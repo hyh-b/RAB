@@ -1,11 +1,13 @@
 package com.example.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.mappers.MainMapperInter;
 import com.example.mappers.MemberMapperInter;
 
 @Repository
@@ -13,13 +15,15 @@ import com.example.mappers.MemberMapperInter;
 public class MainDAO {
 	
 	@Autowired
-	private MemberMapperInter mapper;
+	private MainMapperInter mapper;
 	
-	public ArrayList<MainTO> food_data() {
+	public ArrayList<MainTO> main_data() {
 		
-		ArrayList<MainTO> lists = new ArrayList<>();
-		
-		return lists;
+	    List<MainTO> tlist = (List<MainTO>)mapper.TotalDataForMain();
+	    
+	    ArrayList<MainTO> lists = new ArrayList<>(tlist);
+	    
+	    return lists;
 	}
 	
 

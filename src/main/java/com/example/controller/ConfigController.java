@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.kakao.OAuthService;
+import com.example.model.MainDAO;
+import com.example.model.MainTO;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
 import com.google.gson.JsonObject;
@@ -27,6 +30,9 @@ public class ConfigController {
 	@Autowired
 	private MemberDAO m_dao;
 	
+	@Autowired
+	private MainDAO dao;
+	
 	@RequestMapping("/")
 	public ModelAndView index() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -36,17 +42,23 @@ public class ConfigController {
 	
 	@RequestMapping("/main.do")
 	public ModelAndView main(Authentication authentication, ModelMap map) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		//이거 뭔가요? to hyh
 		String mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
 
-        
-        System.out.println("m_id: " + member.getM_id());
-        System.out.println("m_mail: " + member.getM_mail());
+        ArrayList<MainTO> lists = dao.main_data();
+       
+        //System.out.println("m_id: " + member.getM_id());
+        //System.out.println("m_mail: " + member.getM_mail());
 
-        
         map.addAttribute("user", member);
-		ModelAndView modelAndView = new ModelAndView();
+		
+		modelAndView.addObject("lists",lists);
 		modelAndView.setViewName("main");
+		
 		return modelAndView; 
 	}
 	
@@ -262,6 +274,15 @@ public class ConfigController {
 		modelAndView.addObject("flag", flag);
 		return modelAndView; 
 	}
+	
+	//----test.do 지우지마셈 ------------------
+	@RequestMapping("/test.do")
+	public ModelAndView test() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("test");
+		return modelAndView; 
+	}
+	
 	
 	
 }
