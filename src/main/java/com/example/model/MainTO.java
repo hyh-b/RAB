@@ -73,7 +73,21 @@ public class MainTO {
    
    private BigDecimal m_target_weight;
    
-   // 아점저 ----------------------------
+   // 아점저 Meals ----------------------------
+   
+   private int d_seq;
+   private int e_seq;
+   
+   private BigDecimal d_kcal;
+   private Date d_day;
+   
+   private int b_seq;
+   private BigDecimal b_kcal;
+   private Date b_day;
+   
+   private int l_seq;
+   private BigDecimal l_kcal;
+   private Date l_day;
 
 
 

@@ -6,6 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -35,11 +36,27 @@
    <c:set var="m_weight" value="${item.m_weight}"/>
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
+   <c:set var="m_name" value="${item.m_name}" />
 </c:forEach>
 
-<c:forEach var="user" items="${users}">
-   <c:set var="m_name" value="${user.m_name}" />
+<!--  
+<c:forEach var="data" items="${datas}">
+	<c:set var="d_seq" value="${data.d_seq}" />
+	<c:set var="e_seq" value="${data.e_seq}" />
+	<c:set var="d_kcal" value="${data.d_kcal}" />
+	<c:set var="d_day" value="${data.d_day}" />
+
+	<c:set var="b_seq" value="${data.b_seq}" />
+	<c:set var="b_kcal" value="${data.b_kcal}" />
+	<c:set var="b_day" value="${data.b_day}" />
+
+	<c:set var="l_seq" value="${data.l_seq}" />
+	<c:set var="l_kcal" value="${data.l_kcal}" />
+	<c:set var="l_day" value="${data.l_day}" />
+
 </c:forEach>
+
+-->
 
 </head>
  
@@ -478,7 +495,7 @@
         >
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white"
-              >${m_name} 김규하</span
+              >${m_name}</span
             >
             <span class="block text-xs font-medium">직업란 쓰시렵니까들?</span>
           </span>
@@ -908,10 +925,10 @@
   var barOptions = {
     series: [
       
-      { name: '아침', data: [13, 23, 20,10,22,44,12] },
-      { name: '점심', data: [13, 23, 20,10,22,44,12] },
-      { name: '저녁', data: [13, 23, 20,10,22,44,12] },
-      { name: '간식', data: [13, 23, 20,10,22,44,12] },
+      { name: '아침', data: [10, 23, 20, 10, 22, 44, 12] },
+      { name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
+      { name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
+      { name: '간식', data: [13, 23, 20, 10, 22, 44, 12] },
       
     ],
     chart: {
