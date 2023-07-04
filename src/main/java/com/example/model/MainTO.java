@@ -10,7 +10,9 @@ import lombok.Setter;
 @Setter
 public class MainTO {
 	
-   // IntakeData ----------------------------
+
+	//IntakeData, Member
+
 	
    private int i_seq  ;           
    
