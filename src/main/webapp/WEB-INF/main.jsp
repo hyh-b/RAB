@@ -269,7 +269,7 @@
                 </defs>
               </svg>
 
-            	로그아웃
+            	<a href="/logout">로그아웃</a>
             </a>
           </li>
           <!-- Menu Item Settings -->

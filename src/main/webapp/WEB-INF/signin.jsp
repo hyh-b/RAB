@@ -30,6 +30,20 @@
     </script>
 <% } %>
 
+<%
+String userId = request.getParameter("userId");
+String userEmail = request.getParameter("userEmail");
+%>
+
+<% if( userId != null ) { %>
+    <script type='text/javascript'>
+        window.onload = function() {
+            document.getElementById('login').click();
+        };
+    </script>
+<% } %>
+
+
 
   <div
     class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
@@ -293,11 +307,11 @@
                     Sign In to RockAtYourBody
                   </h2>
 
-                  <form action='<c:url value="/signin_ok"/>'method="post" >
+                  <form action='<c:url value="/signin_ok"/>'method="post" name="sfrm" id="sfrm" >
                     <div class="mb-4">
                       <label class="mb-2.5 block font-medium text-black dark:text-white">아이디</label>
                       <div class="relative">
-                        <input type="text" placeholder="id" name="id" value=""
+                        <input type="text" placeholder="id" name="id" id="id" value=<%=userEmail %>
                           class="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
 
                         <span class="absolute right-4 top-4">
@@ -316,7 +330,7 @@
                     <div class="mb-6">
                       <label class="mb-2.5 block font-medium text-black dark:text-white">비밀번호</label>
                       <div class="relative">
-                        <input type="password" placeholder="password" name="password" value=""
+                        <input type="password" placeholder="password" name="password" id="password" value=<%=userId %>
                           class="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
 
                         <span class="absolute right-4 top-4">
@@ -336,7 +350,7 @@
                     </div>
 
                     <div class="mb-5">
-                      <input type="submit" value="로그인" 
+                      <input id="login" type="submit" value="로그인" 
                         class="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 font-medium text-white transition hover:bg-opacity-90" />
                     </div>
                     

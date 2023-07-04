@@ -3,10 +3,12 @@ package com.example.mappers;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.mybatis.spring.annotation.MapperScan;
 
 import com.example.model.MemberTO;
 
 @Mapper
+@MapperScan("com.example.mappers")
 public interface MemberMapperInter {
 	
 	@Insert("insert into member values(0,#{m_id},#{m_password},#{m_mail},null,null,null,null,default,null,null)")
@@ -20,5 +22,8 @@ public interface MemberMapperInter {
 	
 	@Select("SELECT * FROM member WHERE m_id = #{mId}")
 	public MemberTO findByMId(String mId);
+	
+	@Select("select m_id from member where m_id = #{kId}")
+	public MemberTO confirmKakao(String kId);
 	
 }
