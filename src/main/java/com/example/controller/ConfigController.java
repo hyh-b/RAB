@@ -34,17 +34,22 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
+	@RequestMapping("/test.do")
+	public ModelAndView test() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("test");
+		return modelAndView; 
+	}
+	
 	@RequestMapping("/main.do")
 	public ModelAndView main(Authentication authentication, ModelMap map) {
 		String mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
 
-        
         System.out.println("m_id: " + member.getM_id());
         System.out.println("m_mail: " + member.getM_mail());
-
-        
         map.addAttribute("user", member);
+        
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("main");
 		return modelAndView; 
