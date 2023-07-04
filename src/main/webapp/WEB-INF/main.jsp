@@ -4,6 +4,7 @@
     pageEncoding="UTF-8"%>
     
     <%
+
    	 request.setCharacterEncoding("UTF-8");
 
     //DB에서 땡겨오는 now()로 받아주기 ,형식만 여기서 바꾸기
@@ -12,9 +13,7 @@
      // String formattedDate = dateFormat.format();
      
      //__
-     
 
-	
     			
 %>
 
