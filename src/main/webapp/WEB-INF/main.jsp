@@ -4,11 +4,15 @@
     pageEncoding="UTF-8"%>
     
     <%
-    	request.setCharacterEncoding("utf-8");
-    
-    	Date date = new Date();
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd");
-    	String formattedDate = dateFormat.format(date);
+   	 request.setCharacterEncoding("UTF-8");
+
+    //DB에서 땡겨오는 now()로 받아주기 ,형식만 여기서 바꾸기
+    //Date date = new Date();
+     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd");
+     // String formattedDate = dateFormat.format();
+     
+     
+
 	
     			
 %>
