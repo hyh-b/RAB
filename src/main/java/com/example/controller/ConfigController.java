@@ -40,13 +40,6 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
-	@RequestMapping("/test.do")
-	public ModelAndView testDo() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("test");
-		return modelAndView; 
-	}
-	
 	@RequestMapping("/main.do")
 	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request) {
 		
