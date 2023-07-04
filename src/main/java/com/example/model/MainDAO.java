@@ -19,8 +19,10 @@ public class MainDAO {
 	
 	public ArrayList<MainTO> main_data() {
 		
-	    List<MainTO> tlist = (List<MainTO>)mapper.TotalDataForMain();
+	    //List<MainTO> tlist = (List<MainTO>)mapper.IntakeDataForMain();
 	    
+		List<MainTO> tlist = (List<MainTO>)mapper.TotalDataForMain();
+		
 	    ArrayList<MainTO> lists = new ArrayList<>(tlist);
 	    
 	    return lists;

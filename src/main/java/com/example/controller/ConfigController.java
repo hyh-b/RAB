@@ -51,12 +51,12 @@ public class ConfigController {
 
         ArrayList<MainTO> lists = dao.main_data();
        
-        //System.out.println("m_id: " + member.getM_id());
-        //System.out.println("m_mail: " + member.getM_mail());
+        System.out.println("     m_id: " + member.getM_id());
+        System.out.println("     m_mail: " + member.getM_mail());
 
         map.addAttribute("user", member);
 		
-		modelAndView.addObject("lists",lists);
+		modelAndView.addObject("lists", lists);
 		modelAndView.setViewName("main");
 		
 		return modelAndView; 
