@@ -45,6 +45,7 @@ public class ConfigController {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
+		
 		//이거 뭔가요? to hyh
 		String mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
