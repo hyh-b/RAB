@@ -5,7 +5,6 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <%
 
@@ -680,7 +679,7 @@
                     <h4
                       class="text-title-md font-bold text-black dark:text-white"
                     >
-                     <%=i_kcal %> kcal
+                     1000 kcal
                     </h4>
                     <span class="text-sm font-medium">총 섭취 칼로리</span>
                   </div>
