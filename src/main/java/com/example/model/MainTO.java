@@ -10,61 +10,84 @@ import lombok.Setter;
 @Setter
 public class MainTO {
 	
+
 	//IntakeData, Member
+
 	
    private int i_seq  ;           
    
    private int m_seq;
    
-   private String  i_kcal ;   
+   private BigDecimal  i_kcal ;   
    
-   private String i_carbohydrate_g;
+   private BigDecimal i_carbohydrate_g;
    
-   private String i_protein_g;
+   private BigDecimal i_protein_g;
    
-   private String i_fat_g ;
+   private BigDecimal i_fat_g ;
    
-   private String i_sugar_g  ;
+   private BigDecimal i_sugar_g  ;
    
-   private String  i_cholesterol_mgl;
+   private BigDecimal  i_cholesterol_mgl;
    
-   private String i_sodium_mg;
+   private BigDecimal i_sodium_mg;
    
-   private String i_trans_fat_g ;
+   private BigDecimal i_trans_fat_g ;
    
    private Date i_day;
    
-   private int mSeq;
+   private BigDecimal i_used_kcal;
    
-   private String mId;
    
-   private String mPw;
+   // Member ----------------------------
    
-   private String mName;
+   //private int m_seq;
    
-   private String mGender;
+   private String m_id;
    
-   private BigDecimal mWeight;
+   private String m_pw;
    
-   private BigDecimal mHeight;
+   private String m_name;
    
-   private String mMail;
+   private String m_gender;
    
-   private boolean mIsKakao;
+   private BigDecimal m_weight;
    
-   private String mRole;
+   private BigDecimal m_height;
    
-   private String mTel;
+   private String m_mail;
    
-   private String mFilename;
+   private boolean m_iskakao;
    
-   private int mFilesize;
+   private String m_role;
    
-   private Date mJoinDate;
+   private String m_tel;
    
-   private int mTargetCalorie;
+   private String m_filename;
    
-   private BigDecimal mTargetWeight;
+   private int m_filesize;
+   
+   private Date m_join_date;
+   
+   private int m_target_calorie;
+   
+   private BigDecimal m_target_weight;
+   
+   // 아점저 Meals ----------------------------
+   
+   private int d_seq;
+   private int e_seq;
+   
+   private BigDecimal d_kcal;
+   private Date d_day;
+   
+   private int b_seq;
+   private BigDecimal b_kcal;
+   private Date b_day;
+   
+   private int l_seq;
+   private BigDecimal l_kcal;
+   private Date l_day;
 
 
 

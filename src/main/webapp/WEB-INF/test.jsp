@@ -1,12 +1,23 @@
+<%@page import="com.example.model.MainTO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
     
 <%
     	request.setCharacterEncoding("utf-8");
     
-    	java.util.Date date = new java.util.Date();
-	
-    			
+
+	 ArrayList<MainTO> lists = (ArrayList)request.getAttribute("lists");
+	 
+        //DB에서 땡겨오는 now()로 받아주기 ,형식만 여기서 바꾸기
+        //Date date = new Date();
+         //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd");
+         // String formattedDate = dateFormat.format();
+         
+         //__    			
 %>
 
 <!DOCTYPE html>
@@ -20,6 +31,175 @@
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
+  <script defer src="bundle.js"></script>
+  
+  <!-- ===== 파이그래프 , 스택 데이터 ===== -->
+  <script>
+  var pieData = [44, 55, 13];
+  var barData = [41, 20, 15];
+
+  var pieOptions = {
+    series: pieData,
+    chart: {
+      type: 'pie',
+      height: 350,
+    },
+    labels: ['danbak', 'tansu', 'jibang'],
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }]
+  };
+
+  var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+  pieChart.render();
+
+  var barOptions = {
+    series: [
+      {
+        name: 'danbak',
+        data: barData
+      },
+      { name: 'tansu', data: [13, 23, 20] },
+      { name: 'jibang', data: [11, 17, 15] },
+    ],
+    chart: {
+      type: 'bar',
+      height: 350,
+      stacked: true,
+      toolbar: {
+        show: true
+      },
+      zoom: {
+        enabled: true
+      }
+    },
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        legend: {
+          position: 'bottom',
+          offsetX: -10,
+          offsetY: 0
+        }
+      }
+    }],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        borderRadius: 10,
+        dataLabels: {
+          total: {
+            enabled: true,
+            style: {
+              fontSize: '13px',
+              fontWeight: 900
+            }
+          }
+        }
+      },
+    },
+    xaxis: {
+      type: 'text',
+      categories: ['morning', 'lunch', 'dinner'],
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'center',
+      offsetY: 10,
+      markers: {
+        radius: 12
+      }
+    },
+    fill: {
+      opacity: 1
+    }
+  };
+
+  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
+  barChart.render();
+</script>
+  <!-- ===== 파이그래프 , 스택 데이터 ===== -->
+	
+<script>
+    var options = {
+      series: [{
+        name: '저번주의 달성도',
+        data: [31, 40, 28, 51, 42, 109, 100]
+      }, {
+        name: '이번주의 달성도',
+        data: [11, 32, 45, 32, 34, 52, 41]
+      }],
+      chart: {
+        height: 350,
+        type: 'area'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      xaxis: {
+        type: 'datetime',
+        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+      },
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm'
+        },
+      },
+    };
+
+    var chart = new ApexCharts(document.querySelector("#barchart"), options);
+    chart.render();
+  </script>	
+	
+<script>
+  var options = {
+    series: [{
+      name: "Desktops",
+      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+    }],
+    chart: {
+      height: 350,
+      type: 'line',
+      zoom: {
+        enabled: false
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'straight'
+    },
+    title: {
+      text: 'Product Trends by Month',
+      align: 'left'
+    },
+    grid: {
+      row: {
+        colors: ['#000000', 'transparent'], // takes an array which will be repeated on columns
+        opacity: 0.5
+      },
+    },
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    }
+  };
+
+  var chart = new ApexCharts(document.querySelector("#chartline"), options);
+  chart.render();
+</script>
+  
   </head>
  
   <body
@@ -29,6 +209,8 @@
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
     :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}"
   >
+  
+  
     <!-- ===== Preloader Start ===== -->
     <div
   x-show="loaded"
@@ -883,12 +1065,8 @@
               <!-- ====== Chart Three End -->
 
               <!-- ====== Map One Start -->
-              <div class="col-span-12 rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-7">
-				  <h4 class="mb-2 text-xl font-bold text-black dark:text-white">
-				    Region labels
-				  </h4>
-				    <div id="chartline" class="mx-auto flex justify-center"></div>
-			</div>
+ 
+            
               <!-- ====== Map One End -->
 
               <!-- ====== Table One Start -->
@@ -902,174 +1080,7 @@
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
-  <script defer src="bundle.js"></script>
-  
-  <!-- ===== 파이그래프 , 스택 데이터 ===== -->
-  <script>
-  var pieData = [44, 55, 13];
-  var barData = [41, 20, 15];
 
-  var pieOptions = {
-    series: pieData,
-    chart: {
-      type: 'pie',
-      height: 350,
-    },
-    labels: ['danbak', 'tansu', 'jibang'],
-    responsive: [{
-      breakpoint: 480,
-      options: {
-        chart: {
-          width: 200
-        },
-        legend: {
-          position: 'bottom'
-        }
-      }
-    }]
-  };
-
-  var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-  pieChart.render();
-
-  var barOptions = {
-    series: [
-      {
-        name: 'danbak',
-        data: barData
-      },
-      { name: 'tansu', data: [13, 23, 20] },
-      { name: 'jibang', data: [11, 17, 15] },
-    ],
-    chart: {
-      type: 'bar',
-      height: 350,
-      stacked: true,
-      toolbar: {
-        show: true
-      },
-      zoom: {
-        enabled: true
-      }
-    },
-    responsive: [{
-      breakpoint: 480,
-      options: {
-        legend: {
-          position: 'bottom',
-          offsetX: -10,
-          offsetY: 0
-        }
-      }
-    }],
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        borderRadius: 10,
-        dataLabels: {
-          total: {
-            enabled: true,
-            style: {
-              fontSize: '13px',
-              fontWeight: 900
-            }
-          }
-        }
-      },
-    },
-    xaxis: {
-      type: 'text',
-      categories: ['morning', 'lunch', 'dinner'],
-    },
-    legend: {
-      position: 'top',
-      horizontalAlign: 'center',
-      offsetY: 10,
-      markers: {
-        radius: 12
-      }
-    },
-    fill: {
-      opacity: 1
-    }
-  };
-
-  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
-  barChart.render();
-</script>
-  <!-- ===== 파이그래프 , 스택 데이터 ===== -->
-	
-<script>
-    var options = {
-      series: [{
-        name: '저번주의 달성도',
-        data: [31, 40, 28, 51, 42, 109, 100]
-      }, {
-        name: '이번주의 달성도',
-        data: [11, 32, 45, 32, 34, 52, 41]
-      }],
-      chart: {
-        height: 350,
-        type: 'area'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth'
-      },
-      xaxis: {
-        type: 'datetime',
-        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-      },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm'
-        },
-      },
-    };
-
-    var chart = new ApexCharts(document.querySelector("#barchart"), options);
-    chart.render();
-  </script>	
-	
-<script>
-  var options = {
-    series: [{
-      name: "Desktops",
-      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-    }],
-    chart: {
-      height: 350,
-      type: 'line',
-      zoom: {
-        enabled: false
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'straight'
-    },
-    title: {
-      text: 'Product Trends by Month',
-      align: 'left'
-    },
-    grid: {
-      row: {
-        colors: ['#000000', 'transparent'], // takes an array which will be repeated on columns
-        opacity: 0.5
-      },
-    },
-    xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-    }
-  };
-
-  var chart = new ApexCharts(document.querySelector("#chartline"), options);
-  chart.render();
-</script>
   </body>
   
   
