@@ -59,30 +59,23 @@ public class ConfigController {
 
 	
 	@RequestMapping("/main.do")
-	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request) {
+	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
-		
-		//이거 뭔가요? to hyh
-		String mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
-        //정보
+        //v_memberIntakeData 정보
         ArrayList<MainTO> lists = dao.main_data();
         
-        //음식 데이터
+        //v_eat 음식 데이터
         ArrayList<MainTO> datas = dao.data_meals();
 
 
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
         
-        //지울것
-        String id = request.getParameter("id");
-        MemberTO member_id = dao.data_member(request, id);
-	    System.out.println( " member_id ->  " + member_id);
-	    //
 
         map.addAttribute("user", member);
 		modelAndView.addObject("lists", lists);
@@ -153,17 +146,17 @@ public class ConfigController {
 		
 		myto.setM_filename(newFilename);
 
-		if (upload != null && !upload.isEmpty()) {
-		    myto.setM_filesize(upload.getSize());
-		} else {
-		    myto.setM_filesize(0);
-		}
-		
-		int flag = mydao.MypageModifyOk(myto);
+//		if (upload != null && !upload.isEmpty()) {
+//		    myto.setM_filesize(upload.getSize());
+//		} else {
+//		    myto.setM_filesize(0);
+//		}
+//		
+//		int flag = mydao.MypageModifyOk(myto);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("mypageModifyOK");
-		modelAndView.addObject("flag" , flag);
+		//modelAndView.addObject("flag" , flag);
 		modelAndView.addObject("myto" , myto);
 		return modelAndView; 
 	}
@@ -220,15 +213,6 @@ public class ConfigController {
 		ModelAndView modelAndView = new ModelAndView();
 		// 로그인 되어있는 사용자가 로그인페이지에 접근하면  main페이지로 돌려보냄
 	    if (principal != null && principal.getName() != null) {
-	        
-	        modelAndView.setViewName("redirect:/main.do");
-
-		    //지울것
-	        String id = request.getParameter("id");
-	        MemberTO member_id = dao.data_member(request, id);
-	    	System.out.println( " member_id ->  " + member_id);
-			modelAndView.addObject("member_id", member_id);
-			//
 			
 	        modelAndView.setViewName("redirect:/main.do");
 	        

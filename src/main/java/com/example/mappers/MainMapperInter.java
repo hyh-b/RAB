@@ -16,8 +16,8 @@ public interface MainMapperInter {
     public List<MainTO> TotalDataForMain();
 	
 	//signin.do 에 id입력칸 parameter 이름 확인 =id
-	@Select("SELECT * FROM Member WHERE m_id = #{id}")
-	public MemberTO DataFromId(String id);
+	@Select("SELECT * FROM Member WHERE m_id = #{mId}")
+	public MemberTO DataFromId(String mId);
 	
 	//eat에 들어온 데이터들 그래프에 뿌리기
 	@Select("SELECT * FROM v_eat where b_seq = 2;")

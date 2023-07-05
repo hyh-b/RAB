@@ -32,11 +32,11 @@ public class MainDAO {
 	
 	//member아이디 가진 정보가 다 들어오는 지 확인 test용, Member로 바귀어야함 지우고 다시만들기 mapper에서도, parameter연결관계 설정 확인
 	//메인에 멤버 데이터 뿌리는 메서드 (지우지 마세요)
-	public MemberTO data_member(HttpServletRequest request, String id) {
+	public MainTO data_member(HttpServletRequest request, String mId) {
 		
-		id = request.getParameter("id");
+		mId = request.getParameter("mId");
 		
-		MemberTO to = mapper.DataFromId(id);
+		//MainTO to = mapper.DataFromId(mId);
 		
 		return to; 
 	}
