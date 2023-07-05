@@ -4,7 +4,6 @@
 <%	
 	//int flag = 1;
 	int flag = (Integer)request.getAttribute( "flag" );
-	out.print("hello");
 	out.println( "<script type='text/javascript'>" );
 	 if( flag == 0 ) {
 		out.println( "alert('회원가입에 성공');" );

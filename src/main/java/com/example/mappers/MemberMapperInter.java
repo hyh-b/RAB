@@ -3,7 +3,7 @@ package com.example.mappers;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.mybatis.spring.annotation.MapperScan;
+
 
 import com.example.model.MemberTO;
 
@@ -25,4 +25,5 @@ public interface MemberMapperInter {
 	@Select("select m_id from Member where m_id = #{kId}")
 	public MemberTO confirmKakao(String kId);
 	
+
 }

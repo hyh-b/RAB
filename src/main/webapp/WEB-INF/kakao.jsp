@@ -39,17 +39,6 @@
     out.println( "</script>" );
     
  %>
- <%-- 
- <script type="text/javascript">
-	
-	window.onload = function() {
-		
-		
-			
-			 document.kfrm.submit();  
-		
-		
-	};
-</script> --%> 
+
 </body>
 </html>

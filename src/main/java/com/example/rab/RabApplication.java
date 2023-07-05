@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.example.rab","com.example.kakao","com.example.security","com.example.controller","com.example.model","com.example.mappers"})
+@ComponentScan(basePackages = {"com.example.rab","com.example.kakao","com.example.security","com.example.controller","com.example.model", "com.example.boardmodel", "com.example.mappers"})
+
 public class RabApplication {
 
 	public static void main(String[] args) {
