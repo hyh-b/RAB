@@ -38,7 +38,7 @@ public class ConfigController {
 	}
 	
 	@RequestMapping("/main.do")
-	public ModelAndView main(Authentication authentication, ModelMap map,HttpSession session) {
+	public ModelAndView main(Authentication authentication, ModelMap map,HttpSession session,HttpServletRequest request) {
 		String mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         session.setAttribute("thisse","abc" );
@@ -49,6 +49,8 @@ public class ConfigController {
         
         map.addAttribute("user", member);
 		ModelAndView modelAndView = new ModelAndView();
+		
+		
 		modelAndView.setViewName("main");
 		return modelAndView; 
 	}
@@ -206,12 +208,11 @@ public class ConfigController {
 	@RequestMapping("/signup_ok.do")
 	public ModelAndView signup_ok(HttpServletRequest request) {
 		MemberTO to = new MemberTO();
-		//System.out.println(request.getParameter("id"));
-		//System.out.println(request.getParameter("password"));
-		
+		String id = request.getParameter("id");
+		String pw = request.getParameter("password");
 		String password = bcry.encode(request.getParameter("password"));
 		to.setM_id(request.getParameter("id"));
-		to.setM_password(password);
+		to.setM_pw(password);
 		to.setM_mail(request.getParameter("mail"));
 		
 		int flag = m_dao.signup_ok(to);
@@ -219,6 +220,8 @@ public class ConfigController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("signup_ok");
 		modelAndView.addObject("flag", flag);
+		modelAndView.addObject("sId", id);
+		modelAndView.addObject("sPw", pw);
 		return modelAndView; 
 	}
 	
@@ -228,13 +231,15 @@ public class ConfigController {
 		OAuthService oau = new OAuthService();
 		String access_token = oau.getKakaoAccessToken(code);
 		HashMap<String, Object> userInfo = oau.getKakaoUserInfo(access_token);
+		
 		System.out.println("유저정보"+userInfo.toString());
+		
 		Object idObject = userInfo.get("id");
 		Object emailObject = userInfo.get("email");
 		String id = String.valueOf(idObject);
 		String email = String.valueOf(emailObject);
+		
 		ModelAndView modelAndView = new ModelAndView();
-		System.out.println("아이디"+email);
 		  if(m_dao.confirmKakao(email) != null) { //가입한 회원이면
 		  session.setAttribute("userInfo", email);
 		  session.setAttribute("access_token", access_token);
@@ -258,7 +263,7 @@ public class ConfigController {
 		MemberTO to = new MemberTO();
 		to.setM_mail(email);
 		to.setM_id(email);
-		to.setM_password(password);
+		to.setM_pw(password);
 		
 		int flag = m_dao.kSignup_ok(to);
 		
@@ -268,17 +273,29 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
-	@RequestMapping("/kLogout.do")
+	@RequestMapping("/klogout.do")
 	public ModelAndView klogout(HttpSession session) {
-		//String access_Token = (String)session.getAttribute("access_Token");
-		//System.out.println("로그아웃토큰"+access_Token);
+		String access_Token = (String)session.getAttribute("access_Token");
+		System.out.println("로그아웃토큰"+access_Token);
 		OAuthService oau = new OAuthService();
 		ModelAndView modelAndView = new ModelAndView();
-		oau.kakaoLogout((String)session.getAttribute("access_token"));
-		session.removeAttribute("acces_token");
-		session.removeAttribute("userInfo");
-		System.out.println("세션제거성공");
-		modelAndView.setViewName("index");
+		if(access_Token != null) {
+			oau.kakaoLogout((String)session.getAttribute("access_token"));
+			session.removeAttribute("acces_token");
+			session.removeAttribute("userInfo");
+			System.out.println("세션제거성공");
+		}
+		modelAndView.setViewName("redirect:/");
+		return modelAndView; 
+	}
+	
+	@RequestMapping("/signup2.do")
+	public ModelAndView signup2(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView();
+		if(request.getParameter("signup") != null) {
+			modelAndView.setViewName("signup2");
+		}
+		modelAndView.setViewName("\"redirect:/main.do\"");
 		return modelAndView; 
 	}
 	

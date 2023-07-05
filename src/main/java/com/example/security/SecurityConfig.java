@@ -24,20 +24,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     public SecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-	
+	//@Autowired
+    //private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		/*http.authorizeRequests()
-			.antMatchers("/","/signup.do","/signup_ok.do","kakao.do").permitAll()
+		http.authorizeRequests()
+		//.antMatchers("/profile.do").hasAnyRole("manage")
+		.anyRequest().permitAll();
+		/*.antMatchers("/","/signup.do","/signup_ok.do","kakao.do").permitAll()
 			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/src/images/**").permitAll()
-			//.antMatchers("/main.do").hasAnyRole("USER","ADMIN")
 			.anyRequest().authenticated();
-			*/
+			
 		
 		http.authorizeRequests()
 		
 		.anyRequest().permitAll();
-		
+		*/
 		http.formLogin()
 			.loginPage("/signin.do")
 			.loginProcessingUrl("/signin_ok")
@@ -46,10 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.usernameParameter("id")
 			.passwordParameter("password")
 			.permitAll();
-		
+			//.successHandler(authenticationSuccessHandler);
 		http.logout()
 			
-			.logoutSuccessUrl("/")
+			.logoutSuccessUrl("/klogout.do")
 			.permitAll();
 		
 		http.csrf().disable();
@@ -61,12 +64,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		System.out.println(bCryptPasswordEncoder.encode("1"));
 		
 		auth.jdbcAuthentication()
 			.dataSource(dataSource)
-			.usersByUsernameQuery("select m_id as username, m_password as password, true as enabled from member where m_id = ?")
-            .authoritiesByUsernameQuery("select m_id as username, 'role_user' as authority from member where m_id = ?")
+			.usersByUsernameQuery("select m_id as username, m_pw as password, true as enabled from Member where m_id = ?")
+            .authoritiesByUsernameQuery("select m_id as username, 'm_role' as authority from Member where m_id = ?")
 			.passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
