@@ -13,7 +13,7 @@ public interface MainMapperInter {
 	
 	
 	//curdate()은 달력 파라미터 이름으로 바꿔서 정한 날짜에 맞춰서 그 데이터가 따라올 예정.
-	@Select("SELECT * FROM v_MeberIntakeData;")
+	@Select("SELECT * FROM v_MeberIntakeData where i_day = curdate();")
     public List<MainTO> TotalDataForMain();
 	
 	//signin.do 에 id입력칸 parameter 이름 확인 =id
