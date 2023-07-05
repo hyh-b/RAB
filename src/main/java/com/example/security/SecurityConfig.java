@@ -24,21 +24,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     public SecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-	
+	@Autowired
+    private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		/*http.authorizeRequests()
-			.antMatchers("/","/signup.do","/signup_ok.do","kakao.do").permitAll()
+		http.authorizeRequests()
+		//.antMatchers("/profile.do").hasAnyRole("manage")
+		.anyRequest().permitAll();
+		/*.antMatchers("/","/signup.do","/signup_ok.do","kakao.do").permitAll()
 			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/src/images/**").permitAll()
-			//.antMatchers("/main.do").hasAnyRole("USER","ADMIN")
 			.anyRequest().authenticated();
-			*/
+			
 		
 		http.authorizeRequests()
 		
 		.anyRequest().permitAll();
-
-		
+		*/
 		http.formLogin()
 			.loginPage("/signin.do")
 			.loginProcessingUrl("/signin_ok")
@@ -46,12 +48,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.failureUrl("/signin.do?error")
 			.usernameParameter("id")
 			.passwordParameter("password")
+			.successHandler(authenticationSuccessHandler)
 			.permitAll();
-			//.successHandler(authenticationSuccessHandler);
 		http.logout()
 			
 			.logoutSuccessUrl("/klogout.do")
-
 			.permitAll();
 		
 		http.csrf().disable();
@@ -63,13 +64,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
 		
 		auth.jdbcAuthentication()
 			.dataSource(dataSource)
 			.usersByUsernameQuery("select m_id as username, m_pw as password, true as enabled from Member where m_id = ?")
             .authoritiesByUsernameQuery("select m_id as username, 'm_role' as authority from Member where m_id = ?")
-
 			.passwordEncoder(new BCryptPasswordEncoder());
 	}
 	

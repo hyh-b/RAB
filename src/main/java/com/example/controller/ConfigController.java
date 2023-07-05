@@ -71,7 +71,9 @@ public class ConfigController {
         map.addAttribute("user", member);
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("datas", datas);
-
+		HttpSession session = request.getSession();
+		String mSeq = (String)session.getAttribute("mSeq");
+		System.out.println("메인세션:"+mSeq);
 		modelAndView.setViewName("main");
 		return modelAndView; 
 	}
