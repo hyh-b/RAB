@@ -1,3 +1,5 @@
+<%@page import="ch.qos.logback.core.recovery.ResilientSyslogOutputStream"%>
+<%@page import="com.example.model.MemberTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
@@ -6,7 +8,9 @@
     
     	java.util.Date date = new java.util.Date();
 	
-    			
+    	MemberTO to =(MemberTO)request.getAttribute("member");
+    	
+    	String seq = to.getM_seq();
 %>
 
 <!DOCTYPE html>
@@ -129,7 +133,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="profile.do"
+              href="profile.do?seq=${seq}"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
@@ -161,7 +165,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="profile.do"
+              href="profile.do "
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"

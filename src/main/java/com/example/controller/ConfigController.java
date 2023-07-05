@@ -1,6 +1,9 @@
 package com.example.controller;
 
+import java.io.File;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.kakao.OAuthService;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
+import com.example.model.MypageDAO;
+import com.example.model.MypageTO;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -27,6 +33,9 @@ public class ConfigController {
 	
 	@Autowired
 	private MemberDAO m_dao;
+	
+	@Autowired
+	private MypageDAO mydao;
 	
 	BCryptPasswordEncoder bcry = new BCryptPasswordEncoder();
 	
@@ -43,20 +52,107 @@ public class ConfigController {
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         session.setAttribute("thisse","abc" );
         
+        System.out.println("m_seq" + member.getM_seq());
+        
         System.out.println("m_id: " + member.getM_id());
         System.out.println("m_mail: " + member.getM_mail());
-
         
         map.addAttribute("user", member);
+        
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("main");
+		modelAndView.addObject("member",member);
 		return modelAndView; 
 	}
 	
 	@RequestMapping("/profile.do")
-	public ModelAndView profile() {
+	public ModelAndView profile(HttpServletRequest request) {
+		
+		MypageTO myto = new MypageTO();
+		System.out.println("main에서 온 seq" + myto.getM_seq());
+		System.out.println( myto.getM_join_date() );
+		myto.setM_id(  request.getParameter("userId")  );
+		System.out.println("request.getParameter(\"userId\") :  " + request.getParameter("userId") );
+		
+		myto = mydao.Mypage(myto);
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("profile");
+		modelAndView.addObject("myto" , myto );
+		return modelAndView; 
+	}
+	
+	@RequestMapping("/mypageModify.do")
+	public ModelAndView mypageModify(HttpServletRequest request) {
+		MypageTO myto = new MypageTO();
+		myto.setM_id(  request.getParameter("id")  );
+		
+		myto = mydao.Mypage(myto);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("mypageModify");
+		modelAndView.addObject("myto" , myto );
+		return modelAndView; 
+	}
+	
+	@RequestMapping("/mypageModifyOK.do")
+	public ModelAndView mypageModifyOK(HttpServletRequest request, @RequestParam("upload") MultipartFile upload) throws Exception {
+		MypageTO myto = new MypageTO();
+		myto.setM_id(  request.getParameter("memberid")  );
+		
+		myto.setM_name( request.getParameter( "name" ) );
+		myto.setM_tel( request.getParameter( "phoneNumber" ) );
+		myto.setM_height( request.getParameter("cm") );
+		myto.setM_weight( request.getParameter("kg") );
+		myto.setM_target_calorie( request.getParameter("takeKcal") );
+		myto.setM_target_weight( request.getParameter("targetScale") );
+		myto.setM_mail( request.getParameter("email") );
+		myto.setM_birthday( request.getParameter( "birthday" ) );
+		
+
+		// transferTo : 메모리에 있는거를 실제 파일에 적용
+		String originalFilename = upload.getOriginalFilename();
+		String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+		
+		// 중복 파일명 처리를 위해 파일명에 타임스탬프 추가
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String timestamp = sdf.format(new Date() );
+		
+		String newFilename = originalFilename.replace(extension, "_" + timestamp + extension);
+		
+		// 업로드
+		upload.transferTo(new File(newFilename));
+		
+		myto.setM_filename(newFilename);
+
+		if (upload != null && !upload.isEmpty()) {
+		    myto.setM_filesize(upload.getSize());
+		} else {
+		    myto.setM_filesize(0);
+		}
+		
+		int flag = mydao.MypageModifyOk(myto);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("mypageModifyOK");
+		modelAndView.addObject("flag" , flag);
+		modelAndView.addObject("myto" , myto);
+		return modelAndView; 
+	}
+	
+	@RequestMapping("/mypageDelete.do")
+	public ModelAndView mypageDelete(HttpServletRequest request) {
+		MypageTO myto = new MypageTO();
+		myto.setM_seq( Integer.parseInt( request.getParameter("seq") ) );
+		myto.setM_id(  request.getParameter("id")  );
+		
+		int flag = mydao.MypageDeleteOk(myto);
+		
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("mypageDelete");
+		modelAndView.addObject("flag" , flag);
+		modelAndView.addObject("myto" , myto);
 		return modelAndView; 
 	}
 	
@@ -211,7 +307,7 @@ public class ConfigController {
 		
 		String password = bcry.encode(request.getParameter("password"));
 		to.setM_id(request.getParameter("id"));
-		to.setM_password(password);
+		to.setM_pw(password);
 		to.setM_mail(request.getParameter("mail"));
 		
 		int flag = m_dao.signup_ok(to);
@@ -258,7 +354,7 @@ public class ConfigController {
 		MemberTO to = new MemberTO();
 		to.setM_mail(email);
 		to.setM_id(email);
-		to.setM_password(password);
+		to.setM_pw(password);
 		
 		int flag = m_dao.kSignup_ok(to);
 		
