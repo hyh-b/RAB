@@ -25,4 +25,5 @@ public class MemberTO {
 	private int m_target_calorie;
 	private BigDecimal m_target_weight;
 	
+
 }

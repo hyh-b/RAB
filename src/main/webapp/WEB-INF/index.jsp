@@ -55,7 +55,11 @@
 						<p>당신의 몸을 &nbsp;&bull;&nbsp;상승시키세요&nbsp;&bull;&nbsp; With RAB</p>
 						<nav>
 							<ul>
+<<<<<<< HEAD
 								<li class="login"><a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do">
+=======
+								<li class="login"><a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/main.do">
+>>>>>>> ff263d9c30f7af10a8f2000655c754f51a667884
     								<img src="src/images/logo/kloginpng.png"> 
 									</a>
 								</li>

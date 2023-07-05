@@ -25,4 +25,5 @@ public interface MemberMapperInter {
 	@Select("select m_id from Member where m_id = #{kId}")
 	public MemberTO confirmKakao(String kId);
 	
+
 }

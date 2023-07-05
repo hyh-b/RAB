@@ -41,7 +41,6 @@ System.out.println(userEmail);
 <%if( userId != null || sId != null) { %>
 	  <script type='text/javascript'>
         window.onload = function() {
-        	alert("hello");
         	
         	
         	document.getElementById('login').click();
