@@ -4,6 +4,10 @@
  String userEmail = (String)request.getAttribute("userEmail"); 
  System.out.println("유저인포"+userId);
 %>
+<<<<<<< HEAD
+=======
+
+>>>>>>> bdce1e214328a1af6e41b6891d0d97ca087fe3e1
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +20,7 @@
 <input type="hidden" name="userEmail" value="<%= userEmail %>">
 <!-- 이메일<input type="text" name="email" > -->
 <input type="button" id="kbtn" value="가입">
+<<<<<<< HEAD
 </form>
 <script type="text/javascript">
 	window.onload = function() {
@@ -27,5 +32,30 @@
 		
 	};
 </script>
+=======
+</form>  
+
+<form action="signin.do" name="sfrm" method="post">
+<input type="hidden" name="userId" value="<%= userId %>">
+<input type="hidden" name="userEmail" value="<%= userEmail %>">
+<input type="button" id="sbtn" value="가입">
+</form> 
+<%   
+	String login = (String)request.getAttribute("login");
+	
+ 	out.println( "<script type='text/javascript'>" );
+ 	out.println("window.onload = function() {");
+ 	if(login !=null){
+ 	
+ 	out.println( "document.sfrm.submit();" );
+ 	}else{
+ 		out.println("document.kfrm.submit();" );
+ 	}
+    out.println( "};" );
+    out.println( "</script>" );
+    
+ %>
+
+>>>>>>> bdce1e214328a1af6e41b6891d0d97ca087fe3e1
 </body>
 </html>
