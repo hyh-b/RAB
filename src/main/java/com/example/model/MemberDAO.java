@@ -1,7 +1,9 @@
 package com.example.model;
 
+
 import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.annotation.MapperScans;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -44,8 +46,12 @@ public class MemberDAO {
 	}
 	
 	
-	
 	public MemberTO findByMId(String mId) {
         return mapper.findByMId(mId);
     }
+	
+	public MemberTO confirmKakao(String kId) {
+		return mapper.confirmKakao(kId);
+	}
+
 }
