@@ -49,6 +49,7 @@ public class ConfigController {
 		modelAndView.setViewName("index");
 		return modelAndView; 
 	}
+
 	
 	@RequestMapping("/main.do")
 	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request) {
