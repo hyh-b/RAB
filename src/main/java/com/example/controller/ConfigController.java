@@ -50,13 +50,6 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
-	@RequestMapping("/profile.do")
-	public ModelAndView profile() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("profile");
-		return modelAndView; 
-	}
-	
 	@RequestMapping("/settings.do")
 	public ModelAndView settings() {
 		ModelAndView modelAndView = new ModelAndView();

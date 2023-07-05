@@ -161,10 +161,10 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="profile.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
+              href="food.do"
+              @click="selected = (selected === 'food' ? '':'food')"
+              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'food') && (page === 'food') }"
+              :class="page === 'food' && 'bg-graydark'"
             >
               <svg
                 class="fill-current"
