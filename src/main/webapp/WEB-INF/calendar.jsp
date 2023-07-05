@@ -1338,15 +1338,7 @@
                     <h6 class="text-sm font-medium text-black dark:text-white">
                       Mariya Desoja
                     </h6>
-<<<<<<< HEAD
-                    <p class="text-sm">I like your confidence 💪</p>
-=======
-<<<<<<< HEAD
-                    <p class="text-sm">I like your confidence 💪</p>
-=======
                     <p class="text-sm">I like your confidence ðª</p>
->>>>>>> ff263d9c30f7af10a8f2000655c754f51a667884
->>>>>>> bdce1e214328a1af6e41b6891d0d97ca087fe3e1
                     <p class="text-xs">2min ago</p>
                   </div>
                 </a>

@@ -73,11 +73,6 @@ pageEncoding="UTF-8"%>
 		      }
 		    });
 
-		    $("#openDialogButton").click(function() {
-		      showDialog();
-		    });
-		    
-		    
 		    $( '#write-form' ).dialog({
 				autoOpen: false,
 				modal: true,
@@ -108,7 +103,7 @@ pageEncoding="UTF-8"%>
 			});
 		    
 		    $( '#btn1' ).button().on( 'click', function() {
-				$( '#write-form' ).dialog( 'open' ); 
+				$( '#dialogContainer' ).dialog( 'open' ); 
 			});
 	});
 </script>
@@ -718,8 +713,6 @@ pageEncoding="UTF-8"%>
 							    &nbsp;&nbsp;&nbsp;&nbsp;<h4 class="text-xl font-bold text-black dark:text-white" style="padding-right: 30px;">아침</h4>
 							    <div style="display: flex; flex-direction: row;">
 							        <button id="btn1"><img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px"></buttoN>
-							        <img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px" onclick="showDialog()">
-							        <span style="">추가</span>
 							    </div>
 							</div>
 							</td>
