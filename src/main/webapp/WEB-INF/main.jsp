@@ -171,6 +171,7 @@
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
+        flag : ${flag}
 
         <ul class="mb-6 flex flex-col gap-1.5">
           <!-- Menu Item Dashboard -->
@@ -637,14 +638,14 @@
              <!--  달력날짜 컨트롤러  -->
                 		<li>
                 			<label for="start"></label>
-			    		  <input type="date" id="start" name="trip-start"
+			    		  <input type="date" id="calendarCt" name="trip-start"
        					   value=""
        					   min="2023-02-01" max="2023-12-31">
      		  			  </li>
      		  			  
 		  			   <script>
     						var currentDate = new Date().toISOString().split('T')[0];
-    						document.getElementById('start').value = currentDate;
+    						document.getElementById('calendarCt').value = currentDate;
 						</script>
               
 
@@ -735,7 +736,7 @@
                     <h4
                       class="text-title-md font-bold text-black dark:text-white"
                     >
-                      ${i_used_kcal} 0.00 kcal
+                      ${i_used_kcal} kcal
                     </h4>
                     <span class="text-sm font-medium">소모 칼로리</span>
                   </div>

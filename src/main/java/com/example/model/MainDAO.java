@@ -32,16 +32,36 @@ public class MainDAO {
 	
 //-------------------------------------------------------------------------
 	
-	public ArrayList<MainTO> HDataforMain(String mId) {
+	public int InsertData(String mId) {
 		
-	    //List<MainTO> tlist = (List<MainTO>)mapper.IntakeDataForMain();
-	    
-		List<MainTO> tlist = (List<MainTO>)mapper.HdataForMain(mId);
+		int flag = 1;
 		
-	    ArrayList<MainTO> hlists = new ArrayList<>(tlist);
-	    
-	    return hlists;
+		int result = mapper.InsertDataForMain(mId);
+		
+		if(result == 1 ) {
+			flag = 0;
+		}else if(result == 0) {
+			flag = 1;
+		}
+	
+		return flag;
+				
 	}
+	
+	
+
+//-------------------------------------------------------------------------
+	
+//	public ArrayList<MainTO> HDataforMain(String mId) {
+//		
+//	    //List<MainTO> tlist = (List<MainTO>)mapper.IntakeDataForMain();
+//	    
+//		List<MainTO> tlist = (List<MainTO>)mapper.HdataForMain(mId);
+//		
+//	    ArrayList<MainTO> hlists = new ArrayList<>(tlist);
+//	    
+//	    return hlists;
+//	}
 	
 	
 	

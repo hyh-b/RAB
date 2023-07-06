@@ -68,15 +68,17 @@ public class ConfigController {
         
         //v_memberIntakeData 정보
         ArrayList<MainTO> lists = dao.main_data(mId);
-        ArrayList<MainTO> hlists = dao.HDataforMain(mId);
+        int flag = dao.InsertData(mId);
         
 
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
   
         map.addAttribute("user", member);
+        
+        
 		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("hlists", hlists);
+		modelAndView.addObject("flag", flag);
 		
 		modelAndView.setViewName("main");
 		return modelAndView; 
