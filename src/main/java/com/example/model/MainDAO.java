@@ -19,11 +19,11 @@ public class MainDAO {
 	@Autowired
 	private MainMapperInter mapper;
 	
-	public ArrayList<MainTO> main_data() {
+	public ArrayList<MainTO> main_data(String mId) {
 		
 	    //List<MainTO> tlist = (List<MainTO>)mapper.IntakeDataForMain();
 	    
-		List<MainTO> tlist = (List<MainTO>)mapper.TotalDataForMain();
+		List<MainTO> tlist = (List<MainTO>)mapper.TotalDataForMain(mId);
 		
 	    ArrayList<MainTO> lists = new ArrayList<>(tlist);
 	    
@@ -31,6 +31,22 @@ public class MainDAO {
 	}
 	
 //-------------------------------------------------------------------------
+	
+	public ArrayList<MainTO> HDataforMain(String mId) {
+		
+	    //List<MainTO> tlist = (List<MainTO>)mapper.IntakeDataForMain();
+	    
+		List<MainTO> tlist = (List<MainTO>)mapper.HdataForMain(mId);
+		
+	    ArrayList<MainTO> hlists = new ArrayList<>(tlist);
+	    
+	    return hlists;
+	}
+	
+	
+	
+	
+//----------------------------------------------------------------------------
 	
 	//member아이디 가진 정보가 다 들어오는 지 확인 test용, Member로 바귀어야함 지우고 다시만들기 mapper에서도, parameter연결관계 설정 확인
 	
@@ -45,15 +61,15 @@ public class MainDAO {
 //	}
 	
 //아 점 저---------------------------------------------------------
-	public ArrayList<MainTO> data_meals(){
-		
-		List<MainTO> elist = (List<MainTO>)mapper.TotalDataForMain();
-		
-	    ArrayList<MainTO> datas = new ArrayList<>(elist);
-	    
-	    return datas;
-	    
-	}
+//	public ArrayList<MainTO> data_meals(){
+//		
+//		List<MainTO> elist = (List<MainTO>)mapper.TotalDataForMain();
+//		
+//	    ArrayList<MainTO> datas = new ArrayList<>(elist);
+//	    
+//	    return datas;
+//	    
+//	}
 
 }
 

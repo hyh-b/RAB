@@ -2,6 +2,7 @@ package com.example.model;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Time;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -88,7 +89,17 @@ public class MainTO {
    private int l_seq;
    private BigDecimal l_kcal;
    private Date l_day;
+   
+   // hdata 필요없음
 
-
+   private int h_seq;
+   private Date h_wdate;
+   private BigDecimal h_body_fat; 
+   private BigDecimal h_muscle;
+   private Time h_exerciseDuration;
+   private int h_kcal;
+   private int h_heart_rate;      
+   private Time h_sleep_duration;  
+   private int h_step_count;
 
 }

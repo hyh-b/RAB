@@ -67,19 +67,17 @@ public class ConfigController {
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
         //v_memberIntakeData 정보
-        ArrayList<MainTO> lists = dao.main_data();
+        ArrayList<MainTO> lists = dao.main_data(mId);
+        ArrayList<MainTO> hlists = dao.HDataforMain(mId);
         
-        //v_eat 음식 데이터
-        ArrayList<MainTO> datas = dao.data_meals();
-
 
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
   
         map.addAttribute("user", member);
 		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("datas", datas);
-
+		modelAndView.addObject("hlists", hlists);
+		
 		modelAndView.setViewName("main");
 		return modelAndView; 
 	}
@@ -239,13 +237,16 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
+	
+	// Calendar는 팝업 캘린더로 대체될듯함
 	@RequestMapping("/calendar.do")
 	public ModelAndView calendar() {
+		
 		ModelAndView modelAndView = new ModelAndView();
 		
 	      
-        ArrayList<MainTO> lists = dao.main_data();
-        modelAndView.addObject("lists", lists);
+        //ArrayList<MainTO> lists = dao.main_data();
+        //modelAndView.addObject("lists", lists);
         
         
 		modelAndView.setViewName("calendar");

@@ -6,6 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -34,11 +35,13 @@
    <c:set var="i_day" value="${item.i_day}" />
    <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
    <c:set var="m_weight" value="${item.m_weight}"/>
+   <c:set var="m_gender" value="${item.m_gender}"/>
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
    <c:set var="m_name" value="${item.m_name}" />
+  
    
-
+<!--  현재 몸무게가 목표몸무게보다 적으면 + 많으면 - 로 나오게 하는 함수 , 목표까지 ~ 에 삽입하면 됨,-->
   <script type="text/javascript">
     var m_weight = ${m_weight};
     var m_target_weight = ${m_target_weight};
@@ -54,13 +57,17 @@
       html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
     }
 
-    var divElement = document.getElementById('targetWeight_${i_seq}');
+    var divElement = document.getElementById('targetWeight');
     if (divElement) {
       divElement.innerHTML = html;
     }
   </script>
+  
+       		<!--  달력의 값이 현재날짜로 디폴트되게 하는 소스, 날짜밑에 삽입하면 됨, -->  			  
+
    
 </c:forEach>
+
 
 <!--  
 <c:forEach var="data" items="${datas}">
@@ -240,7 +247,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="tables.do"
+              href="calendar.do"
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
             >
@@ -498,7 +505,7 @@
 
               >${m_name}</span
             >
-            <span class="block text-xs font-medium">직업</span>
+            <span class="block text-xs font-medium">${m_gender}</span>
           </span>
 
           <span class="h-12 w-12 rounded-full">
@@ -627,14 +634,20 @@
                     </h4>
                     <span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a>
                     
-                           <!--  달력날짜 컨트롤러  -->
+             <!--  달력날짜 컨트롤러  -->
                 		<li>
                 			<label for="start"></label>
 			    		  <input type="date" id="start" name="trip-start"
        					   value=""
        					   min="2023-02-01" max="2023-12-31">
      		  			  </li>
-     		    
+     		  			  
+		  			   <script>
+    						var currentDate = new Date().toISOString().split('T')[0];
+    						document.getElementById('start').value = currentDate;
+						</script>
+              
+
      		    </span>
                   </div>
 
@@ -722,7 +735,7 @@
                     <h4
                       class="text-title-md font-bold text-black dark:text-white"
                     >
-                      ${i_used_kcal} kcal
+                      ${i_used_kcal} 0.00 kcal
                     </h4>
                     <span class="text-sm font-medium">소모 칼로리</span>
                   </div>
@@ -768,11 +781,12 @@
                     >
                       ${m_weight} kg
                     </h4>
-                  
+ 
                  
                     <div id="targetWeight">
                      <span class="text-sm font-medium">목표까지 - ${totarget} kg</span>
                   	</div>
+                  
                   	 
                  <!--  목표 몸무게 + - 로 나오게 하는 거 추가 작업 필요
                   	
