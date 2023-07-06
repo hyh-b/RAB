@@ -17,9 +17,10 @@
      with RAB - 당신의 몸을 상승시키세요
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+  
+  <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
-
-
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
   <!-- jstl 로 lists 받아옴 -->
  <c:forEach var="item" items="${lists}">
@@ -67,6 +68,29 @@
 
    
 </c:forEach>
+
+<!--  jQuery  -->
+<script>
+$(document).ready(function() {
+    var i_day = ${i_day};
+    var m_weight = ${m_weight};
+    var m_target_weight = ${m_target_weight};
+    var totarget = ${totarget};
+    
+    var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
+    $('#calendarCt').html(calendarhtml);
+ 
+    var html = '';
+
+    if (m_weight < m_target_weight) {
+      html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
+    } else {
+      html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
+    }
+    $('#targetWeight').html(html);
+	
+	});
+</script>
 
 
 <!--  
@@ -636,18 +660,9 @@
                     <span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a>
                     
              <!--  달력날짜 컨트롤러  -->
-                		<li>
-                			<label for="start"></label>
-			    		  <input type="date" id="calendarCt" name="trip-start"
-       					   value=""
-       					   min="2023-02-01" max="2023-12-31">
-     		  			  </li>
-     		  			  
-		  			   <script>
-    						var currentDate = new Date().toISOString().split('T')[0];
-    						document.getElementById('calendarCt').value = currentDate;
-						</script>
-              
+             <div id="calendarCt">
+               
+              </div>
 
      		    </span>
                   </div>
@@ -785,7 +800,7 @@
  
                  
                     <div id="targetWeight">
-                     <span class="text-sm font-medium">목표까지 - ${totarget} kg</span>
+                    
                   	</div>
                   
                   	 
