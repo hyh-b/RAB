@@ -75,8 +75,7 @@ public class ConfigController {
 
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
-        
-
+  
         map.addAttribute("user", member);
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("datas", datas);
@@ -220,6 +219,8 @@ public class ConfigController {
 	        
 	        modelAndView.setViewName("signin");
 	    }
+	    
+	    
 
 		return modelAndView; 
 	}
@@ -241,6 +242,12 @@ public class ConfigController {
 	@RequestMapping("/calendar.do")
 	public ModelAndView calendar() {
 		ModelAndView modelAndView = new ModelAndView();
+		
+	      
+        ArrayList<MainTO> lists = dao.main_data();
+        modelAndView.addObject("lists", lists);
+        
+        
 		modelAndView.setViewName("calendar");
 		return modelAndView; 
 	}
@@ -358,6 +365,8 @@ public class ConfigController {
 	      Object emailObject = userInfo.get("email");
 	      String id = String.valueOf(idObject);
 	      String email = String.valueOf(emailObject);
+	      
+	      System.out.println( "  kakaoid =>" + id +"\n");
 	      
 	      ModelAndView modelAndView = new ModelAndView();
 	        if(m_dao.confirmKakao(email) != null) { //가입한 회원이면

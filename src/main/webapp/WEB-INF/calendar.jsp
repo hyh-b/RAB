@@ -172,7 +172,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="profile.do"
+              href="food.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
@@ -440,7 +440,7 @@
             <span class="block text-sm font-medium text-black dark:text-white"
               >${m_name}</span
             >
-            <span class="block text-xs font-medium">직업란 쓰시렵니까들?</span>
+            <span class="block text-xs font-medium">직업</span>
           </span>
 
           <span class="h-12 w-12 rounded-full">
@@ -570,11 +570,19 @@
               <h2 class="text-title-md2 font-bold text-black dark:text-white">
                 달력
               </h2>
+              
+              <!--  달력날짜 컨트롤러  -->
+                <li><label for="start">Start date:</label>
+					<input type="date" id="start" name="trip-start"
+       					   value="2018-07-22"
+       					   min="2023-02-01" max="2023-12-31">
+     		    </li>
 
               <nav>
                 <ol class="flex items-center gap-2">
-                  <li><a class="font-medium" href="index.html">메인 /</a></li>
+                  <li><a class="font-medium" href="main.do"><u>메인</u> /</a></li>
                   <li class="text-primary">달력</li>
+                
                 </ol>
               </nav>
             </div>
