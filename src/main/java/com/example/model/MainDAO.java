@@ -16,8 +16,9 @@ import com.example.mappers.MemberMapperInter;
 @MapperScan("com.example.mappers")
 public class MainDAO {
 	
-	@Autowired
-	private MainMapperInter mapper;
+	
+	  @Autowired private MainMapperInter mapper;
+	 
 	
 	public ArrayList<MainTO> main_data() {
 		

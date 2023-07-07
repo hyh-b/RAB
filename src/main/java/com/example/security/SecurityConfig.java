@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
@@ -40,8 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		//페이지 권한 설정시 설정한 권한 앞에 자동으로 ROLE_가 붙는다 따라서 m_role에 'ROLE_권한명'으로 값을 줘야한다
 		.antMatchers("/signup2.do").hasRole("SIGNUP")
+		.antMatchers("/food.do").hasRole("ADMIN")
+		.antMatchers("/tables.do").hasRole("kic매니저")
 		.anyRequest().permitAll();
 		/*.antMatchers("/","/signup.do","/signup_ok.do","kakao.do").permitAll()
 			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/src/images/**").permitAll()
@@ -63,9 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.logout()
 			.logoutSuccessUrl("/")
 			.permitAll();
-		//권한 없는 페이지 접속시 연결될 url
-		http.exceptionHandling()
-			.accessDeniedPage("/access-denied.do");
 		
 		http.csrf().disable();
 	}

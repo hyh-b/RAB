@@ -15,11 +15,13 @@ public class CustomUserDetailsService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// 사용자 id로 정보 조회
 		MemberTO to = memberDAO.findByMId(username);
 		if(to == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
 		
-		return to;
+		CustomUserDetails details = new CustomUserDetails(to);
+		return details;
 	}
 }

@@ -13,9 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +31,7 @@ import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
 import com.example.model.MypageDAO;
 import com.example.model.MypageTO;
-
+import com.example.security.CustomUserDetails;
 import com.example.model.MainDAO;
 import com.example.model.MainTO;
 
@@ -57,8 +59,15 @@ public class ConfigController {
 	
 	@RequestMapping("/main.do")
 	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request) {
-		
 		ModelAndView modelAndView = new ModelAndView();
+		//원하는 유저 정보 가져오기 - security패키지의 CustomUserDetails 설정
+		//로그인한(인증된) 사용자의 정보를 authentication에 담음
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		System.out.println("seq가져와 "+customUserDetails.getM_seq());
 		
 		//유저 Id가져오기
 		String mId = authentication.getName(); 
@@ -337,27 +346,28 @@ public class ConfigController {
 	
 	//회원가입
 	@RequestMapping("/signup_ok.do")
-	   public ModelAndView signup_ok(HttpServletRequest request) {
-	      MemberTO to = new MemberTO();
+	public ModelAndView signup_ok(HttpServletRequest request) {
+		MemberTO to = new MemberTO();
 	      
-	      String id = request.getParameter("id");
-	      String pw = request.getParameter("password");
-	      String password = bcry.encode(request.getParameter("password"));
+		String id = request.getParameter("id");
+		String pw = request.getParameter("password");
+		String password = bcry.encode(request.getParameter("password"));
 	      
-	      to.setM_id(request.getParameter("id"));
-	      to.setM_pw(password);
-	      to.setM_mail(request.getParameter("mail"));
-	      to.setM_role("ROLE_SIGNUP");
+		to.setM_id(request.getParameter("id"));
+		to.setM_pw(password);
+		to.setM_mail(request.getParameter("mail"));
+		to.setM_role("SIGNUP");
 	      
-	      int flag = mDao.signup_ok(to);
+		int flag = mDao.signup_ok(to);
 	      
-	      ModelAndView modelAndView = new ModelAndView();
-	      modelAndView.setViewName("signup_ok");
-	      modelAndView.addObject("flag", flag);
-	      modelAndView.addObject("sId", id);
-	      modelAndView.addObject("sPw", pw);
-	      return modelAndView; 
-	   }
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("signup_ok");
+		modelAndView.addObject("flag", flag);
+		modelAndView.addObject("sId", id);
+		modelAndView.addObject("sPw", pw);
+		
+		return modelAndView; 
+	}
 	   
 	   //카카오 로그인
 	   @RequestMapping("/kakao.do")
@@ -383,8 +393,7 @@ public class ConfigController {
 	      if(mDao.confirmKakao(email) != null) { 
 	    	  modelAndView.addObject("login", "login"); 
 	        }
-	      System.out.println(id);
-	      System.out.println(email);
+	      
 	      modelAndView.addObject("userEmail", email);
 	      modelAndView.addObject("userId", id);
 	      modelAndView.setViewName("kakao");
@@ -404,7 +413,7 @@ public class ConfigController {
 		   to.setM_id(kId);
 		   to.setM_pw(password);
 		   //추가 정보입력을 위해 기존 이용자들과 식별할 권한부여
-		   to.setM_role("ROLE_SIGNUP");
+		   to.setM_role("SIGNUP");
 	      
 		   int flag = mDao.kSignup_ok(to);
 	      
@@ -433,7 +442,7 @@ public class ConfigController {
 			 
 		   modelAndView.setViewName("kLogout");
 		   return modelAndView; 
-	   }
+	   }	
 	   //회원가입 후 추가 정보입력
 	   @RequestMapping("/signup2.do")
 		public ModelAndView signup2() {
@@ -519,12 +528,5 @@ public class ConfigController {
 			
 		   return flag; 
 	   }
-	   //권한 없는 페이지 접속시
-	   @RequestMapping("/access-denied.do")
-	   public ModelAndView accessDenied() {
-		   ModelAndView modelAndView = new ModelAndView();
-		   modelAndView.setViewName("access-denied");
-		   return modelAndView;
-	   }
-
+	  
 }
