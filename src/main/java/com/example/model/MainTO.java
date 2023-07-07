@@ -12,8 +12,7 @@ import lombok.Setter;
 public class MainTO {
 	
 
-	//IntakeData, Member
-
+//IntakeData, Member
 	
    private int i_seq  ;           
    
@@ -38,11 +37,8 @@ public class MainTO {
    private Date i_day;
    
    private BigDecimal i_used_kcal;
-   
-   
-   // Member ----------------------------
-   
-   //private int m_seq;
+      
+// Member ----------------------------
    
    private String m_id;
    
@@ -75,31 +71,64 @@ public class MainTO {
    private BigDecimal m_target_weight;
    
    // 아점저 Meals ----------------------------
-   
-   private int d_seq;
+
    private int e_seq;
    
-   private BigDecimal d_kcal;
-   private Date d_day;
-   
+   private Date e_day;           
+   private BigDecimal e_carbohydrate_g;       
+   private BigDecimal e_protein_g;         
+   private BigDecimal e_fat_g;                       
+   private BigDecimal e_sugar_g;               
+   private BigDecimal e_cholesterol_mg; 
+   private BigDecimal e_sodium_mg;      
+   private BigDecimal e_trans_fat_g;    
+   private String e_name;
+ 
+   //Breakfast
    private int b_seq;
    private BigDecimal b_kcal;
    private Date b_day;
    
+   private String b_name;
+   private BigDecimal b_carbohydrate_g;
+   private BigDecimal b_protein_g;
+   private BigDecimal b_fat_g;
+   private BigDecimal b_sugar_g;
+   private BigDecimal b_cholesterol_mg;
+   private BigDecimal b_sodium_mg;
+   private BigDecimal b_trans_fat_g;
+  
+   //lunch
    private int l_seq;
    private BigDecimal l_kcal;
    private Date l_day;
    
-   // hdata 필요없음
+   private String l_name;
+   private BigDecimal l_carbohydrate_g;
+   private BigDecimal l_protein_g;
+   private BigDecimal l_fat_g;
+   private BigDecimal l_sugar_g;
+   private BigDecimal l_cholesterol_mg;
+   private BigDecimal l_sodium_mg;
+   private BigDecimal l_trans_fat_g;
+   
+   //Dinner
+   private int d_seq;
+   private BigDecimal d_kcal;
+   private Date d_day;
+   
+   private String d_name;
+   private BigDecimal d_carbohydrate_g;
+   private BigDecimal d_protein_g;
+   private BigDecimal d_fat_g;
+   private BigDecimal d_sugar_g;
+   private BigDecimal d_cholesterol_mg;
+   private BigDecimal d_sodium_mg;
+   private BigDecimal d_trans_fat_g;
+   
 
-//   private int h_seq;
-//   private Date h_wdate;
-//   private BigDecimal h_body_fat; 
-//   private BigDecimal h_muscle;
-//   private Time h_exerciseDuration;
-//   private int h_kcal;
-//   private int h_heart_rate;      
-//   private Time h_sleep_duration;  
-//   private int h_step_count;
+
+   
+
 
 }
