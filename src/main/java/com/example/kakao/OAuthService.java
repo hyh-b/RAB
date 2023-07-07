@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
@@ -75,6 +76,7 @@ public class OAuthService {
 	 
 	 public HashMap<String, Object> getKakaoUserInfo(String access_token) {
 		 HashMap<String, Object> userInfo = new HashMap<String, Object>();
+
 		    String reqURL = "https://kapi.kakao.com/v2/user/me";
 		    
 		    //access_token을 이용하여 사용자 정보 조회
@@ -122,11 +124,11 @@ public class OAuthService {
 	        try {
 	            URL url = new URL(reqURL);
 	            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	            conn.setRequestMethod("POSt");
+	            conn.setRequestMethod("POST");
 	            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
 	            int responseCode = conn.getResponseCode();
-	            System.out.println("responseCode : " + responseCode);
+	            System.out.println("카카오 로그아웃responseCode : " + responseCode);
 
 	            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -142,4 +144,5 @@ public class OAuthService {
 	            e.printStackTrace();
 	        }
 	    }
+
 }

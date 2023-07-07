@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
->>>>>>> ff263d9c30f7af10a8f2000655c754f51a667884
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,11 +7,9 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<<<<<<< HEAD
-  <title>Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template</title>
-=======
+
+
   <title>달력</title>
->>>>>>> ff263d9c30f7af10a8f2000655c754f51a667884
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
 
 <body

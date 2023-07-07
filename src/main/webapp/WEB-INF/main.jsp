@@ -6,8 +6,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -18,7 +16,6 @@
      with RAB - 당신의 몸을 상승시키세요
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-  
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
 
   </head>
@@ -103,16 +100,13 @@
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
     <a href="/">
    <!--  사이트 로고  -->
-<<<<<<< HEAD
+
      <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
     </a>
-
-
-=======
      <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
     </a>
 
->>>>>>> ff263d9c30f7af10a8f2000655c754f51a667884
+
     <button
       class="block lg:hidden"
       @click.stop="sidebarToggle = !sidebarToggle"
@@ -203,7 +197,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="profile.do"
+              href="food.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
@@ -285,7 +279,7 @@
         <li>
 			<a
     			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-    			href="/logout"
+    			href="/klogout.do"
     			@click="selected = (selected === 'Settings' ? '':'Settings')"
     			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
     			:class="page === 'settings' && 'bg-graydark'"
@@ -576,7 +570,7 @@
                 fill=""
               />
             </svg>
-            <a href="/logout">로그아웃</a>
+            <a href="/klogout.do">로그아웃</a>
           </button>
         </div>
         <!-- Dropdown End -->

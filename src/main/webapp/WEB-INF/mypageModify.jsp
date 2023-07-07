@@ -5,33 +5,35 @@
     	request.setCharacterEncoding("utf-8");
     
     	java.util.Date date = new java.util.Date();
+		
+		MypageTO myto = (MypageTO)request.getAttribute("myto");
     	
-    	MypageTO myto = (MypageTO)request.getAttribute("myto");
-    	System.out.println("profile.jsp TO >>>> " + myto );
+    	int seq = myto.getM_seq();
     	
-//     	String name = myto.getM_name();
-//     	String tel = myto.getM_tel();
-//     	String height = myto.getM_height();
-//     	String weight = myto.getM_weight();
-//     	String targetCalorie = myto.getM_target_calorie();
-//     	String targetWeight = myto.getM_target_weight();
-//     	String id = myto.getM_id();
-//     	String mail = myto.getM_mail();
+    	String name = myto.getM_name();
+    	String tel = myto.getM_tel();
+    	String height = myto.getM_height();
+    	String weight = myto.getM_weight();
+    	String targetCalorie = myto.getM_target_calorie();
+    	String targetWeight = myto.getM_target_weight();
+    	String id = myto.getM_id();
+    	String mail = myto.getM_mail();
     	
-//     	String filename = myto.getM_filename();
-//     	long filesize = myto.getM_filesize();
+    	String filename = myto.getM_filename();
+    	long filesize = myto.getM_filesize();
     	
-//     	System.out.println("profile.jsp name >>>> " + name);
-//     	System.out.println("profile.jsp tel >>>> " + tel);
-//     	System.out.println("profile.jsp height >>>> " + height);
-//     	System.out.println("profile.jsp weight>>>> " + weight);
-//     	System.out.println("profile.jsp targetCalorie >>>> " + targetCalorie);
-//     	System.out.println("profile.jsp targetWeight >>>> " + targetWeight);
-//     	System.out.println("profile.jsp id >>>> " + id);
-//     	System.out.println("profile.jsp mail >>>> " + mail);
-//     	System.out.println("profile.jsp filename >>>> " + filename);
-//     	System.out.println("profile.jsp filesize >>>> " + filesize);
-	
+    	System.out.println("profileModify.jsp seq >>>> " + seq);
+    	System.out.println("profileModify.jsp name >>>> " + name);
+    	System.out.println("profileModify.jsp tel >>>> " + tel);
+    	System.out.println("profileModify.jsp height >>>> " + height);
+    	System.out.println("profileModify.jsp weight>>>> " + weight);
+    	System.out.println("profileModify.jsp targetCalorie >>>> " + targetCalorie);
+    	System.out.println("profileModify.jsp targetWeight >>>> " + targetWeight);
+    	System.out.println("profileModify.jsp id >>>> " + id);
+    	System.out.println("profileModify.jsp mail >>>> " + mail);
+    	System.out.println("profileModify.jsp filename >>>> " + filename);
+    	System.out.println("profileModify.jsp filesize >>>> " + filesize);
+
     			
 %>
 
@@ -73,7 +75,6 @@ window.onload = function () {
   <!-- ===== Page Wrapper Start ===== -->
   <div class="flex h-screen overflow-hidden">
   
-  
     <!-- ===== Sidebar Start ===== -->
 <!-- 	메인 슬라이드바 완성시 그대로 -->
     <!-- ===== Sidebar End ===== -->
@@ -88,7 +89,39 @@ window.onload = function () {
     class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11"
   >
     <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
-    
+      <!-- Hamburger Toggle BTN -->
+      <button
+        class="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
+        @click.stop="sidebarToggle = !sidebarToggle"
+      >
+        <span class="relative block h-5.5 w-5.5 cursor-pointer">
+          <span class="du-block absolute right-0 h-full w-full">
+            <span
+              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white"
+              :class="{ '!w-full delay-300': !sidebarToggle }"
+            ></span>
+            <span
+              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white"
+              :class="{ '!w-full delay-400': !sidebarToggle }"
+            ></span>
+            <span
+              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white"
+              :class="{ '!w-full delay-500': !sidebarToggle }"
+            ></span>
+          </span>
+          <span class="du-block absolute right-0 h-full w-full rotate-45">
+            <span
+              class="absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white"
+              :class="{ 'h-0 delay-[0]': !sidebarToggle }"
+            ></span>
+            <span
+              class="delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white"
+              :class="{ 'h-0 dealy-200': !sidebarToggle }"
+            ></span>
+          </span>
+        </span>
+      </button>
+      <!-- Hamburger Toggle BTN -->
       <a class="block flex-shrink-0 lg:hidden" href="index.html">
         <img src="src/images/logo/logo-icon.svg" alt="Logo" />
       </a>
@@ -96,6 +129,7 @@ window.onload = function () {
     <div class="hidden sm:block">
       <form action="https://formbold.com/s/unique_form_id" method="POST">
         <div class="relative">
+      
         </div>
       </form>
     </div>
@@ -229,6 +263,47 @@ window.onload = function () {
                 My Profile
               </a>
             </li>
+          </ul>
+          <button
+            class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+          >
+            <svg
+              class="fill-current"
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
+                fill=""
+              />
+              <path
+                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+                fill=""
+              />
+            </svg>
+            Log Out
+          </button>
+        </div>
+        <!-- Dropdown End -->
+      </div>
+      <!-- User Area -->
+    </div>
+  </div>
+</header>
+
+      <!-- ===== Header End ===== -->
+
+      <!-- ===== Main Content Start ===== -->
+      <main>
+        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+          <div class="mx-auto max-w-242.5">
+            <!-- Breadcrumb Start -->
+            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h2 class="text-title-md2 font-bold text-black dark:text-white">
+                Mypage
               </h2>
 
               <nav>
@@ -244,18 +319,46 @@ window.onload = function () {
             <div
               class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div class="relative z-20 h-35 md:h-65">
-<!--  배사 파일명 -->
+              <!--  배사 파일명 -->
                 <img src="src/images/cover/cover-01.png" alt="profile cover"
                   class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
-               
+                <div class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
+                  <label for="cover"
+                    class="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary py-1 px-2 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4">
+                    <input type="file" name="cover" id="cover" class="sr-only" />
+                    <span>
+                      <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M4.76464 1.42638C4.87283 1.2641 5.05496 1.16663 5.25 1.16663H8.75C8.94504 1.16663 9.12717 1.2641 9.23536 1.42638L10.2289 2.91663H12.25C12.7141 2.91663 13.1592 3.101 13.4874 3.42919C13.8156 3.75738 14 4.2025 14 4.66663V11.0833C14 11.5474 13.8156 11.9925 13.4874 12.3207C13.1592 12.6489 12.7141 12.8333 12.25 12.8333H1.75C1.28587 12.8333 0.840752 12.6489 0.512563 12.3207C0.184375 11.9925 0 11.5474 0 11.0833V4.66663C0 4.2025 0.184374 3.75738 0.512563 3.42919C0.840752 3.101 1.28587 2.91663 1.75 2.91663H3.77114L4.76464 1.42638ZM5.56219 2.33329L4.5687 3.82353C4.46051 3.98582 4.27837 4.08329 4.08333 4.08329H1.75C1.59529 4.08329 1.44692 4.14475 1.33752 4.25415C1.22812 4.36354 1.16667 4.51192 1.16667 4.66663V11.0833C1.16667 11.238 1.22812 11.3864 1.33752 11.4958C1.44692 11.6052 1.59529 11.6666 1.75 11.6666H12.25C12.4047 11.6666 12.5531 11.6052 12.6625 11.4958C12.7719 11.3864 12.8333 11.238 12.8333 11.0833V4.66663C12.8333 4.51192 12.7719 4.36354 12.6625 4.25415C12.5531 4.14475 12.4047 4.08329 12.25 4.08329H9.91667C9.72163 4.08329 9.53949 3.98582 9.4313 3.82353L8.43781 2.33329H5.56219Z"
+                          fill="white" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M6.99992 5.83329C6.03342 5.83329 5.24992 6.61679 5.24992 7.58329C5.24992 8.54979 6.03342 9.33329 6.99992 9.33329C7.96642 9.33329 8.74992 8.54979 8.74992 7.58329C8.74992 6.61679 7.96642 5.83329 6.99992 5.83329ZM4.08325 7.58329C4.08325 5.97246 5.38909 4.66663 6.99992 4.66663C8.61075 4.66663 9.91659 5.97246 9.91659 7.58329C9.91659 9.19412 8.61075 10.5 6.99992 10.5C5.38909 10.5 4.08325 9.19412 4.08325 7.58329Z"
+                          fill="white" />
+                      </svg>
+                    </span>
+                    <span>Edit</span>
+                  </label>
                 </div>
               </div>
               <div class="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
                 <div
                   class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
                   <div class="relative drop-shadow-2">
-<!--  프사  -->
                     <img src="src/images/user/user-06.png" alt="profile" />
+                    <label for="profile"
+                      class="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2">
+                      <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M4.76464 1.42638C4.87283 1.2641 5.05496 1.16663 5.25 1.16663H8.75C8.94504 1.16663 9.12717 1.2641 9.23536 1.42638L10.2289 2.91663H12.25C12.7141 2.91663 13.1592 3.101 13.4874 3.42919C13.8156 3.75738 14 4.2025 14 4.66663V11.0833C14 11.5474 13.8156 11.9925 13.4874 12.3207C13.1592 12.6489 12.7141 12.8333 12.25 12.8333H1.75C1.28587 12.8333 0.840752 12.6489 0.512563 12.3207C0.184375 11.9925 0 11.5474 0 11.0833V4.66663C0 4.2025 0.184374 3.75738 0.512563 3.42919C0.840752 3.101 1.28587 2.91663 1.75 2.91663H3.77114L4.76464 1.42638ZM5.56219 2.33329L4.5687 3.82353C4.46051 3.98582 4.27837 4.08329 4.08333 4.08329H1.75C1.59529 4.08329 1.44692 4.14475 1.33752 4.25415C1.22812 4.36354 1.16667 4.51192 1.16667 4.66663V11.0833C1.16667 11.238 1.22812 11.3864 1.33752 11.4958C1.44692 11.6052 1.59529 11.6666 1.75 11.6666H12.25C12.4047 11.6666 12.5531 11.6052 12.6625 11.4958C12.7719 11.3864 12.8333 11.238 12.8333 11.0833V4.66663C12.8333 4.51192 12.7719 4.36354 12.6625 4.25415C12.5531 4.14475 12.4047 4.08329 12.25 4.08329H9.91667C9.72163 4.08329 9.53949 3.98582 9.4313 3.82353L8.43781 2.33329H5.56219Z"
+                          fill="" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M7.00004 5.83329C6.03354 5.83329 5.25004 6.61679 5.25004 7.58329C5.25004 8.54979 6.03354 9.33329 7.00004 9.33329C7.96654 9.33329 8.75004 8.54979 8.75004 7.58329C8.75004 6.61679 7.96654 5.83329 7.00004 5.83329ZM4.08337 7.58329C4.08337 5.97246 5.38921 4.66663 7.00004 4.66663C8.61087 4.66663 9.91671 5.97246 9.91671 7.58329C9.91671 9.19412 8.61087 10.5 7.00004 10.5C5.38921 10.5 4.08337 9.19412 4.08337 7.58329Z"
+                          fill="" />
+                      </svg>
+                      <input type="file" name="profile" id="profile" class="sr-only" />
+                    </label>
                   </div>
                 </div>
 <!--  마이페이지  -->                
@@ -287,7 +390,7 @@ window.onload = function () {
                               </svg>
                             </span>
 							<input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-							       type="text" name="name" id="name" value="윤지현" readonly />
+							       type="text" name="name" id="name" value="윤지현"  />
                           </div>
                         </div>
                         
@@ -299,11 +402,12 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="phoneNumber" id="phoneNumber"
-						    value="010 - 2920 - 0105" readonly />
+						    value="010 - 2920 - 0105"  />
 						    <img src="src/images/logo/call.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
                        </div>
+                       
 <!--  현재 신장 -->                      
                          <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                         <div class="w-full sm:w-1/2">
@@ -312,8 +416,8 @@ window.onload = function () {
 						  </label>
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="takeKcal" id="takeKcal" 
-						    value="163" readonly />
+						    type="text" name="cm" id="cm" 
+						    value="163"  />
 						    <img src="src/images/logo/cm.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -325,8 +429,8 @@ window.onload = function () {
 						  </label>
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="targetScale" id="targetScale"
-						    value="49" readonly />
+						    type="text" name="kg" id="kg"
+						    value="49"  />
 						    <img src="src/images/logo/body.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -341,7 +445,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="takeKcal" id="takeKcal" 
-						    value="1400" readonly />
+						    value="1400"  />
 						    <img src="src/images/logo/mypageFood.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -354,7 +458,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="targetScale" id="targetScale"
-						    value="47" readonly />
+						    value="47"  />
 						    <img src="src/images/logo/work3.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -369,7 +473,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="birthday" id="birthday" 
-						    value="2000.03.03" readonly />
+						    value="2000.03.03"  />
 						    <img src="src/images/logo/birthday.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -421,7 +525,7 @@ window.onload = function () {
                           <input
                             class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="email" name="email" id="email" 
-                            value="test@test.com" readonly/>
+                             />
                         </div>
                       </div>
 
@@ -435,8 +539,8 @@ window.onload = function () {
 		  <!-- 정보 수정 버튼 -->
 		  <button id="editButton"
 		    class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-		    onclick="location.href='mypageModify.do'">
-		    정보 수정
+		    onclick="location.href='mypageModifyOK.do'">
+		    저장
 		  </button>
 		  
 		  <!--  탈퇴 -->

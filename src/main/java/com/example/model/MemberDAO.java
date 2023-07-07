@@ -1,9 +1,7 @@
 package com.example.model;
 
-
-import java.util.ArrayList;
-
 import org.mybatis.spring.annotation.MapperScan;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,6 +15,11 @@ public class MemberDAO {
 	@Autowired
 	private MemberMapperInter mapper;
 	
+	@Autowired
+	public MemberDAO(MemberMapperInter mapper) {
+	    this.mapper = mapper;
+	}
+	//회원가입 성공 여부 flag로 확인
 	public int signup_ok(MemberTO to) {
 		int flag = 1;
 		
@@ -28,7 +31,7 @@ public class MemberDAO {
        
 		return flag;
 	}
-	
+	//회원가입 성공 여부 flag로 확인
 	public int kSignup_ok(MemberTO to) {
 		int flag = 1;
 		
@@ -40,20 +43,38 @@ public class MemberDAO {
        
 		return flag;
 	}
-	
-	public MemberTO signin_ok(MemberTO to) {
-		
-		return mapper.signin_ok(to);
-	}
-	
-	
-	
-	public MemberTO findByMId(String mId) {
-        return mapper.findByMId(mId);
+	//유저 정보 찾기
+	public MemberTO findByMId(String m_id) {
+        return mapper.findByMId(m_id);
     }
-	
+	//카카오 회원 여부확인
 	public MemberTO confirmKakao(String kId) {
 		return mapper.confirmKakao(kId);
+	}
+	//추가 정보입력 성공 여부 flag로 확인
+	public int signup2_ok(MemberTO to) {
+		int flag = 1;
+		
+		int result = mapper.signup2(to);
+		
+		if( result == 1 ) {
+			flag = 0;
+		}
+       
+		return flag;
+	}
+	//아이디 중복체크
+	public int idCheck(String m_id) {
+		
+		int flag = mapper.idCheck(m_id);
+		
+		return flag;
+	}
+	//이름 중복체크
+	public int nameCheck(String m_name) {
+		int flag = mapper.nameCheck(m_name);
+		
+		return flag;
 	}
 	
 }
