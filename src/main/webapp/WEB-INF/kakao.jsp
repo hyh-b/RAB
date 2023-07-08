@@ -25,16 +25,16 @@
 <input type="button" id="sbtn" value="가입">
 </form> 
 <%   
-	String login = (String)request.getAttribute("login");
-	
- 	out.println( "<script type='text/javascript'>" );
- 	out.println("window.onload = function() {");
- 	if(login !=null){
- 	
- 	out.println( "document.sfrm.submit();" );
- 	}else{
- 		out.println("document.kfrm.submit();" );
- 	}
+   String login = (String)request.getAttribute("login");
+   
+    out.println( "<script type='text/javascript'>" );
+    out.println("window.onload = function() {");
+    if(login !=null){
+    
+    out.println( "document.sfrm.submit();" );
+    }else{
+       out.println("document.kfrm.submit();" );
+    }
     out.println( "};" );
     out.println( "</script>" );
     

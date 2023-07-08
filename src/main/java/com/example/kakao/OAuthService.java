@@ -8,6 +8,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.springframework.stereotype.Service;
+
+import com.google.gson.JsonElement;
 import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
@@ -74,6 +77,7 @@ public class OAuthService {
 	        return access_Token;
 	    }
 	 
+
 	 public HashMap<String, Object> getKakaoUserInfo(String access_token) {
 		 HashMap<String, Object> userInfo = new HashMap<String, Object>();
 
@@ -98,6 +102,7 @@ public class OAuthService {
 		            result += line;
 		        }
 		        System.out.println("response body : " + result);
+
 		        JsonParser parser = new JsonParser();
 		        JsonElement element = parser.parse(result);
 		        

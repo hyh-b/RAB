@@ -6,6 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -13,13 +14,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-     with RAB - 당신의 몸을 상승시키세요
+     Main RAB
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+  
+  <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
-
-  </head>
-
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
   <!-- jstl 로 lists 받아옴 -->
  <c:forEach var="item" items="${lists}">
@@ -35,39 +36,209 @@
    <c:set var="i_day" value="${item.i_day}" />
    <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
    <c:set var="m_weight" value="${item.m_weight}"/>
+    <c:set var="m_seq" value="${item.m_seq}"/>
+   <c:set var="m_gender" value="${item.m_gender}"/>
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
    <c:set var="m_name" value="${item.m_name}" />
+       		<!--  달력의 값이 현재날짜로 디폴트되게 하는 소스, 날짜밑에 삽입하면 됨, -->  			     
 </c:forEach>
 
-<!--  
-<c:forEach var="data" items="${datas}">
-	<c:set var="d_seq" value="${data.d_seq}" />
-	<c:set var="e_seq" value="${data.e_seq}" />
-	<c:set var="d_kcal" value="${data.d_kcal}" />
-	<c:set var="d_day" value="${data.d_day}" />
+	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->
+	<script>
 
-	<c:set var="b_seq" value="${data.b_seq}" />
-	<c:set var="b_kcal" value="${data.b_kcal}" />
-	<c:set var="b_day" value="${data.b_day}" />
+		var i_day = ${i_day};
+		var m_seq = ${m_seq};
+		var m_weight = ${m_weight};
+		var m_target_weight = ${m_target_weight};
+		var totarget = ${totarget};
 
-	<c:set var="l_seq" value="${data.l_seq}" />
-	<c:set var="l_kcal" value="${data.l_kcal}" />
-	<c:set var="l_day" value="${data.l_day}" />
+	$(document).ready(function() {
+	
+    	var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
+    	$('#calendarCt').html(calendarhtml);
+ 
+    	var html = '';
+    
+    	console.log(m_weight);
+    	console.log(m_target_weight);
+    	console.log(m_seq);
+    
+    
+   	 if (m_weight < m_target_weight) {
+    	 html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
+    	}
+    	else if (m_weight == m_target_weight) {
+     	 html = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';	
+    	}
+    	else if(m_weight > m_target_weight) {
+      	html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
+    	}
+    
+    	$('#targetWeight').html(html);
+    	
+		});
+	////////////////////////////////////////////////////////////////////////////
+	
+		window.onload = function() {
+		
+		  	var pieData = [44, 55, 13];
+	  	  	var pieOptions = {
+	    	series: pieData,
+	    	chart: {
+	      	type: 'pie',
+	      	height: 350,
+	    	},
+	    	labels: ['탄수', '단백', '지방'],
+	    	responsive: [{
+	      	breakpoint: 480,
+	      	options: {
+	        	chart: {
+	          	width: 200
+	        	},
+	        	legend: {
+	          	position: 'bottom'
+	        	}
+	      	  }
+	    	}]
+	  	};
+	  	var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+	  	pieChart.render();
 
-</c:forEach>
+	  	var barOptions = {
+	    	series: [
+	      	{ name: '아침', data: [m_seq, 23, 20, 10, 22, 44, 12] },
+	      	{ name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
+	      	{ name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
+	    	],
+	    	chart: {
+	      	type: 'bar',
+	      	height: 350,
+	      	stacked: true,
+	      	toolbar: {
+	        	show: true
+	      	},
+	      	zoom: {
+	        	enabled: true
+	      	}
+	    	},
+	    	responsive: [{
+	      	breakpoint: 480,
+	      	options: {
+	        legend: {
+	        position: 'bottom',
+	        offsetX: -10,
+	        offsetY: 0
+	        }
+	      }
+	    }],
+	    plotOptions: {
+	      bar: {
+	        horizontal: false,
+	        borderRadius: 10,
+	        dataLabels: {
+	          total: {
+	            enabled: true,
+	            style: {
+	              fontSize: '13px',
+	              fontWeight: 900
+	            }
+	          }
+	        }
+	      },
+	    },
+	    xaxis: {
+	      type: 'text',
+	      categories: ['월', '화', '수', '목','금','토','일'],
+	    },
+	    legend: {
+	      position: 'top',
+	      horizontalAlign: 'center',
+	      offsetY: 10,
+	      markers: {
+	        radius: 12
+	      }
+	    },
+	    fill: {
+	      opacity: 1
+	    }
+	  };
+	  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
+	  barChart.render();
 
--->
+	  var areaOptions = {
+	    series: [{
+	      name: '저번주',
+	      data: [31, 40, 28, 51, 42, 109, 100]
+	    }, {
+	      name: '이번주',
+	      data: [11, 32, 45, 32, 34, 52, 41]
+	    }],
+	    chart: {
+	      height: 350,
+	      type: 'area'
+	    },
+	    dataLabels: {
+	      enabled: false
+	    },
+	    stroke: {
+	      curve: 'smooth'
+	    },
+	    xaxis: {
+	      type: 'datetime',
+	      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+	    },
+	    tooltip: {
+	      x: {
+	        format: 'dd/MM/yy HH:mm'
+	      },
+	    },
+	  };
+	  var areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
+	  areaChart.render();
 
-<!--  sign in 에서 데이터
-<c:forEach var="user" items="${users}">
-   <c:set var="m_name" value="${user.m_name}" />
-</c:forEach>
--->
+	  var lineOptions = {
+	    series: [{
+	      name: "Desktops",
+	      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+	    }],
+	    chart: {
+	      height: 350,
+	      type: 'line',
+	      zoom: {
+	        enabled: false
+	      }
+	    },
+	    dataLabels: {
+	      enabled: false
+	    },
+	    stroke: {
+	      curve: 'straight'
+	    },
+	    title: {
+	      text: '단위 : 월',
+	      align: 'left'
+	    },
+	    grid: {
+	      row: {
+	        colors: ['#000000', 'transparent'],
+	        opacity: 0.5
+	      },
+	    },
+	    xaxis: {
+	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+	    }
+	  };
+	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
+	  lineChart.render();
+	};
+	
+</script>
+
+
 
 </head>
 
- 
   <body
     x-data="{ page: 'analytics', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
@@ -90,6 +261,7 @@
 
     <!-- ===== Page Wrapper Start ===== -->
     <div class="flex h-screen overflow-hidden">
+    
  <!-- ===== Sidebar Start ===== -->
       <aside
   :class="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
@@ -99,12 +271,15 @@
   <!-- SIDEBAR HEADER -->
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
     <a href="/">
+    
    <!--  사이트 로고  -->
-
-
+     <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
+    </a>
+    
+    <!-- 
      <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
     </a>
-
+ -->
     <button
       class="block lg:hidden"
       @click.stop="sidebarToggle = !sidebarToggle"
@@ -137,9 +312,11 @@
         selected = JSON.parse(localStorage.getItem('selected'));
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
+    </nav>
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
+        flag : ${flag}
 
         <ul class="mb-6 flex flex-col gap-1.5">
           <!-- Menu Item Dashboard -->
@@ -176,7 +353,6 @@
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-
              <img
       			class="fill-current"
       			src="/src/images/user/rocatNOb.png"
@@ -184,12 +360,10 @@
       			width="24"
       			height="24"
    			/>
-
              	게시판
             </a>
           </li>
           <!-- Menu Item Profile -->
-          
 
               <!-- Menu Item Profile2 -->
           <li>
@@ -208,7 +382,6 @@
       			width="24"
       			height="24"
    			/>
-
              	식단
             </a>
           </li>
@@ -220,11 +393,10 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="tables.do"
+              href="calendar.do"
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
             >
-
             <img
       			class="fill-current"
       			src="/src/images/user/rocatNOb.png"
@@ -242,37 +414,7 @@
           <!-- Menu Item Tables -->
 		  <br/><br/>
           <!-- Menu Item Settings -->
-         
-         <!-- 
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="/logout"
-
-              @click="selected = (selected === 'Settings' ? '':'Settings')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
-              :class="page === 'settings' && 'bg-graydark'"
-            >
-              <svg
-                class="fill-current"
-                width="18"
-                height="19"
-                viewBox="0 0 18 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g clip-path="url(#clip0_130_9763)">
-
-            	<a href="/logout">로그아웃</a>
-            </a>
-          </li>
-=======
-            	로그아웃
-            </a>
-          </li>
-          
-          <li>
-           -->
+ 
            
         <li>
 			<a
@@ -293,7 +435,6 @@
   			</a>
 		</li>
           
-
           <!-- Menu Item Settings -->
         </ul>
       </div>
@@ -332,7 +473,7 @@
         class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
       >
         <!-- ===== Header Start ===== -->
-        <header
+    <header
   class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
 >
   <div
@@ -371,9 +512,9 @@
           </span>
         </span>
       </button>
-      <!-- Hamburger Toggle BTN -->
-      <a class="block flex-shrink-0 lg:hidden" href="index.jsp">
-        <img src="src/images/logo/logo-icon.svg" alt="Logo" />
+        <!-- Hamburger Toggle BTN -->
+      <a class="block flex-shrink-0 lg:hidden" href="/">
+        <img src="src/images/logo/" alt="홈 로고 추가해야되요" />
       </a>
     </div>
     
@@ -414,7 +555,6 @@
                     fill="#969AA1"
                   />
                   <path
-
                     fill="#969AA1"
                   />
                 </svg>
@@ -454,7 +594,7 @@
 
               >${m_name}</span
             >
-            <span class="block text-xs font-medium">직업란 쓰시렵니까들?</span>
+            <span class="block text-xs font-medium">${m_gender}</span>
           </span>
 
           <span class="h-12 w-12 rounded-full">
@@ -491,7 +631,6 @@
           >
             <li>
               <a
-
                 href="profile.do"
                 class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
               >
@@ -505,49 +644,8 @@
                 내 정보
               </a>
             </li>
-            
-            <!--  연락처 
-            <li>
-              <a
-                href="contact.do"
-
-                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-              >
-                <svg
-                  class="fill-current"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 22 22"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M17.6687 1.44374C17.1187 0.893744 16.4312 0.618744 15.675 0.618744H7.42498C6.25623 0.618744 5.25935 1.58124 5.25935 2.78437V4.12499H4.29685C3.88435 4.12499 3.50623 4.46874 3.50623 4.91562C3.50623 5.36249 3.84998 5.70624 4.29685 5.70624H5.25935V10.2781H4.29685C3.88435 10.2781 3.50623 10.6219 3.50623 11.0687C3.50623 11.4812 3.84998 11.8594 4.29685 11.8594H5.25935V16.4312H4.29685C3.88435 16.4312 3.50623 16.775 3.50623 17.2219C3.50623 17.6687 3.84998 18.0125 4.29685 18.0125H5.25935V19.25C5.25935 20.4187 6.22185 21.4156 7.42498 21.4156H15.675C17.2218 21.4156 18.4937 20.1437 18.5281 18.5969V3.47187C18.4937 2.68124 18.2187 1.95937 17.6687 1.44374ZM16.9469 18.5625C16.9469 19.2844 16.3625 19.8344 15.6406 19.8344H7.3906C7.04685 19.8344 6.77185 19.5594 6.77185 19.2156V17.875H8.6281C9.0406 17.875 9.41873 17.5312 9.41873 17.0844C9.41873 16.6375 9.07498 16.2937 8.6281 16.2937H6.77185V11.7906H8.6281C9.0406 11.7906 9.41873 11.4469 9.41873 11C9.41873 10.5875 9.07498 10.2094 8.6281 10.2094H6.77185V5.63749H8.6281C9.0406 5.63749 9.41873 5.29374 9.41873 4.84687C9.41873 4.39999 9.07498 4.05624 8.6281 4.05624H6.77185V2.74999C6.77185 2.40624 7.04685 2.13124 7.3906 2.13124H15.6406C15.9844 2.13124 16.2937 2.26874 16.5687 2.50937C16.8094 2.74999 16.9469 3.09374 16.9469 3.43749V18.5625Z"
-                    fill=""
-                  />
-                </svg>
-                연락처
-              </a>
-            </li>
-
-             -->
-            <li>
-              <a
-                href="settings.do"
-                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-              >
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-
-                정보 수정
-              </a>
-            </li>
           </ul>
+          
           <button
             class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
           >
@@ -621,11 +719,16 @@
                     <h4
                       class="text-title-md font-bold text-black dark:text-white"
                     >
-
                    ${i_day}
                     </h4>
-                    <span class="text-sm font-medium"><a href="calendar.do"><u> 날짜를 선택하세요 </u></a></span>
+                    <span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a>
+                    
+             <!--  달력날짜 컨트롤러  -->
+             <div id="calendarCt">
+               
+              </div>
 
+     		    </span>
                   </div>
 
                 </div>
@@ -667,7 +770,6 @@
                     <h4
                       class="text-title-md font-bold text-black dark:text-white"
                     >
-
                      ${i_kcal} kcal
                     </h4>
                     <span class="text-sm font-medium">섭취 칼로리</span>
@@ -713,11 +815,9 @@
                     <h4
                       class="text-title-md font-bold text-black dark:text-white"
                     >
-
                       ${i_used_kcal} kcal
                     </h4>
                     <span class="text-sm font-medium">소모 칼로리</span>
-
                   </div>
 
                 </div>
@@ -759,11 +859,23 @@
                     <h4
                       class="text-title-md font-bold text-black dark:text-white"
                     >
-
                       ${m_weight} kg
                     </h4>
-                    <span class="text-sm font-medium">목표까지 ${totarget} kg</span>
-
+ 
+                 
+                    <div id="targetWeight">
+                    
+                  	</div>
+                  
+                  	 
+                 <!--  목표 몸무게 + - 로 나오게 하는 거 추가 작업 필요
+                  	
+                <div id="targetWeight_${i_seq}">
+  					
+				</div>
+				
+				 -->
+                  
                   </div>
 
                 </div>
@@ -847,184 +959,9 @@
     </div>
     <!-- ===== Page Wrapper End ===== -->
   <script defer src="bundle.js"></script>
-  
-  <!-- ===== 파이그래프 , 스택 데이터 ===== -->
-  <script>
-  var pieData = [44, 55, 13];
 
-  //var barData = [41, 20, 15];
 
-  var pieOptions = {
-    series: pieData,
-    chart: {
-      type: 'pie',
-      height: 350,
-    },
 
-    labels: ['탄수', '단백', '지방'],
-
-    responsive: [{
-      breakpoint: 480,
-      options: {
-        chart: {
-          width: 200
-        },
-        legend: {
-          position: 'bottom'
-        }
-      }
-    }]
-  };
-
-  var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-  pieChart.render();
-
-  var barOptions = {
-    series: [
-      
-
-      { name: '아침', data: [10, 23, 20, 10, 22, 44, 12] },
-      { name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
-      { name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
-      { name: '간식', data: [13, 23, 20, 10, 22, 44, 12] },
-
-      
-    ],
-    chart: {
-      type: 'bar',
-      height: 350,
-      stacked: true,
-      toolbar: {
-        show: true
-      },
-      zoom: {
-        enabled: true
-      }
-    },
-    responsive: [{
-      breakpoint: 480,
-      options: {
-        legend: {
-          position: 'bottom',
-          offsetX: -10,
-          offsetY: 0
-        }
-      }
-    }],
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        borderRadius: 10,
-        dataLabels: {
-          total: {
-            enabled: true,
-            style: {
-              fontSize: '13px',
-              fontWeight: 900
-            }
-          }
-        }
-      },
-    },
-    xaxis: {
-      type: 'text',
-      categories: ['월', '화', '수', '목','금','토','일'],
-    },
-    legend: {
-      position: 'top',
-      horizontalAlign: 'center',
-      offsetY: 10,
-      markers: {
-        radius: 12
-      }
-    },
-    fill: {
-      opacity: 1
-    }
-  };
-
-  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
-  barChart.render();
-</script>
-  <!-- ===== 파이그래프 , 스택 데이터 ===== -->
-	
-<script>
-    var options = {
-      series: [{
-
-        name: '저번주',
-        data: [31, 40, 28, 51, 42, 109, 100]
-      }, {
-        name: '이번주',
-
-        data: [11, 32, 45, 32, 34, 52, 41]
-      }],
-      chart: {
-        height: 350,
-        type: 'area'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth'
-      },
-      xaxis: {
-        type: 'datetime',
-        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-      },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm'
-        },
-      },
-    };
-
-    var chart = new ApexCharts(document.querySelector("#barchart"), options);
-    chart.render();
-  </script>	
-	
-<script>
-  var options = {
-    series: [{
-      name: "Desktops",
-      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-    }],
-    chart: {
-      height: 350,
-      type: 'line',
-      zoom: {
-        enabled: false
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'straight'
-    },
-    title: {
-
-      text: '단위 : 월',
-
-      align: 'left'
-    },
-    grid: {
-      row: {
-        colors: ['#000000', 'transparent'], // takes an array which will be repeated on columns
-        opacity: 0.5
-      },
-    },
-    xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-    }
-  };
-
-  var chart = new ApexCharts(document.querySelector("#chartline"), options);
-  chart.render();
-</script>
-  </body>
-  
-  
-  
+</body>
+    
 </html>

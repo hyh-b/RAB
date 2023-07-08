@@ -46,7 +46,6 @@ public class MemberDAO {
 	}
 	
 	
-	
 	public MemberTO findByMId(String mId) {
         return mapper.findByMId(mId);
     }

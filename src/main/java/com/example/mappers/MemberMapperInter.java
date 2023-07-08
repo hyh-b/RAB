@@ -10,6 +10,7 @@ import com.example.model.MemberTO;
 @Mapper
 public interface MemberMapperInter {
 	
+
 	@Insert("insert into Member(m_seq, m_id,m_pw,m_mail,m_iskakao,m_join_date) values (0,#{m_id},#{m_pw},#{m_mail},0,now());")
 	public int signup_ok(MemberTO to);
 	

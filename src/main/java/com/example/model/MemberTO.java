@@ -1,8 +1,8 @@
 package com.example.model;
 
 
-import java.math.BigDecimal;
 
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +11,7 @@ import lombok.Setter;
 public class MemberTO {
 	private String m_seq;
 	private String m_id;
+
 	private String m_pw;
 	private String m_name;
 	private String gender;
