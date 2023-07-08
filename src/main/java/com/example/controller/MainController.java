@@ -3,6 +3,7 @@ package com.example.controller;
 import java.awt.PageAttributes.MediaType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,12 +38,10 @@ public class MainController {
 	private MainDAO dao;
 	
 	BCryptPasswordEncoder bcry = new BCryptPasswordEncoder();
-	
-	JsonArray arr = new JsonArray();
-	JsonObject obj = new JsonObject();
-	
+
+
 	@RequestMapping("/test.do")
-	public ModelAndView testForMain(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
+	public ModelAndView test(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		
@@ -56,14 +55,13 @@ public class MainController {
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
   
-        map.addAttribute("user", member);
-        
-        
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("flag", flag);
+		
 	
         modelAndView.setViewName("test");
-		return modelAndView; 
+        
+        return modelAndView;
 	}
 
 	
@@ -85,90 +83,65 @@ public class MainController {
   
         map.addAttribute("user", member);
         
-        
-		modelAndView.addObject("lists", lists);
+      
 		modelAndView.addObject("flag", flag);
+		modelAndView.addObject("lists", lists);
 		
 		modelAndView.setViewName("main");
 		return modelAndView; 
 	}
 	
 	//------jsonedData---------------------------------------
-	
 
-//	@RequestMapping(value = "/json_data.do", method = RequestMethod.GET, produces = "application/json")
-//	public ResponseEntity<JsonObject> jsonData(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
-//			
-//			ModelAndView modelAndView = new ModelAndView();
-//			
-//			mId = authentication.getName(); // Retrieve the m_id of the authenticated user
-//	        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+//	@RequestMapping("json_data")
+//	public ResponseEntity<String> JsonedDatas() {
 //	    
-//	        System.out.println("     m_id: " + member.getM_id());
-//	        System.out.println("     m_mail: " + member.getM_mail());
-//	  
-//	        map.addAttribute("user", member);
-//	        ArrayList<MainTO> fdatas = dao.foodData();
-//	        
-//	        JsonArray Foodarr = new JsonArray();
-//	    	
-//	
-//	    	System.out.println("     fdatas ->" + fdatas.size() );
-//	    	
-//	    	for(MainTO to : fdatas){
+//	    ArrayList<MainTO> fdatas = dao.foodData();
 //
-//	               // Breakfast
-//	               JsonObject breakfast = new JsonObject();
-//	               breakfast.addProperty("b_seq", to.getB_seq());
-//	               breakfast.addProperty("b_kcal", to.getB_kcal());
-//	               breakfast.addProperty("b_day", to.getB_day().toString());
-//	               // 나머지 필드들도 동일하게 처리
-//	               obj.add("breakfast", breakfast);
+//	    JsonObject result = new JsonObject();
+//	    
+//	    JsonArray Foodarr = new JsonArray();
 //
-//	               // Lunch
-//	               JsonObject lunch = new JsonObject();
-//	               lunch.addProperty("l_seq", to.getL_seq());
-//	               lunch.addProperty("l_kcal", to.getL_kcal());
-//	               lunch.addProperty("l_day", to.getL_day().toString());
-//	               // 나머지 필드들도 동일하게 처리
-//	               obj.add("lunch", lunch);
+//	    for (MainTO to : fdatas) {
+//	        JsonObject obj = new JsonObject();
 //
-//	               // Dinner
-//	               JsonObject dinner = new JsonObject();
-//	               dinner.addProperty("d_seq", to.getD_seq());
-//	               dinner.addProperty("d_kcal", to.getD_kcal());
-//	               dinner.addProperty("d_day", to.getD_day().toString());
-//	               // 나머지 필드들도 동일하게 처리
-//	               obj.add("dinner", dinner);
+//	        // Breakfast
+//	        JsonObject breakfast = new JsonObject();
+//	        breakfast.addProperty("b_seq", to.getB_seq());
+//	        breakfast.addProperty("b_kcal", to.getB_kcal());
+//	        breakfast.addProperty("b_day", to.getB_day().toString());
+//	        // 나머지 필드들도 동일하게 처리
+//	        obj.add("breakfast", breakfast);
 //
-//	               Foodarr.add(obj);
-//	    	
-//	    	}    	
-//	    	
-//	    	//JsonObject responseObject = new JsonObject();
-//	    	//System.out.println( "\n      responseObject -> " + responseObject);
-//	    	
-//	        //responseObject.add("fdatas", arr);
-//	        
-//	    	System.out.println( "     arrr -> " + Foodarr);
-//	 
-//	       
-//			modelAndView.setViewName("json_data");
-//			//modelAndView.addObject("fdatas", fdatas);
-//			modelAndView.addObject("Foodarr", Foodarr);
-//			
-//			return new ResponseEntity<>(Arrays.toString(Foodarr), HttpStatus.OK);
+//	        // Lunch
+//	        JsonObject lunch = new JsonObject();
+//	        lunch.addProperty("l_seq", to.getL_seq());
+//	        lunch.addProperty("l_kcal", to.getL_kcal());
+//	        lunch.addProperty("l_day", to.getL_day().toString());
+//	        // 나머지 필드들도 동일하게 처리
+//	        obj.add("lunch", lunch);
 //
-//		}
+//	        // Dinner
+//	        JsonObject dinner = new JsonObject();
+//	        dinner.addProperty("d_seq", to.getD_seq());
+//	        dinner.addProperty("d_kcal", to.getD_kcal());
+//	        dinner.addProperty("d_day", to.getD_day().toString());
+//	        // 나머지 필드들도 동일하게 처리
+//	        obj.add("dinner", dinner);
+//
+//	        Foodarr.add(obj);
+//	    }
+//
+//	    result.add("fdatas", Foodarr);
+//	    
+//	    System.out.println("   result - >  " + result);
+//	   	
+//	   	return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+//	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/json_data.do", method = RequestMethod.POST)
-	public ResponseEntity<JsonObject> jsonData(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
-
-	    mId = authentication.getName(); // Retrieve the m_id of the authenticated user
-	    MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
-
-	    map.addAttribute("user", member);
+	@RequestMapping("json_data")
+	public ResponseEntity<String> JsonedDatas() {
+	    
 	    ArrayList<MainTO> fdatas = dao.foodData();
 
 	    JsonObject result = new JsonObject();
@@ -179,28 +152,21 @@ public class MainController {
 	        JsonObject obj = new JsonObject();
 
 	        // Breakfast
-	        JsonObject breakfast = new JsonObject();
-	        breakfast.addProperty("b_seq", to.getB_seq());
-	        breakfast.addProperty("b_kcal", to.getB_kcal());
-	        breakfast.addProperty("b_day", to.getB_day().toString());
+	        JsonObject meals = new JsonObject();
+	        meals.addProperty("b_seq", to.getB_seq());
+	        meals.addProperty("b_kcal", to.getB_kcal());
+	        meals.addProperty("b_day", to.getB_day().toString());
+	        meals.addProperty("b_name", to.getB_name().toString());
+	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
+	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
+	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
+	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
+	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
+	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
+	        
+	        meals.addProperty("m_seq", to.getM_seq());
 	        // 나머지 필드들도 동일하게 처리
-	        obj.add("breakfast", breakfast);
-
-	        // Lunch
-	        JsonObject lunch = new JsonObject();
-	        lunch.addProperty("l_seq", to.getL_seq());
-	        lunch.addProperty("l_kcal", to.getL_kcal());
-	        lunch.addProperty("l_day", to.getL_day().toString());
-	        // 나머지 필드들도 동일하게 처리
-	        obj.add("lunch", lunch);
-
-	        // Dinner
-	        JsonObject dinner = new JsonObject();
-	        dinner.addProperty("d_seq", to.getD_seq());
-	        dinner.addProperty("d_kcal", to.getD_kcal());
-	        dinner.addProperty("d_day", to.getD_day().toString());
-	        // 나머지 필드들도 동일하게 처리
-	        obj.add("dinner", dinner);
+	        obj.add("meals", meals);
 
 	        Foodarr.add(obj);
 	    }
@@ -208,10 +174,9 @@ public class MainController {
 	    result.add("fdatas", Foodarr);
 	    
 	    System.out.println("   result - >  " + result);
-
-	    return new ResponseEntity<>(result, HttpStatus.OK);
+	   	
+	   	return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
 	}
-
 
 
 

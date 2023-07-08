@@ -41,8 +41,10 @@
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
    <c:set var="m_name" value="${item.m_name}" />
-       		<!--  달력의 값이 현재날짜로 디폴트되게 하는 소스, 날짜밑에 삽입하면 됨, -->  			     
+       					     
 </c:forEach>
+
+ 
 
 	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->
 	
@@ -53,43 +55,43 @@
     var m_target_weight = "${m_target_weight}";
     var totarget = "${totarget}";
     
-    var selected = ''; 
+    //var selected = ''; 
 	</script>
+	
+	
 	
 <script>
 
+
     window.onload = function() {
-  	
-      var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
-      $('#calendarCt').html(calendarhtml);
-
-      var whtml = '';
-
-      if (m_weight < m_target_weight) {
-        whtml = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-      } else if (m_weight == m_target_weight) {
-        whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';  
-      } else if(m_weight > m_target_weight) {
-        whtml = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-      }
-
-      $('#targetWeight').html(whtml);
-      
-      //data: { mId: "your-mId-value" },
-      
-      
-      
+  	  
       $.ajax({
-        url: "/json_data.do",
-        type: "post",
+        url: "/json_data",
+        type: "get",
         dataType: 'json',
-        data : {
-        	day : i_day
-        },
-        success: function (response) {
+        success: function (result) {
+        
+        	console.log( "result ->", result);
         	
-        	console.log(day);
 
+            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
+            $('#calendarCt').html(calendarhtml);
+
+            var whtml = '';
+
+            if (m_weight < m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
+            } else if (m_weight == m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';  
+            } else if(m_weight > m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
+            }
+
+            $('#targetWeight').html(whtml);
+            
+            //data: { mId: "your-mId-value" },
+            
+        
             var pieData = [44, 55, 13];
     	  	  	var pieOptions = {
     	    	series: pieData,
