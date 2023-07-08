@@ -6,7 +6,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up | TailAdmin - Tailwind CSS Admin Dashboard Template</title>
+  <title>회원가입</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
 
@@ -201,7 +201,7 @@
                     Rock At Your Body와 함께<br> 건강한 하루를 보내봐요!
                   </p>
                   <span class="mt-15 inline-block">
-				        <img src="src/images/logo/rocatNOb.png" width="90%" height="90%" >
+				       <a href="/"><img src="src/images/logo/rocatNOb.png" width="90%" height="90%" ></a>
                   </span>
                 </div>
               </div>
@@ -360,9 +360,9 @@
 	window.onload = function() {
 	
 		document.getElementById( 'sbtn' ).onclick = function() {
-			// 유효성검사 - email은 이메일형식 / 비밀번호는 문자와 숫자가 필수로 포함된 6~20자리
+			// 유효성검사 - email은 이메일형식 / 비밀번호는 문자와 숫자가 필수로 포함된 6~20자리(='"사용불가)
 			var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-            var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
+            var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?![^]*[\\'\\\"\\=]).{6,20}$/;
 			
 			if( document.sfrm.id.value.trim() == '' ) {
 				alert( 'id를 입력하셔야 합니다' );
@@ -396,7 +396,7 @@
             }
 
             if (!passwordPattern.test(document.sfrm.password.value.trim())) {
-                alert("비밀번호는 최소 6자이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.");
+                alert("비밀번호는 최소 6자이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \" 는 사용불가)");
                 event.preventDefault();
                 return false;
             }

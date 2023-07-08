@@ -43,14 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 		.antMatchers("/signup2.do").hasRole("SIGNUP")
-		.antMatchers("/food.do").hasRole("ADMIN")
-		.antMatchers("/tables.do").hasRole("kic매니저")
+		//.antMatchers("/food.do").hasRole("ADMIN")
+		//.antMatchers("/tables.do").hasRole("kic매니저")
 		.anyRequest().permitAll();
 		/*.antMatchers("/","/signup.do","/signup_ok.do","kakao.do").permitAll()
 			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/src/images/**").permitAll()
 			.anyRequest().authenticated();
 			
-		
 		http.authorizeRequests()
 		
 		.anyRequest().permitAll();

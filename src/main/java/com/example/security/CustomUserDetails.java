@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Getter
 public class CustomUserDetails implements UserDetails {
-	// 기본 getter이 필요한 필드들
+	// 기본 getter가 필요한 필드들
     private String username;
     private String password;
     private boolean accountNonLocked =true;

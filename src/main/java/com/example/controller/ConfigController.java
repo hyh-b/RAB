@@ -74,7 +74,7 @@ public class ConfigController {
 		//유저 Id를 통하여 정보가져오는 메서드
         MemberTO member = mDao.findByMId(mId); 
         // 권한 확인 후 정보입력 페이지로 넘김
-        if("ROLE_SIGNUP".equals(member.getM_role())) {
+        if("SIGNUP".equals(member.getM_role())) {
         	modelAndView.setViewName("redirect:/signup2.do");
         	return modelAndView;
         }
@@ -279,10 +279,10 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
-	@RequestMapping("/tables.do")
+	@RequestMapping("/exercise.do")
 	public ModelAndView tables() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("tables");
+		modelAndView.setViewName("exercise");
 		return modelAndView; 
 	}
 
@@ -528,5 +528,12 @@ public class ConfigController {
 			
 		   return flag; 
 	   }
+	   
+	   @RequestMapping("/pra.do")
+		public ModelAndView ds() {
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("pra");
+			return modelAndView; 
+		}
 	  
 }
