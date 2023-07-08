@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.kakao.OAuthService;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
-
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.example.model.MypageDAO;
@@ -47,9 +47,6 @@ public class ConfigController {
 	
 	BCryptPasswordEncoder bcry = new BCryptPasswordEncoder();
 	
-	@Autowired
-	private MainDAO dao;
-	
 	@RequestMapping("/")
 	public ModelAndView index() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -57,59 +54,6 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
-	@RequestMapping("/test.do")
-	public ModelAndView testForMain(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
-		ModelAndView modelAndView = new ModelAndView();
-		
-		
-		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
-        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
-        
-        //v_memberIntakeData 정보
-        ArrayList<MainTO> lists = dao.main_data(mId);
-        int flag = dao.InsertData(mId);
-        
-        System.out.println("     m_id: " + member.getM_id());
-        System.out.println("     m_mail: " + member.getM_mail());
-  
-        map.addAttribute("user", member);
-        
-        
-		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("flag", flag);
-        
-        modelAndView.setViewName("test");
-		return modelAndView; 
-	}
-
-	
-	@RequestMapping("/main.do")
-	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
-		
-		ModelAndView modelAndView = new ModelAndView();
-		
-		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
-        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
-        
-        //v_memberIntakeData 정보
-        ArrayList<MainTO> lists = dao.main_data(mId);
-        int flag = dao.InsertData(mId);
-        
-    
-        System.out.println("     m_id: " + member.getM_id());
-        System.out.println("     m_mail: " + member.getM_mail());
-  
-        map.addAttribute("user", member);
-        
-        
-		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("flag", flag);
-		
-		modelAndView.setViewName("main");
-		return modelAndView; 
-	}
-	
-
 	@RequestMapping("/profile.do")
 	public ModelAndView profile(HttpServletRequest request) {
 		

@@ -15,14 +15,12 @@ import com.example.mappers.MemberMapperInter;
 @Repository
 @MapperScan("com.example.mappers")
 public class MainDAO {
-	
+		
 	@Autowired
 	private MainMapperInter mapper;
 	
 	public ArrayList<MainTO> main_data(String mId) {
-		
-	    //List<MainTO> tlist = (List<MainTO>)mapper.IntakeDataForMain();
-	    
+
 		List<MainTO> tlist = (List<MainTO>)mapper.TotalDataForMain(mId);
 		
 	    ArrayList<MainTO> lists = new ArrayList<>(tlist);
@@ -48,21 +46,16 @@ public class MainDAO {
 				
 	}
 	
-	
-
 //-------------------------------------------------------------------------
-	
-//	public ArrayList<MainTO> HDataforMain(String mId) {
-//		
-//	    //List<MainTO> tlist = (List<MainTO>)mapper.IntakeDataForMain();
-//	    
-//		List<MainTO> tlist = (List<MainTO>)mapper.HdataForMain(mId);
-//		
-//	    ArrayList<MainTO> hlists = new ArrayList<>(tlist);
-//	    
-//	    return hlists;
-//	}
-	
+		public ArrayList<MainTO> foodData() {
+
+			List<MainTO> datas = (List<MainTO>)this.mapper.FoodData();
+		
+			ArrayList<MainTO> fdatas = new ArrayList<>(datas);
+	    
+	    	return fdatas;
+		}
+
 	
 	
 	

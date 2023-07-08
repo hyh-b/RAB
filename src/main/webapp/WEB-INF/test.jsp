@@ -45,44 +45,42 @@
 </c:forEach>
 
 	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->
-	<script>
+<script>
+    window.onload = function() {
+      var i_day = ${i_day};
+      var m_seq = ${m_seq};
+      var m_weight = ${m_weight};
+      var m_target_weight = ${m_target_weight};
+      var totarget = ${totarget};
+      
+     	
+      var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
+      $('#calendarCt').html(calendarhtml);
 
-		var i_day = ${i_day};
-		var m_seq = ${m_seq};
-		var m_weight = ${m_weight};
-		var m_target_weight = ${m_target_weight};
-		var totarget = ${totarget};
+      var whtml = '';
 
-	$(document).ready(function() {
-	
-    	var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
-    	$('#calendarCt').html(calendarhtml);
- 
-    	var html = '';
-    
-    	console.log(m_weight);
-    	console.log(m_target_weight);
-    	console.log(m_seq);
-    
-    
-   	 if (m_weight < m_target_weight) {
-    	 html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-    	}
-    	else if (m_weight == m_target_weight) {
-     	 html = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';	
-    	}
-    	else if(m_weight > m_target_weight) {
-      	html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-    	}
-    
-    	$('#targetWeight').html(html);
-    	
-		});
-	////////////////////////////////////////////////////////////////////////////
-	
-		window.onload = function() {
-		
-		  	var pieData = [44, 55, 13];
+      if (m_weight < m_target_weight) {
+        whtml = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
+      } else if (m_weight == m_target_weight) {
+        whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';  
+      } else if(m_weight > m_target_weight) {
+        whtml = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
+      }
+
+      $('#targetWeight').html(whtml);
+      
+      $.ajax({
+        url: "/json_data.do",
+        type: "post",
+        dataType: 'json', 
+        success: function (response) {
+   			
+        	
+        	
+        	var fd = response.fdatas;
+        	console.log(fd.length());
+        	
+          var pieData = [44, 55, 13];
 	  	  	var pieOptions = {
 	    	series: pieData,
 	    	chart: {
@@ -107,7 +105,7 @@
 
 	  	var barOptions = {
 	    	series: [
-	      	{ name: '아침', data: [m_seq, 23, 20, 10, 22, 44, 12] },
+	      	{ name: '아침', data: [10, 23, 20, 10, 22, 44, 12] },
 	      	{ name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
 	      	{ name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
 	    	],
@@ -231,13 +229,17 @@
 	  };
 	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
 	  lineChart.render();
-	};
-	
-</script>
+		};
+          
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      })  
+    };
+  </script>
+  
 
-
-	
-</script>
 
 
 </head>
@@ -274,9 +276,13 @@
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
     <a href="/">
    <!--  사이트 로고  -->
+     <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
+    </a>
+    
+    <!-- 
      <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
     </a>
-
+ -->
     <button
       class="block lg:hidden"
       @click.stop="sidebarToggle = !sidebarToggle"
@@ -309,6 +315,7 @@
         selected = JSON.parse(localStorage.getItem('selected'));
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
+    </nav>
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
@@ -469,7 +476,7 @@
         class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
       >
         <!-- ===== Header Start ===== -->
-        <header
+    <header
   class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
 >
   <div
@@ -508,13 +515,13 @@
           </span>
         </span>
       </button>
-      <!-- Hamburger Toggle BTN -->
-      <a class="block flex-shrink-0 lg:hidden" href="index.jsp">
-        <img src="src/images/logo/rocatNOb.png" alt="Logo" />
+        <!-- Hamburger Toggle BTN -->
+      <a class="block flex-shrink-0 lg:hidden" href="/">
+        <img src="src/images/logo/" alt="홈 로고 추가해야되요" />
       </a>
     </div>
     
-    <!--  검색 창 -->
+    <!--  검색 창 얘가 있어야 옆에얘가 안딸려옴-->
     <div class="hidden sm:block">
     
     </div>
@@ -956,8 +963,6 @@
     <!-- ===== Page Wrapper End ===== -->
   <script defer src="bundle.js"></script>
 
- 
-<!-- chart jQuery변환 --> 
 
 
 </body>

@@ -72,17 +72,17 @@ public class MainTO {
    
    // 아점저 Meals ----------------------------
 
-   private int e_seq;
-   
-   private Date e_day;           
-   private BigDecimal e_carbohydrate_g;       
-   private BigDecimal e_protein_g;         
-   private BigDecimal e_fat_g;                       
-   private BigDecimal e_sugar_g;               
-   private BigDecimal e_cholesterol_mg; 
-   private BigDecimal e_sodium_mg;      
-   private BigDecimal e_trans_fat_g;    
-   private String e_name;
+//   private int e_seq;
+//   
+//   private Date e_day;           
+//   private BigDecimal e_carbohydrate_g;       
+//   private BigDecimal e_protein_g;         
+//   private BigDecimal e_fat_g;                       
+//   private BigDecimal e_sugar_g;               
+//   private BigDecimal e_cholesterol_mg; 
+//   private BigDecimal e_sodium_mg;      
+//   private BigDecimal e_trans_fat_g;    
+//   private String e_name;
  
    //Breakfast
    private int b_seq;
