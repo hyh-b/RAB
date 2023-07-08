@@ -44,11 +44,9 @@
        					     
 </c:forEach>
 
- 
-
 	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->
 	
-	<script>
+<script>
     var i_day = "${i_day}";
     var m_seq = "${m_seq}";
     var m_weight = "${m_weight}";
@@ -56,7 +54,7 @@
     var totarget = "${totarget}";
     
     //var selected = ''; 
-	</script>
+</script>
 	
 	
 	
@@ -256,19 +254,8 @@
         }
       })  
     };
-    
-    
-    
-
-    	
-    	
-	
-
   </script>
   
-
-
-
 </head>
 
   <body
