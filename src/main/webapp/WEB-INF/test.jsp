@@ -14,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-     with RAB - 당신의 몸을 상승시키세요
+     TEST RAB
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   
@@ -36,85 +36,208 @@
    <c:set var="i_day" value="${item.i_day}" />
    <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
    <c:set var="m_weight" value="${item.m_weight}"/>
+    <c:set var="m_seq" value="${item.m_seq}"/>
    <c:set var="m_gender" value="${item.m_gender}"/>
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
    <c:set var="m_name" value="${item.m_name}" />
-  
-   
-<!--  현재 몸무게가 목표몸무게보다 적으면 + 많으면 - 로 나오게 하는 함수 , 목표까지 ~ 에 삽입하면 됨,-->
-  <script type="text/javascript">
-    var m_weight = ${m_weight};
-    var m_target_weight = ${m_target_weight};
-    var totarget = ${totarget};
-
-    var html = '';
-
-    if (m_weight < m_target_weight) {
-      // m_weight가 m_target_weight보다 작을 경우
-      html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-    } else {
-      // m_weight가 m_target_weight보다 클 경우
-      html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-    }
-
-    var divElement = document.getElementById('targetWeight');
-    if (divElement) {
-      divElement.innerHTML = html;
-    }
-  </script>
-  
-       		<!--  달력의 값이 현재날짜로 디폴트되게 하는 소스, 날짜밑에 삽입하면 됨, -->  			  
-
-   
+       		<!--  달력의 값이 현재날짜로 디폴트되게 하는 소스, 날짜밑에 삽입하면 됨, -->  			     
 </c:forEach>
 
-<!--  jQuery  -->
-<script>
-$(document).ready(function() {
-    var i_day = ${i_day};
-    var m_weight = ${m_weight};
-    var m_target_weight = ${m_target_weight};
-    var totarget = ${totarget};
-    
-    var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
-    $('#calendarCt').html(calendarhtml);
- 
-    var html = '';
+	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->
+	<script>
 
-    if (m_weight < m_target_weight) {
-      html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-    } else {
-      html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-    }
-    $('#targetWeight').html(html);
+		var i_day = ${i_day};
+		var m_seq = ${m_seq};
+		var m_weight = ${m_weight};
+		var m_target_weight = ${m_target_weight};
+		var totarget = ${totarget};
+
+	$(document).ready(function() {
 	
-	});
+    	var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
+    	$('#calendarCt').html(calendarhtml);
+ 
+    	var html = '';
+    
+    	console.log(m_weight);
+    	console.log(m_target_weight);
+    	console.log(m_seq);
+    
+    
+   	 if (m_weight < m_target_weight) {
+    	 html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
+    	}
+    	else if (m_weight == m_target_weight) {
+     	 html = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';	
+    	}
+    	else if(m_weight > m_target_weight) {
+      	html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
+    	}
+    
+    	$('#targetWeight').html(html);
+    	
+		});
+	////////////////////////////////////////////////////////////////////////////
+	
+		window.onload = function() {
+		
+		  	var pieData = [44, 55, 13];
+	  	  	var pieOptions = {
+	    	series: pieData,
+	    	chart: {
+	      	type: 'pie',
+	      	height: 350,
+	    	},
+	    	labels: ['탄수', '단백', '지방'],
+	    	responsive: [{
+	      	breakpoint: 480,
+	      	options: {
+	        	chart: {
+	          	width: 200
+	        	},
+	        	legend: {
+	          	position: 'bottom'
+	        	}
+	      	  }
+	    	}]
+	  	};
+	  	var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+	  	pieChart.render();
 
+	  	var barOptions = {
+	    	series: [
+	      	{ name: '아침', data: [m_seq, 23, 20, 10, 22, 44, 12] },
+	      	{ name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
+	      	{ name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
+	    	],
+	    	chart: {
+	      	type: 'bar',
+	      	height: 350,
+	      	stacked: true,
+	      	toolbar: {
+	        	show: true
+	      	},
+	      	zoom: {
+	        	enabled: true
+	      	}
+	    	},
+	    	responsive: [{
+	      	breakpoint: 480,
+	      	options: {
+	        legend: {
+	        position: 'bottom',
+	        offsetX: -10,
+	        offsetY: 0
+	        }
+	      }
+	    }],
+	    plotOptions: {
+	      bar: {
+	        horizontal: false,
+	        borderRadius: 10,
+	        dataLabels: {
+	          total: {
+	            enabled: true,
+	            style: {
+	              fontSize: '13px',
+	              fontWeight: 900
+	            }
+	          }
+	        }
+	      },
+	    },
+	    xaxis: {
+	      type: 'text',
+	      categories: ['월', '화', '수', '목','금','토','일'],
+	    },
+	    legend: {
+	      position: 'top',
+	      horizontalAlign: 'center',
+	      offsetY: 10,
+	      markers: {
+	        radius: 12
+	      }
+	    },
+	    fill: {
+	      opacity: 1
+	    }
+	  };
+	  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
+	  barChart.render();
 
+	  var areaOptions = {
+	    series: [{
+	      name: '저번주',
+	      data: [31, 40, 28, 51, 42, 109, 100]
+	    }, {
+	      name: '이번주',
+	      data: [11, 32, 45, 32, 34, 52, 41]
+	    }],
+	    chart: {
+	      height: 350,
+	      type: 'area'
+	    },
+	    dataLabels: {
+	      enabled: false
+	    },
+	    stroke: {
+	      curve: 'smooth'
+	    },
+	    xaxis: {
+	      type: 'datetime',
+	      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+	    },
+	    tooltip: {
+	      x: {
+	        format: 'dd/MM/yy HH:mm'
+	      },
+	    },
+	  };
+	  var areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
+	  areaChart.render();
+
+	  var lineOptions = {
+	    series: [{
+	      name: "Desktops",
+	      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+	    }],
+	    chart: {
+	      height: 350,
+	      type: 'line',
+	      zoom: {
+	        enabled: false
+	      }
+	    },
+	    dataLabels: {
+	      enabled: false
+	    },
+	    stroke: {
+	      curve: 'straight'
+	    },
+	    title: {
+	      text: '단위 : 월',
+	      align: 'left'
+	    },
+	    grid: {
+	      row: {
+	        colors: ['#000000', 'transparent'],
+	        opacity: 0.5
+	      },
+	    },
+	    xaxis: {
+	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+	    }
+	  };
+	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
+	  lineChart.render();
+	};
+	
 </script>
 
 
-<!--  
-<c:forEach var="data" items="${datas}">
-	<c:set var="d_seq" value="${data.d_seq}" />
-	<c:set var="e_seq" value="${data.e_seq}" />
-	<c:set var="d_kcal" value="${data.d_kcal}" />
-	<c:set var="d_day" value="${data.d_day}" />
-
-	<c:set var="b_seq" value="${data.b_seq}" />
-	<c:set var="b_kcal" value="${data.b_kcal}" />
-	<c:set var="b_day" value="${data.b_day}" />
-
-	<c:set var="l_seq" value="${data.l_seq}" />
-	<c:set var="l_kcal" value="${data.l_kcal}" />
-	<c:set var="l_day" value="${data.l_day}" />
-
-</c:forEach>
-
--->
-
-  
+	
+</script>
 
 
 </head>
@@ -832,74 +955,11 @@ $(document).ready(function() {
     </div>
     <!-- ===== Page Wrapper End ===== -->
   <script defer src="bundle.js"></script>
-  
-  <!-- ===== 파이그래프 , 스택 데이터 ===== -->
-<div id="pieGraph"></div>
-<div id="stackChart"></div>
-<div id="areaChart"></div>
-<div id="lineChart"></div>
+
  
- 
-<script>
-$(document).ready(function() {
-    var i_day = ${i_day};
-    var m_weight = ${m_weight};
-    var m_target_weight = ${m_target_weight};
-    var totarget = ${totarget};
+<!-- chart jQuery변환 --> 
+
+
+</body>
     
-    var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
-    $('#calendarCt').html(calendarhtml);
- 
-    var html = '';
-
-    if (m_weight < m_target_weight) {
-      html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-    } else {
-      html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-    }
-    $('#targetWeight').html(html);
-    
-  	//-------------------------------------------------------------------- 파이 2번위치
-	
-
-
-	var pieHtml = '<script>';
-		pieHtml += 'var pieData = [44, 55, 13];var pieOptions = {series: pieData,chart: {type: "pie",height: 350,},labels: ["탄수", "단백", "지방"],responsive: [{breakpoint: 480, options: {chart: {width: 200},legend: {position: "bottom"} } }] }; var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions); pieChart.render();';
-		pieHtml += '<' + '/script' + '>';
-
-	$('#pieGraph').html(pieHtml);
-	
-	});
-		
-//--------------------------------------------------------------------- 스택 차트 1번위치
-    var stackChartHtml = '<script>';
-    stackChartHtml += 'var barOptions = {series: [{ name: "아침", data: [10, 23, 20, 10, 22, 44, 12] },{ name: "점심", data: [13, 23, 20, 10, 22, 44, 12] },{ name: "저녁", data: [13, 23, 20, 10, 22, 44, 12] },],chart: {type: "bar",height: 350,stacked: true,toolbar: {show: true},zoom: {enabled: true}},responsive: [{breakpoint: 480,options: {legend: {position: "bottom",offsetX: -10,offsetY: 0}}}],plotOptions: {bar: {horizontal: false,borderRadius: 10,dataLabels: {total: {enabled: true,style: {fontSize: "13px",fontWeight: 900}}}}},xaxis: {type: "text",categories: ["월", "화", "수", "목","금","토","일"]},legend: {position: "top",horizontalAlign: "center",offsetY: 10,markers: {radius: 12}},fill: {opacity: 1}};';
-    stackChartHtml += 'var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions); barChart.render();';
-    stackChartHtml += '<' + '/script' + '>';
-
-    $('#stackChart').html(stackChartHtml);
-	
-  //---------------------------------------------------------------------지역 차트 3번위치
-  
-    var areaChartHTML = '<script>';
-    areaChartHTML += 'var options = {series: [{name: "저번주",data: [31, 40, 28, 51, 42, 109, 100]}, {name: "이번주",data: [11, 32, 45, 32, 34, 52, 41]}],chart: {height: 350,type: "area"},dataLabels: {enabled: false},stroke: {curve: "smooth"},xaxis: {type: "datetime",categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]},tooltip: {x: {format: "dd/MM/yy HH:mm"}}};';
-    areaChartHTML += 'var chart = new ApexCharts(document.querySelector("#barchart"), options); chart.render();';
-    areaChartHTML += '<' + '/script' + '>';
-
-    $('#areaChart').html(areaChartHTML);
-    
-  //---------------------------------------------------------------------지역 차트 4번위치
-    
-    var lineChartHtml = '<script>';
-    lineChartHtml += 'var options = {series: [{name: "Desktops",data: [10, 41, 35, 51, 49, 62, 69, 91, 148]}],chart: {height: 350,type: "line",zoom: {enabled: false}},dataLabels: {enabled: false},stroke: {curve: "straight"},title: {text: "단위 : 월",align: "left"},grid: {row: {colors: ["#000000", "transparent"],opacity: 0.5}},xaxis: {categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]}};';
-    lineChartHtml += 'var chart = new ApexCharts(document.querySelector("#chartline"), options); chart.render();';
-    lineChartHtml += '<' + '/script' + '>';
-
-    $('#lineChart').html(lineChartHtml);
-</script>
-
-  </body>
-  
-  
-  
 </html>

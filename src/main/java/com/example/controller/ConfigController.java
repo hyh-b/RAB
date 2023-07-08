@@ -95,7 +95,7 @@ public class ConfigController {
         ArrayList<MainTO> lists = dao.main_data(mId);
         int flag = dao.InsertData(mId);
         
-
+    
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
   

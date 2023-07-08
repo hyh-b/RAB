@@ -14,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-     with RAB - 당신의 몸을 상승시키세요
+     With RAB 당신의 몸을 상승시키세요
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   
@@ -40,60 +40,8 @@
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
    <c:set var="m_name" value="${item.m_name}" />
-  
-   
-<!--  현재 몸무게가 목표몸무게보다 적으면 + 많으면 - 로 나오게 하는 함수 , 목표까지 ~ 에 삽입하면 됨,-->
-  <script type="text/javascript">
-    var m_weight = ${m_weight};
-    var m_target_weight = ${m_target_weight};
-    var totarget = ${totarget};
-
-    var html = '';
-
-    if (m_weight < m_target_weight) {
-      // m_weight가 m_target_weight보다 작을 경우
-      html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-    } else {
-      // m_weight가 m_target_weight보다 클 경우
-      html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-    }
-
-    var divElement = document.getElementById('targetWeight');
-    if (divElement) {
-      divElement.innerHTML = html;
-    }
-  </script>
-  
-       		<!--  달력의 값이 현재날짜로 디폴트되게 하는 소스, 날짜밑에 삽입하면 됨, -->  			  
-
-   
+       		<!--  달력의 값이 현재날짜로 디폴트되게 하는 소스, 날짜밑에 삽입하면 됨, -->  			     
 </c:forEach>
-
-<!--  jQuery  -->
-<script>
-$(document).ready(function() {
-    var i_day = ${i_day};
-    var m_weight = ${m_weight};
-    var m_target_weight = ${m_target_weight};
-    var totarget = ${totarget};
-    
-    var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
-    $('#calendarCt').html(calendarhtml);
- 
-    var html = '';
-
-    if (m_weight < m_target_weight) {
-      html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-    } else {
-      html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-    }
-    $('#targetWeight').html(html);
-	
-	});
-
-
-</script>
-
 
 <!--  
 <c:forEach var="data" items="${datas}">
@@ -111,18 +59,39 @@ $(document).ready(function() {
 	<c:set var="l_day" value="${data.l_day}" />
 
 </c:forEach>
-
 -->
 
-<!--  sign in 에서 데이터
-<c:forEach var="user" items="${users}">
-   <c:set var="m_name" value="${user.m_name}" />
-</c:forEach>
--->
+<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->
+<script>
+$(document).ready(function() {
+    var i_day = ${i_day};
+    var m_weight = ${m_weight};
+    var m_target_weight = ${m_target_weight};
+    var totarget = ${totarget};
+    
+    var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
+    $('#calendarCt').html(calendarhtml);
+ 
+    var html = '';
+    
+    console.log(m_weight);
+    console.log(m_target_weight);
+    
+    if (m_weight < m_target_weight) {
+      html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
+    }
+    else if (m_weight == m_target_weight) {
+      html = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';	
+    }
+    else if(m_weight > m_target_weight) {
+      html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
+    }
+    $('#targetWeight').html(html);
+	
+	});
 
-  
 
-
+</script>
 </head>
 
   <body
@@ -838,36 +807,18 @@ $(document).ready(function() {
     </div>
     <!-- ===== Page Wrapper End ===== -->
   <script defer src="bundle.js"></script>
-  
-  <!-- ===== 파이그래프 , 스택 데이터 ===== -->
+
 <div id="pieGraph"></div>
 <div id="stackChart"></div>
 <div id="areaChart"></div>
 <div id="lineChart"></div>
  
- 
+
+<!-- chart jQuery변환 --> 
 <script>
 $(document).ready(function() {
-    var i_day = ${i_day};
-    var m_weight = ${m_weight};
-    var m_target_weight = ${m_target_weight};
-    var totarget = ${totarget};
-    
-    var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
-    $('#calendarCt').html(calendarhtml);
- 
-    var html = '';
-
-    if (m_weight < m_target_weight) {
-      html = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-    } else {
-      html = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-    }
-    $('#targetWeight').html(html);
     
   	//-------------------------------------------------------------------- 파이 2번위치
-	
-
 
 	var pieHtml = '<script>';
 		pieHtml += 'var pieData = [44, 55, 13];var pieOptions = {series: pieData,chart: {type: "pie",height: 350,},labels: ["탄수", "단백", "지방"],responsive: [{breakpoint: 480, options: {chart: {width: 200},legend: {position: "bottom"} } }] }; var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions); pieChart.render();';
@@ -904,8 +855,6 @@ $(document).ready(function() {
     $('#lineChart').html(lineChartHtml);
 </script>
 
-  </body>
-  
-  
-  
+</body>
+    
 </html>
