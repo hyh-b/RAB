@@ -162,7 +162,7 @@ public class MainController {
 //		}
 	
 	@ResponseBody
-	@RequestMapping(value = "/json_data.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/json_data.do", method = RequestMethod.POST)
 	public ResponseEntity<JsonObject> jsonData(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
 
 	    mId = authentication.getName(); // Retrieve the m_id of the authenticated user
