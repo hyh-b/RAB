@@ -153,19 +153,22 @@ public class MainController {
 
 	        // Breakfast
 	        JsonObject meals = new JsonObject();
+	        
+	        meals.addProperty("m_seq", to.getM_seq());
+	        
 	        meals.addProperty("b_seq", to.getB_seq());
 	        meals.addProperty("b_kcal", to.getB_kcal());
 	        meals.addProperty("b_day", to.getB_day().toString());
 	        meals.addProperty("b_name", to.getB_name().toString());
-	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
-	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
-	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
-	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
-	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
-	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
 	        
-	        meals.addProperty("m_seq", to.getM_seq());
-	        // 나머지 필드들도 동일하게 처리
+	        meals.addProperty("b_carbohydrate_g", to.getB_carbohydrate_g());
+	        meals.addProperty("b_protein_g", to.getB_protein_g());
+	        meals.addProperty("b_fat_g", to.getB_fat_g());
+	        meals.addProperty("b_sugar_g", to.getB_sugar_g());
+	        meals.addProperty("b_cholesterol_mg", to.getB_cholesterol_mg());
+	        meals.addProperty("b_sodium_mg", to.getB_sodium_mg());
+
+	 
 	        obj.add("meals", meals);
 
 	        Foodarr.add(obj);

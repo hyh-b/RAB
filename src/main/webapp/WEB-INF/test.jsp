@@ -73,6 +73,10 @@
         
         	console.log( "result ->", result);
         	
+        	var b_kcal_data = result.fdatas.map(function(meal) {
+                return meal.meals.b_kcal;
+            });
+        	
 
             var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
             $('#calendarCt').html(calendarhtml);
@@ -117,7 +121,7 @@
 
     	  	var barOptions = {
     	    	series: [
-    	      	{ name: '아침', data: [10, 23, 20, 10, 22, 44, 12] },
+    	      	{ name: '아침', data: b_kcal_data },
     	      	{ name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
     	      	{ name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
     	    	],
