@@ -541,7 +541,7 @@ pageEncoding="UTF-8"%>
 		            $(this).dialog("close");
 		        }
 		    }
-		});
+		}); 
 		
 		$('#fbtn3').on('click',function(){
 			
