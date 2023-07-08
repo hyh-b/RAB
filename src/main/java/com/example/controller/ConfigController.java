@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import java.security.Principal;
 import java.io.File;
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,18 +24,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.kakao.OAuthService;
-import com.example.model.MainDAO;
 import com.example.model.MainTO;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.example.model.MypageDAO;
 import com.example.model.MypageTO;
 import com.example.security.CustomUserDetails;
-import com.example.model.MainDAO;
 import com.example.model.MainTO;
 
 @Controller
@@ -45,9 +50,6 @@ public class ConfigController {
 	@Autowired
 	private MypageDAO mydao;
 	
-	
-	@Autowired
-	private MainDAO dao;
 	
 	@RequestMapping("/")
 	public ModelAndView index() {
@@ -88,19 +90,13 @@ public class ConfigController {
 	    // 콘솔에 m_seq 값을 출력합니다.
 	    System.out.println("세션의 m_seq 값: " + mSeq);
 		
-        //정보
-        ArrayList<MainTO> lists = dao.main_data();
-        
-        //음식 데이터
-        ArrayList<MainTO> datas = dao.data_meals();
-        
         map.addAttribute("user", member);
-		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("datas", datas);
+		
 		
 		modelAndView.setViewName("main");
 		return modelAndView; 
 	}
+
 	
 	@RequestMapping("/profile.do")
 	public ModelAndView profile(HttpServletRequest request) {
@@ -162,17 +158,17 @@ public class ConfigController {
 		
 		myto.setM_filename(newFilename);
 
-		if (upload != null && !upload.isEmpty()) {
-		    myto.setM_filesize(upload.getSize());
-		} else {
-		    myto.setM_filesize(0);
-		}
-		
-		int flag = mydao.MypageModifyOk(myto);
+//		if (upload != null && !upload.isEmpty()) {
+//		    myto.setM_filesize(upload.getSize());
+//		} else {
+//		    myto.setM_filesize(0);
+//		}
+//		
+//		int flag = mydao.MypageModifyOk(myto);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("mypageModifyOK");
-		modelAndView.addObject("flag" , flag);
+		//modelAndView.addObject("flag" , flag);
 		modelAndView.addObject("myto" , myto);
 		return modelAndView; 
 	}
@@ -193,6 +189,8 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
+
+
 	@RequestMapping("/settings.do")
 	public ModelAndView settings() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -224,17 +222,10 @@ public class ConfigController {
 	@RequestMapping("/signin.do")
 
 	public ModelAndView signin(Principal principal, HttpServletRequest request) {
+
 		ModelAndView modelAndView = new ModelAndView();
 		// 로그인 되어있는 사용자가 로그인페이지에 접근하면  main페이지로 돌려보냄
 	    if (principal != null && principal.getName() != null) {
-	        
-	    	
-		    //지울것
-	        String id = request.getParameter("id");
-	        MemberTO member_id = dao.data_member(request, id);
-	    	System.out.println( " member_id ->  " + member_id);
-			modelAndView.addObject("member_id", member_id);
-			//
 			
 	        modelAndView.setViewName("redirect:/main.do");
 	        
@@ -242,7 +233,7 @@ public class ConfigController {
 	        
 	        modelAndView.setViewName("signin");
 	    }
-
+	    
 		return modelAndView; 
 	}
 	
@@ -258,9 +249,18 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
+	
+	// Calendar는 팝업 캘린더로 대체될듯함
 	@RequestMapping("/calendar.do")
 	public ModelAndView calendar() {
+		
 		ModelAndView modelAndView = new ModelAndView();
+		
+	      
+        //ArrayList<MainTO> lists = dao.main_data();
+        //modelAndView.addObject("lists", lists);
+        
+        
 		modelAndView.setViewName("calendar");
 		return modelAndView; 
 	}

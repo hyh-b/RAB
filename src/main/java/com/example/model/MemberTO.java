@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ public class MemberTO{
 	
 	private String m_seq;
 	private String m_id;
+
 	private String m_pw;
 	private String m_name;
 	private String m_gender;

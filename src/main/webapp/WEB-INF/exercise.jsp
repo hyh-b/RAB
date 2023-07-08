@@ -628,7 +628,7 @@ pageEncoding="UTF-8"%>
 </header>
 
       <!-- ===== Header End ===== -->
-
+	
       <!-- ===== Main Content Start ===== -->
       <main>
 		  <div style="
@@ -822,9 +822,9 @@ pageEncoding="UTF-8"%>
 				</div>
 		  </div>    
 		  <br>
+		  
 		  <!-- 사진 등록 -->
-		  	<div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
-    style="position: absolute; left: 0;">
+		  	<div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 			  	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
 			    	<label class="mb-3 block font-medium text-sm text-black dark:text-white">
 			            사진 등록

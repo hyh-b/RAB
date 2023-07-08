@@ -46,6 +46,7 @@ public class MemberDAO {
 	//유저 정보 찾기
 	public MemberTO findByMId(String m_id) {
         return mapper.findByMId(m_id);
+
     }
 	//카카오 회원 여부확인
 	public MemberTO confirmKakao(String kId) {

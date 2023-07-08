@@ -8,13 +8,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class FoodController {
-	
-	
-	@RequestMapping("/food.do")
-	public ModelAndView food(HttpServletRequest request) {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("food");
-		return modelAndView;
-	}
-	
+   
+   
+   @RequestMapping("/food.do")
+   public ModelAndView food(HttpServletRequest request) {
+      ModelAndView modelAndView = new ModelAndView();
+      modelAndView.setViewName("food");
+      return modelAndView;
+   }
+   
 }
