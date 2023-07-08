@@ -19,7 +19,7 @@
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
 
   </head>
-
+<c:set var="seq" value="${requestScope.seq}" />
   
   <!-- jstl 로 lists 받아옴 -->
  <c:forEach var="item" items="${lists}">
@@ -189,7 +189,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
+              href="food.do?seq=${seq}"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"

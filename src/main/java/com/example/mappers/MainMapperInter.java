@@ -13,11 +13,11 @@ public interface MainMapperInter {
 	
 	
 	//curdate()은 달력 파라미터 이름으로 바꿔서 정한 날짜에 맞춰서 그 데이터가 따라올 예정.
-	@Select("SELECT * FROM v_MeberIntakeData where i_day = curdate();")
+	@Select("SELECT * FROM v_memberIntakeData where i_day = curdate();")
     public List<MainTO> TotalDataForMain();
 	
 	//signin.do 에 id입력칸 parameter 이름 확인 =id
-	@Select("SELECT * FROM member WHERE m_id = #{id}")
+	@Select("SELECT * FROM Member WHERE m_id = #{id}")
 	public MemberTO DataFromId(String id);
 	
 	//eat에 들어온 데이터들 그래프에 뿌리기

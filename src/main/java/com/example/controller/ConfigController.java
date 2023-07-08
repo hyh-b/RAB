@@ -81,12 +81,13 @@ public class ConfigController {
         //지울것
         String id = request.getParameter("id");
         MemberTO member_id = dao.data_member(request, id);
-	    System.out.println( " member_id ->  " + member_id);
-	    //
-
+	    
+        String seq = member.getM_seq();
+        
         map.addAttribute("user", member);
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("datas", datas);
+		modelAndView.addObject("seq",seq);
 
 		modelAndView.setViewName("main");
 		return modelAndView; 

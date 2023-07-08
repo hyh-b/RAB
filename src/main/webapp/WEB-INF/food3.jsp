@@ -131,12 +131,12 @@ pageEncoding="UTF-8"%>
 		            });
 
 		            let result = '<div id="#">';
-		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+		            result += '<div class="tt" style="display: flex; justify-content: space-between;">';
 		            result += '<div>';
 		            result += '<table>';
 		            result += '<thead>';
 		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/></td>';
+		            result += '<td"><input type="text" name="f_name" value="' + selectedData[0][0] + '" readonly /></td>';
 		            result += '</tr>';
 		            result += '</thead>';
 		            result += '</table>';
@@ -145,43 +145,17 @@ pageEncoding="UTF-8"%>
 		            result += '<thead></thead>';
 		            result += '<tbody>';
 		            result += '<tr>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][1] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][2] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][3] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][4] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][5] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][6] + '"/></td>';
-		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][7] + '"/></td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_carbohydrate_g" value="' + selectedData[0][1] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_protein_g" value="' + selectedData[0][2] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_fat_g" value="' + selectedData[0][3] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_cholesterol_mg" value="' + selectedData[0][4] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_sodium_mg" value="' + selectedData[0][5] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_sugar_g" value="' + selectedData[0][6] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:50px;" name="f_kcal" value="' + selectedData[0][7] + '" readonly />(kcal)</td>';
 		            result += '</tr>';
 		            result += '</tbody>';
 		            result += '</table>';
 		            result += '</div>';
-// 		            let result = '<div id="#">';
-// 		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-// 		            result += '<div>';
-// 		            result += '<table>';
-// 		            result += '<thead>';
-// 		            result += '<tr>';
-// 		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/></td>';
-// 		            result += '</tr>';
-// 		            result += '</thead>';
-// 		            result += '</table>';
-// 		            result += '</div>';
-// 		            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-// 		            result += '<thead></thead>';
-// 		            result += '<tbody>';
-// 		            result += '<tr>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][1] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][2] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][3] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][4] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][5] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][6] + '"/></td>';
-// 		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name = "f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][7] + '"/></td>';
-// 		            result += '</tr>';
-// 		            result += '</tbody>';
-// 		            result += '</table>';
-// 		            result += '</div>';
 		         	// 선택한 데이터를 결과 div에 추가
 		            $('#resultFood1').append(result); 
 					
@@ -241,7 +215,7 @@ pageEncoding="UTF-8"%>
 	            contentType: false,
 	            dataType : 'json',
 	            success : function(json){
-	                console.log('아침 클릭 '+json);
+	                //console.log(json);
 	                if(json.flag == '1'){
 	                	alert('등록 성공입니다.');
 	                	// 등록 성공 후 div 제거
@@ -337,12 +311,12 @@ pageEncoding="UTF-8"%>
 		            });
 
 		            let result = '<div id="#">';
-		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+		            result += '<div class="tt" style="display: flex; justify-content: space-between;">';
 		            result += '<div>';
 		            result += '<table>';
 		            result += '<thead>';
 		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/></td>';
+		            result += '<td"><input type="text" name="f_name" value="' + selectedData[0][0] + '" readonly /></td>';
 		            result += '</tr>';
 		            result += '</thead>';
 		            result += '</table>';
@@ -351,13 +325,13 @@ pageEncoding="UTF-8"%>
 		            result += '<thead></thead>';
 		            result += '<tbody>';
 		            result += '<tr>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][1] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][2] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][3] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][4] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][5] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][6] + '"/></td>';
-		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name = "f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][7] + '"/></td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_carbohydrate_g" value="' + selectedData[0][1] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_protein_g" value="' + selectedData[0][2] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_fat_g" value="' + selectedData[0][3] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_cholesterol_mg" value="' + selectedData[0][4] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_sodium_mg" value="' + selectedData[0][5] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_sugar_g" value="' + selectedData[0][6] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:50px;" name="f_kcal" value="' + selectedData[0][7] + '" readonly />(kcal)</td>';
 		            result += '</tr>';
 		            result += '</tbody>';
 		            result += '</table>';
@@ -513,12 +487,12 @@ pageEncoding="UTF-8"%>
 		            });
 
 		            let result = '<div id="#">';
-		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+		            result += '<div class="tt" style="display: flex; justify-content: space-between;">';
 		            result += '<div>';
 		            result += '<table>';
 		            result += '<thead>';
 		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/></td>';
+		            result += '<td"><input type="text" name="f_name" value="' + selectedData[0][0] + '" readonly /></td>';
 		            result += '</tr>';
 		            result += '</thead>';
 		            result += '</table>';
@@ -527,13 +501,13 @@ pageEncoding="UTF-8"%>
 		            result += '<thead></thead>';
 		            result += '<tbody>';
 		            result += '<tr>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][1] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][2] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][3] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][4] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][5] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][6] + '"/></td>';
-		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name = "f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][7] + '"/></td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_carbohydrate_g" value="' + selectedData[0][1] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_protein_g" value="' + selectedData[0][2] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_fat_g" value="' + selectedData[0][3] + '" readonly />(g)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_cholesterol_mg" value="' + selectedData[0][4] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_sodium_mg" value="' + selectedData[0][5] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="padding-right: 17px;"><input type="text" style="width:50px;" name="f_sugar_g" value="' + selectedData[0][6] + '" readonly />(mg)</td>';
+		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:50px;" name="f_kcal" value="' + selectedData[0][7] + '" readonly />(kcal)</td>';
 		            result += '</tr>';
 		            result += '</tbody>';
 		            result += '</table>';
@@ -1143,133 +1117,292 @@ pageEncoding="UTF-8"%>
 
       <!-- ===== Main Content Start ===== -->
       <main>
-        <!-- =============================== div 시작 ========================= -->
-		<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-
-        <!-- =============================== 타이틀 시작========================= -->
-
-		<div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
-			<h4 class="text-title-md2 font-bold text-black dark:text-white" style="padding-left: 30px">
-			    식단 메모
-			</h4>
-		</div>
-        <!-- =============================== 타이틀 끝 ========================= -->
-
-        <hr style="padding-bottom: 30px"/>
-
-        <!-- =============================== 아침 ========================= -->
-          	
-        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-				<div class="flex items-center">
-			   		<h4 class="font-medium text-black dark:text-white mr-4">
-			    		아침
-			    	</h4>
-			    	<button id="btn1">
-			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-			    	</button>
-			    	<div style="display: flex; flex-direction: row;">
-						<button id="fbtn1" style="padding-left: 30px;">등록</buttoN>
-					</div>
-			    	<div id="dialogContainer1" title="검색">
-						<input type="text" id="foodName1" placeholder="검색어를 입력하세요">
-						<button id="searchButton1">검색</button>
-						<div id="foodComent1"></div>
-					</div>
+		  <div style="
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: flex-start; /* Items start at the beginning of the container */
+		    align-items: center; 
+		    height: 100vh;
+		  " class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-1" >
+		    <div style="margin-top: 20px;">
+		    	<h4 class="text-xl font-bold text-black dark:text-white">
+			        식단 메모지
+				</h4>
+		    </div>
+		    
+		    <!-- 탄단지 , 콜나당 radio버튼 -->
+<!-- 		    <div class="button-container" style="margin-top: 10px;"> -->
+<!-- 			  	<h1 class="text-xl font-bold text-black dark:text-white" style="width: 700px; height: 50px; text-align: left"> -->
+<!-- 					※ 한식만 데이터 검색 가능합니다. -->
+<!-- 				</h1> -->
+<!-- 			</div> -->
+			
+			<br/>
+			<!-- 탄단지 영역 div 시작  -->
+			<div id="#">
+			
+				<!-- 탄단지 영역 div 끝  -->
+				<div class="rounded-sm border border-stroke bg-white py-10 px-8 shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 1000px;">
+				    <div class="mt-4 flex items-end justify-end">
+				        <!-- ajax 시작 -->
+				        <div id="#">
+				            <!-- 탄단지, 콜나당 ui -->
+				            <div class="tt" style="display: flex; justify-content: space-between; align-items: center;">
+				                <div>
+				                	<h4 class="text-xl font-bold text-black dark:text-white" style="width: 330px;height: 35px;" >
+										※ 한식만 데이터 검색 가능합니다.
+									</h4>
+				                </div>
+<!-- 				                <table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;"> -->
+<!-- 				                    <thead> -->
+<!-- 				                        <tr> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;">탄수화물</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;">단백질</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;">지방</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;">콜레스토롤</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;">나트륨</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;">당</td> -->
+<!-- 				                            <td class="main" style="padding-right: 0px;">칼로리</td> -->
+<!-- 				                        </tr> -->
+<!-- 				                        <tr style="height: 2px;"> -->
+<!-- 				                            <td colspan="4"></td> -->
+<!-- 				                        </tr> -->
+<!-- 				                    </thead> -->
+				                    
+<!-- 				                    <tbody> -->
+<!-- 				                        ajax로 가져온 데이터 뿌리기 -->
+<!-- 				                        <tr> -->
+<!-- 				                            <td class="sub" style="padding-right: 9px;">17.4(g)</td> -->
+<!-- 				                            <td class="sub" style="padding-right: 9px;">17.4(g)</td> -->
+<!-- 				                            <td class="sub" style="padding-right: 9px;">18.4(g)</td> -->
+<!-- 				                            <td class="sub" style="padding-right: 9px;">11110(mg)</td> -->
+<!-- 				                            <td class="sub" style="padding-right: 9px;">1111(mg)</td> -->
+<!-- 				                            <td class="sub" style="padding-right: 9px;">1001(mg)</td> -->
+<!-- 				                            <td class="sub" style="color: #000; font-weight: bold;">1111(kcal)</td> -->
+<!-- 				                        </tr> -->
+<!-- 				                    </tbody> -->
+<!-- 				                </table> -->
+				            </div>
+				        </div>
+				        <!-- ajax 끝 -->
+				    </div>
 				</div>
-			</div>
-            <div class="flex flex-col gap-5.5 p-6.5">
-            	<div>
-<!--            	<label class="mb-3 block font-medium text-sm text-black dark:text-white"> -->
-					<!-- Default Input -->
-<!--                </label> -->
-		            <form action="#" method="post" name="ffrm">
-						<input type="hidden" name="seq" id="seq" value="${seq}" />
-						<div id="resultFood1"></div>
-					</form>
-	        	</div>
-        	</div>
-        </div>
-        </div> 
-        <!-- =============================== 아침 끝 =========================== -->
-        
-        <!-- =============================== 점심 시작 =========================== -->
-        
-        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-
-        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-				<div class="flex items-center">
-			   		<h4 class="font-medium text-black dark:text-white mr-4">
-			    		점심
-			    	</h4>
-			    	<button id="btn2">
-			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-			    	</button>
-			    	<div style="display: flex; flex-direction: row;">
-						<button id="fbtn2" style="padding-left: 30px;">등록</buttoN>
-					</div>
-			    	<div id="dialogContainer2" title="검색">
-						<input type="text" id="foodName2" placeholder="검색어를 입력하세요">
-						<button id="searchButton2">검색</button>
-						<div id="foodComent2"></div>
-					</div>
+	
+				<!-- 아침 -->
+				<table style="">
+					<tbody>
+						<tr>
+							<td style="padding-top: 15px;">
+								<div id="dialogContainer1" title="검색">
+					            	<input type="text" id="foodName1" placeholder="검색어를 입력하세요">
+					            	<button id="searchButton1">검색</button>
+					            	<div id="foodComent1"></div>
+					          	</div>
+								<div style="margin-top: 20px; display: flex; align-items: center;">
+							    &nbsp;&nbsp;&nbsp;&nbsp;<h4 class="text-xl font-bold text-black dark:text-white" style="padding-right: 30px;">아침</h4>
+							    <div style="display: flex; flex-direction: row;">
+							        <button id="btn1"><img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px"></buttoN>
+							    </div>
+							    <div style="display: flex; flex-direction: row;">
+							        <button id="fbtn1" style="padding-left: 30px;">등록</buttoN>
+							    </div>
+							</div>
+							</td>
+							<td style="height:7px"></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<br/>
+				
+				<div class="rounded-sm border border-stroke bg-white py-10 px-8 shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 1000px;">
+				    <div id="#">
+				    	<form action="#" method="post" name="ffrm">
+				    		<input type="hidden" name="seq" id="seq" value="${seq}" />
+					    	<div id="resultFood1">
+				        <!-- ajax 시작 -->
+<!-- 				        <div id="#"> -->
+<!-- 				            탄단지, 콜나당 ui -->
+<!-- 				            <div class="tt" style="display: flex; justify-content: space-between;"> -->
+<!-- 				                <div> -->
+<!-- 				                    <table> -->
+<!-- 				                        <thead> -->
+<!-- 				                            <tr> -->
+<!-- 				                                <td id="f_name">된장찌개</td> -->
+<!-- 				                            </tr> -->
+<!-- 				                        </thead> -->
+<!-- 				                    </table> -->
+<!-- 				                </div> -->
+<!-- 				                <table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;"> -->
+<!-- 				                    <thead> -->
+<!-- 				                    </thead> -->
+				                    
+<!-- 				                    <tbody> -->
+<!-- 				                        ajax로 가져온 데이터 뿌리기 --> 
+<!-- 				                        <tr> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_carbohydrate_g">17.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_protein_g">17.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_fat_g">18.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_cholesterol_mg">11110(mg)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_sodium_mg">1111(mg)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_sugar_g">1001(mg)</td> -->
+<!-- 				                            <td class="main" style="color: #000; font-weight: bold;" id="f_kcal">1111(kcal)</td> -->
+<!-- 				                        </tr> -->
+<!-- 				                    </tbody> -->
+<!-- 				                </table> -->
+<!-- 				            </div> -->
+<!-- 				        </div> -->
+				        <!-- ajax 끝 -->
+				        	</div>
+				    	</form>
+				    </div>
 				</div>
-			</div>
-            <div class="flex flex-col gap-5.5 p-6.5">
-            	<div>
-		            <form action="#" method="post" name="ffrm">
-						<input type="hidden" name="seq" id="seq" value="${seq}" />
-						<div id="resultFood2"></div>
-					</form>
-	        	</div>
-        	</div>
-        </div>
-        
-        </div>
-        
-        <!-- =============================== 점심 끝 =========================== -->
-
-        <!-- =============================== 저녁 시작 =========================== -->
-        
-        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-
-        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-				<div class="flex items-center">
-			   		<h4 class="font-medium text-black dark:text-white mr-4">
-			    		저녁
-			    	</h4>
-			    	<button id="btn3">
-			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-			    	</button>
-			    	<div style="display: flex; flex-direction: row;">
-						<button id="fbtn3" style="padding-left: 30px;">등록</buttoN>
-					</div>
-			    	<div id="dialogContainer3" title="검색">
-						<input type="text" id="foodName3" placeholder="검색어를 입력하세요">
-						<button id="searchButton3">검색</button>
-						<div id="foodComent3"></div>
-					</div>
+				
+				<br/>
+				<!-- 점심 -->
+				<table style="">
+					<tbody>
+						<tr>
+							<td style="padding-top: 15px;">
+								<div id="dialogContainer2" title="검색">
+					            	<input type="text" id="foodName2" placeholder="검색어를 입력하세요">
+					            	<button id="searchButton2">검색</button>
+					            	<div id="foodComent2"></div>
+					          	</div>
+								<div style="margin-top: 20px; display: flex; align-items: center;">
+							    &nbsp;&nbsp;&nbsp;&nbsp;<h4 class="text-xl font-bold text-black dark:text-white" style="padding-right: 30px;">점심</h4>
+							    <div style="display: flex; flex-direction: row;">
+							        <button id="btn2"><img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px"></buttoN>
+							    </div>
+							    <div style="display: flex; flex-direction: row;">
+							        <button id="fbtn2" style="padding-left: 30px;">등록</buttoN>
+							    </div>
+							</div>
+							</td>
+							<td style="height:7px"></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<br/>
+				
+				<div class="rounded-sm border border-stroke bg-white py-10 px-8 shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 1000px;">
+				    <div id="#">
+				    	<form action="#" method="post" name="ffrm">
+				    		<input type="hidden" name="seq" id="seq" value="${seq}" />
+					    	<div id="resultFood2">
+				        <!-- ajax 시작 -->
+<!-- 				        <div id="#"> -->
+<!-- 				            탄단지, 콜나당 ui -->
+<!-- 				            <div class="tt" style="display: flex; justify-content: space-between;"> -->
+<!-- 				                <div> -->
+<!-- 				                    <table> -->
+<!-- 				                        <thead> -->
+<!-- 				                            <tr> -->
+<!-- 				                                <td id="f_name">된장찌개</td> -->
+<!-- 				                            </tr> -->
+<!-- 				                        </thead> -->
+<!-- 				                    </table> -->
+<!-- 				                </div> -->
+<!-- 				                <table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;"> -->
+<!-- 				                    <thead> -->
+<!-- 				                    </thead> -->
+				                    
+<!-- 				                    <tbody> -->
+<!-- 				                        ajax로 가져온 데이터 뿌리기 --> 
+<!-- 				                        <tr> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_carbohydrate_g">17.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_protein_g">17.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_fat_g">18.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_cholesterol_mg">11110(mg)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_sodium_mg">1111(mg)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_sugar_g">1001(mg)</td> -->
+<!-- 				                            <td class="main" style="color: #000; font-weight: bold;" id="f_kcal">1111(kcal)</td> -->
+<!-- 				                        </tr> -->
+<!-- 				                    </tbody> -->
+<!-- 				                </table> -->
+<!-- 				            </div> -->
+<!-- 				        </div> -->
+				        <!-- ajax 끝 -->
+				        	</div>
+				    	</form>
+				    </div>
 				</div>
-			</div>
-            <div class="flex flex-col gap-5.5 p-6.5">
-            	<div>
-		            <form action="#" method="post" name="ffrm">
-						<input type="hidden" name="seq" id="seq" value="${seq}" />
-						<div id="resultFood3"></div>
-					</form>
-	        	</div>
-        	</div>
-        </div>
-        
-        </div>
-        
-        
-        <!-- =============================== 저녁 끝 =========================== -->
-        
-        <!-- =============================== div 끝 =========================== -->
-	  </main> 
+				
+				<br/>
+				<!-- 저녁 -->
+				<table style="">
+					<tbody>
+						<tr>
+							<td style="padding-top: 15px;">
+								<div id="dialogContainer3" title="검색">
+					            	<input type="text" id="foodName3" placeholder="검색어를 입력하세요">
+					            	<button id="searchButton3">검색</button>
+					            	<div id="foodComent3"></div>
+					          	</div>
+								<div style="margin-top: 20px; display: flex; align-items: center;">
+							    &nbsp;&nbsp;&nbsp;&nbsp;<h4 class="text-xl font-bold text-black dark:text-white" style="padding-right: 30px;">저녁</h4>
+							    <div style="display: flex; flex-direction: row;">
+							        <button id="btn3"><img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px"></buttoN>
+							    </div>
+							    <div style="display: flex; flex-direction: row;">
+							        <button id="fbtn3" style="padding-left: 30px;">등록</buttoN>
+							    </div>
+							</div>
+							</td>
+							<td style="height:7px"></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<br/>
+				
+				<div class="rounded-sm border border-stroke bg-white py-10 px-8 shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 1000px;">
+				    <div id="#">
+				    	<form action="#" method="post" name="ffrm">
+				    		<input type="hidden" name="seq" id="seq" value="${seq}" />
+					    	<div id="resultFood3">
+				        <!-- ajax 시작 -->
+<!-- 				        <div id="#"> -->
+<!-- 				            탄단지, 콜나당 ui -->
+<!-- 				            <div class="tt" style="display: flex; justify-content: space-between;"> -->
+<!-- 				                <div> -->
+<!-- 				                    <table> -->
+<!-- 				                        <thead> -->
+<!-- 				                            <tr> -->
+<!-- 				                                <td id="f_name">된장찌개</td> -->
+<!-- 				                            </tr> -->
+<!-- 				                        </thead> -->
+<!-- 				                    </table> -->
+<!-- 				                </div> -->
+<!-- 				                <table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;"> -->
+<!-- 				                    <thead> -->
+<!-- 				                    </thead> -->
+				                    
+<!-- 				                    <tbody> -->
+<!-- 				                        ajax로 가져온 데이터 뿌리기 --> 
+<!-- 				                        <tr> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_carbohydrate_g">17.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_protein_g">17.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_fat_g">18.4(g)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_cholesterol_mg">11110(mg)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_sodium_mg">1111(mg)</td> -->
+<!-- 				                            <td class="main" style="padding-right: 17px;" id="f_sugar_g">1001(mg)</td> -->
+<!-- 				                            <td class="main" style="color: #000; font-weight: bold;" id="f_kcal">1111(kcal)</td> -->
+<!-- 				                        </tr> -->
+<!-- 				                    </tbody> -->
+<!-- 				                </table> -->
+<!-- 				            </div> -->
+<!-- 				        </div> -->
+				        <!-- ajax 끝 -->
+				        	</div>
+				    	</form>
+				    </div>
+				</div>
+					
+		  	</div> 
+		  </div>
+		</main> 
       <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Content Area End ===== -->
