@@ -6,9 +6,8 @@
     
     	java.util.Date date = new java.util.Date();
 		
-		MypageTO myto = (MypageTO)request.getAttribute("myto");
-    	
-    	int seq = myto.getM_seq();
+    	MypageTO myto = (MypageTO)request.getAttribute("myto");
+    	System.out.println("profileModify.jsp TO >>>> " + myto );
     	
     	String name = myto.getM_name();
     	String tel = myto.getM_tel();
@@ -18,11 +17,17 @@
     	String targetWeight = myto.getM_target_weight();
     	String id = myto.getM_id();
     	String mail = myto.getM_mail();
+    	String role = myto.getM_role();
+    	String joinDate = myto.getM_join_date();
+    	String birthday = myto.getM_birthday();
     	
-    	String filename = myto.getM_filename();
-    	long filesize = myto.getM_filesize();
     	
-    	System.out.println("profileModify.jsp seq >>>> " + seq);
+    	String backgroundfilename = myto.getM_backgroundfilename();
+    	long backgroundfilesize = myto.getM_backgroundfilesize();
+    	
+    	String profilename = myto.getM_profilename();
+    	long profilesize = myto.getM_profilesize();
+    	
     	System.out.println("profileModify.jsp name >>>> " + name);
     	System.out.println("profileModify.jsp tel >>>> " + tel);
     	System.out.println("profileModify.jsp height >>>> " + height);
@@ -31,9 +36,12 @@
     	System.out.println("profileModify.jsp targetWeight >>>> " + targetWeight);
     	System.out.println("profileModify.jsp id >>>> " + id);
     	System.out.println("profileModify.jsp mail >>>> " + mail);
-    	System.out.println("profileModify.jsp filename >>>> " + filename);
-    	System.out.println("profileModify.jsp filesize >>>> " + filesize);
-
+    	
+    	System.out.println("profileModify.jsp backgroundfilename >>>> " + backgroundfilename);
+    	System.out.println("profileModify.jsp backgroundfilesize >>>> " + backgroundfilesize);
+    	System.out.println("profileModify.jsp profilename >>>> " + profilename);
+    	System.out.println("profileModify.jsp profilesize >>>> " + profilesize);
+	
     			
 %>
 
@@ -47,11 +55,123 @@
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 </head>
 <script type="text/javascript">
-window.onload = function () {
-	
-};
-</script>
+// 이메일 형식 검사==============================================================================================================
+function validateEmail() {
+	  const emailInput = document.getElementById('email');
+	  const email = emailInput.value.trim();
+	  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	  
+	  if (email === '') {
+	    alert('이메일을 입력하셔야 합니다.');
+	    return false;
+	  }
+	  
+	  if (!emailRegex.test(email)) {
+	    alert('올바른 이메일 형식이 아닙니다. 다시 입력해주세요.');
+	    return false;
+	  }
+	  
+	  return true;
+	}
 
+// 필수 입력값 =====================================================================================================================
+window.onload = function () {
+	document.getElementById('editButton').onclick = function () {
+		if( document.mfrm.name.value.trim() == '') {
+			alert('닉네임을 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.phoneNumber.value.trim() == '') {
+			alert('휴대폰 번호를 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.cm.value.trim() == '') {
+			alert('현재신장을 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.kg.value.trim() == '') {
+			alert('현재 몸무게를 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.takeKcal.value.trim() == '') {
+			alert('하루 목표 섭취 칼로리를 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.targetScale.value.trim() == '') {
+			alert('목표 체중을 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.birthday.value.trim() == '') {
+			alert('생년월일을 입력하셔야 합니다'); 
+			return false;
+		}
+		document.wfrm.submit();
+	};
+};
+
+// 배경 사진 사진 변경================================================================================================================
+ const coverInput = document.getElementById('cover');
+
+//입력 요소에 change 이벤트 리스너를 추가
+ coverInput.addEventListener('change', (event) => {
+   // 이벤트에서 선택된 파일
+   const file = event.target.files[0];
+
+   const reader = new FileReader();
+   reader.onload = function (e) {
+     // 미리보기 이미지를 표시하기 위해 새로운 <img> 요소를 생성
+     const previewImage = document.createElement('img');
+
+     // <img> 요소의 소스를 선택된 파일의 데이터 URL로 설정
+     previewImage.src = e.target.result;
+
+     // 미리보기 이미지에 적절한 스타일 클래스를 추가
+     previewImage.classList.add('h-40', 'w-40', 'object-cover');
+
+     // 미리보기 이미지를 표시할 컨테이너 요소
+     const previewContainer = document.getElementById('cover-container');
+
+     // 컨테이너 요소 비우기
+     previewContainer.innerHTML = '';
+
+     // 미리보기 이미지를 컨테이너에 추가
+     previewContainer.appendChild(previewImage);
+   };
+
+   // 선택된 파일을 데이터 URL로 읽어옴
+   reader.readAsDataURL(file);
+ });
+ 
+ // 프로필 사진 변경 ===================================================================================================================
+const profileInput = document.getElementById('profile');
+
+profileInput.addEventListener('change', (event) => {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    // 선택된 파일의 데이터 URL을 가져옴
+    const imageDataUrl = e.target.result;
+
+    // 프로필 이미지를 생성하고 소스를 설정
+    const profileImage = new Image();
+    profileImage.src = imageDataUrl;
+
+    // 프로필 이미지를 표시할 컨테이너 요소를 가져옵니다.
+    const profileContainer = document.getElementById('profile-container');
+
+    // 기존의 프로필 이미지를 제거합니다.
+    profileContainer.innerHTML = '';
+
+    // 프로필 이미지를 컨테이너에 추가합니다.
+    profileContainer.appendChild(profileImage);
+  };
+  
+	//선택된 파일을 데이터 URL로 읽어옴
+  reader.readAsDataURL(file);
+});
+ 
+</script>
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
@@ -202,14 +322,14 @@ window.onload = function () {
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
           <span class="hidden text-right lg:block">
-            <span class="block text-sm font-medium text-black dark:text-white"
-              >윤지현</span
-            >
-            <span class="block text-xs font-medium">이용자</span>
+            <span class="block text-sm font-medium text-black dark:text-white">
+            <%=name %>
+            </span >
+            <span class="block text-xs font-medium"><%=role %></span>
           </span>
 
           <span class="h-12 w-12 rounded-full">
-            <img src="src/images/user/user-01.png" alt="User" />
+            <img src="src/images/upload/<%=profilename %>"/>
           </span>
 
           <svg
@@ -315,17 +435,24 @@ window.onload = function () {
             </div>
             <!-- Breadcrumb End -->
 
-            <!-- ====== Profile Section Start -->
+ <!-- ====== Profile Section Start -->
+<form action="mypageModifyOK.do" method="post" name="mfrm" enctype="multipart/form-data">
+
+<!--  배사  -->
             <div
               class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div class="relative z-20 h-35 md:h-65">
-              <!--  배사 파일명 -->
-                <img src="src/images/cover/cover-01.png" alt="profile cover"
+                <img src="src/images/upload/<%=backgroundfilename %>" alt="profile cover"
                   class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
                 <div class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
                   <label for="cover"
                     class="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary py-1 px-2 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4">
                     <input type="file" name="cover" id="cover" class="sr-only" />
+                    
+<!--                      <input type="file" -->
+<!--                      id = "cover" name ="cover" -->
+<!--                       class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" /> -->
+                    
                     <span>
                       <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -340,12 +467,16 @@ window.onload = function () {
                     <span>Edit</span>
                   </label>
                 </div>
+                </div>
               </div>
+ 
+ <!--  프사  -->             
               <div class="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
                 <div
                   class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
                   <div class="relative drop-shadow-2">
-                    <img src="src/images/user/user-06.png" alt="profile" />
+
+                    <img src="src/images/upload/<%=profilename %>" alt="profile" />
                     <label for="profile"
                       class="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2">
                       <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14" fill="none"
@@ -357,19 +488,20 @@ window.onload = function () {
                           d="M7.00004 5.83329C6.03354 5.83329 5.25004 6.61679 5.25004 7.58329C5.25004 8.54979 6.03354 9.33329 7.00004 9.33329C7.96654 9.33329 8.75004 8.54979 8.75004 7.58329C8.75004 6.61679 7.96654 5.83329 7.00004 5.83329ZM4.08337 7.58329C4.08337 5.97246 5.38921 4.66663 7.00004 4.66663C8.61087 4.66663 9.91671 5.97246 9.91671 7.58329C9.91671 9.19412 8.61087 10.5 7.00004 10.5C5.38921 10.5 4.08337 9.19412 4.08337 7.58329Z"
                           fill="" />
                       </svg>
-                      <input type="file" name="profile" id="profile" class="sr-only" />
+                      <input type="file" name="profile" id="profile" value="" class="sr-only" />
                     </label>
                   </div>
                 </div>
-<!--  마이페이지  -->                
+                
+                
+<!-- 텍스트 필드 부분  -->                
                 <div class="mt-4">
                   <h3 class="mb-1.5 text-2xl font-medium text-black dark:text-white">
-                    윤지현
+                    <%=name %>
                   </h3>
-                  <p class="font-medium">2023.06.23 가입</p>
+                  <p class="font-medium"><%=joinDate %> 가입</p>
                   <div class="mx-auto max-w-180">
                   
-             <form action="./mypage.do" method="post" name="wfrm" >
               <div class="p-7">
                       <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                         <div class="w-full sm:w-1/2">
@@ -390,7 +522,8 @@ window.onload = function () {
                               </svg>
                             </span>
 							<input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-							       type="text" name="name" id="name" value="윤지현"  />
+							       type="text" name="name" id="name" 
+							       value="<%=name %>"  />
                           </div>
                         </div>
                         
@@ -402,7 +535,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="phoneNumber" id="phoneNumber"
-						    value="010 - 2920 - 0105"  />
+						    value="<%=tel %>"  />
 						    <img src="src/images/logo/call.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -417,7 +550,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="cm" id="cm" 
-						    value="163"  />
+						    value="<%=height %>"  />
 						    <img src="src/images/logo/cm.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -430,7 +563,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="kg" id="kg"
-						    value="49"  />
+						    value="<%=weight %>"  />
 						    <img src="src/images/logo/body.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -445,7 +578,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="takeKcal" id="takeKcal" 
-						    value="1400"  />
+						    value="<%=targetCalorie %>"  />
 						    <img src="src/images/logo/mypageFood.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -458,7 +591,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="targetScale" id="targetScale"
-						    value="47"  />
+						    value="<%=targetWeight %>"  />
 						    <img src="src/images/logo/work3.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -473,7 +606,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="birthday" id="birthday" 
-						    value="2000.03.03"  />
+						    value="<%=birthday %>"  />
 						    <img src="src/images/logo/birthday.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -499,7 +632,7 @@ window.onload = function () {
 						<input 
 							class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                              type="text" name="memberid" id="memberid"
-                             value="testID" readonly/>
+                             value="<%=id %>" readonly/>
                         </div>
                       </div>
                      </div>
@@ -524,8 +657,7 @@ window.onload = function () {
                           </span>
                           <input
                             class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                            type="email" name="email" id="email" 
-                             />
+                            type="email" name="email" id="email" value="<%=mail %>" onblur="validateEmail()" />
                         </div>
                       </div>
 
@@ -539,17 +671,9 @@ window.onload = function () {
 		  <!-- 정보 수정 버튼 -->
 		  <button id="editButton"
 		    class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-		    onclick="location.href='mypageModifyOK.do'">
+		  >
 		    저장
 		  </button>
-		  
-		  <!--  탈퇴 -->
-		  <button id="delete"
-		    class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-		    onclick="location.href='mypageDelete.do'">
-		    회원 탈퇴
-		  </button>
-            
             <!-- ====== Profile Section End -->
           </div>
         </div>
