@@ -57,7 +57,6 @@
 							<ul>
 
 								<li class="login"><a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do">
-
     								<img src="src/images/logo/kloginpng.png"> 
 									</a>
 								</li>

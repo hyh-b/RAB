@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.kakao.OAuthService;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
-
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.example.model.MypageDAO;
@@ -47,53 +47,13 @@ public class ConfigController {
 	
 	BCryptPasswordEncoder bcry = new BCryptPasswordEncoder();
 	
-	@Autowired
-	private MainDAO dao;
-	
 	@RequestMapping("/")
 	public ModelAndView index() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("index");
 		return modelAndView; 
 	}
-
 	
-	@RequestMapping("/main.do")
-	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request) {
-		
-		ModelAndView modelAndView = new ModelAndView();
-		
-		
-		//이거 뭔가요? to hyh
-		String mId = authentication.getName(); // Retrieve the m_id of the authenticated user
-        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
-        
-        //정보
-        ArrayList<MainTO> lists = dao.main_data();
-        
-        //음식 데이터
-        ArrayList<MainTO> datas = dao.data_meals();
-
-
-        System.out.println("     m_id: " + member.getM_id());
-        System.out.println("     m_mail: " + member.getM_mail());
-        
-        //지울것
-        String id = request.getParameter("id");
-        MemberTO member_id = dao.data_member(request, id);
-	    
-        String seq = member.getM_seq();
-        
-        map.addAttribute("user", member);
-		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("datas", datas);
-		modelAndView.addObject("seq",seq);
-
-		modelAndView.setViewName("main");
-		return modelAndView; 
-	}
-	
-
 	@RequestMapping("/profile.do")
 	public ModelAndView profile(HttpServletRequest request) {
 		
@@ -154,17 +114,17 @@ public class ConfigController {
 		
 		myto.setM_filename(newFilename);
 
-		if (upload != null && !upload.isEmpty()) {
-		    myto.setM_filesize(upload.getSize());
-		} else {
-		    myto.setM_filesize(0);
-		}
-		
-		int flag = mydao.MypageModifyOk(myto);
+//		if (upload != null && !upload.isEmpty()) {
+//		    myto.setM_filesize(upload.getSize());
+//		} else {
+//		    myto.setM_filesize(0);
+//		}
+//		
+//		int flag = mydao.MypageModifyOk(myto);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("mypageModifyOK");
-		modelAndView.addObject("flag" , flag);
+		//modelAndView.addObject("flag" , flag);
 		modelAndView.addObject("myto" , myto);
 		return modelAndView; 
 	}
@@ -221,15 +181,6 @@ public class ConfigController {
 		ModelAndView modelAndView = new ModelAndView();
 		// 로그인 되어있는 사용자가 로그인페이지에 접근하면  main페이지로 돌려보냄
 	    if (principal != null && principal.getName() != null) {
-	        
-	        modelAndView.setViewName("redirect:/main.do");
-
-		    //지울것
-	        String id = request.getParameter("id");
-	        MemberTO member_id = dao.data_member(request, id);
-	    	System.out.println( " member_id ->  " + member_id);
-			modelAndView.addObject("member_id", member_id);
-			//
 			
 	        modelAndView.setViewName("redirect:/main.do");
 	        
@@ -237,6 +188,8 @@ public class ConfigController {
 	        
 	        modelAndView.setViewName("signin");
 	    }
+	    
+	    
 
 		return modelAndView; 
 	}
@@ -255,9 +208,18 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
+	
+	// Calendar는 팝업 캘린더로 대체될듯함
 	@RequestMapping("/calendar.do")
 	public ModelAndView calendar() {
+		
 		ModelAndView modelAndView = new ModelAndView();
+		
+	      
+        //ArrayList<MainTO> lists = dao.main_data();
+        //modelAndView.addObject("lists", lists);
+        
+        
 		modelAndView.setViewName("calendar");
 		return modelAndView; 
 	}
@@ -375,6 +337,8 @@ public class ConfigController {
 	      Object emailObject = userInfo.get("email");
 	      String id = String.valueOf(idObject);
 	      String email = String.valueOf(emailObject);
+	      
+	      System.out.println( "  kakaoid =>" + id +"\n");
 	      
 	      ModelAndView modelAndView = new ModelAndView();
 	        if(m_dao.confirmKakao(email) != null) { //가입한 회원이면

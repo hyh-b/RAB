@@ -9,28 +9,38 @@
     	MypageTO myto = (MypageTO)request.getAttribute("myto");
     	System.out.println("profile.jsp TO >>>> " + myto );
     	
-//     	String name = myto.getM_name();
-//     	String tel = myto.getM_tel();
-//     	String height = myto.getM_height();
-//     	String weight = myto.getM_weight();
-//     	String targetCalorie = myto.getM_target_calorie();
-//     	String targetWeight = myto.getM_target_weight();
-//     	String id = myto.getM_id();
-//     	String mail = myto.getM_mail();
+    	String name = myto.getM_name();
+    	String tel = myto.getM_tel();
+    	String height = myto.getM_height();
+    	String weight = myto.getM_weight();
+    	String targetCalorie = myto.getM_target_calorie();
+    	String targetWeight = myto.getM_target_weight();
+    	String id = myto.getM_id();
+    	String mail = myto.getM_mail();
+    	String role = myto.getM_role();
+    	String joinDate = myto.getM_join_date();
+    	String birthday = myto.getM_birthday();
     	
-//     	String filename = myto.getM_filename();
-//     	long filesize = myto.getM_filesize();
     	
-//     	System.out.println("profile.jsp name >>>> " + name);
-//     	System.out.println("profile.jsp tel >>>> " + tel);
-//     	System.out.println("profile.jsp height >>>> " + height);
-//     	System.out.println("profile.jsp weight>>>> " + weight);
-//     	System.out.println("profile.jsp targetCalorie >>>> " + targetCalorie);
-//     	System.out.println("profile.jsp targetWeight >>>> " + targetWeight);
-//     	System.out.println("profile.jsp id >>>> " + id);
-//     	System.out.println("profile.jsp mail >>>> " + mail);
-//     	System.out.println("profile.jsp filename >>>> " + filename);
-//     	System.out.println("profile.jsp filesize >>>> " + filesize);
+    	String backgroundfilename = myto.getM_backgroundfilename();
+    	long backgroundfilesize = myto.getM_backgroundfilesize();
+    	
+    	String profilename = myto.getM_profilename();
+    	long profilesize = myto.getM_profilesize();
+    	
+    	System.out.println("profile.jsp name >>>> " + name);
+    	System.out.println("profile.jsp tel >>>> " + tel);
+    	System.out.println("profile.jsp height >>>> " + height);
+    	System.out.println("profile.jsp weight>>>> " + weight);
+    	System.out.println("profile.jsp targetCalorie >>>> " + targetCalorie);
+    	System.out.println("profile.jsp targetWeight >>>> " + targetWeight);
+    	System.out.println("profile.jsp id >>>> " + id);
+    	System.out.println("profile.jsp mail >>>> " + mail);
+    	
+    	System.out.println("profile.jsp backgroundfilename >>>> " + backgroundfilename);
+    	System.out.println("profile.jsp backgroundfilesize >>>> " + backgroundfilesize);
+    	System.out.println("profile.jsp profilename >>>> " + profilename);
+    	System.out.println("profile.jsp profilesize >>>> " + profilesize);
 	
     			
 %>
@@ -45,11 +55,12 @@
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 </head>
 <script type="text/javascript">
-window.onload = function () {
-	
-};
+function confirmDelete() {
+	  if ( confirm(" 탈퇴 후 복구가 불가능 합니다 정말 삭제하시겠습니까?") ) {
+	    location.href = "mypageDeleteOK.do";
+	  }
+	}
 </script>
-
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
@@ -73,10 +84,173 @@ window.onload = function () {
   <!-- ===== Page Wrapper Start ===== -->
   <div class="flex h-screen overflow-hidden">
   
-  
-    <!-- ===== Sidebar Start ===== -->
-<!-- 	메인 슬라이드바 완성시 그대로 -->
-    <!-- ===== Sidebar End ===== -->
+<!-- ===== Sidebar Start ===== -->
+      <aside
+  :class="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
+  class="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
+  @click.outside="sidebarToggle = false"
+>
+  <!-- SIDEBAR HEADER -->
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+    <a href="/">
+   <!--  사이트 로고  -->
+
+
+     <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
+    </a>
+
+    <button
+      class="block lg:hidden"
+      @click.stop="sidebarToggle = !sidebarToggle"
+    >
+      <svg
+        class="fill-current"
+        width="20"
+        height="18"
+        viewBox="0 0 20 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M19 8.175H2.98748L9.36248 1.6875C9.69998 1.35 9.69998 0.825 9.36248 0.4875C9.02498 0.15 8.49998 0.15 8.16248 0.4875L0.399976 8.3625C0.0624756 8.7 0.0624756 9.225 0.399976 9.5625L8.16248 17.4375C8.31248 17.5875 8.53748 17.7 8.76248 17.7C8.98748 17.7 9.17498 17.625 9.36248 17.475C9.69998 17.1375 9.69998 16.6125 9.36248 16.275L3.02498 9.8625H19C19.45 9.8625 19.825 9.4875 19.825 9.0375C19.825 8.55 19.45 8.175 19 8.175Z"
+          fill=""
+        />
+      </svg>
+    </button>
+  </div>
+  <!-- SIDEBAR HEADER -->
+
+  <div
+    class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear"
+  >
+    <!-- Sidebar Menu -->
+    <nav
+      class="mt-5 py-4 px-4 lg:mt-9 lg:px-6"
+      x-data="{selected: 'Dashboard'}"
+      x-init="
+        selected = JSON.parse(localStorage.getItem('selected'));
+        $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
+    >
+      <!-- Menu Group -->
+      <div>
+        <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
+
+        <ul class="mb-6 flex flex-col gap-1.5">
+          <li>
+            <a
+              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+              href="calendar.do"
+              @click="selected = (selected === 'Calendar' ? '':'Calendar')"
+              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
+            >
+
+            <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="비고.png"
+      			width="24"
+      			height="24"
+   			/>
+
+              공지사항
+            </a>
+          </li>
+          <li>
+            <a
+              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+
+              href="board_list.do"
+              @click="selected = (selected === 'Profile' ? '':'Profile')"
+              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
+              :class="page === 'profile' && 'bg-graydark'"
+            >
+
+             <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="게시판.png"
+      			width="24"
+      			height="24"
+   			/>
+
+             	게시판
+            </a>
+          </li>
+          <li>
+            <a
+              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+              href="food.do"
+              @click="selected = (selected === 'Profile' ? '':'Profile')"
+              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
+              :class="page === 'profile' && 'bg-graydark'"
+            >
+
+               <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="식단.png"
+      			width="24"
+      			height="24"
+   			/>
+
+             	식단
+            </a>
+          </li>
+          <li>
+            <a
+              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+              href="tables.do"
+              @click="selected = (selected === 'Tables' ? '':'Tables')"
+              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
+            >
+
+            <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="운동.png"
+      			width="24"
+      			height="24"
+   			/>
+
+              운동
+            </a>
+            
+     
+          </li>
+          
+          <!-- Menu Item Tables -->
+		  <br/><br/>
+          <!-- Menu Item Settings -->
+         
+           
+        <li>
+			<a
+    			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+    			href="/logout"
+    			@click="selected = (selected === 'Settings' ? '':'Settings')"
+    			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
+    			:class="page === 'settings' && 'bg-graydark'"
+ 			>
+   			<img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="로그아웃"
+      			width="24"
+      			height="24"
+   			/>
+    			로그아웃
+  			</a>
+		</li>
+          
+
+        </ul>
+      </div>
+
+  </div>
+</aside>
+
+      <!-- ===== Sidebar End ===== -->
+
 
     <!-- ===== Content Area Start ===== -->
     <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
@@ -88,7 +262,39 @@ window.onload = function () {
     class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11"
   >
     <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
-    
+      <!-- Hamburger Toggle BTN -->
+      <button
+        class="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
+        @click.stop="sidebarToggle = !sidebarToggle"
+      >
+        <span class="relative block h-5.5 w-5.5 cursor-pointer">
+          <span class="du-block absolute right-0 h-full w-full">
+            <span
+              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white"
+              :class="{ '!w-full delay-300': !sidebarToggle }"
+            ></span>
+            <span
+              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white"
+              :class="{ '!w-full delay-400': !sidebarToggle }"
+            ></span>
+            <span
+              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white"
+              :class="{ '!w-full delay-500': !sidebarToggle }"
+            ></span>
+          </span>
+          <span class="du-block absolute right-0 h-full w-full rotate-45">
+            <span
+              class="absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white"
+              :class="{ 'h-0 delay-[0]': !sidebarToggle }"
+            ></span>
+            <span
+              class="delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white"
+              :class="{ 'h-0 dealy-200': !sidebarToggle }"
+            ></span>
+          </span>
+        </span>
+      </button>
+      <!-- Hamburger Toggle BTN -->
       <a class="block flex-shrink-0 lg:hidden" href="index.html">
         <img src="src/images/logo/logo-icon.svg" alt="Logo" />
       </a>
@@ -96,6 +302,7 @@ window.onload = function () {
     <div class="hidden sm:block">
       <form action="https://formbold.com/s/unique_form_id" method="POST">
         <div class="relative">
+      
         </div>
       </form>
     </div>
@@ -168,14 +375,14 @@ window.onload = function () {
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
           <span class="hidden text-right lg:block">
-            <span class="block text-sm font-medium text-black dark:text-white"
-              >윤지현</span
-            >
-            <span class="block text-xs font-medium">이용자</span>
+            <span class="block text-sm font-medium text-black dark:text-white">
+            <%=name %>
+            </span>
+            <span class="block text-xs font-medium"><%=role %></span>
           </span>
 
           <span class="h-12 w-12 rounded-full">
-            <img src="src/images/user/user-01.png" alt="User" />
+            <img src="src/images/upload/<%=profilename %>" />
           </span>
 
           <svg
@@ -229,6 +436,47 @@ window.onload = function () {
                 My Profile
               </a>
             </li>
+          </ul>
+          <button
+            class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+          >
+            <svg
+              class="fill-current"
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
+                fill=""
+              />
+              <path
+                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+                fill=""
+              />
+            </svg>
+            Log Out
+          </button>
+        </div>
+        <!-- Dropdown End -->
+      </div>
+      <!-- User Area -->
+    </div>
+  </div>
+</header>
+
+      <!-- ===== Header End ===== -->
+
+      <!-- ===== Main Content Start ===== -->
+      <main>
+        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+          <div class="mx-auto max-w-242.5">
+            <!-- Breadcrumb Start -->
+            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h2 class="text-title-md2 font-bold text-black dark:text-white">
+                Mypage
               </h2>
 
               <nav>
@@ -245,7 +493,7 @@ window.onload = function () {
               class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div class="relative z-20 h-35 md:h-65">
 <!--  배사 파일명 -->
-                <img src="src/images/cover/cover-01.png" alt="profile cover"
+                <img src="src/images/upload/<%=backgroundfilename %>" alt="profile cover"
                   class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
                
                 </div>
@@ -255,15 +503,15 @@ window.onload = function () {
                   class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
                   <div class="relative drop-shadow-2">
 <!--  프사  -->
-                    <img src="src/images/user/user-06.png" alt="profile" />
+                    <img src="src/images/upload/<%=profilename %>" alt="profile" />
                   </div>
                 </div>
 <!--  마이페이지  -->                
                 <div class="mt-4">
                   <h3 class="mb-1.5 text-2xl font-medium text-black dark:text-white">
-                    윤지현
+                    <%=name %>
                   </h3>
-                  <p class="font-medium">2023.06.23 가입</p>
+                  <p class="font-medium"><%=joinDate %> 가입</p>
                   <div class="mx-auto max-w-180">
                   
              <form action="./mypage.do" method="post" name="wfrm" >
@@ -287,7 +535,7 @@ window.onload = function () {
                               </svg>
                             </span>
 							<input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-							       type="text" name="name" id="name" value="윤지현" readonly />
+							       type="text" name="name" id="name" value="<%=name %>" readonly />
                           </div>
                         </div>
                         
@@ -299,7 +547,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="phoneNumber" id="phoneNumber"
-						    value="010 - 2920 - 0105" readonly />
+						    value="<%=tel %>" readonly />
 						    <img src="src/images/logo/call.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -313,7 +561,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="takeKcal" id="takeKcal" 
-						    value="163" readonly />
+						    value="<%=height %>" readonly />
 						    <img src="src/images/logo/cm.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -326,7 +574,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="targetScale" id="targetScale"
-						    value="49" readonly />
+						    value="<%=weight %>" readonly />
 						    <img src="src/images/logo/body.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -341,7 +589,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="takeKcal" id="takeKcal" 
-						    value="1400" readonly />
+						    value="<%=targetCalorie %>" readonly />
 						    <img src="src/images/logo/mypageFood.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -354,7 +602,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="targetScale" id="targetScale"
-						    value="47" readonly />
+						    value="<%=targetWeight %>" readonly />
 						    <img src="src/images/logo/work3.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -369,7 +617,7 @@ window.onload = function () {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="birthday" id="birthday" 
-						    value="2000.03.03" readonly />
+						    value="<%=birthday %>" readonly />
 						    <img src="src/images/logo/birthday.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -395,7 +643,7 @@ window.onload = function () {
 						<input 
 							class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                              type="text" name="memberid" id="memberid"
-                             value="testID" readonly/>
+                             value="<%=id %>" readonly/>
                         </div>
                       </div>
                      </div>
@@ -421,7 +669,7 @@ window.onload = function () {
                           <input
                             class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="email" name="email" id="email" 
-                            value="test@test.com" readonly/>
+                            value="<%=mail %>" readonly/>
                         </div>
                       </div>
 
@@ -440,11 +688,11 @@ window.onload = function () {
 		  </button>
 		  
 		  <!--  탈퇴 -->
-		  <button id="delete"
-		    class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-		    onclick="location.href='mypageDelete.do'">
-		    회원 탈퇴
-		  </button>
+			<button id="delete"
+			  class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
+			  onclick="confirmDelete()">
+			  회원 탈퇴
+			</button>
             
             <!-- ====== Profile Section End -->
           </div>
