@@ -20,6 +20,7 @@
   
   <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
+<c:set var="seq" value="${requestScope.seq}" />
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
   <!-- jstl 로 lists 받아옴 -->
@@ -379,7 +380,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
+              href="food.do?seq=${seq}"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
