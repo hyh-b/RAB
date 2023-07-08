@@ -537,7 +537,7 @@ pageEncoding="UTF-8"%>
 		            result += '</tr>';
 		            result += '</tbody>';
 		            result += '</table>';
-		            result += '</div>';
+		            result += '</div>'; 
 		         	// 선택한 데이터를 결과 div에 추가
 		            $('#resultFood3').append(result); 
 					
