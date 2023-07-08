@@ -58,44 +58,6 @@ public class ConfigController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/main.do")
-	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request) {
-		ModelAndView modelAndView = new ModelAndView();
-		//원하는 유저 정보 가져오기 - security패키지의 CustomUserDetails 설정
-		//로그인한(인증된) 사용자의 정보를 authentication에 담음
-		authentication = SecurityContextHolder.getContext().getAuthentication();
-		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
-		Object principal = authentication.getPrincipal();
-		// principal 객체를 CustomUserDetails 타입으로 캐스팅
-		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		System.out.println("seq가져와 "+customUserDetails.getM_seq());
-		
-		//유저 Id가져오기
-		String mId = authentication.getName(); 
-		//유저 Id를 통하여 정보가져오는 메서드
-        MemberTO member = mDao.findByMId(mId); 
-        // 권한 확인 후 정보입력 페이지로 넘김
-        if("SIGNUP".equals(member.getM_role())) {
-        	modelAndView.setViewName("redirect:/signup2.do");
-        	return modelAndView;
-        }
-		
-		//이미 저장된 세션을 가져옵니다.
-	    HttpSession session = request.getSession();
-	    
-	    // 세션에서 m_seq 값을 가져옵니다.
-	    String mSeq = (String) session.getAttribute("m_seq");
-	    
-	    // 콘솔에 m_seq 값을 출력합니다.
-	    System.out.println("세션의 m_seq 값: " + mSeq);
-		
-        map.addAttribute("user", member);
-		
-		
-		modelAndView.setViewName("main");
-		return modelAndView; 
-	}
-
 	@RequestMapping("/profile.do")
 	public ModelAndView profile(HttpServletRequest request) {
 
@@ -425,7 +387,6 @@ public class ConfigController {
 	      Object emailObject = userInfo.get("email");
 	      String id = String.valueOf(idObject);
 	      String email = String.valueOf(emailObject);
-	      
 	      session.setAttribute("userInfo", email);
 	      session.setAttribute("access_token", access_token);
 	      

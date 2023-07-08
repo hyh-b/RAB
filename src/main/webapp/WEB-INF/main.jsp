@@ -274,15 +274,7 @@
     <a href="/">
     
    <!--  사이트 로고  -->
-<<<<<<< HEAD
 
-     <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
-    </a>
-     <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
-    </a>
-
-
-=======
      <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
     </a>
     
@@ -290,7 +282,7 @@
      <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
     </a>
  -->
->>>>>>> 34e732b6d1ca5ec27102a27151a13cecd64e696a
+
     <button
       class="block lg:hidden"
       @click.stop="sidebarToggle = !sidebarToggle"
@@ -404,11 +396,8 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-<<<<<<< HEAD
               href="exercise.do"
-=======
-              href="calendar.do"
->>>>>>> 34e732b6d1ca5ec27102a27151a13cecd64e696a
+
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
             >
