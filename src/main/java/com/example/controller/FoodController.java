@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +24,7 @@ import com.example.model.FoodDAO;
 import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
 import com.example.model.MemberTO;
+import com.example.security.CustomUserDetails;
 
 @RestController
 public class FoodController {
@@ -39,11 +42,21 @@ public class FoodController {
 	DinnerDAO ddao;
 	
 	@RequestMapping("/food.do")
-	public ModelAndView food(HttpServletRequest request) {
-		MemberTO to = new MemberTO();
-		to.setM_seq((request.getParameter("seq")));
+	public ModelAndView food(HttpServletRequest request , Authentication authentication) {
+//		MemberTO to = new MemberTO();
+//		to.setM_seq((request.getParameter("seq")));
 //		System.out.println(to.getM_seq());
-		String seq = to.getM_seq();
+//		String seq = to.getM_seq();
+		
+		//원하는 유저 정보 가져오기 - security패키지의 CustomUserDetails 설정
+		//로그인한(인증된) 사용자의 정보를 authentication에 담음
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		String seq = customUserDetails.getM_seq();
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("food");
 		modelAndView.addObject("seq", seq);
