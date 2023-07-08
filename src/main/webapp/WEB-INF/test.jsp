@@ -45,15 +45,21 @@
 </c:forEach>
 
 	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->
+	
+	<script>
+    var i_day = "${i_day}";
+    var m_seq = "${m_seq}";
+    var m_weight = "${m_weight}";
+    var m_target_weight = "${m_target_weight}";
+    var totarget = "${totarget}";
+    
+    var selected = ''; 
+	</script>
+	
 <script>
+
     window.onload = function() {
-      var i_day = ${i_day};
-      var m_seq = ${m_seq};
-      var m_weight = ${m_weight};
-      var m_target_weight = ${m_target_weight};
-      var totarget = ${totarget};
-      
-     	
+  	
       var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
       $('#calendarCt').html(calendarhtml);
 
@@ -69,174 +75,189 @@
 
       $('#targetWeight').html(whtml);
       
+      //data: { mId: "your-mId-value" },
+      
+      
+      
       $.ajax({
         url: "/json_data.do",
         type: "post",
-        dataType: 'json', 
+        dataType: 'json',
+        data : {
+        	day : i_day
+        },
         success: function (response) {
-   			
         	
-        	
-        	var fd = response.fdatas;
-        	console.log(fd.length());
-        	
-          var pieData = [44, 55, 13];
-	  	  	var pieOptions = {
-	    	series: pieData,
-	    	chart: {
-	      	type: 'pie',
-	      	height: 350,
-	    	},
-	    	labels: ['탄수', '단백', '지방'],
-	    	responsive: [{
-	      	breakpoint: 480,
-	      	options: {
-	        	chart: {
-	          	width: 200
-	        	},
-	        	legend: {
-	          	position: 'bottom'
-	        	}
-	      	  }
-	    	}]
-	  	};
-	  	var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-	  	pieChart.render();
+        	console.log(day);
 
-	  	var barOptions = {
-	    	series: [
-	      	{ name: '아침', data: [10, 23, 20, 10, 22, 44, 12] },
-	      	{ name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
-	      	{ name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
-	    	],
-	    	chart: {
-	      	type: 'bar',
-	      	height: 350,
-	      	stacked: true,
-	      	toolbar: {
-	        	show: true
-	      	},
-	      	zoom: {
-	        	enabled: true
-	      	}
-	    	},
-	    	responsive: [{
-	      	breakpoint: 480,
-	      	options: {
-	        legend: {
-	        position: 'bottom',
-	        offsetX: -10,
-	        offsetY: 0
-	        }
-	      }
-	    }],
-	    plotOptions: {
-	      bar: {
-	        horizontal: false,
-	        borderRadius: 10,
-	        dataLabels: {
-	          total: {
-	            enabled: true,
-	            style: {
-	              fontSize: '13px',
-	              fontWeight: 900
-	            }
-	          }
-	        }
-	      },
-	    },
-	    xaxis: {
-	      type: 'text',
-	      categories: ['월', '화', '수', '목','금','토','일'],
-	    },
-	    legend: {
-	      position: 'top',
-	      horizontalAlign: 'center',
-	      offsetY: 10,
-	      markers: {
-	        radius: 12
-	      }
-	    },
-	    fill: {
-	      opacity: 1
-	    }
-	  };
-	  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
-	  barChart.render();
+            var pieData = [44, 55, 13];
+    	  	  	var pieOptions = {
+    	    	series: pieData,
+    	    	chart: {
+    	      	type: 'pie',
+    	      	height: 350,
+    	    	},
+    	    	labels: ['탄수', '단백', '지방'],
+    	    	responsive: [{
+    	      	breakpoint: 480,
+    	      	options: {
+    	        	chart: {
+    	          	width: 200
+    	        	},
+    	        	legend: {
+    	          	position: 'bottom'
+    	        	}
+    	      	  }
+    	    	}]
+    	  	};
+    	  	var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+    	  	pieChart.render();
 
-	  var areaOptions = {
-	    series: [{
-	      name: '저번주',
-	      data: [31, 40, 28, 51, 42, 109, 100]
-	    }, {
-	      name: '이번주',
-	      data: [11, 32, 45, 32, 34, 52, 41]
-	    }],
-	    chart: {
-	      height: 350,
-	      type: 'area'
-	    },
-	    dataLabels: {
-	      enabled: false
-	    },
-	    stroke: {
-	      curve: 'smooth'
-	    },
-	    xaxis: {
-	      type: 'datetime',
-	      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-	    },
-	    tooltip: {
-	      x: {
-	        format: 'dd/MM/yy HH:mm'
-	      },
-	    },
-	  };
-	  var areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
-	  areaChart.render();
+    	  	var barOptions = {
+    	    	series: [
+    	      	{ name: '아침', data: [10, 23, 20, 10, 22, 44, 12] },
+    	      	{ name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
+    	      	{ name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
+    	    	],
+    	    	chart: {
+    	      	type: 'bar',
+    	      	height: 350,
+    	      	stacked: true,
+    	      	toolbar: {
+    	        	show: true
+    	      	},
+    	      	zoom: {
+    	        	enabled: true
+    	      	}
+    	    	},
+    	    	responsive: [{
+    	      	breakpoint: 480,
+    	      	options: {
+    	        legend: {
+    	        position: 'bottom',
+    	        offsetX: -10,
+    	        offsetY: 0
+    	        }
+    	      }
+    	    }],
+    	    plotOptions: {
+    	      bar: {
+    	        horizontal: false,
+    	        borderRadius: 10,
+    	        dataLabels: {
+    	          total: {
+    	            enabled: true,
+    	            style: {
+    	              fontSize: '13px',
+    	              fontWeight: 900
+    	            }
+    	          }
+    	        }
+    	      },
+    	    },
+    	    xaxis: {
+    	      type: 'text',
+    	      categories: ['월', '화', '수', '목','금','토','일'],
+    	    },
+    	    legend: {
+    	      position: 'top',
+    	      horizontalAlign: 'center',
+    	      offsetY: 10,
+    	      markers: {
+    	        radius: 12
+    	      }
+    	    },
+    	    fill: {
+    	      opacity: 1
+    	    }
+    	  };
+    	  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
+    	  barChart.render();
 
-	  var lineOptions = {
-	    series: [{
-	      name: "Desktops",
-	      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-	    }],
-	    chart: {
-	      height: 350,
-	      type: 'line',
-	      zoom: {
-	        enabled: false
-	      }
-	    },
-	    dataLabels: {
-	      enabled: false
-	    },
-	    stroke: {
-	      curve: 'straight'
-	    },
-	    title: {
-	      text: '단위 : 월',
-	      align: 'left'
-	    },
-	    grid: {
-	      row: {
-	        colors: ['#000000', 'transparent'],
-	        opacity: 0.5
-	      },
-	    },
-	    xaxis: {
-	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-	    }
-	  };
-	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
-	  lineChart.render();
-		};
+    	  var areaOptions = {
+    	    series: [{
+    	      name: '저번주',
+    	      data: [31, 40, 28, 51, 42, 109, 100]
+    	    }, {
+    	      name: '이번주',
+    	      data: [11, 32, 45, 32, 34, 52, 41]
+    	    }],
+    	    chart: {
+    	      height: 350,
+    	      type: 'area'
+    	    },
+    	    dataLabels: {
+    	      enabled: false
+    	    },
+    	    stroke: {
+    	      curve: 'smooth'
+    	    },
+    	    xaxis: {
+    	      type: 'datetime',
+    	      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+    	    },
+    	    tooltip: {
+    	      x: {
+    	        format: 'dd/MM/yy HH:mm'
+    	      },
+    	    },
+    	  };
+    	  var areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
+    	  areaChart.render();
+
+    	  var lineOptions = {
+    	    series: [{
+    	      name: "Desktops",
+    	      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+    	    }],
+    	    chart: {
+    	      height: 350,
+    	      type: 'line',
+    	      zoom: {
+    	        enabled: false
+    	      }
+    	    },
+    	    dataLabels: {
+    	      enabled: false
+    	    },
+    	    stroke: {
+    	      curve: 'straight'
+    	    },
+    	    title: {
+    	      text: '단위 : 월',
+    	      align: 'left'
+    	    },
+    	    grid: {
+    	      row: {
+    	        colors: ['#000000', 'transparent'],
+    	        opacity: 0.5
+    	      },
+    	    },
+    	    xaxis: {
+    	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    	    }
+    	  };
+    	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
+    	  lineChart.render();
+	
           
         },
         error: function (error) {
-          console.log(error);
+        	console.log('에러는 -> ', error);
+        	console.log('\n 응답 JSON -> ', error.responseJSON);
+        	console.log('\n 응답 본문 -> ', error.responseText);
+ 
         }
       })  
     };
+    
+    
+    
+
+    	
+    	
+	
+
   </script>
   
 
@@ -517,7 +538,7 @@
       </button>
         <!-- Hamburger Toggle BTN -->
       <a class="block flex-shrink-0 lg:hidden" href="/">
-        <img src="src/images/logo/" alt="홈 로고 추가해야되요" />
+        <u>홈</u>
       </a>
     </div>
     
