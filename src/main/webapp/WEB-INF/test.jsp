@@ -14,12 +14,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-     TEST RAB
+     Test RAB
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   
   <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
+<c:set var="seq" value="${requestScope.seq}" />
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
   <!-- jstl 로 lists 받아옴 -->
@@ -41,10 +42,10 @@
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
    <c:set var="m_name" value="${item.m_name}" />
-       					     
+       				     
 </c:forEach>
 
-	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->
+	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->	
 	
 <script>
     var i_day = "${i_day}";
@@ -254,8 +255,11 @@
         }
       })  
     };
-  </script>
-  
+    
+</script>
+
+
+
 </head>
 
   <body
@@ -280,6 +284,7 @@
 
     <!-- ===== Page Wrapper Start ===== -->
     <div class="flex h-screen overflow-hidden">
+    
  <!-- ===== Sidebar Start ===== -->
       <aside
   :class="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
@@ -289,7 +294,9 @@
   <!-- SIDEBAR HEADER -->
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
     <a href="/">
+    
    <!--  사이트 로고  -->
+
      <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
     </a>
     
@@ -297,6 +304,7 @@
      <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
     </a>
  -->
+
     <button
       class="block lg:hidden"
       @click.stop="sidebarToggle = !sidebarToggle"
@@ -386,7 +394,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
+              href="food.do?seq=${m_seq}"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
@@ -410,7 +418,8 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="calendar.do"
+              href="exercise.do"
+
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
             >
@@ -436,7 +445,7 @@
         <li>
 			<a
     			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-    			href="/logout"
+    			href="/klogout.do"
     			@click="selected = (selected === 'Settings' ? '':'Settings')"
     			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
     			:class="page === 'settings' && 'bg-graydark'"
@@ -531,11 +540,11 @@
       </button>
         <!-- Hamburger Toggle BTN -->
       <a class="block flex-shrink-0 lg:hidden" href="/">
-        <u>홈</u>
+        <img src="src/images/logo/" alt="홈 로고 추가해야되요" />
       </a>
     </div>
     
-    <!--  검색 창 얘가 있어야 옆에얘가 안딸려옴-->
+    <!--  검색 창 -->
     <div class="hidden sm:block">
     
     </div>
@@ -683,7 +692,7 @@
                 fill=""
               />
             </svg>
-            <a href="/logout">로그아웃</a>
+            <a href="/klogout.do">로그아웃</a>
           </button>
         </div>
         <!-- Dropdown End -->
