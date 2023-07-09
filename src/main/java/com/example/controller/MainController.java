@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,6 +26,7 @@ import com.example.model.MainTO;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
 import com.example.model.MypageDAO;
+import com.example.security.CustomUserDetails;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -70,8 +72,23 @@ public class MainController {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
+		//원하는 유저 정보 가져오기 - security패키지의 CustomUserDetails 설정
+		//로그인한(인증된) 사용자의 정보를 authentication에 담음
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		System.out.println("seq가져와 "+customUserDetails.getM_seq());
+		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+        
+        // 신규유저 권한 확인 후 정보입력 페이지로 넘김
+        if("SIGNUP".equals(member.getM_role())) {
+        	modelAndView.setViewName("redirect:/signup2.do");
+        	return modelAndView;
+        }
         
         //v_memberIntakeData 정보
         ArrayList<MainTO> lists = dao.main_data(mId);
@@ -138,10 +155,9 @@ public class MainController {
 //	   	
 //	   	return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
 //	}
-	
+
 	@RequestMapping("json_data")
 	public ResponseEntity<String> JsonedDatas() {
-	    
 	    ArrayList<MainTO> fdatas = dao.foodData();
 
 	    JsonObject result = new JsonObject();

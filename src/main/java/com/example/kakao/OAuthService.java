@@ -129,11 +129,11 @@ public class OAuthService {
 	        try {
 	            URL url = new URL(reqURL);
 	            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	            conn.setRequestMethod("POSt");
+	            conn.setRequestMethod("POST");
 	            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
 	            int responseCode = conn.getResponseCode();
-	            System.out.println("responseCode : " + responseCode);
+	            System.out.println("카카오 로그아웃responseCode : " + responseCode);
 
 	            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 

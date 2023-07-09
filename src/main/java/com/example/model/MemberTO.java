@@ -1,20 +1,27 @@
 package com.example.model;
 
-
-
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.Data;
+
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
-public class MemberTO {
+@Data
+public class MemberTO{
+	
 	private String m_seq;
 	private String m_id;
 
 	private String m_pw;
 	private String m_name;
-	private String gender;
+	private String m_gender;
 	private BigDecimal m_weight;
 	private BigDecimal m_height;
 	private String m_mail;
@@ -24,8 +31,8 @@ public class MemberTO {
 	private String m_filename;
 	private int m_filesize;
 	private String m_join_date;
-	private int m_target_calorie;
+	private Integer m_target_calorie;
 	private BigDecimal m_target_weight;
+	private String m_birthday;
 	
-
 }

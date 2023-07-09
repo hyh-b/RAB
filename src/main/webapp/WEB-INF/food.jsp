@@ -55,11 +55,18 @@ pageEncoding="UTF-8"%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script>
   	
 	$(document).ready(function() {
 		
+		// 아침 , 점심 ,저녁 의 div 삭제 이벤트 전역변수
+		let divId = 1;
+		// 아침 , 점심 , 저녁 deleteBtn 이벤트
+		$(document).on('click', '.delete-btn', function() {
+	        let targetDiv = $(this).data('target');
+	        $('#' + targetDiv).remove();  // Remove the target div
+	    });
 	//==================================================== 아침 =================================================================
 		$('#searchButton1').click(function() {
 		    const data = $('#foodName1').val();
@@ -130,13 +137,13 @@ pageEncoding="UTF-8"%>
 		                selectedData.push(rowData);
 		            });
 
-		            let result = '<div id="#">';
+		            let result = '<div id="generated-div-' + divId + '">';
 		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
 		            result += '<div>';
 		            result += '<table>';
 		            result += '<thead>';
 		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/></td>';
+		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/><button class="delete-btn" data-target="generated-div-' + divId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
 		            result += '</tr>';
 		            result += '</thead>';
 		            result += '</table>';
@@ -185,14 +192,8 @@ pageEncoding="UTF-8"%>
 		         	// 선택한 데이터를 결과 div에 추가
 		            $('#resultFood1').append(result); 
 					
-		            let totalKcal = 0;
-		            selectedData.forEach(function(data) {
-		              totalKcal += parseInt(data[7]);
-		            });
-		            
-		            console.log('selectedData\t :' + selectedData);
-		            
-		            
+		            divId++;
+		         	
 		            $(this).dialog("close");
 		        }
 		    }
@@ -336,13 +337,13 @@ pageEncoding="UTF-8"%>
 		                selectedData.push(rowData);
 		            });
 
-		            let result = '<div id="#">';
+		            let result = '<div id="generated-div-' + divId + '">';
 		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
 		            result += '<div>';
 		            result += '<table>';
 		            result += '<thead>';
 		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/></td>';
+		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/><button class="delete-btn" data-target="generated-div-' + divId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
 		            result += '</tr>';
 		            result += '</thead>';
 		            result += '</table>';
@@ -365,13 +366,7 @@ pageEncoding="UTF-8"%>
 		         	// 선택한 데이터를 결과 div에 추가
 		            $('#resultFood2').append(result); 
 					
-		            let totalKcal = 0;
-		            selectedData.forEach(function(data) {
-		              totalKcal += parseInt(data[7]);
-		            });
-		            
-		            console.log('selectedData\t :' + selectedData);
-		            
+					divId++;		            
 		            
 		            $(this).dialog("close");
 		        }
@@ -512,13 +507,13 @@ pageEncoding="UTF-8"%>
 		                selectedData.push(rowData);
 		            });
 
-		            let result = '<div id="#">';
+		            let result = '<div id="generated-div-' + divId + '">';
 		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
 		            result += '<div>';
 		            result += '<table>';
 		            result += '<thead>';
 		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/></td>';
+		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/><button class="delete-btn" data-target="generated-div-' + divId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
 		            result += '</tr>';
 		            result += '</thead>';
 		            result += '</table>';
@@ -537,22 +532,16 @@ pageEncoding="UTF-8"%>
 		            result += '</tr>';
 		            result += '</tbody>';
 		            result += '</table>';
-		            result += '</div>';
+		            result += '</div>'; 
 		         	// 선택한 데이터를 결과 div에 추가
 		            $('#resultFood3').append(result); 
 					
-		            let totalKcal = 0;
-		            selectedData.forEach(function(data) {
-		              totalKcal += parseInt(data[7]);
-		            });
-		            
-		            console.log('selectedData\t :' + selectedData);
-		            
+					divId++;		            
 		            
 		            $(this).dialog("close");
 		        }
 		    }
-		});
+		}); 
 		
 		$('#fbtn3').on('click',function(){
 			
