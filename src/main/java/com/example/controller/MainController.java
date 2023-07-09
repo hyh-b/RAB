@@ -108,56 +108,11 @@ public class MainController {
 		return modelAndView; 
 	}
 	
-	//------jsonedData---------------------------------------
+	//------jsonedDatas---------------------------------------
 
-//	@RequestMapping("json_data")
-//	public ResponseEntity<String> JsonedDatas() {
-//	    
-//	    ArrayList<MainTO> fdatas = dao.foodData();
-//
-//	    JsonObject result = new JsonObject();
-//	    
-//	    JsonArray Foodarr = new JsonArray();
-//
-//	    for (MainTO to : fdatas) {
-//	        JsonObject obj = new JsonObject();
-//
-//	        // Breakfast
-//	        JsonObject breakfast = new JsonObject();
-//	        breakfast.addProperty("b_seq", to.getB_seq());
-//	        breakfast.addProperty("b_kcal", to.getB_kcal());
-//	        breakfast.addProperty("b_day", to.getB_day().toString());
-//	        // 나머지 필드들도 동일하게 처리
-//	        obj.add("breakfast", breakfast);
-//
-//	        // Lunch
-//	        JsonObject lunch = new JsonObject();
-//	        lunch.addProperty("l_seq", to.getL_seq());
-//	        lunch.addProperty("l_kcal", to.getL_kcal());
-//	        lunch.addProperty("l_day", to.getL_day().toString());
-//	        // 나머지 필드들도 동일하게 처리
-//	        obj.add("lunch", lunch);
-//
-//	        // Dinner
-//	        JsonObject dinner = new JsonObject();
-//	        dinner.addProperty("d_seq", to.getD_seq());
-//	        dinner.addProperty("d_kcal", to.getD_kcal());
-//	        dinner.addProperty("d_day", to.getD_day().toString());
-//	        // 나머지 필드들도 동일하게 처리
-//	        obj.add("dinner", dinner);
-//
-//	        Foodarr.add(obj);
-//	    }
-//
-//	    result.add("fdatas", Foodarr);
-//	    
-//	    System.out.println("   result - >  " + result);
-//	   	
-//	   	return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
-//	}
-
-	@RequestMapping("json_data")
+	@RequestMapping("charts_data")
 	public ResponseEntity<String> JsonedDatas() {
+		
 	    ArrayList<MainTO> fdatas = dao.foodData();
 
 	    JsonObject result = new JsonObject();
@@ -195,6 +150,46 @@ public class MainController {
 	    System.out.println("   result - >  " + result);
 	   	
 	   	return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+	}
+	
+	
+	//---------------datas for main elements------------------------//
+	
+	@RequestMapping("main_data")
+	public ResponseEntity<String> MainElements(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        
+		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+        
+	    ArrayList<MainTO> lists = dao.main_data(mId);
+
+	    JsonObject mainDatas = new JsonObject();
+	    
+	    JsonArray mainarr = new JsonArray();
+
+	    for (MainTO to : lists) {
+	    	
+	        JsonObject obj = new JsonObject();
+
+	        JsonObject elements = new JsonObject();
+	        
+	        elements.addProperty("m_seq", to.getM_seq());
+	        elements.addProperty("i_day", to.getI_day().toString());
+	        elements.addProperty("i_kcal", to.getI_kcal());
+	        elements.addProperty("i_kcal", to.getI_used_kcal());
+	        
+
+	        obj.add("elements", elements);
+
+	        mainarr.add(obj);
+	    }
+
+	    mainDatas.add("mainarr", mainarr);
+	    
+	    System.out.println("   result - >  " + mainDatas);
+	   	
+	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
 	}
 
 

@@ -56,45 +56,24 @@
     
     //var selected = ''; 
 </script>
-	
-	
-	
+
 <script>
 
-
     window.onload = function() {
-  	  
+    	
+	//------------- ajax for charts -------------------------
       $.ajax({
-        url: "/json_data",
+        url: "/charts_data",
         type: "get",
         dataType: 'json',
-        success: function (result) {
+        success: function (charts) {
         
-        	console.log( "result ->", result);
+        	console.log( "charts ->", charts);
         	
-        	var b_kcal_data = result.fdatas.map(function(meal) {
+        	var b_kcal_data = charts.fdatas.map(function(meal) {
                 return meal.meals.b_kcal;
             });
-        	
 
-            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
-            $('#calendarCt').html(calendarhtml);
-
-            var whtml = '';
-
-            if (m_weight < m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-            } else if (m_weight == m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';  
-            } else if(m_weight > m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
-            }
-
-            $('#targetWeight').html(whtml);
-            
-            //data: { mId: "your-mId-value" },
-            
-        
             var pieData = [44, 55, 13];
     	  	  	var pieOptions = {
     	    	series: pieData,
@@ -254,6 +233,62 @@
  
         }
       })  
+      
+//--------------------main Elements--------------------------------
+
+      $.ajax({
+    	  
+          url: "/main_data",
+          type: "get",
+          dataType: 'json',
+          
+          success: function (elements) {
+        	  
+          	console.log( " mainElements ->", elements);
+    
+            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
+            
+            $('#calendarCt').html(calendarhtml);
+
+            var whtml = '';
+
+            if (m_weight < m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
+            } else if (m_weight == m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';  
+            } else if(m_weight > m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
+            }
+
+            $('#targetWeight').html(whtml);
+            
+            //data: { mId: "your-mId-value" },
+            
+            //main 상자 4개 jQuery
+            
+            let firstelementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">${i_day}</h4><span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a></span>';
+
+			$("#firstElement").html(firstelementHtml);
+			
+			//
+			
+			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">${i_kcal} kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
+
+			$("#secondElement").html(secondElementHtml);
+			
+			//
+			
+			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">${i_used_kcal} kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
+
+			$("#thirdElement").html(thirdElementHtml);
+          },
+          	 error: function (error) {
+             	console.log('에러는 -> ', error);
+             	console.log('\n 응답 JSON -> ', error.responseJSON);
+             	console.log('\n 응답 본문 -> ', error.responseText);
+      
+          	 }
+        })  
     };
     
 </script>
@@ -741,23 +776,18 @@
                 </div>
 
                 <div class="mt-4 flex items-end justify-between">
-                  <div>
-                    <h4
-                      class="text-title-md font-bold text-black dark:text-white"
-                    >
-                   ${i_day}
-                    </h4>
-                    <span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a>
-                    
-             <!--  달력날짜 컨트롤러  -->
-             <div id="calendarCt">
+                  <div id="firstElement">
+          		        
                
-              </div>
-
-     		    </span>
+                   
+     		    
                   </div>
-
                 </div>
+                
+               <!--  달력날짜 컨트롤러  -->
+                  <div id="calendarCt">
+               
+              	  </div>
               </div>
               <!-- Card Item End -->
 
@@ -792,13 +822,9 @@
                 </div>
 
                 <div class="mt-4 flex items-end justify-between">
-                  <div>
-                    <h4
-                      class="text-title-md font-bold text-black dark:text-white"
-                    >
-                     ${i_kcal} kcal
-                    </h4>
-                    <span class="text-sm font-medium">섭취 칼로리</span>
+                
+                  <div id="secondElement">
+            
 
                   </div>
 
@@ -837,13 +863,9 @@
                 </div>
 
                 <div class="mt-4 flex items-end justify-between">
-                  <div>
-                    <h4
-                      class="text-title-md font-bold text-black dark:text-white"
-                    >
-                      ${i_used_kcal} kcal
-                    </h4>
-                    <span class="text-sm font-medium">소모 칼로리</span>
+                
+                  <div id="thirdElement">
+            
                   </div>
 
                 </div>
