@@ -147,7 +147,7 @@ public class MainController {
 
 	    result.add("fdatas", Foodarr);
 	    
-	    System.out.println("   result - >  " + result);
+	    //System.out.println("   result - >  " + result);
 	   	
 	   	return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
 	}
@@ -165,30 +165,18 @@ public class MainController {
 	    ArrayList<MainTO> lists = dao.main_data(mId);
 
 	    JsonObject mainDatas = new JsonObject();
-	    
-	    JsonArray mainarr = new JsonArray();
 
 	    for (MainTO to : lists) {
-	    	
-	        JsonObject obj = new JsonObject();
-
-	        JsonObject elements = new JsonObject();
 	        
-	        elements.addProperty("m_seq", to.getM_seq());
-	        elements.addProperty("i_day", to.getI_day().toString());
-	        elements.addProperty("i_kcal", to.getI_kcal());
-	        elements.addProperty("i_kcal", to.getI_used_kcal());
+	        mainDatas.addProperty("m_seq", to.getM_seq());
+	        mainDatas.addProperty("m_weight", to.getM_weight());
+	        mainDatas.addProperty("m_target_weight", to.getM_target_weight());
 	        
+	        mainDatas.addProperty("i_day", to.getI_day().toString());
+	        mainDatas.addProperty("i_kcal", to.getI_kcal());
+	        mainDatas.addProperty("i_kcal", to.getI_used_kcal());
 
-	        obj.add("elements", elements);
-
-	        mainarr.add(obj);
-	    }
-
-	    mainDatas.add("mainarr", mainarr);
-	    
-	    System.out.println("   result - >  " + mainDatas);
-	   	
+	    }	   	
 	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
 	}
 

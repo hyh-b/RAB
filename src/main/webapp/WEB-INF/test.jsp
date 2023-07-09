@@ -45,18 +45,6 @@
        				     
 </c:forEach>
 
-	<!--  몸무게 변화에 따른 +,- 달력 기본값 jQuery  -->	
-	
-<script>
-    var i_day = "${i_day}";
-    var m_seq = "${m_seq}";
-    var m_weight = "${m_weight}";
-    var m_target_weight = "${m_target_weight}";
-    var totarget = "${totarget}";
-    
-    //var selected = ''; 
-</script>
-
 <script>
 
     window.onload = function() {
@@ -244,20 +232,33 @@
           
           success: function (elements) {
         	  
-          	console.log( " mainElements ->", elements);
-    
-            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="${i_day}" min="2023-02-01" max="2023-12-31"> </li>';
+           //데이터 넘어오는거 검사 섹션
+       	   console.log("m_seq ->", elements.m_seq);
+           console.log("i_day ->", elements.i_day);
+           console.log("i_kcal ->", elements.i_kcal);
+           console.log("i_used_kcal ->", elements.i_used_kcal);
+           console.log("m_weight ->", elements.m_weight);
+           console.log("m_target_weight ->", elements.m_target_weight);
+    	   //
+    	   
+    	   //달력
+            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + elements.i_day + '" min="2023-02-01" max="2023-12-31"> </li>';
             
             $('#calendarCt').html(calendarhtml);
-
+			
+           //몸무게 동적처리
+            
+            var toTarget = elements.m_weight - elements.m_target_weight;
             var whtml = '';
+            
+            console.log("  목몸 -> " , toTarget);
 
-            if (m_weight < m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표까지 + ' + totarget + ' kg</span>';
-            } else if (m_weight == m_target_weight) {
+            if (elements.m_weight < elements.m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
+            } else if (elements.m_weight == elements.m_target_weight) {
               whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';  
-            } else if(m_weight > m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표까지 - ' + totarget + ' kg</span>';
+            } else if(elements.m_weight > elements.m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
             }
 
             $('#targetWeight').html(whtml);
@@ -272,13 +273,12 @@
 			
 			//
 			
-			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">${i_kcal} kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
+			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
 
 			$("#secondElement").html(secondElementHtml);
 			
 			//
-			
-			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">${i_used_kcal} kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
+			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
 
 			$("#thirdElement").html(thirdElementHtml);
           },
