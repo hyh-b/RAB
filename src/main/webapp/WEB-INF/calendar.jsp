@@ -7,11 +7,6 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 34e732b6d1ca5ec27102a27151a13cecd64e696a
   <title>달력</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

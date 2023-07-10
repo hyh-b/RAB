@@ -11,7 +11,7 @@ public class FoodTO {
 	private int f_seq;
 	private String f_name;
 	private int f_weight;
-	private int f_kal;
+	private int f_kcal;
 	private BigDecimal f_carbohydrate_g;
 	private BigDecimal f_sugar_g;
 	private BigDecimal f_fat_g;
