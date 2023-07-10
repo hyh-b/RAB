@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.awt.PageAttributes.MediaType;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,8 +100,7 @@ public class MainController {
         System.out.println("     m_mail: " + member.getM_mail());
   
         map.addAttribute("user", member);
-        
-      
+
 		modelAndView.addObject("flag", flag);
 		modelAndView.addObject("lists", lists);
 		
@@ -167,6 +167,31 @@ public class MainController {
 	    JsonObject mainDatas = new JsonObject();
 
 	    for (MainTO to : lists) {
+	        
+	        mainDatas.addProperty("m_seq", to.getM_seq());
+	        mainDatas.addProperty("m_weight", to.getM_weight());
+	        mainDatas.addProperty("m_target_weight", to.getM_target_weight());
+	        
+	        mainDatas.addProperty("i_day", to.getI_day().toString());
+	        mainDatas.addProperty("i_kcal", to.getI_kcal());
+	        mainDatas.addProperty("i_kcal", to.getI_used_kcal());
+
+	    }	   	
+	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
+	}
+	
+	@RequestMapping("selected_data")
+	public ResponseEntity<String> MainForSelectedDate(Authentication authentication, ModelMap map, HttpServletRequest request, String mId, Date date) {
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        
+		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+        
+	    ArrayList<MainTO> ddatas = dao.DateData(mId, date);
+
+	    JsonObject mainDatas = new JsonObject();
+
+	    for (MainTO to : ddatas) {
 	        
 	        mainDatas.addProperty("m_seq", to.getM_seq());
 	        mainDatas.addProperty("m_weight", to.getM_weight());

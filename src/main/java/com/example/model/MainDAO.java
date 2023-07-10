@@ -1,5 +1,7 @@
 package com.example.model;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,18 @@ public class MainDAO {
 	}
 	
 //-------------------------------------------------------------------------
+	
+	public ArrayList<MainTO> DateData(String mId, Date i_day) {
+
+		List<MainTO> datas = (List<MainTO>)mapper.DataFromDateForMain(mId, i_day);
+		
+	    ArrayList<MainTO> ddatas = new ArrayList<>(datas);
+	    
+	    return ddatas;
+	}
+	
+	
+//----------------------------------------------------------------------------
 	
 	public int InsertData(String mId) {
 		

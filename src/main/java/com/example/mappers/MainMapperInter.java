@@ -12,8 +12,11 @@ import com.example.model.MainTO;
 @Mapper
 public interface MainMapperInter {
 	
-   @Select("SELECT m.*, i.i_kcal, i.i_weight, i.i_day, i.i_used_kcal FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_id = #{mId};")
+   @Select("SELECT m.*, i.i_kcal, i.i_weight, i.i_day, i.i_used_kcal FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_id = #{mId} and i.i_day= curdate()-4;")
    public List<MainTO> DataForMain(String mId);
+	
+	@Select("SELECT m.*, i.i_kcal, i.i_weight, i.i_day, i.i_used_kcal FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_id = #{mId} and i.i_day=#{i_day};")
+	public List<MainTO> DataFromDateForMain(String mId, Date i_day);
 	
     //로그인과 동시에 참조레코드가 없다면 m_seq를 들어가서 참조 레코드를 만듬 중복없이.
     @Insert("INSERT INTO IntakeData (m_seq) SELECT m.m_seq FROM Member m LEFT JOIN IntakeData i ON m.m_seq = i.m_seq WHERE i.m_seq IS NULL AND m.m_id = #{mId} LIMIT 1;")

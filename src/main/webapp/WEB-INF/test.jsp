@@ -46,7 +46,6 @@
 </c:forEach>
 
 <script>
-
     window.onload = function() {
     	
 	//------------- ajax for charts -------------------------
@@ -56,7 +55,7 @@
         dataType: 'json',
         success: function (charts) {
         
-        	console.log( "charts ->", charts);
+        //	console.log( "charts ->", charts);
         	
         	var b_kcal_data = charts.fdatas.map(function(meal) {
                 return meal.meals.b_kcal;
@@ -224,14 +223,19 @@
       
 //--------------------main Elements--------------------------------
 
-      $.ajax({
-    	  
-          url: "/main_data",
+          $.ajax({
+
+          url: "/selected_data",
           type: "get",
           dataType: 'json',
-          
+          data: {
+             	i_day: selectedDate,
+          },
           success: function (elements) {
-        	  
+        	
+        	  console.log("i_day ->", elements.i_day);
+        	  console.log(" selected  ->", selectedDate);
+
            //데이터 넘어오는거 검사 섹션
        	   console.log("m_seq ->", elements.m_seq);
            console.log("i_day ->", elements.i_day);
@@ -240,43 +244,43 @@
            console.log("m_weight ->", elements.m_weight);
            console.log("m_target_weight ->", elements.m_target_weight);
     	   //
-    	   
+
     	   //달력
             var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + elements.i_day + '" min="2023-02-01" max="2023-12-31"> </li>';
-            
+
             $('#calendarCt').html(calendarhtml);
-			
+
            //몸무게 동적처리
-            
+
             var toTarget = elements.m_weight - elements.m_target_weight;
             var whtml = '';
-            
+
             console.log("  목몸 -> " , toTarget);
 
             if (elements.m_weight < elements.m_target_weight) {
               whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
             } else if (elements.m_weight == elements.m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';  
+              whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
             } else if(elements.m_weight > elements.m_target_weight) {
               whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
             }
 
             $('#targetWeight').html(whtml);
-            
+
             //data: { mId: "your-mId-value" },
-            
+
             //main 상자 4개 jQuery
-            
-            let firstelementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">${i_day}</h4><span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a></span>';
+
+            let firstelementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_day + '</h4><span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a></span>';
 
 			$("#firstElement").html(firstelementHtml);
-			
+
 			//
-			
+
 			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
 
 			$("#secondElement").html(secondElementHtml);
-			
+
 			//
 			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
 
@@ -286,11 +290,102 @@
              	console.log('에러는 -> ', error);
              	console.log('\n 응답 JSON -> ', error.responseJSON);
              	console.log('\n 응답 본문 -> ', error.responseText);
-      
+
           	 }
-        })  
-    };
+        });
+        
+        //---------------------달력 날짜 변경 되는거 파리미터값으로 전달------------------------------
+        	var selectedDate = $("#calendarCtInput").val();
+        
+        	console.log("  선택된 날짜는 -> ", selectedDate);
+
+        $("#calendarCtInput").on("change", function() {
+            loadDataFromDate();
+        });
+        
+//////////////////  
+    };  //window.onload끝 
+/////////////////
+
+	//----------------------함수-----------------------------
     
+    
+    function loadDataFromDate() {
+
+   	selectedDate = $("#calendarCtInput").val(); // selectedDate 업데이트
+
+   	$.ajax({
+
+          url: "/selected_data",
+          type: "get",
+          dataType: 'json',
+          data: {
+             	i_day: selectedDate,
+          },
+          success: function (elements) {
+        	
+        	  console.log("i_day ->", elements.i_day);
+        	  console.log(" selected  ->", selectedDate);
+
+           //데이터 넘어오는거 검사 섹션
+       	   console.log("m_seq ->", elements.m_seq);
+           console.log("i_day ->", elements.i_day);
+           console.log("i_kcal ->", elements.i_kcal);
+           console.log("i_used_kcal ->", elements.i_used_kcal);
+           console.log("m_weight ->", elements.m_weight);
+           console.log("m_target_weight ->", elements.m_target_weight);
+    	   //
+
+    	   //달력
+            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + elements.i_day + '" min="2023-02-01" max="2023-12-31"> </li>';
+
+            $('#calendarCt').html(calendarhtml);
+
+           //몸무게 동적처리
+
+            var toTarget = elements.m_weight - elements.m_target_weight;
+            var whtml = '';
+
+            console.log("  목몸 -> " , toTarget);
+
+            if (elements.m_weight < elements.m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
+            } else if (elements.m_weight == elements.m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+            } else if(elements.m_weight > elements.m_target_weight) {
+              whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
+            }
+
+            $('#targetWeight').html(whtml);
+
+            //data: { mId: "your-mId-value" },
+
+            //main 상자 4개 jQuery
+
+            let firstelementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_day + '</h4><span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a></span>';
+
+			$("#firstElement").html(firstelementHtml);
+
+			//
+
+			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
+
+			$("#secondElement").html(secondElementHtml);
+
+			//
+			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
+
+			$("#thirdElement").html(thirdElementHtml);
+          },
+          	 error: function (error) {
+             	console.log('에러는 -> ', error);
+             	console.log('\n 응답 JSON -> ', error.responseJSON);
+             	console.log('\n 응답 본문 -> ', error.responseText);
+
+          	 }
+        });
+		
+    	}
 </script>
 
 
