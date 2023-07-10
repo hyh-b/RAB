@@ -282,14 +282,6 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
-	@RequestMapping("/exercise.do")
-	public ModelAndView tables() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("exercise");
-		return modelAndView; 
-	}
-
-	
 	@RequestMapping("/index-ecommerce.do")
 	public ModelAndView index_ecommerce() {
 		ModelAndView modelAndView = new ModelAndView();

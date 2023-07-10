@@ -1,7 +1,9 @@
 package com.example.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +23,9 @@ import com.example.model.BreakfastTO;
 import com.example.model.DinnerDAO;
 import com.example.model.DinnerTO;
 import com.example.model.FoodDAO;
+import com.example.model.FoodTO;
 import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
-import com.example.model.MemberTO;
 import com.example.security.CustomUserDetails;
 
 @RestController
@@ -65,11 +67,47 @@ public class FoodController {
 	
 	// 음식 데이터 찾기 
 	@RequestMapping("/foodData")
-	public Map<String, Object> foodData1(HttpServletRequest request) {
+	public List<Map<String, Object>> foodData1(HttpServletRequest request) {
 		String foodName = request.getParameter("data");
 		System.out.println("foodName" + foodName);
-		Map<String, Object> response = fdao.selectFood(foodName);
-		return response;
+		
+		List<Map<String, Object>> responseList = new ArrayList<>();
+		List<FoodTO> foodList = fdao.selectFood(foodName);
+		    
+		for (FoodTO to : foodList) {
+			Map<String, Object> response = new HashMap<>();
+			
+			String f_name = to.getF_name();
+			int f_kcal = to.getF_kcal();
+			BigDecimal f_carbohydrate_g = to.getF_carbohydrate_g();
+			BigDecimal f_protein_g = to.getF_protein_g();
+			BigDecimal f_fat_g = to.getF_fat_g();
+			BigDecimal f_sugar_g = to.getF_sugar_g();
+			int f_cholesterol_mg = to.getF_cholesterol_mg();
+			int f_sodium_mg = to.getF_sodium_mg();
+			
+			response.put("f_name", f_name);
+			response.put("f_kcal", f_kcal);
+			response.put("f_carbohydrate_g", f_carbohydrate_g);
+			response.put("f_protein_g", f_protein_g);
+			response.put("f_fat_g", f_fat_g);
+			response.put("f_sugar_g", f_sugar_g);
+			response.put("f_cholesterol_mg", f_cholesterol_mg);
+			response.put("f_sodium_mg", f_sodium_mg);
+			
+			System.out.println("음식 이름 \t :" + f_name);
+			System.out.println("탄수화물 \t :" + f_carbohydrate_g);
+			System.out.println("단백지 \t :" + f_protein_g);
+			System.out.println("지방 \t :" + f_fat_g);
+			System.out.println("콜레스토롤 \t :" + f_cholesterol_mg);
+			System.out.println("나트륨 \t :" + f_sodium_mg);
+			System.out.println("당 \t :" + f_sugar_g);
+			System.out.println("칼로리 \t :" + f_kcal);
+			
+			
+			responseList.add(response);
+		}
+		return responseList;
 	}
 	
 	// 아침 ajax 데이터 구문.
