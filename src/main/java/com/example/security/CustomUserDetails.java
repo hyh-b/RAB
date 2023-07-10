@@ -27,11 +27,13 @@ public class CustomUserDetails implements UserDetails {
     //사용하고 싶은 추가 데이터 설정
     private String m_seq;
     private String m_name;
+    private String m_gender;
     public CustomUserDetails(MemberTO to) {
         this.username = to.getM_id();
         this.password = to.getM_pw();
         this.m_seq = to.getM_seq();
         this.m_name = to.getM_name();
+        this.m_gender = to.getM_gender();
         // 권한 목록 확인
         List<String> roles = Collections.singletonList(to.getM_role());
 

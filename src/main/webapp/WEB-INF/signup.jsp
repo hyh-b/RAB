@@ -216,7 +216,7 @@
                   	<div class="mb-4">
                       <label class="mb-2.5 block font-medium text-black dark:text-white">아이디</label>
                       <div class="relative flex">
-					        <input type="text" placeholder="20자 이내" id="id" name="id" required maxlength="20" required oninput = "checkId()"
+					        <input type="text" placeholder="6~20자 이내" id="id" name="id" required maxlength="20" required oninput = "checkId()"
 					            class="w-auto flex-grow rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input"
 					            oninput="removeSpaces(this);" />
 					        
@@ -360,17 +360,26 @@
 	window.onload = function() {
 	
 		document.getElementById( 'sbtn' ).onclick = function() {
-			// 유효성검사 - email은 이메일형식 / 비밀번호는 문자와 숫자가 필수로 포함된 6~20자리(='"사용불가)
+			// 유효성검사 - email은 이메일형식  
 			var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+			// 비밀번호는 문자와 숫자가 필수로 포함된 6~20자리(='"사용불가)
             var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?![^]*[\\'\\\"\\=]).{6,20}$/;
-			
+            // 아이디는 대소문자 알파벳이 필수로 들어가며 '.'은 사용불가인 6~20자리
+            var idPattern = /^(?=.*[a-zA-Z])[^\.\n]{6,20}$/;
+            
 			if( document.sfrm.id.value.trim() == '' ) {
-				alert( 'id를 입력하셔야 합니다' );
+				alert( '아이디를 입력하셔야 합니다' );
 				return false;
 			}
 			if (window.getComputedStyle(idOk).display !== 'inline-block') {
 	            alert('아이디가 중복됩니다.');
 	            event.preventDefault(); 
+	            return false;
+	        }
+			
+			if (!idPattern.test(document.sfrm.id.value.trim())) { 
+	            alert("아이디는 최소 6자 이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다. ('.'는 사용불가)");
+	            event.preventDefault();
 	            return false;
 	        }
 			if( document.sfrm.mail.value.trim() == '' ) {
