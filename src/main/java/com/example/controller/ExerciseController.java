@@ -57,7 +57,7 @@ public class ExerciseController {
 				
 			long timestamp = System.currentTimeMillis();
 			String newfilename = uploadDirectory + filename + "-"+timestamp + extension;
-			
+					
 			String uploadPath = request.getSession().getServletContext().getRealPath(uploadDirectory);
 			
 			upload.transferTo(new File(uploadPath, newfilename));
