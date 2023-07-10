@@ -367,7 +367,7 @@ pageEncoding="UTF-8"%>
 		            }
 		        }
 		    }
-		});
+		}); 
 		
 		$('#fbtn2').on('click',function(){
 			
