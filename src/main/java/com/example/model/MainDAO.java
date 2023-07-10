@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.mappers.MainMapperInter;
 import com.example.mappers.MemberMapperInter;
@@ -71,7 +72,14 @@ public class MainDAO {
 		}
 	
 //----------------------------------------------------------------------------
-	
+//		public ArrayList<MainTO> foodData(@RequestParam int m_seq) {
+//
+//			List<MainTO> datas = (List<MainTO>)this.mapper.FoodData(m_seq);
+//		
+//			ArrayList<MainTO> fdatas = new ArrayList<>(datas);
+//	    
+//	    	return fdatas;
+//		}
 		
 
 }

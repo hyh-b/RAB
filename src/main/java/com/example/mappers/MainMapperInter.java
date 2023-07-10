@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.example.model.MainTO;
 
 
@@ -25,6 +27,11 @@ public interface MainMapperInter {
     //음식 칼로리, 영양분 for charts
     @Select("SELECT * FROM Breakfast WHERE b_day = '2023-07-08' AND m_seq = 30 UNION ALL SELECT * FROM Lunch WHERE l_day = '2023-07-08' AND m_seq = 30 UNION ALL SELECT * FROM Dinner WHERE d_day = '2023-07-08' AND m_seq = 30;")
     public List<MainTO> FoodData();
+    
+    //음식 칼로리, 영양분 for charts
+//    @Select("SELECT * FROM Breakfast WHERE b_day = '2023-07-08' AND m_seq = #{m_seq} UNION ALL SELECT * FROM Lunch WHERE l_day = '2023-07-08' AND m_seq = #{m_seq}  UNION ALL SELECT * FROM Dinner WHERE d_day = '2023-07-08' AND m_seq = #{m_seq} ;")
+//    public List<MainTO> FoodData(@RequestParam int m_seq);
+    
     
     //
     

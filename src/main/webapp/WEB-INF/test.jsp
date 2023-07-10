@@ -1,3 +1,4 @@
+<%@page import="org.springframework.security.core.Authentication"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="com.example.model.MainTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -6,6 +7,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -20,7 +23,11 @@
   
   <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
+  
+   
 <c:set var="seq" value="${requestScope.seq}" />
+
+ 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
   <!-- jstl 로 lists 받아옴 -->
@@ -36,6 +43,8 @@
    <c:set var="i_trans_fat_g" value="${item.i_trans_fat_g}" />
    <c:set var="i_day" value="${item.i_day}" />
    <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
+   
+   <c:set var="m_id" value="${item.m_id}"/>
    <c:set var="m_weight" value="${item.m_weight}"/>
     <c:set var="m_seq" value="${item.m_seq}"/>
    <c:set var="m_gender" value="${item.m_gender}"/>
@@ -46,6 +55,9 @@
 </c:forEach>
 
 <script>
+	
+	//console.log("뭔 seq ", seq);
+	
     window.onload = function() {
     	
 	//------------- ajax for charts -------------------------
@@ -53,6 +65,9 @@
         url: "/charts_data",
         type: "get",
         dataType: 'json',
+        data: {
+    	  	m_seq : seq
+      	},
         success: function (charts) {
         
         //	console.log( "charts ->", charts);
@@ -229,6 +244,7 @@
           type: "get",
           dataType: 'json',
           data: {
+        	  	mId: ${item.m_id},
              	i_day: selectedDate,
           },
           success: function (elements) {
@@ -295,6 +311,7 @@
         });
         
         //---------------------달력 날짜 변경 되는거 파리미터값으로 전달------------------------------
+        
         	var selectedDate = $("#calendarCtInput").val();
         
         	console.log("  선택된 날짜는 -> ", selectedDate);
@@ -321,6 +338,7 @@
           dataType: 'json',
           data: {
              	i_day: selectedDate,
+             	mId : elements.m_id
           },
           success: function (elements) {
         	
@@ -329,7 +347,9 @@
 
            //데이터 넘어오는거 검사 섹션
        	   console.log("m_seq ->", elements.m_seq);
-           console.log("i_day ->", elements.i_day);
+       	   console.log(" m_id ->", elements.m_id);
+           
+       	   console.log("i_day ->", elements.i_day);
            console.log("i_kcal ->", elements.i_kcal);
            console.log("i_used_kcal ->", elements.i_used_kcal);
            console.log("m_weight ->", elements.m_weight);
@@ -386,6 +406,7 @@
         });
 		
     	}
+    
 </script>
 
 

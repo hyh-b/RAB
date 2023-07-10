@@ -64,6 +64,8 @@ public class MainController {
 	
         modelAndView.setViewName("test");
         
+	    System.out.println(" test.do mId => " + mId);
+        
         return modelAndView;
 	}
 
@@ -75,9 +77,11 @@ public class MainController {
 		
 		//원하는 유저 정보 가져오기 - security패키지의 CustomUserDetails 설정
 		//로그인한(인증된) 사용자의 정보를 authentication에 담음
+		
 		authentication = SecurityContextHolder.getContext().getAuthentication();
 		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
 		Object principal = authentication.getPrincipal();
+		
 		// principal 객체를 CustomUserDetails 타입으로 캐스팅
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		System.out.println("seq가져와 "+customUserDetails.getM_seq());
@@ -111,13 +115,16 @@ public class MainController {
 	//------jsonedDatas---------------------------------------
 
 	@RequestMapping("charts_data")
-	public ResponseEntity<String> JsonedDatas() {
+	public ResponseEntity<String> JsonedDatas(Authentication authentication, String mId) {
 		
 	    ArrayList<MainTO> fdatas = dao.foodData();
 
 	    JsonObject result = new JsonObject();
 	    
 	    JsonArray Foodarr = new JsonArray();
+	    
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
 
 	    for (MainTO to : fdatas) {
 	        JsonObject obj = new JsonObject();
@@ -138,6 +145,7 @@ public class MainController {
 	        meals.addProperty("b_sugar_g", to.getB_sugar_g());
 	        meals.addProperty("b_cholesterol_mg", to.getB_cholesterol_mg());
 	        meals.addProperty("b_sodium_mg", to.getB_sodium_mg());
+	        //meals.addProperty("m_id", member.toString());
 
 	 
 	        obj.add("meals", meals);
@@ -146,6 +154,9 @@ public class MainController {
 	    }
 
 	    result.add("fdatas", Foodarr);
+	    
+	    System.out.println(" charts. mId => " + mId);
+	    //System.out.println(" charts. mSeq => " + m_seq);
 	    
 	    //System.out.println("   result - >  " + result);
 	   	
@@ -196,12 +207,15 @@ public class MainController {
 	        mainDatas.addProperty("m_seq", to.getM_seq());
 	        mainDatas.addProperty("m_weight", to.getM_weight());
 	        mainDatas.addProperty("m_target_weight", to.getM_target_weight());
+	        mainDatas.addProperty("m_id", to.getM_id());
 	        
 	        mainDatas.addProperty("i_day", to.getI_day().toString());
 	        mainDatas.addProperty("i_kcal", to.getI_kcal());
 	        mainDatas.addProperty("i_kcal", to.getI_used_kcal());
 
 	    }	   	
+	    
+	    System.out.println(" selectedDate mId => " + mId);
 	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
 	}
 
