@@ -1,7 +1,8 @@
+<%@page import="java.util.Date"%>
+<%@page import="org.springframework.security.core.Authentication"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="com.example.model.MainTO"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="java.sql.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -20,7 +21,11 @@
   
   <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
+  
+   
 <c:set var="seq" value="${requestScope.seq}" />
+
+ 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
   <!-- jstl 로 lists 받아옴 -->
@@ -36,28 +41,30 @@
    <c:set var="i_trans_fat_g" value="${item.i_trans_fat_g}" />
    <c:set var="i_day" value="${item.i_day}" />
    <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
+   
+   <c:set var="m_id" value="${item.m_id}"/>
    <c:set var="m_weight" value="${item.m_weight}"/>
     <c:set var="m_seq" value="${item.m_seq}"/>
    <c:set var="m_gender" value="${item.m_gender}"/>
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
-   <c:set var="m_name" value="${item.m_name}" />
-       				     
+   <c:set var="m_name" value="${item.m_name}" />       				     
 </c:forEach>
 
 <script>
 
-	
     window.onload = function() {
-
+  
+    	
 	//------------- ajax for charts -------------------------
       $.ajax({
+        
         url: "/charts_data",
-        type: "get",
+   		type: "get",
         dataType: 'json',
         success: function (charts) {
         
-        	console.log( "charts ->", charts);
+        //	console.log( "charts ->", charts);
         	
         	var b_kcal_data = charts.fdatas.map(function(meal) {
                 return meal.meals.b_kcal;
@@ -223,9 +230,10 @@
         }
       })  
       
-//--------------------main Elements--------------------------------            
-		
-		//-----------달력 라벨 밸류 항상 디폴트는 현재값을 전달
+//--------------------main Elements--------------------------------
+
+        	
+    	//-----------달력 라벨 밸류 항상 디폴트는 현재값을 전달
 		var currentDate = new Date();
 
 		//Date 객체를 YYYY-MM-DD 문자열 형식으로 포맷합니다.
@@ -239,83 +247,138 @@
     
 		$('#calendarCt').html(calendarhtml);
 	
-		//console.log( " formattedDate -> " , formattedDate );
+		console.log( " formattedDate -> " , formattedDate );
+
+		var selectedDate = formattedDate;
+		/////////////////////////////
 		
-		/////////////////////
-  		$("#calendarCtInput").change(function() {
-  		
-  	    	var selectedDate = $(this).val();
-  	    
-  	    	console.log("달력 value 확인 ->", selectedDate);
-  		});
+		
+        $("#calendarCtInput").on("change", function() {
+        	
+        	selectedDate = $(this).val();
+        	
+        	console.log("달력 value 확인 ->", selectedDate);
+        	
+            loadDataFromDate();
+        });
+        
+//////////////////  
+    };  //window.onload끝 
+/////////////////
+
+	//----------------------함수-----------------------------
+    function assignDateChangeListener() {
     	
-      
-      $.ajax({
-    	  
-          url: "/main_data",
+    $("#calendarCtInput").off("change"); 
+    
+    $("#calendarCtInput").on("change", function() {
+        selectedDate = $(this).val();
+        
+        console.log("달력 value 확인 ->", selectedDate);
+        
+        loadDataFromDate();
+    });
+	
+    }
+    
+    assignDateChangeListener();
+    
+////////////////////////////////////////
+
+    function loadDataFromDate() {
+		
+    	var zzinid = $("#zzinid").val();
+    	selectedDate = $("#calendarCtInput").val();
+    	
+    	console.log( " loadDataFromDate() id ->", zzinid );
+    	
+   	$.ajax({
+
+          url: "/selected_data",
           type: "get",
           dataType: 'json',
-          
+          data: {
+             	i_day: selectedDate,
+             	id: zzinid
+          },
           success: function (elements) {
         	  
+        	  console.log("  함수에서 selectedDate -> ", selectedDate);
+        	
            //데이터 넘어오는거 검사 섹션
        	   console.log("m_seq ->", elements.m_seq);
-           console.log("i_day ->", elements.i_day);
+       	   console.log(" m_id ->", elements.m_id);
+           
+       	   console.log("i_day ->", elements.i_day);
            console.log("i_kcal ->", elements.i_kcal);
            console.log("i_used_kcal ->", elements.i_used_kcal);
            console.log("m_weight ->", elements.m_weight);
            console.log("m_target_weight ->", elements.m_target_weight);
-    	   //
     	   
+           //
+
     	   //달력
-          
-			
-           //몸무게 동적처리
+            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + selectedDate + '" min="2023-02-01" max="2023-12-31"> </li>';
+
+            $('#calendarCt').html(calendarhtml);
             
+            assignDateChangeListener();
+           //몸무게 동적처리
+
             var toTarget = elements.m_weight - elements.m_target_weight;
             var whtml = '';
-            
+
             console.log("  목몸 -> " , toTarget);
 
-            if (elements.m_weight < elements.m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
-            } else if (elements.m_weight == elements.m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp &nbsp &nbsp &nbsp &nbsp <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';  
-            } else if(elements.m_weight > elements.m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
-            }
+            if(elements.m_weight === undefined || elements.m_target_weight === undefined ) {
+           	   whtml = '<span class="text-sm font-medium"> 날짜를 선택해주세요 </span>';
+           	} else if (elements.m_weight < elements.m_target_weight) {
+           	   whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
+           	} else if(elements.m_weight > elements.m_target_weight) {
+           	   whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
+          	} else if (elements.m_weight == elements.m_target_weight) {
+           	   whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+           	   //console.log(" undefined ? ->? ", elements.m_weight);
+           	}
+
 
             $('#targetWeight').html(whtml);
-            
-            //data: { mId: "your-mId-value" },
-            
-            //main 상자 4개 jQuery
-            
-            let firstelementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">${i_day}</h4><span class="text-sm font-medium"><a href="calendar.do"> 날짜를 선택하세요</a></span>';
 
-			$("#firstElement").html(firstelementHtml);
-			
+            //data: { mId: "your-mId-value" },
+
+            //main 상자 4개 jQuery
+
+            let firstElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + selectedDate + '</h4><span class="text-sm font-medium"></span>';
+
+			$("#firstElement").html(firstElementHtml);
+
 			//
-			
+
 			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
 
 			$("#secondElement").html(secondElementHtml);
-			
+
 			//
 			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
 
 			$("#thirdElement").html(thirdElementHtml);
-          },
+			
+			//
+			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.m_weight +' kg</h4>';
+
+			$("#fourthElement").html(fourthElementHtml);
+			
+         	 },
+         	 
           	 error: function (error) {
              	console.log('에러는 -> ', error);
              	console.log('\n 응답 JSON -> ', error.responseJSON);
              	console.log('\n 응답 본문 -> ', error.responseText);
-      
+
           	 }
-        })  
- 
-    	
-    };
+        });
+		
+    	}
     
 </script>
 
@@ -330,6 +393,8 @@
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
     :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}"
   >
+  
+  <input type="hidden" id="zzinid" value="${zzinid}" />
     <!-- ===== Preloader Start ===== -->
     <div
   x-show="loaded"
@@ -340,6 +405,9 @@
     class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
   ></div>
 </div>
+	
+	
+	
 
     <!-- ===== Preloader End ===== -->
 
@@ -360,8 +428,8 @@
 
      <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
     </a>
-    
-    <!-- 
+  
+   <!--
      <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
     </a>
  -->
@@ -455,7 +523,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do?seq=${m_seq}} }"
+              href="food.do?seq=${m_seq}"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
@@ -899,7 +967,7 @@
               <!-- Card Item End -->
 
               <!-- Card Item Start -->
-              <div
+             <div
                 class="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"
               >
                 <div
@@ -927,31 +995,17 @@
                     />
                   </svg>
                 </div>
-
+                
                 <div class="mt-4 flex items-end justify-between">
-                  <div>
-                    <h4
-                      class="text-title-md font-bold text-black dark:text-white"
-                    >
-                      ${m_weight} kg
-                    </h4>
- 
-                 
-                    <div id="targetWeight">
-                    
-                  	</div>
-                  
-                  	 
-                 <!--  목표 몸무게 + - 로 나오게 하는 거 추가 작업 필요
-                  	
-                <div id="targetWeight_${i_seq}">
-  					
-				</div>
-				
-				 -->
-                  
-                  </div>
+                
+                  <div id="fourthElement">
 
+                  	</div>
+                  	
+               <div id="targetWeight">
+               
+                   </div>
+                   
                 </div>
               </div>
               <!-- Card Item End -->

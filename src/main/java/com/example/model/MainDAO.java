@@ -35,19 +35,18 @@ public class MainDAO {
 	
 //-------------------------------------------------------------------------
 	
-	public ArrayList<MainTO> DateData(String mId, @RequestParam("i_day") String i_day) {
+	public ArrayList<MainTO> DateData(String id, String i_day ) {
 
-		List<MainTO> datas = (List<MainTO>)mapper.DataFromDateForMain(i_day);
+		List<MainTO> datas = (List<MainTO>)mapper.DataFromDateForMain(i_day, id);
 		
 		System.out.println(" i_day DAO -> " + i_day);
-		
-		System.out.println(" mId DAO -> " + mId);
+		System.out.println("  m_id DAO -> " + id );
+
 		
 	    ArrayList<MainTO> ddatas = new ArrayList<>(datas);
 	    
 	    return ddatas;
 	}
-	
 	
 //----------------------------------------------------------------------------
 	

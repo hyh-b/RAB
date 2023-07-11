@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-     Test RAB
+     test RAB
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   
@@ -48,23 +48,17 @@
    <c:set var="m_gender" value="${item.m_gender}"/>
    <c:set var="m_target_weight" value="${item.m_target_weight}"/>
    <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
-   <c:set var="m_name" value="${item.m_name}" />
-       				     
+   <c:set var="m_name" value="${item.m_name}" />       				     
 </c:forEach>
 
 <script>
-	
-	//console.log("뭔 seq ", seq);
-	
+
     window.onload = function() {
-    	
-    	//var m_seq = "${requestScope.seq}";
-    	
-    	//console.log(" m_seq -> " , m_seq);
+  
     	
 	//------------- ajax for charts -------------------------
       $.ajax({
-        //url: "/charts_data?m_seq="+m_seq,
+        
         url: "/charts_data",
    		type: "get",
         dataType: 'json',
@@ -257,6 +251,8 @@
 
 		var selectedDate = formattedDate;
 		/////////////////////////////
+		
+		
         $("#calendarCtInput").on("change", function() {
         	
         	selectedDate = $(this).val();
@@ -290,8 +286,11 @@
 ////////////////////////////////////////
 
     function loadDataFromDate() {
-	
+		
+    	var zzinid = $("#zzinid").val();
     	selectedDate = $("#calendarCtInput").val();
+    	
+    	console.log( " loadDataFromDate() id ->", zzinid );
     	
    	$.ajax({
 
@@ -299,7 +298,8 @@
           type: "get",
           dataType: 'json',
           data: {
-             	i_day: selectedDate
+             	i_day: selectedDate,
+             	id: zzinid
           },
           success: function (elements) {
         	  
@@ -330,13 +330,17 @@
 
             console.log("  목몸 -> " , toTarget);
 
-            if (elements.m_weight < elements.m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
-            } else if (elements.m_weight == elements.m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! &nbsp&nbsp&nbsp&nbsp  <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
-            } else if(elements.m_weight > elements.m_target_weight) {
-              whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
-            }
+            if(elements.m_weight === undefined || elements.m_target_weight === undefined ) {
+           	   whtml = '<span class="text-sm font-medium"> 날짜를 선택해주세요 </span>';
+           	} else if (elements.m_weight < elements.m_target_weight) {
+           	   whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
+           	} else if(elements.m_weight > elements.m_target_weight) {
+           	   whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
+          	} else if (elements.m_weight == elements.m_target_weight) {
+           	   whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+           	   //console.log(" undefined ? ->? ", elements.m_weight);
+           	}
+
 
             $('#targetWeight').html(whtml);
 
@@ -344,9 +348,9 @@
 
             //main 상자 4개 jQuery
 
-            let firstelementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + selectedDate + '</h4><span class="text-sm font-medium"></span>';
+            let firstElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + selectedDate + '</h4><span class="text-sm font-medium"></span>';
 
-			$("#firstElement").html(firstelementHtml);
+			$("#firstElement").html(firstElementHtml);
 
 			//
 
@@ -364,7 +368,8 @@
 
 			$("#fourthElement").html(fourthElementHtml);
 			
-          },
+         	 },
+         	 
           	 error: function (error) {
              	console.log('에러는 -> ', error);
              	console.log('\n 응답 JSON -> ', error.responseJSON);
@@ -388,6 +393,8 @@
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
     :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}"
   >
+  
+  <input type="hidden" id="zzinid" value="${zzinid}" />
     <!-- ===== Preloader Start ===== -->
     <div
   x-show="loaded"
@@ -398,6 +405,9 @@
     class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
   ></div>
 </div>
+	
+	
+	
 
     <!-- ===== Preloader End ===== -->
 
@@ -418,8 +428,8 @@
 
      <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
     </a>
-    
-    <!-- 
+  
+   <!--
      <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
     </a>
  -->
@@ -957,7 +967,7 @@
               <!-- Card Item End -->
 
               <!-- Card Item Start -->
-              <div
+             <div
                 class="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"
               >
                 <div
@@ -985,22 +995,17 @@
                     />
                   </svg>
                 </div>
-
+                
                 <div class="mt-4 flex items-end justify-between">
                 
                   <div id="fourthElement">
-                 
- 				
- 					</div>
-                 
-                    <div id="targetWeight">
-                    
-                  	</div>
-                  
-           
-                  
-                  </div>
 
+                  	</div>
+                  	
+               <div id="targetWeight">
+               
+                   </div>
+                   
                 </div>
               </div>
               <!-- Card Item End -->

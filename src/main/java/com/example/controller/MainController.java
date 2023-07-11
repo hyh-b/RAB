@@ -56,15 +56,18 @@ public class MainController {
         //v_memberIntakeData 정보
         ArrayList<MainTO> lists = dao.main_data(mId);
         int flag = dao.InsertData(mId);
+     
         
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
   
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("flag", flag);
-		
-	
+		modelAndView.addObject("zzinid", member.getM_id());
+
         modelAndView.setViewName("test");
+        
+        System.out.println(" test.do m_id " + member.getM_id());
         
 	    System.out.println(" test.do mId => " + mId);
         
@@ -97,7 +100,7 @@ public class MainController {
         	return modelAndView;
         }
         
-        //v_memberIntakeData 정보
+       
         ArrayList<MainTO> lists = dao.main_data(mId);
         int flag = dao.InsertData(mId);
         
@@ -106,9 +109,13 @@ public class MainController {
         System.out.println("     m_mail: " + member.getM_mail());
   
         map.addAttribute("user", member);
+        
 
 		modelAndView.addObject("flag", flag);
 		modelAndView.addObject("lists", lists);
+		modelAndView.addObject("zzinid", member.getM_id());
+		
+		System.out.println(" test.do m_id " + member.getM_id());
 		
 		modelAndView.setViewName("main");
 		return modelAndView; 
@@ -190,21 +197,25 @@ public class MainController {
 	        mainDatas.addProperty("i_day", to.getI_day().toString());
 	        mainDatas.addProperty("i_kcal", to.getI_kcal());
 	        mainDatas.addProperty("i_kcal", to.getI_used_kcal());
-
+	        
+	        
 	    }	   	
 	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
 	}
 	
 	@RequestMapping("selected_data")
-	public ResponseEntity<String> MainForSelectedDate(Authentication authentication, ModelMap map, HttpServletRequest request, String mId, @RequestParam("i_day") String i_day ) {
+	public ResponseEntity<String> MainForSelectedDate(
+	Authentication authentication, ModelMap map, HttpServletRequest request, String mId, 
+	 @RequestParam("id") String id, @RequestParam("i_day") String i_day ) {
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
-	    ArrayList<MainTO> ddatas = dao.DateData(mId, i_day);
+	    ArrayList<MainTO> ddatas = dao.DateData(i_day, id);
 	    
 	    System.out.println("  i_day Controller -> " + i_day);
+	    System.out.println("  m_id Controller -> " + id );
 
 	    JsonObject mainDatas = new JsonObject();
 
@@ -213,11 +224,15 @@ public class MainController {
 	        mainDatas.addProperty("m_seq", to.getM_seq());
 	        mainDatas.addProperty("m_weight", to.getM_weight());
 	        mainDatas.addProperty("m_target_weight", to.getM_target_weight());
-	        mainDatas.addProperty("m_id", to.getM_id());
+	        //mainDatas.addProperty("m_id", to.getM_id());
 	        
 	        mainDatas.addProperty("i_day", to.getI_day().toString());
 	        mainDatas.addProperty("i_kcal", to.getI_kcal());
 	        mainDatas.addProperty("i_used_kcal", to.getI_used_kcal());
+	        
+	        mainDatas.addProperty("m_id", member.getM_id());
+	        //mainDatas.addProperty("seq", member.getM_seq());
+
 
 	    }	   	
 	    
@@ -225,7 +240,5 @@ public class MainController {
 	    
 	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
 	}
-
-
-
+	
 }
