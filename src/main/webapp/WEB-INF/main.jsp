@@ -47,8 +47,9 @@
 
 <script>
 
+	
     window.onload = function() {
-    	
+
 	//------------- ajax for charts -------------------------
       $.ajax({
         url: "/charts_data",
@@ -222,8 +223,33 @@
         }
       })  
       
-//--------------------main Elements--------------------------------
+//--------------------main Elements--------------------------------            
+		
+		//-----------달력 라벨 밸류 항상 디폴트는 현재값을 전달
+		var currentDate = new Date();
 
+		//Date 객체를 YYYY-MM-DD 문자열 형식으로 포맷합니다.
+		var day = ("0" + currentDate.getDate()).slice(-2);
+		var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+		var year = currentDate.getFullYear();
+
+		var formattedDate = year + "-" + month + "-" + day;
+
+		var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + formattedDate + '" min="2023-01-01" max="2050-12-31"></li>';
+    
+		$('#calendarCt').html(calendarhtml);
+	
+		//console.log( " formattedDate -> " , formattedDate );
+		
+		/////////////////////
+  		$("#calendarCtInput").change(function() {
+  		
+  	    	var selectedDate = $(this).val();
+  	    
+  	    	console.log("달력 value 확인 ->", selectedDate);
+  		});
+    	
+      
       $.ajax({
     	  
           url: "/main_data",
@@ -242,9 +268,7 @@
     	   //
     	   
     	   //달력
-            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + elements.i_day + '" min="2023-02-01" max="2023-12-31"> </li>';
-            
-            $('#calendarCt').html(calendarhtml);
+          
 			
            //몸무게 동적처리
             
@@ -289,6 +313,8 @@
       
           	 }
         })  
+ 
+    	
     };
     
 </script>

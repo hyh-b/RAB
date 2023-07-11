@@ -1,14 +1,15 @@
 package com.example.controller;
 
 import java.awt.PageAttributes.MediaType;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -117,6 +119,8 @@ public class MainController {
 	@RequestMapping("charts_data")
 	public ResponseEntity<String> JsonedDatas(Authentication authentication, String mId) {
 		
+		//@RequestParam int m_seq
+		
 	    ArrayList<MainTO> fdatas = dao.foodData();
 
 	    JsonObject result = new JsonObject();
@@ -192,13 +196,15 @@ public class MainController {
 	}
 	
 	@RequestMapping("selected_data")
-	public ResponseEntity<String> MainForSelectedDate(Authentication authentication, ModelMap map, HttpServletRequest request, String mId, Date date) {
+	public ResponseEntity<String> MainForSelectedDate(Authentication authentication, ModelMap map, HttpServletRequest request, String mId, @RequestParam("i_day") String i_day ) {
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
-	    ArrayList<MainTO> ddatas = dao.DateData(mId, date);
+	    ArrayList<MainTO> ddatas = dao.DateData(mId, i_day);
+	    
+	    System.out.println("  i_day Controller -> " + i_day);
 
 	    JsonObject mainDatas = new JsonObject();
 
@@ -211,11 +217,12 @@ public class MainController {
 	        
 	        mainDatas.addProperty("i_day", to.getI_day().toString());
 	        mainDatas.addProperty("i_kcal", to.getI_kcal());
-	        mainDatas.addProperty("i_kcal", to.getI_used_kcal());
+	        mainDatas.addProperty("i_used_kcal", to.getI_used_kcal());
 
 	    }	   	
 	    
-	    System.out.println(" selectedDate mId => " + mId);
+	    System.out.println(" mId Controller => " + mId);
+	    
 	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
 	}
 
