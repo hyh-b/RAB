@@ -1,10 +1,14 @@
+<%@page import="com.example.model.ExerciseAlbumTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String m_name = (String)request.getAttribute("m_name");
 	String m_gender = (String)request.getAttribute("m_gender");
-	
+	String abHtml = (String)request.getAttribute("abHtml");
+	System.out.println("ㅇ미ㅣ지주소:"+abHtml);
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -128,45 +132,70 @@ pageEncoding="UTF-8"%>
 	
 	/*  --------------------------이미지 슬라이드 끝------------------------------  */
     
-  .button-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap; 
-  align-items: flex-end;
-  margin: 20px;
-}
+   .button-container {
+	  display: flex;
+	  justify-content: space-between;
+	  flex-wrap: wrap; 
+	  align-items: flex-end;
+	  margin: 20px;
+	}
+	
+	.upload-container {
+	  padding: 10px;
+	  margin-right: 100px;
+	}
 
-.upload-container {
-  padding: 10px;
-  margin-right: 100px;
-}
-
-.button-view-all {
-  width: auto; 
-  height: 40px;
-  padding: 10px;
-  margin-left: 100px; 
-}
-
-@media (max-width: 768px) { 
-  .button-container {
-    justify-content: center; 
-  }
-  .button-view-all, .upload-container {
-    margin: auto;
-  }
-}
-
-@media (max-width: 600px) { 
-  .button-container {
-    flex-direction: column; 
-    align-items: center;
-  }
-  .button-view-all, .upload-container {
-    margin: 5px;
-  }
-}
+/*--------------- 다이어로그 창 ----------------------------  */
+  
+  
+  #closeDialogBtn {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      font-size: 2em;
+    }
+    #photoDialog {
+      display: none;
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      background: white;
+      padding: 20px;
+      border: 1px solid black;
+    }
+    #photoContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    #photoContainer img {
+      width: 30%;
+      margin-bottom: 20px;
+    }
     
+    .photoContainer div {
+            margin-bottom: 30px;
+        }
+        
+     .photoContainer div img {
+            max-width: 380px;
+            max-height: 360px;
+            min-width: 250px;
+            min-height: 250px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+        #previousPageBtn, #nextPageBtn {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            font-size:20px;
+        }
+        #nextPageBtn {
+            left: 90px;
+        }
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
@@ -183,7 +212,12 @@ pageEncoding="UTF-8"%>
 			document.ufrm.submit();
 		}
 		
+		
+		
+		
 	}
+	
+	
 	
 </script>
 
@@ -844,80 +878,18 @@ pageEncoding="UTF-8"%>
 			<!---------- 사진 등록 끝 ---------->
 			
 			<!---------- 사진 전체보기 시작 ---------->
-			<a href="#"
+			<a href="#" id="viewBtn"
                   class="button-view-all inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10">
-                  사진전체보기 버튼1
+                  사진전체보기 버튼
                 </a>
             </div>
+            
             <!---------- 사진 전체보기 끝 ---------->
 		    <br>
 		  
 			  <div class="swiper-container">
 				<div class="swiper-wrapper">
-					<div class="swiper-slide">
-						<img src="/src/images/user/rocatNOb.png" >
-						<div class="slideText">2012-06-14</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/user-01.png" >
-						<div class="slideText">111번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/rocatNOb.png" >
-						<div class="slideText">1번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/user-01.png" >
-						<div class="slideText">2번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/user-02.png" >
-						<div class="slideText">3번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/rocatNOb.png" >
-						<div class="slideText">4번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/user-03.png" >
-						<div class="slideText">5번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/rocatNOb.png" >
-						<div class="slideText">61번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/user-04.png" >
-						<div class="slideText">7번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/rocatNOb.png" >
-						<div class="slideText">8번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/user-07.png" >
-						<div class="slideText">9번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/rocatNOb.png" >
-						<div class="slideText">10번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/logo/body.png" >
-						<div class="slideText">11번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/rocatNOb.png" >
-						<div class="slideText">12번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/logo/work.png" >
-						<div class="slideText">13번</div>
-					</div>
-					<div class="swiper-slide">
-						<img src="/src/images/user/rocatNOb.png" >
-						<div class="slideText">14번</div>
-					</div>
+				${sbHtml}
 				</div>
 			
 				<!-- 네비게이션 -->
@@ -927,8 +899,16 @@ pageEncoding="UTF-8"%>
 				<!-- 페이징 -->
 				<div class="swiper-pagination"></div>
 			</div>
-		
-		  
+			<div id="photoDialog" style="display:none; width:1200px; height:1200px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: white; padding: 20px; border: 1px solid black;">
+		        <button id="closeDialogBtn" style="font-size: 30px; position: absolute; right: 20px; bottom: 20px;">닫기</button>
+		        <button id="deleteBtn" style="font-size: 30px; position: absolute; right: 100px; bottom: 20px;">삭제</button>
+			    <button id="previousPageBtn">이전</button>
+			    <button id="nextPageBtn">다음</button>
+		        <div id="photoContainer" class="photoContainer">
+		            <!-- Photos go here -->
+		        </div>
+		    </div>
+  </div>
 		</main> 
     </div>
   </div>
@@ -956,6 +936,88 @@ pageEncoding="UTF-8"%>
 			prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
 		},
 	});
+	
+	
+	
+	document.getElementById('viewBtn').addEventListener('click', function() {
+	      document.getElementById('photoDialog').style.display = 'block';
+	    });
+
+	    document.getElementById('closeDialogBtn').addEventListener('click', function() {
+	      document.getElementById('photoDialog').style.display = 'none';
+	    });
+		
+	    let images = [
+	    	<%= abHtml%>
+	    	
+	    ];
+
+	    let currentPage = 1;
+	    let imagesPerPage = 9;
+	    let numOfPages = Math.ceil(images.length / imagesPerPage);
+
+	    function displayImages() {
+	      let start = (currentPage - 1) * imagesPerPage;
+	      let end = start + imagesPerPage;
+	      let imagesToDisplay = images.slice(start, end);
+
+	      let html = '';
+	      for(let i = 0; i < imagesToDisplay.length; i++) {
+	          if (i % 3 === 0) {
+	            html += '<div style="display:flex">';
+	          }
+	          html += '<img src="' + imagesToDisplay[i] + '"onclick="selectImage(this)" style="width: 100%; height: 100%; margin-bottom: 20px;">';
+	          if ((i+1) % 3 === 0 || i+1 === imagesToDisplay.length) {
+	            html += '</div>';
+	          }
+	        }
+	      document.getElementById('photoContainer').innerHTML = html;
+	    }
+	    let selectedImage = null;
+	    
+	    function selectImage(imageElement) {
+	        if (selectedImage) {
+	            selectedImage.style.border = 'none'; // Remove border from previously selected image
+	        }
+	        imageElement.style.border = '2px solid red'; // Add border to the selected image
+	        selectedImage = imageElement;
+	    }
+
+	    function deleteImage() {
+	        if (!selectedImage) {
+	            alert('No image selected!');
+	            return;
+	        }
+	        let imageIndex = images.indexOf(selectedImage.src);
+	        if (imageIndex > -1) {
+	            images.splice(imageIndex, 1);
+	        }
+	        selectedImage.parentElement.removeChild(selectedImage);
+	        selectedImage = null;
+	        displayImages();
+	    }
+
+	    document.getElementById('deleteBtn').addEventListener('click', deleteImage);
+	    
+
+	    function handleNextPage() {
+	      if (currentPage < numOfPages) {
+	        currentPage++;
+	        displayImages();
+	      }
+	    }
+
+	    function handlePreviousPage() {
+	      if (currentPage > 1) {
+	        currentPage--;
+	        displayImages();
+	      }
+	    }
+
+	    document.getElementById('previousPageBtn').addEventListener('click', handlePreviousPage);
+	    document.getElementById('nextPageBtn').addEventListener('click', handleNextPage);
+
+	    displayImages(); // Initial display
 
 </script>
 </body>

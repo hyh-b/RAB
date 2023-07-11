@@ -1,5 +1,7 @@
 package com.example.model;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,6 +26,12 @@ public class ExerciseAlbumDAO {
 			flag=1;
 		}
 		return flag;
+	}
+	
+	public ArrayList<ExerciseAlbumTO> exerciseAlbumList(String m_id){
+		ArrayList<ExerciseAlbumTO> eaLists = mapper.exerciseAlbumList(m_id);
+		
+		return eaLists;
 	}
 	
 }
