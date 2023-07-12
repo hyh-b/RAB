@@ -54,7 +54,8 @@
 <script>
 
 //----------------------함수-----------------------------
-
+		
+		//반복해서 함수들이 그 자리를 대체하게 하는 함수
 		function assignDateChangeListener() {
 	
 		$("#calendarCtInput").off("change"); 
@@ -72,108 +73,100 @@
 
 		assignDateChangeListener();
 	
+		//------------날짜에 맞춰서 4elements 표시---------------------------------------
 
 		function loadDataFromDate() {
 	
 			var zzinid = $("#zzinid").val();
 			selectedDate = $("#calendarCtInput").val();
 	
-	console.log( " loadDataFromDate() id ->", zzinid );
+			//console.log( " loadDataFromDate() id ->", zzinid );
 	
-	$.ajax({
-
-      url: "/selected_data",
-      type: "get",
-      dataType: 'json',
-      data: {
-         	i_day: selectedDate,
-         	id: zzinid
-      },
-      success: function (elements) {
+		$.ajax({
+			url: "/selected_data",
+      		type: "get",
+      		dataType: 'json',
+      		
+      		data: {
+         		i_day: selectedDate,
+         		id: zzinid
+      		},
+      
+      		success: function (elements) {
     	  
-    	  console.log("  함수에서 selectedDate -> ", selectedDate);
+    	  	//console.log("  함수에서 selectedDate -> ", selectedDate);
     	
        //데이터 넘어오는거 검사 섹션
-   	   console.log("m_seq ->", elements.m_seq);
-   	   console.log(" m_id ->", elements.m_id);
+   	   
+       		//console.log("m_seq ->", elements.m_seq);
+   	   		//console.log(" m_id ->", elements.m_id);
        
-   	   console.log("i_day ->", elements.i_day);
-       console.log("i_kcal ->", elements.i_kcal);
-       console.log("i_used_kcal ->", elements.i_used_kcal);
-       console.log("m_weight ->", elements.m_weight);
-       console.log("m_target_weight ->", elements.m_target_weight);
-	   
-       //
+   	   		//console.log("i_day ->", elements.i_day);
+       		//console.log("i_kcal ->", elements.i_kcal);
+       		//console.log("i_used_kcal ->", elements.i_used_kcal);
+       		//console.log("m_weight ->", elements.m_weight);
+       		//console.log("m_target_weight ->", elements.m_target_weight);
 
-	   //달력
-        var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + selectedDate + '" min="2023-02-01" max="2023-12-31"> </li>';
+	   		//달력
+        	var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + selectedDate + '" min="2023-02-01" max="2023-12-31"> </li>';
 
-        $('#calendarCt').html(calendarhtml);
+        	$('#calendarCt').html(calendarhtml);
         
-        assignDateChangeListener();
-       //몸무게 동적처리
+        	assignDateChangeListener();
+       
+        	//몸무게 동적처리
+			var toTarget = elements.i_weight - elements.m_target_weight;
+        	var whtml = '';
+			
+        	//console.log(" i 몸무게 -> ", elements.i_weight);
+        	//console.log(" 목표무게 -> ", elements.m_target_weight);
+        	//console.log("  목표까지 kg -> " , toTarget);
 
-        var toTarget = elements.m_weight - elements.m_target_weight;
-        var whtml = '';
-
-        console.log("  목몸 -> " , toTarget);
-
-        if(elements.m_weight === undefined || elements.m_target_weight === undefined ) {
-       	   whtml = '<span class="text-sm font-medium"> 날짜를 선택해주세요 </span>';
-       	} else if (elements.m_weight < elements.m_target_weight) {
-       	   whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
-       	} else if(elements.m_weight > elements.m_target_weight) {
-       	   whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
-      	} else if (elements.m_weight == elements.m_target_weight) {
-       	   whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+        	if(elements.i_weight === undefined || elements.m_target_weight === undefined ) {
+       	   		whtml = '<span class="text-sm font-medium">달력에서 날짜를 선택해주세요</span>';
+       		} else if (elements.i_weight < elements.m_target_weight) {
+       	   		whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
+       		} else if(elements.i_weight > elements.m_target_weight) {
+       	   		whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
+      		} else if (elements.i_weight == elements.m_target_weight) {
+       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
        	   //console.log(" undefined ? ->? ", elements.m_weight);
-       	}
+       		}
+			$('#targetWeight').html(whtml);
 
+        	//main 상자 4개 jQuery
+			
+        	//
+        	let firstElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + selectedDate + '</h4><span class="text-sm font-medium"></span>';
+			$("#firstElement").html(firstElementHtml);
 
-        $('#targetWeight').html(whtml);
+			//
+			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
+			$("#secondElement").html(secondElementHtml);
 
-        //data: { mId: "your-mId-value" },
-
-        //main 상자 4개 jQuery
-
-        let firstElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + selectedDate + '</h4><span class="text-sm font-medium"></span>';
-
-		$("#firstElement").html(firstElementHtml);
-
-		//
-
-		let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
-
-		$("#secondElement").html(secondElementHtml);
-
-		//
-		let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
-
-		$("#thirdElement").html(thirdElementHtml);
-		
-		//
-		let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.m_weight +' kg</h4>';
-
-		$("#fourthElement").html(fourthElementHtml);
-		
-     	 },
-     	 
-      	 error: function (error) {
+			//
+			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
+			$("#thirdElement").html(thirdElementHtml);
+			//
+			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.i_weight +' kg</h4>';
+			$("#fourthElement").html(fourthElementHtml);
+			
+      	},
+     	  error: function (error) {
          	console.log('에러는 -> ', error);
          	console.log('\n 응답 JSON -> ', error.responseJSON);
          	console.log('\n 응답 본문 -> ', error.responseText);
 
       	 }
-    });
-	
-	
+    	
+		});
 	}
+	//---4elements 끝--------------------------------------------
 	
 	//---pie 함수--------------------------
+		var pieChart;
 	
-	var pieChart;
-	
-	function PieDataForDate() {
+		function PieDataForDate() {
 		
 			var zzinid = $("#zzinid").val();
 			var selectedDate = $("#calendarCtInput").val();
@@ -239,14 +232,19 @@
 	});
 			
 	}	
-/////////////////////pie 함수 끝//////////////////////////////////////
+	//---pie 함수 끝--------------------------------------------------
 
-
-   $(document).ready(function() {
-
-    	//assignDateChangeListener();
-    	
-    	
+	//---bar 함수----------------------------------------------------
+	
+	
+	
+	//---bar 함수 끝 ----------------------------------------------------
+	
+	
+	
+	//--- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트----------------------------
+  $(document).ready(function() {
+	   
 	//------------- ajax for charts -------------------------
       $.ajax({
         
@@ -404,15 +402,12 @@
         	console.log('\n 응답 본문 -> ', error.responseText);
  
         }
-      })  
+        
+      })
       
-      //---- pie Chart ----------------
-     
-      
-//--------------------main Elements--------------------------------
+      //-------------Default chart끝---------------------
 
-        	
-    	//-----------달력 라벨 밸류 항상 디폴트는 현재값을 전달
+   	  //--달력 라벨 밸류 항상 디폴트는 현재값을 전달-----------------------------------------------
 		var currentDate = new Date();
 
 		var day = ("0" + currentDate.getDate()).slice(-2);
@@ -430,7 +425,7 @@
 		var selectedDate = formattedDate;
 		/////////////////////////////
 		
-		
+	//---함수등록 칸  ------------------ 바뀌는 날짜에 대해서 모든 데이터가 비도이적으로 처리됨-----------------------------------------
     $("#calendarCtInput").on("change", function() {
         	
         	selectedDate = $(this).val();
