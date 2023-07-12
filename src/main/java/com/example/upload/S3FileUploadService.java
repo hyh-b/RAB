@@ -81,7 +81,7 @@ public class S3FileUploadService {
             log.error(e.getMessage());
         }
     }
-    
+    // 파일 삭제
     public void deleteFile(String filename) {
     	AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
     		    .withRegion(Regions.AP_NORTHEAST_2) // 원하는 리전 설정

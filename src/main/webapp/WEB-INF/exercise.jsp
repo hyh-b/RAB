@@ -8,7 +8,8 @@ pageEncoding="UTF-8"%>
 	String m_name = (String)request.getAttribute("m_name");
 	String m_gender = (String)request.getAttribute("m_gender");
 	String abHtml = (String)request.getAttribute("abHtml");
-	System.out.println("ㅇ미ㅣ지주소:"+abHtml);
+	System.out.println("닉네임"+m_name);
+	System.out.println("성별"+m_gender);
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -21,12 +22,6 @@ pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
 <style type="text/css">
-	body {
-	  overflow: auto;
-	  height: auto;
-	}
-
-	/*  메인 스크롤 고정  */
 	.radio-buttons {
     	display: flex; /* 가로 배치를 위해 flexbox 사용 */
   	}
@@ -68,8 +63,8 @@ pageEncoding="UTF-8"%>
 		/* width:100px; */
 		width: 100%;
 	    height: auto;
-	    max-width: 1000px;
-	    min-height: 300px; /* 이 값을 조정해 슬라이더의 최소 높이를 설정하세요. */
+	    max-width: 1500px;
+	    min-height: 450px; /* 이 값을 조정해 슬라이더의 최소 높이를 설정하세요. */
 		border:5px solid silver;
 		border-radius:7px;
 		box-shadow:0 0 20px #ccc inset;
@@ -104,8 +99,8 @@ pageEncoding="UTF-8"%>
 	.swiper-slide img {
 		box-shadow:0 0 5px #555;
 		max-width:100%; /* 이미지 최대너비를 제한, 슬라이드에 이미지가 여러개가 보여질때 필요 */
-		max-height:300px;
-		min-height: 100px;
+		max-height:420px;
+		min-height:300px;
 		/* 이 예제에서 필요해서 설정했습니다. 상황에따라 다를 수 있습니다. */
 		margin-bottom: auto; /* 추가: 아래쪽 여백을 auto로 설정하여 위로 붙임 */
 		/* 반응형 웹 */
@@ -116,8 +111,8 @@ pageEncoding="UTF-8"%>
 	
 	.slideText {
 	  position: absolute;
-	  bottom: 30px;
-	  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+	  bottom: 0px;
+	  background: rgba(0, 0, 0, 0.5); 
 	  color: #f2f2f2;
 	  width: 100%;
 	  padding: 10px;
@@ -132,20 +127,25 @@ pageEncoding="UTF-8"%>
 	
 	/*  --------------------------이미지 슬라이드 끝------------------------------  */
     
+    /* --------------------------  파일업로드, 사진전체보기 버튼 ---------------------------------------- */
    .button-container {
 	  display: flex;
-	  justify-content: space-between;
+	  justify-content: space-between; 
 	  flex-wrap: wrap; 
 	  align-items: flex-end;
-	  margin: 20px;
+	  margin: auto;
+	  max-width:1500px;
+	  
 	}
 	
 	.upload-container {
 	  padding: 10px;
-	  margin-right: 100px;
+	  margin-right: 290px;
 	}
 
-/*--------------- 다이어로그 창 ----------------------------  */
+ /* --------------------------  파일업로드, 사진전체보기 버튼 끝---------------------------------------- */
+
+/*--------------- 다이어로그 창 시작----------------------------  */
   
   
   #closeDialogBtn {
@@ -203,22 +203,16 @@ pageEncoding="UTF-8"%>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <script type="text/javascript">
 	window.onload = function(){
-		document.getElementById('ubtn').onclick = function(){
+		 document.getElementById('ubtn').onclick = function(){
 			
 			if(document.ufrm.upload.value.trim()==''){
 				alert('이미지를 첨부하셔야 합니다');
 				return false;
 			}
 			document.ufrm.submit();
-		}
-		
-		
-		
+		} 
 		
 	}
-	
-	
-	
 </script>
 
 </head>
@@ -257,11 +251,6 @@ pageEncoding="UTF-8"%>
 
      <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
     </a>
-    
-    <!-- 
-     <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
-    </a>
- -->
 
     <button
       class="block lg:hidden"
@@ -663,199 +652,92 @@ pageEncoding="UTF-8"%>
 	
       <!-- ===== Main Content Start ===== -->
       <main>
-		  <div style="
-		    display: flex;
-		    flex-direction: column;
-		    justify-content: flex-start; /* Items start at the beginning of the container */
-		    align-items: center; 
-		    height: 100vh;
-		  ">
-		    <div style="margin-top: 20px;">
-		    	<h4 class="text-xl font-bold text-black dark:text-white">
-			        운동
-				</h4>
-		    </div>
-		    
-			<br/>
-			<!-- 탄단지 영역 div 시작  -->
-			<div id="result">
-			
-				<!-- 탄단지 영역 div 끝  -->
-				<div class="rounded-sm border border-stroke bg-white py-10 px-8 shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 1000px;">
-				    <div class="mt-4 flex items-end justify-end">
-				        <!-- ajax 시작 -->
-				        <div id="#">
-				            <!-- 탄단지, 콜나당 ui -->
-				            <div class="tt" style="display: flex; justify-content: space-between; align-items: center;">
-				                <div>
-				                	<h4 class="text-xl font-bold text-black dark:text-white" style="width: 700px; height: 50px" >
-								        총 합
-									</h4>
-				                </div>
-				                <table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">
-				                    <thead>
-				                        <tr>
-				                            <td class="main" style="padding-right: 9px;">시간</td>
-				                            <td class="main" style="padding-right: 9px;">칼로리</td>
-				                        </tr>
-				                        <tr style="height: 2px;">
-				                            <td colspan="4"></td>
-				                        </tr>
-				                    </thead>
-				                    
-				                    <tbody>
-				                        <!-- ajax로 가져온 데이터 뿌리기 -->
-				                        <tr>
-				                            <td class="sub" style="padding-right: 9px;">17.4</td>
-				                            <td class="sub" style="padding-right: 9px;">17.4</td>
-				                        </tr>
-				                    </tbody>
-				                </table>
-				            </div>
-				        </div>
-				        <!-- ajax 끝 -->
-				    </div>
+        <!-- =============================== div 시작 ========================= -->
+		<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+
+        <!-- =============================== 타이틀 시작========================= -->
+
+		<div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+			<h4 class="text-title-md2 font-bold text-black dark:text-white" style="padding-left: 30px">
+			    운동 기록
+			</h4>
+		</div>
+        <!-- =============================== 타이틀 끝 ========================= -->
+
+        <hr style="padding-bottom: 30px"/>
+
+        <!-- =============================== 아침 ========================= -->
+          	
+        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
+        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+				<div class="flex items-center">
+			   		<h4 class="font-medium text-black dark:text-white mr-4">
+			    		운동
+			    	</h4>
+			    	<button id="btn1">
+			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
+			    	</button>
+			    	<div style="display: flex; flex-direction: row;">
+						<button id="fbtn1" style="padding-left: 30px;">등록</buttoN>
+					</div>
+			    	<div id="dialogContainer1" title="검색">
+						<input type="text" id="foodName1" placeholder="검색어를 입력하세요">
+						<button id="searchButton1">검색</button>
+						<div id="foodComent1"></div>
+					</div>
 				</div>
-	
-				<!-- 아침 -->
-				<table style="">
-					<tbody>
-						<tr>
-							<td style="padding-top: 15px;">
-								
-								<div style="margin-top: 20px; display: flex; align-items: center;">
-							    &nbsp;&nbsp;&nbsp;&nbsp;<h4 class="text-xl font-bold text-black dark:text-white" style="padding-right: 30px;">운동</h4>
-							    <div style="display: flex; flex-direction: row;">
-							        <img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px" onclick="showDialog()">
-							        <span style="">추가</span>
-							    </div>
-							</div>
-							</td>
-							<td style="height:7px"></td>
-						</tr>
-					</tbody>
-				</table>
-				
-				<br/>
-				
-				<div class="rounded-sm border border-stroke bg-white py-10 px-8 shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 1000px;">
-				    <div class= "#">
-				        <!-- ajax 시작 -->
-				        <div id="#">
-				            <!-- 탄단지, 콜나당 ui -->
-				            <div class="tt" style="display: flex; justify-content: space-between;">
-				                <div>
-				                    <table>
-				                        <thead>
-				                            <tr>
-				                                <td>1</td>
-				                            </tr>
-				                            <tr>
-				                                <td>2</td>
-				                            </tr>
-				                            <tr>
-				                                <td>3</td>
-				                            </tr>
-				                        </thead>
-				                    </table>
-				                </div>
-				                <table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">
-				                    <thead>
-				                    </thead>
-				                    
-				                    <tbody>
-				                        <!-- ajax로 가져온 데이터 뿌리기 -->
-				                        <tr>
-				                            <td class="sub" style="padding-right: 9px; padding-right: 9px;width: 73px;">17.4</td>
-				                            <td class="sub" style="padding-right: 9px; padding-right: 9px;width: 58px;">17.4</td>
-				                        </tr>
-				                        <tr>
-				                            <td>23</td>
-				                            <td>23</td>
-				                        </tr>
-				                        <tr>
-				                            <td>23</td>
-				                            <td>23</td>
-				                        </tr>
-				                    </tbody>
-				                </table>
-				            </div>
-				        </div>
-				        <!-- ajax 끝 -->
-				    </div>
+			</div>
+            <div class="flex flex-col gap-5.5 p-6.5">
+            	<div>
+<!--            	<label class="mb-3 block font-medium text-sm text-black dark:text-white"> -->
+					<!-- Default Input -->
+<!--                </label> -->
+		            <form action="#" method="post" name="ffrm">
+						<input type="hidden" name="seq" id="seq" value="${seq}" />
+						<div id="resultFood1"></div>
+					</form>
+	        	</div>
+        	</div>
+        </div>
+        </div> 
+        <!-- =============================== 아침 끝 =========================== -->
+        
+        <!-- =============================== 점심 시작 =========================== -->
+        
+        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+
+        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
+        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+				<div class="flex items-center">
+			   		<h4 class="font-medium text-black dark:text-white mr-4">
+			    		사용자 설정 운동
+			    	</h4>
+			    	<button id="btn2">
+			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
+			    	</button>
+			    	<div style="display: flex; flex-direction: row;">
+						<button id="fbtn2" style="padding-left: 30px;">등록</buttoN>
+					</div>
+			    	<div id="dialogContainer2" title="검색">
+						<input type="text" id="foodName2" placeholder="검색어를 입력하세요">
+						<button id="searchButton2">검색</button>
+						<div id="foodComent2"></div>
+					</div>
 				</div>
-				
-				<br/>
-				<!-- 점심 -->
-				<table style="">
-					<tbody>
-						<tr>
-							<td style="padding-top: 15px;">
-								<div style="margin-top: 20px; display: flex; align-items: center;">
-							    &nbsp;&nbsp;&nbsp;&nbsp;<h4 class="text-xl font-bold text-black dark:text-white" style="padding-right: 30px;">사용자 설정 운동</h4>
-							    <div style="display: flex; flex-direction: row;">
-							        <img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-							        <span style="">추가</span>
-							    </div>
-							</div>
-							</td>
-							<td style="height:7px"></td>
-						</tr>
-					</tbody>
-				</table>
-				
-				<br/>
-				
-				<div class="rounded-sm border border-stroke bg-white py-10 px-8 shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 1000px;">
-				    <div class= "#">
-				        <!-- ajax 시작 -->
-				        <div id="#">
-				            <!-- 탄단지, 콜나당 ui -->
-				            <div class="tt" style="display: flex; justify-content: space-between;">
-				                <div>
-				                    <table>
-				                        <thead>
-				                            <tr>
-				                                <td>1</td>
-				                            </tr>
-				                            <tr>
-				                                <td>2</td>
-				                            </tr>
-				                            <tr>
-				                                <td>3</td>
-				                            </tr>
-				                        </thead>
-				                    </table>
-				                </div>
-				                <table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">
-				                    <thead>
-				                    </thead>
-				                    
-				                    <tbody>
-				                        <!-- ajax로 가져온 데이터 뿌리기 -->
-				                        <tr>
-				                            <td class="sub" style="padding-right: 9px; padding-right: 9px;width: 73px;">17.4</td>
-				                            <td class="sub" style="padding-right: 9px; padding-right: 9px;width: 58px;">17.4</td>
-				                        </tr>
-				                        <tr>
-				                            <td>231</td>
-				                            <td>23</td>
-				                        </tr>
-				                        <tr>
-				                            <td>23</td>
-				                            <td>23</td>
-				                        </tr>
-				                    </tbody>
-				                </table>
-				            </div>
-				        </div>
-				        <!-- ajax 끝 -->
-				    </div>
-				</div>
-		  </div>    
+			</div>
+            <div class="flex flex-col gap-5.5 p-6.5">
+            	<div>
+		            <form action="#" method="post" name="ffrm">
+						<input type="hidden" name="seq" id="seq" value="${seq}" />
+						<div id="resultFood2"></div>
+					</form>
+	        	</div>
+        	</div>
+        </div>
+        
+        </div> 
 		  <br>
-		  
-		  <!---------- 사진 등록 ---------->
+	<!------------------ 이미지 업로드 시작---------------------------------------------------->
 		  <form action="exerciseAlbum_ok.do" method="post" name="ufrm" enctype="multipart/form-data">
 		  <div class="button-container">
 		  <div class="upload-container">
@@ -869,24 +751,22 @@ pageEncoding="UTF-8"%>
 			            	class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" />
 			            <input type="button" id="ubtn" value="upload"
 			              	class="inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer;"/>
-			              		
 			      	</div>
 			  	</div>
 			</div>
             </div>
 			</form>
-			<!---------- 사진 등록 끝 ---------->
+	<!------------------- 이미지 업로드 끝 ---------------------------------------------------->
 			
-			<!---------- 사진 전체보기 시작 ---------->
+	<!-------------------- 사진 전체보기 버튼 시작 ------------------------------------------------------>
 			<a href="#" id="viewBtn"
                   class="button-view-all inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10">
-                  사진전체보기 버튼
+                  사진전체보기
                 </a>
             </div>
-            
-            <!---------- 사진 전체보기 끝 ---------->
-		    <br>
-		  
+   <!------------------------ 사진 전체보기 버튼 끝 ----------------------------------------->
+		   
+	<!---------------- 이미지 슬라이드 시작 ----------------------------------------->
 			  <div class="swiper-container">
 				<div class="swiper-wrapper">
 				${sbHtml}
@@ -899,22 +779,27 @@ pageEncoding="UTF-8"%>
 				<!-- 페이징 -->
 				<div class="swiper-pagination"></div>
 			</div>
+	<!---------------- 이미지 슬라이드 끝 ----------------------------------------->
+	
+	<!---------------- 사진 전체보기 다이어로그 시작 ----------------------------------------->
 			<div id="photoDialog" style="display:none; width:1200px; height:1200px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: white; padding: 20px; border: 1px solid black;">
 		        <button id="closeDialogBtn" style="font-size: 30px; position: absolute; right: 20px; bottom: 20px;">닫기</button>
 		        <button id="deleteBtn" style="font-size: 30px; position: absolute; right: 100px; bottom: 20px;">삭제</button>
 			    <button id="previousPageBtn">이전</button>
 			    <button id="nextPageBtn">다음</button>
 		        <div id="photoContainer" class="photoContainer">
-		            <!-- Photos go here -->
+		            
 		        </div>
 		    </div>
-  </div>
+	<!---------------- 사진 전체보기 다이어로그 끝 ----------------------------------------->
+  	</div>
 		</main> 
     </div>
   </div>
 <script defer src="bundle.js"></script>
 <script>
 
+	// 이미지 슬라이드 설정
 	new Swiper('.swiper-container', {
 	
 		slidesPerView : 3, // 동시에 보여줄 슬라이드 갯수
@@ -938,7 +823,7 @@ pageEncoding="UTF-8"%>
 	});
 	
 	
-	
+	//   사진 전체보기 다이어로그 창 설정
 	document.getElementById('viewBtn').addEventListener('click', function() {
 	      document.getElementById('photoDialog').style.display = 'block';
 	    });
@@ -949,13 +834,14 @@ pageEncoding="UTF-8"%>
 		
 	    let images = [
 	    	<%= abHtml%>
-	    	
 	    ];
 
 	    let currentPage = 1;
 	    let imagesPerPage = 9;
 	    let numOfPages = Math.ceil(images.length / imagesPerPage);
-
+	    let selectedImage = null;
+	    let selectedImageValue = null;
+		// 이미지 보이기
 	    function displayImages() {
 	      let start = (currentPage - 1) * imagesPerPage;
 	      let end = start + imagesPerPage;
@@ -966,47 +852,59 @@ pageEncoding="UTF-8"%>
 	          if (i % 3 === 0) {
 	            html += '<div style="display:flex">';
 	          }
-	          html += '<img src="' + imagesToDisplay[i] + '"onclick="selectImage(this)" style="width: 100%; height: 100%; margin-bottom: 20px;">';
+	          html += '<img src="' + imagesToDisplay[i].src + '" value="' + imagesToDisplay[i].aSeq + '" onclick="selectImage(this)" style="width: 100%; height: 100%; margin-bottom: 20px;">';
 	          if ((i+1) % 3 === 0 || i+1 === imagesToDisplay.length) {
 	            html += '</div>';
 	          }
 	        }
 	      document.getElementById('photoContainer').innerHTML = html;
 	    }
-	    let selectedImage = null;
-	    
+	    // 이미지 선택 기능
 	    function selectImage(imageElement) {
 	        if (selectedImage) {
 	            selectedImage.style.border = 'none'; // Remove border from previously selected image
 	        }
 	        imageElement.style.border = '2px solid red'; // Add border to the selected image
 	        selectedImage = imageElement;
+	        selectedImageValue = imageElement.getAttribute('value');
 	    }
-
+		// 이미지 삭제
 	    function deleteImage() {
-	        if (!selectedImage) {
-	            alert('No image selected!');
+	        if (!selectedImageValue) {
+	            alert('Please select an image to delete.');
 	            return;
 	        }
-	        let imageIndex = images.indexOf(selectedImage.src);
-	        if (imageIndex > -1) {
-	            images.splice(imageIndex, 1);
-	        }
-	        selectedImage.parentElement.removeChild(selectedImage);
-	        selectedImage = null;
-	        displayImages();
+	        
+	        $.ajax({
+	            url: '/album_delete.do',
+	            method: 'POST',
+	            data: {
+	                aSeq: selectedImageValue
+	            }
+	        }).done(function(response) {
+	            
+	            alert('이미지가 삭제되었습니다');
+	            location.reload(); // 삭제데이터 반영을 위해 새로고침
+	        }).fail(function() {
+	            // The request has been completed, but status is not OK
+	            alert('삭제에 실패했습니다');
+	        }).always(function() {
+	            // 실행 후 이미지 선택 해제
+	            selectedImage.style.border = 'none';
+	            selectedImage = null;
+	            selectedImageValue = null;
+	        });
 	    }
-
+		
 	    document.getElementById('deleteBtn').addEventListener('click', deleteImage);
-	    
-
+	    // 다음 페이지
 	    function handleNextPage() {
 	      if (currentPage < numOfPages) {
 	        currentPage++;
 	        displayImages();
 	      }
 	    }
-
+		// 이전 페이지
 	    function handlePreviousPage() {
 	      if (currentPage > 1) {
 	        currentPage--;
@@ -1017,7 +915,7 @@ pageEncoding="UTF-8"%>
 	    document.getElementById('previousPageBtn').addEventListener('click', handlePreviousPage);
 	    document.getElementById('nextPageBtn').addEventListener('click', handleNextPage);
 
-	    displayImages(); // Initial display
+	    displayImages(); 
 
 </script>
 </body>
