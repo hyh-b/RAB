@@ -287,22 +287,21 @@ pageEncoding="UTF-8"%>
 		        success: function(json) {
 		        	console.log(json)
 		            if (json.f_name !== null) {
-		                let result = "";
-		                let totalKcal = 0;
+		                let result = "<table>";
 		                $(json).each(function(index, item) {
-		                    result += "<table>";
-		                    result += "<tr>";
+		                    result += "<tr class='selectable-row'>";
+		                    result += "<td><input type='checkbox' class='select-checkbox'></td>";
 		                    result += "<td>" + item.f_name + "</td>";
-		                    result += "<td>" + item.f_carbohydrate_g + "</td>";
-		                    result += "<td>" + item.f_protein_g + "</td>";
-		                    result += "<td>" + item.f_fat_g + "</td>";
-		                    result += "<td>" + item.f_cholesterol_mg + "</td>";
-		                    result += "<td>" + item.f_sodium_mg + "</td>";
-		                    result += "<td>" + item.f_sugar_g + "</td>";
-		                    result += "<td>" + item.f_kcal + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_carbohydrate_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_protein_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_fat_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_cholesterol_mg + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_sodium_mg + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_sugar_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_kcal + "</td>";
 		                    result += "</tr>";
-		                    result += "</table>";
 		                });
+		                result += "</table>";
 		                $('#foodComent2').html(result); 
 		                $('#foodName2').val('');
 		            } else {
@@ -458,22 +457,21 @@ pageEncoding="UTF-8"%>
 		        success: function(json) {
 		        	console.log(json)
 		            if (json.f_name !== null) {
-		                let result = "";
-		                let totalKcal = 0;
+		            	let result = "<table>";
 		                $(json).each(function(index, item) {
-		                    result += "<table>";
-		                    result += "<tr>";
+		                    result += "<tr class='selectable-row'>";
+		                    result += "<td><input type='checkbox' class='select-checkbox'></td>";
 		                    result += "<td>" + item.f_name + "</td>";
-		                    result += "<td>" + item.f_carbohydrate_g + "</td>";
-		                    result += "<td>" + item.f_protein_g + "</td>";
-		                    result += "<td>" + item.f_fat_g + "</td>";
-		                    result += "<td>" + item.f_cholesterol_mg + "</td>";
-		                    result += "<td>" + item.f_sodium_mg + "</td>";
-		                    result += "<td>" + item.f_sugar_g + "</td>";
-		                    result += "<td>" + item.f_kcal + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_carbohydrate_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_protein_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_fat_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_cholesterol_mg + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_sodium_mg + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_sugar_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_kcal + "</td>";
 		                    result += "</tr>";
-		                    result += "</table>";
 		                });
+		                result += "</table>";
 		                $('#foodComent3').html(result); 
 		                $('#foodName3').val('');
 		            } else {
