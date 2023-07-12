@@ -59,15 +59,26 @@ public class ConfigController {
 	}
 
 	@RequestMapping("/profile.do")
-	public ModelAndView profile(HttpServletRequest request) {
+	public ModelAndView profile(HttpServletRequest request, Authentication authentication, ModelMap map) {
+		ModelAndView modelAndView = new ModelAndView();
 
 		MypageTO myto = new MypageTO();
+		
+		//원하는 유저 정보 가져오기 - security패키지의 CustomUserDetails 설정
+				//로그인한(인증된) 사용자의 정보를 authentication에 담음
+				authentication = SecurityContextHolder.getContext().getAuthentication();
+				//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+				Object principal = authentication.getPrincipal();
+				// principal 객체를 CustomUserDetails 타입으로 캐스팅
+				CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+				System.out.println("마이페이지 seq가져와 "+customUserDetails.getM_seq());
+				String m_seq = customUserDetails.getM_seq();
 
 		myto = mydao.Mypage(myto);
 
-		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("profile");
 		modelAndView.addObject("myto", myto);
+		modelAndView.addObject("m_seq", m_seq );
 		return modelAndView;
 	}
 
