@@ -228,6 +228,7 @@ public class MainController {
 	        
 	        mainDatas.addProperty("i_day", to.getI_day().toString());
 	        mainDatas.addProperty("i_kcal", to.getI_kcal());
+	        mainDatas.addProperty("i_weight", to.getI_weight());
 	        mainDatas.addProperty("i_used_kcal", to.getI_used_kcal());
 	        
 	        mainDatas.addProperty("m_id", member.getM_id());

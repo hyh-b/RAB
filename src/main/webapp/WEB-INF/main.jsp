@@ -322,6 +322,7 @@
        	   console.log(" m_id ->", elements.m_id);
            
        	   console.log("i_day ->", elements.i_day);
+       		console.log("i_weight ->", elements.i_weight);
            console.log("i_kcal ->", elements.i_kcal);
            console.log("i_used_kcal ->", elements.i_used_kcal);
            console.log("m_weight ->", elements.m_weight);
@@ -337,18 +338,19 @@
             assignDateChangeListener();
            //몸무게 동적처리
 
-            var toTarget = elements.m_weight - elements.m_target_weight;
+            //var toTarget = Math.abs(elements.i_weight - elements.m_target_weight);
+            var toTarget = elements.i_weight - elements.m_target_weight;
             var whtml = '';
 
             console.log("  목몸 -> " , toTarget);
 
-            if(elements.m_weight === undefined || elements.m_target_weight === undefined ) {
+            if(elements.i_weight === undefined || elements.m_target_weight === undefined ) {
            	   whtml = '<span class="text-sm font-medium"> 날짜를 선택해주세요 </span>';
-           	} else if (elements.m_weight < elements.m_target_weight) {
-           	   whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
-           	} else if(elements.m_weight > elements.m_target_weight) {
-           	   whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
-          	} else if (elements.m_weight == elements.m_target_weight) {
+           	} else if (elements.i_weight < elements.m_target_weight) {
+           	   whtml = '<span class="text-sm font-medium">목표까지  ' + toTarget + ' kg</span>';
+           	} else if(elements.i_weight > elements.m_target_weight) {
+           	   whtml = '<span class="text-sm font-medium">목표까지  ' + toTarget + ' kg</span>';
+          	} else if (elements.i_weight == elements.m_target_weight) {
            	   whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
            	   //console.log(" undefined ? ->? ", elements.m_weight);
            	}
@@ -376,8 +378,9 @@
 			$("#thirdElement").html(thirdElementHtml);
 			
 			//
-			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.m_weight +' kg</h4>';
-
+			//let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.m_weight +' kg</h4>';
+			
+			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.i_weight +' kg</h4>';
 			$("#fourthElement").html(fourthElementHtml);
 			
          	 },
