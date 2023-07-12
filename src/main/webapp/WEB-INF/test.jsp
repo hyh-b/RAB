@@ -52,12 +52,31 @@
 </c:forEach>
 
 <script>
+
+//----------------------함수-----------------------------
+
+		function assignDateChangeListener() {
+	
+		$("#calendarCtInput").off("change"); 
+
+		$("#calendarCtInput").on("change", function() {
+    		//selectedDate = $(this).val();
+
+    		loadDataFromDate();
+    
+    		PieDataForDate();
+
+		});
+
+		}
+
+		assignDateChangeListener();
 	
 
-function loadDataFromDate() {
+		function loadDataFromDate() {
 	
-	var zzinid = $("#zzinid").val();
-	selectedDate = $("#calendarCtInput").val();
+			var zzinid = $("#zzinid").val();
+			selectedDate = $("#calendarCtInput").val();
 	
 	console.log( " loadDataFromDate() id ->", zzinid );
 	
@@ -166,60 +185,64 @@ function loadDataFromDate() {
 			url: "/pie_chart_data",
 			type: "GET",
 			data: {
-  			i_day: selectedDate,
-  			id: zzinid
+  				i_day: selectedDate,
+  				id: zzinid
 			},
 			success: function(pie) {
 				
 				console.log( " pie.영양소들 -> ", pie);
 				
-  				var pieData = [
-    			pie.i_carbohydrate_g,
-    			pie.i_protein_g,
-    			pie.i_fat_g
-  				];
+			 	var pies = JSON.parse(pie);
+				
+  				var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g
+  					
+  					];
+				
+  				//pie가 없으면 새로 만들고 있으면 업데이트 해서 파이가 무한으로 생겨나게 하는 방지 if 문
+  				 if (!pieChart) {
+  	                
+  	                var pieOptions = {
+  	                    series: pieData,
+  	                    chart: {
+  	                        type: "pie",
+  	                        height: 350,
+  	                    },
+  	                  	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
+  	                    responsive: [{
+  	                        breakpoint: 480,
+  	                        options: {
+  	                            chart: {
+  	                                width: 200,
+  	                            },
+  	                            legend: {
+  	                                position: "bottom",
+  	                            },
+  	                        },
+  	                    }],
+  	                };
+  	                pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+  	                pieChart.render();
+  	            } else {
+  	                
+  	                pieChart.updateSeries(pieData);
+  	                
+  	              	pieChart.updateOptions({
+  	                	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g', '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g']
+  	            	});
+  	            }
 
-  			var pieOptions = {
-    		series: pieData,
-    		chart: {
-      			type: "pie",
-      			height: 350,
-    			},
-    			labels: ["탄수", "단백", "지방"],
-    			responsive: [{
-      				breakpoint: 480,
-      				options: {
-        				chart: {
-          			width: 200,
-        		},
-        		legend: {
-          		position: "bottom",
-        		},
-     		},
-   		}],
-  		};
-  	    
-  			 if (pieChart) {
-                 pieChart.destroy();
-             }
-  			
-		var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-  		pieChart.render();
-  		
-  		//console.log(" pieOptions -> ", pieOptions);
-  		
-  		console.log(" in callback함수 success -> ", document.querySelector("#chart"));
 		},
 		
 		error: function(e) {
   		console.log("pie에서 에러 ->", e);
 		},
-			});
-	}
-	
-///////////////////////////////////////////////////////////
+	});
+			
+	}	
+/////////////////////pie 함수 끝//////////////////////////////////////
 
-    window.onload = function() {
+
+   $(document).ready(function() {
 
     	//assignDateChangeListener();
     	
@@ -421,34 +444,8 @@ function loadDataFromDate() {
         });
         
 //////////////////  
-    };  //window.onload끝 
-/////////////////
-
-
-	//----------------------함수-----------------------------
-    function assignDateChangeListener() {
-    	
-    $("#calendarCtInput").off("change"); 
-    
-    $("#calendarCtInput").on("change", function() {
-        //selectedDate = $(this).val();
-
-        loadDataFromDate();
-        
-        PieDataForDate();
-
-    });
-	
-    }
-    
-    assignDateChangeListener();
-    
-////////////////////////////////////////
-	
-	
-    	
- 	/////////////////////////////////////////
-    
+   }); //window.onload끝 
+/////////////////    
 </script>
 
 

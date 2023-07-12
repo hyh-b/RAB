@@ -256,31 +256,35 @@ public class MainController {
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
 	    ArrayList<MainTO> pieChart = dao.PieChartData(id, i_day);
+	    JsonArray pieDatas = new JsonArray(); 
 	    
 	    System.out.println("  i_day pie Controller -> " + i_day);
 	    System.out.println("  m_id pie Controller -> " + id );
 
-	    JsonObject pieDatas = new JsonObject();
+	   
 
 	    for (MainTO to : pieChart) {
+	    	
+	    	 JsonObject pieData = new JsonObject();
 	        
 	    	//기본 유저정보
-	        pieDatas.addProperty("m_seq", to.getM_seq());
-	        pieDatas.addProperty("m_id", to.getM_id());
+	        pieData.addProperty("m_seq", to.getM_seq());
+	        pieData.addProperty("m_id", to.getM_id());
 	        
 	        //단탄지
-	        pieDatas.addProperty("i_protein_g", to.getI_protein_g());
-	        pieDatas.addProperty("i_carbohydrate_g", to.getI_carbohydrate_g());
-	        pieDatas.addProperty("i_fat_g", to.getI_fat_g());
+	        pieData.addProperty("i_protein_g", to.getI_protein_g());
+	        pieData.addProperty("i_carbohydrate_g", to.getI_carbohydrate_g());
+	        pieData.addProperty("i_fat_g", to.getI_fat_g());
 	        
 	        //콜나당
-	        pieDatas.addProperty("i_cholesterol_mgl", to.getI_cholesterol_mgl());
-	        pieDatas.addProperty("i_sodium_mg", to.getI_sodium_mg());
-	        pieDatas.addProperty("i_sugar_g", to.getI_sugar_g());
- 
+	        pieData.addProperty("i_cholesterol_mgl", to.getI_cholesterol_mgl());
+	        pieData.addProperty("i_sodium_mg", to.getI_sodium_mg());
+	        pieData.addProperty("i_sugar_g", to.getI_sugar_g());
+	        pieDatas.add(pieData); 
 	    }	   	
 	    
 	    System.out.println(" pieData jsoned -> " + pieDatas);
+
 	    
 	    //ModelAndView modelAndView = new ModelAndView();
 	    //modelAndView.setViewName("pie_chart_data");
