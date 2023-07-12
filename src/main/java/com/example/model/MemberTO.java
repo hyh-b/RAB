@@ -34,5 +34,6 @@ public class MemberTO{
 	private Integer m_target_calorie;
 	private BigDecimal m_target_weight;
 	private String m_birthday;
+	private String m_real_name;
 	
 }

@@ -61,6 +61,20 @@
 	.input-wrapper input {
 	     width: calc(100% + 10px);
 	}
+	
+	.tel-input-wrapper {
+        display: flex;
+    }
+	
+	.tel-input-part {
+	    flex: none;
+	    width: 74px;
+	}
+	
+	.tel-input {
+	    display: flex;
+	    justify-content: space-between;
+	}
 </style>
 <script type="text/javascript">
 	//닉네임 중복 검사
@@ -112,7 +126,7 @@
             }
             //닉네임을 입력안하거나 중복이 아닌경우에만 제출
             if (window.getComputedStyle(nameOk).display == 'inline-block' || document.getElementById("name").value == '') {
-				document.sfrm.submit();
+            	document.sfrm.submit();
 	        }
 		}
 	}
@@ -124,6 +138,13 @@
         <form action="signup2_ok.do" method="post" id="sfrm" name="sfrm">
 
             <h2>정보 입력</h2>
+            
+            <div class="input-field">
+                <label for="m_real_name">이름:</label>
+                <div class="input-wrapper">
+                	<input type="text" id="realName" name="realName" class="wide-input" value="">
+                </div>
+            </div>
 
             <div class="input-field">
                 <label for="m_name">닉네임:</label>
@@ -138,6 +159,7 @@
             <div class="input-field">
                 <label for="m_gender">성별:</label>
                 <select id="gender" name="gender">
+                    <option value="">선택</option>
                     <option value="male">남성</option>
                     <option value="female">여성</option>
                 </select>
@@ -192,9 +214,14 @@
 
             <div class="input-field">
                 <label for="m_tel">전화번호:</label>
-                <div class="input-wrapper">
-                	<input type="text" id="tel" name="tel" class="wide-input" value="">
+                <div class="tel-input-wrapper">
+                	<div class="tel-input">
+				        <input type="text" id="tel1" name="tel1" class="tel-input-part" maxlength="3"> &nbsp;-&nbsp;
+				        <input type="text" id="tel2" name="tel2" class="tel-input-part" maxlength="4"> &nbsp;-&nbsp;
+				        <input type="text" id="tel3" name="tel3" class="tel-input-part" maxlength="4">
+				    </div>
                 </div>
+                
             </div>
 
             <div class="input-field">
