@@ -52,9 +52,177 @@
 </c:forEach>
 
 <script>
+	
+
+function loadDataFromDate() {
+	
+	var zzinid = $("#zzinid").val();
+	selectedDate = $("#calendarCtInput").val();
+	
+	console.log( " loadDataFromDate() id ->", zzinid );
+	
+	$.ajax({
+
+      url: "/selected_data",
+      type: "get",
+      dataType: 'json',
+      data: {
+         	i_day: selectedDate,
+         	id: zzinid
+      },
+      success: function (elements) {
+    	  
+    	  console.log("  함수에서 selectedDate -> ", selectedDate);
+    	
+       //데이터 넘어오는거 검사 섹션
+   	   console.log("m_seq ->", elements.m_seq);
+   	   console.log(" m_id ->", elements.m_id);
+       
+   	   console.log("i_day ->", elements.i_day);
+       console.log("i_kcal ->", elements.i_kcal);
+       console.log("i_used_kcal ->", elements.i_used_kcal);
+       console.log("m_weight ->", elements.m_weight);
+       console.log("m_target_weight ->", elements.m_target_weight);
+	   
+       //
+
+	   //달력
+        var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + selectedDate + '" min="2023-02-01" max="2023-12-31"> </li>';
+
+        $('#calendarCt').html(calendarhtml);
+        
+        assignDateChangeListener();
+       //몸무게 동적처리
+
+        var toTarget = elements.m_weight - elements.m_target_weight;
+        var whtml = '';
+
+        console.log("  목몸 -> " , toTarget);
+
+        if(elements.m_weight === undefined || elements.m_target_weight === undefined ) {
+       	   whtml = '<span class="text-sm font-medium"> 날짜를 선택해주세요 </span>';
+       	} else if (elements.m_weight < elements.m_target_weight) {
+       	   whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
+       	} else if(elements.m_weight > elements.m_target_weight) {
+       	   whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
+      	} else if (elements.m_weight == elements.m_target_weight) {
+       	   whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+       	   //console.log(" undefined ? ->? ", elements.m_weight);
+       	}
+
+
+        $('#targetWeight').html(whtml);
+
+        //data: { mId: "your-mId-value" },
+
+        //main 상자 4개 jQuery
+
+        let firstElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + selectedDate + '</h4><span class="text-sm font-medium"></span>';
+
+		$("#firstElement").html(firstElementHtml);
+
+		//
+
+		let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
+
+		$("#secondElement").html(secondElementHtml);
+
+		//
+		let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
+
+		$("#thirdElement").html(thirdElementHtml);
+		
+		//
+		let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.m_weight +' kg</h4>';
+
+		$("#fourthElement").html(fourthElementHtml);
+		
+     	 },
+     	 
+      	 error: function (error) {
+         	console.log('에러는 -> ', error);
+         	console.log('\n 응답 JSON -> ', error.responseJSON);
+         	console.log('\n 응답 본문 -> ', error.responseText);
+
+      	 }
+    });
+	
+	
+	}
+	
+	//---pie 함수--------------------------
+	
+	var pieChart;
+	
+	function PieDataForDate() {
+		
+			var zzinid = $("#zzinid").val();
+			var selectedDate = $("#calendarCtInput").val();
+			
+			console.log( " pie 함수에서 zzinid -> ", zzinid); 
+			console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
+
+			$.ajax({
+			url: "/pie_chart_data",
+			type: "GET",
+			data: {
+  			i_day: selectedDate,
+  			id: zzinid
+			},
+			success: function(pie) {
+				
+				console.log( " pie.영양소들 -> ", pie);
+				
+  				var pieData = [
+    			pie.i_carbohydrate_g,
+    			pie.i_protein_g,
+    			pie.i_fat_g
+  				];
+
+  			var pieOptions = {
+    		series: pieData,
+    		chart: {
+      			type: "pie",
+      			height: 350,
+    			},
+    			labels: ["탄수", "단백", "지방"],
+    			responsive: [{
+      				breakpoint: 480,
+      				options: {
+        				chart: {
+          			width: 200,
+        		},
+        		legend: {
+          		position: "bottom",
+        		},
+     		},
+   		}],
+  		};
+  	    
+  			 if (pieChart) {
+                 pieChart.destroy();
+             }
+  			
+		var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+  		pieChart.render();
+  		
+  		//console.log(" pieOptions -> ", pieOptions);
+  		
+  		console.log(" in callback함수 success -> ", document.querySelector("#chart"));
+		},
+		
+		error: function(e) {
+  		console.log("pie에서 에러 ->", e);
+		},
+			});
+	}
+	
+///////////////////////////////////////////////////////////
 
     window.onload = function() {
-  
+
+    	//assignDateChangeListener();
+    	
     	
 	//------------- ajax for charts -------------------------
       $.ajax({
@@ -69,13 +237,18 @@
         	var b_kcal_data = charts.fdatas.map(function(meal) {
                 return meal.meals.b_kcal;
             });
+        	
+        	console.log( " b_kcal_data -> ", b_kcal_data[0] );
+        	//b_kcal_data
+        
+        	// where PieChart used to place
 
 			/////////////////////////////////////////////////////
     	  	var barOptions = {
     	    	series: [
-    	      	{ name: '아침', data: b_kcal_data },
-    	      	{ name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
-    	      	{ name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
+    	      	{ name: '아침', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
+    	      	{ name: '점심', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
+    	      	{ name: '저녁', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
     	    	],
     	    	chart: {
     	      	type: 'bar',
@@ -168,7 +341,7 @@
     	  var lineOptions = {
     	    series: [{
     	      name: "Desktops",
-    	      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+    	      data: [0, 0, 0, 0, 0, 0, 69, 91, 148, 150, 121, 178]
     	    }],
     	    chart: {
     	      height: 350,
@@ -194,7 +367,7 @@
     	      },
     	    },
     	    xaxis: {
-    	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov', 'Dec'  ],
     	    }
     	  };
     	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
@@ -211,55 +384,7 @@
       })  
       
       //---- pie Chart ----------------
-      var zzinid = $("#zzinid").val();
-      selectedDate = $("#calendarCtInput").val();
-
-      $.ajax({
-    	  
-  		url: "/pie_chart_data.do",
-  		type: "GET",
-  		data: {
-  			i_day: selectedDate,
-         	id: zzinid
-  		},
-  		success: function (response) {
-    		var pieData = [
-      		response.i_carbohydrate_g,
-      		response.i_protein_g,
-      		response.i_fat_g,
-    		];
-    		
-    		var pieOptions = {
-      		series: pieData,
-      		chart: {
-        		type: "pie",
-        		height: 350,
-      		 },
-      		
-      		labels: ["탄수", "단백", "지방"],
-      		responsive: [
-        	
-      		  {
-          		breakpoint: 480,
-          		options: {
-            	chart: {
-            	  width: 200,
-            	},
-           		legend: {
-              		position: "bottom",
-           		},
-          	   },
-        	  },
-      	     ],
-    		};
-    		var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-    		pieChart.render();
-  			},
-  			
-  			error: function (e) {
-    		console.log( " pie에서 에러 -> " , e);
-  			},
-		});
+     
       
 //--------------------main Elements--------------------------------
 
@@ -283,18 +408,22 @@
 		/////////////////////////////
 		
 		
-        $("#calendarCtInput").on("change", function() {
+    $("#calendarCtInput").on("change", function() {
         	
         	selectedDate = $(this).val();
         	
         	console.log("달력 value 확인 ->", selectedDate);
         	
             loadDataFromDate();
+         
+          	PieDataForDate();
+            	
         });
         
 //////////////////  
     };  //window.onload끝 
 /////////////////
+
 
 	//----------------------함수-----------------------------
     function assignDateChangeListener() {
@@ -302,9 +431,12 @@
     $("#calendarCtInput").off("change"); 
     
     $("#calendarCtInput").on("change", function() {
-        selectedDate = $(this).val();
+        //selectedDate = $(this).val();
 
         loadDataFromDate();
+        
+        PieDataForDate();
+
     });
 	
     }
@@ -312,101 +444,10 @@
     assignDateChangeListener();
     
 ////////////////////////////////////////
-
-    function loadDataFromDate() {
-		
-    	var zzinid = $("#zzinid").val();
-    	selectedDate = $("#calendarCtInput").val();
+	
+	
     	
-    	console.log( " loadDataFromDate() id ->", zzinid );
-    	
-   	$.ajax({
-
-          url: "/selected_data",
-          type: "get",
-          dataType: 'json',
-          data: {
-             	i_day: selectedDate,
-             	id: zzinid
-          },
-          success: function (elements) {
-        	  
-        	  console.log("  함수에서 selectedDate -> ", selectedDate);
-        	
-           //데이터 넘어오는거 검사 섹션
-       	   console.log("m_seq ->", elements.m_seq);
-       	   console.log(" m_id ->", elements.m_id);
-           
-       	   console.log("i_day ->", elements.i_day);
-           console.log("i_kcal ->", elements.i_kcal);
-           console.log("i_used_kcal ->", elements.i_used_kcal);
-           console.log("m_weight ->", elements.m_weight);
-           console.log("m_target_weight ->", elements.m_target_weight);
-    	   
-           //
-
-    	   //달력
-            var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + selectedDate + '" min="2023-02-01" max="2023-12-31"> </li>';
-
-            $('#calendarCt').html(calendarhtml);
-            
-            assignDateChangeListener();
-           //몸무게 동적처리
-
-            var toTarget = elements.m_weight - elements.m_target_weight;
-            var whtml = '';
-
-            console.log("  목몸 -> " , toTarget);
-
-            if(elements.m_weight === undefined || elements.m_target_weight === undefined ) {
-           	   whtml = '<span class="text-sm font-medium"> 날짜를 선택해주세요 </span>';
-           	} else if (elements.m_weight < elements.m_target_weight) {
-           	   whtml = '<span class="text-sm font-medium">목표까지 + ' + toTarget + ' kg</span>';
-           	} else if(elements.m_weight > elements.m_target_weight) {
-           	   whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
-          	} else if (elements.m_weight == elements.m_target_weight) {
-           	   whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
-           	   //console.log(" undefined ? ->? ", elements.m_weight);
-           	}
-
-
-            $('#targetWeight').html(whtml);
-
-            //data: { mId: "your-mId-value" },
-
-            //main 상자 4개 jQuery
-
-            let firstElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + selectedDate + '</h4><span class="text-sm font-medium"></span>';
-
-			$("#firstElement").html(firstElementHtml);
-
-			//
-
-			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
-
-			$("#secondElement").html(secondElementHtml);
-
-			//
-			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
-
-			$("#thirdElement").html(thirdElementHtml);
-			
-			//
-			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.m_weight +' kg</h4>';
-
-			$("#fourthElement").html(fourthElementHtml);
-			
-         	 },
-         	 
-          	 error: function (error) {
-             	console.log('에러는 -> ', error);
-             	console.log('\n 응답 JSON -> ', error.responseJSON);
-             	console.log('\n 응답 본문 -> ', error.responseText);
-
-          	 }
-        });
-		
-    	}
+ 	/////////////////////////////////////////
     
 </script>
 
@@ -551,7 +592,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do?seq=${m_seq}"
+              href="food.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"

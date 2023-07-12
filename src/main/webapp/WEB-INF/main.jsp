@@ -20,12 +20,7 @@
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   
   <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
-  
-   
-<c:set var="seq" value="${requestScope.seq}" />
-
- 
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script> 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
   <!-- jstl 로 lists 받아옴 -->
@@ -64,20 +59,37 @@
         dataType: 'json',
         success: function (charts) {
         
-        //	console.log( "charts ->", charts);
+        	//console.log( "charts ->", charts);
         	
         	var b_kcal_data = charts.fdatas.map(function(meal) {
                 return meal.meals.b_kcal;
             });
+        	
+        	//console.log( "b_kcal_data ->", b_kcal_data);
+        	
+        	var b_protein_g_data = charts.fdatas.map(function(meal) {
+                return meal.meals.b_protein_g;
+            });
+        	
+        	//console.log(" b_protein_g_data -> ", b_protein_g_data );
+        	
+        	var b_fat_g_data = charts.fdatas.map(function(meal) {
+                return meal.meals.b_fat_g;
+            });
+        	
+        	var b_carbohydrate_g_data = charts.fdatas.map(function(meal) {
+                return meal.meals.b_carbohydrate_g;
+            });
 
-            var pieData = [44, 55, 13];
+            var pieData = [ b_carbohydrate_g_data[0], b_protein_g_data[0], b_fat_g_data[0]];
     	  	  	var pieOptions = {
     	    	series: pieData,
     	    	chart: {
     	      	type: 'pie',
     	      	height: 350,
     	    	},
-    	    	labels: ['탄수', '단백', '지방'],
+    	    	labels: ['탄수 ' + b_carbohydrate_g_data[0] + 'g' , '단백 ' + b_protein_g_data[0] + 'g', '지방 ' + b_fat_g_data[0] + 'g'],
+    	    	//labels: ['탄수 '+ b_kcal_data[0]g, '단백 '+b_kcal_data[1]g, '지방 '+b_kcal_data[2]g],
     	    	responsive: [{
     	      	breakpoint: 480,
     	      	options: {
@@ -95,9 +107,9 @@
 
     	  	var barOptions = {
     	    	series: [
-    	      	{ name: '아침', data: b_kcal_data },
-    	      	{ name: '점심', data: [13, 23, 20, 10, 22, 44, 12] },
-    	      	{ name: '저녁', data: [13, 23, 20, 10, 22, 44, 12] },
+    	    		{ name: '아침', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
+        	      	{ name: '점심', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
+        	      	{ name: '저녁', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
     	    	],
     	    	chart: {
     	      	type: 'bar',
@@ -188,7 +200,7 @@
     	  var lineOptions = {
     	    series: [{
     	      name: "Desktops",
-    	      data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+    	      data: [0, 0, 0, 0, 0, 0, 69, 91, 148, 150, 121, 178]
     	    }],
     	    chart: {
     	      height: 350,
@@ -214,7 +226,7 @@
     	      },
     	    },
     	    xaxis: {
-    	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    	    	categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov', 'Dec'  ],
     	    }
     	  };
     	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
@@ -523,7 +535,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do?seq=${m_seq}"
+              href="food.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
