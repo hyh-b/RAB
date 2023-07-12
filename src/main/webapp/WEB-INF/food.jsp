@@ -371,7 +371,7 @@ pageEncoding="UTF-8"%>
 		            $(this).dialog("close");
 		        }
 		    }
-		});
+		}); 
 		
 		$('#fbtn2').on('click',function(){
 			
