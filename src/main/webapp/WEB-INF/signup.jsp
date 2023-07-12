@@ -337,11 +337,11 @@
         data: {id: id},
         success: function (flag) {
             
-            if (flag > 0 && id.length >0) {
+            if ((flag > 0 && id.length >0) || (id.length <6 && id.length >0)) {
                 // 아이디가 중복됨
                 document.getElementById("idNo").style.display = "inline-block";
                 document.getElementById("idOk").style.display = "none";
-            } else if(flag == 0 && id.length >0){
+            } else if(flag == 0 && id.length >5){
                 // 사용 가능한 아이디
                 document.getElementById("idOk").style.display = "inline-block";
                 document.getElementById("idNo").style.display = "none";
@@ -372,7 +372,7 @@
 				return false;
 			}
 			if (window.getComputedStyle(idOk).display !== 'inline-block') {
-	            alert('아이디가 중복됩니다.');
+	            alert('사용할 수 없는 아이디입니다');
 	            event.preventDefault(); 
 	            return false;
 	        }

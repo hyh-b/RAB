@@ -20,7 +20,6 @@ public class CustomUserDetailsService implements UserDetailsService{
 		if(to == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
-		
 		CustomUserDetails details = new CustomUserDetails(to);
 		return details;
 	}
