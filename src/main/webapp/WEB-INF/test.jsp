@@ -70,29 +70,7 @@
                 return meal.meals.b_kcal;
             });
 
-            var pieData = [44, 55, 13];
-    	  	  	var pieOptions = {
-    	    	series: pieData,
-    	    	chart: {
-    	      	type: 'pie',
-    	      	height: 350,
-    	    	},
-    	    	labels: ['탄수', '단백', '지방'],
-    	    	responsive: [{
-    	      	breakpoint: 480,
-    	      	options: {
-    	        	chart: {
-    	          	width: 200
-    	        	},
-    	        	legend: {
-    	          	position: 'bottom'
-    	        	}
-    	      	  }
-    	    	}]
-    	  	};
-    	  	var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-    	  	pieChart.render();
-
+			/////////////////////////////////////////////////////
     	  	var barOptions = {
     	    	series: [
     	      	{ name: '아침', data: b_kcal_data },
@@ -153,7 +131,8 @@
     	  };
     	  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
     	  barChart.render();
-
+		 
+    	  /////////////////////////////////////////////////////
     	  var areaOptions = {
     	    series: [{
     	      name: '저번주',
@@ -184,7 +163,8 @@
     	  };
     	  var areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
     	  areaChart.render();
-
+    	  
+		  /////////////////////////////////////////////////////
     	  var lineOptions = {
     	    series: [{
     	      name: "Desktops",
@@ -230,13 +210,63 @@
         }
       })  
       
+      //---- pie Chart ----------------
+      var zzinid = $("#zzinid").val();
+      selectedDate = $("#calendarCtInput").val();
+
+      $.ajax({
+    	  
+  		url: "/pie_chart_data.do",
+  		type: "GET",
+  		data: {
+  			i_day: selectedDate,
+         	id: zzinid
+  		},
+  		success: function (response) {
+    		var pieData = [
+      		response.i_carbohydrate_g,
+      		response.i_protein_g,
+      		response.i_fat_g,
+    		];
+    		
+    		var pieOptions = {
+      		series: pieData,
+      		chart: {
+        		type: "pie",
+        		height: 350,
+      		 },
+      		
+      		labels: ["탄수", "단백", "지방"],
+      		responsive: [
+        	
+      		  {
+          		breakpoint: 480,
+          		options: {
+            	chart: {
+            	  width: 200,
+            	},
+           		legend: {
+              		position: "bottom",
+           		},
+          	   },
+        	  },
+      	     ],
+    		};
+    		var pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+    		pieChart.render();
+  			},
+  			
+  			error: function (e) {
+    		console.log( " pie에서 에러 -> " , e);
+  			},
+		});
+      
 //--------------------main Elements--------------------------------
 
         	
     	//-----------달력 라벨 밸류 항상 디폴트는 현재값을 전달
 		var currentDate = new Date();
 
-		//Date 객체를 YYYY-MM-DD 문자열 형식으로 포맷합니다.
 		var day = ("0" + currentDate.getDate()).slice(-2);
 		var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
 		var year = currentDate.getFullYear();
@@ -273,9 +303,7 @@
     
     $("#calendarCtInput").on("change", function() {
         selectedDate = $(this).val();
-        
-        console.log("달력 value 확인 ->", selectedDate);
-        
+
         loadDataFromDate();
     });
 	

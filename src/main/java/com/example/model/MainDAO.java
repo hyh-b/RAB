@@ -76,17 +76,18 @@ public class MainDAO {
 	    	return fdatas;
 		}
 	
-//----------------------------------------------------------------------------
-	
-//		public ArrayList<MainTO> foodData(@RequestParam int m_seq) {
-//
-//			List<MainTO> datas = (List<MainTO>)this.mapper.FoodData(m_seq);
-//		
-//			ArrayList<MainTO> fdatas = new ArrayList<>(datas);
-//	    
-//	    	return fdatas;
-//		}
-//		
+//----------------------Charts below------------------------------------------------------
+		
+		
+//-----------pie---------------
+		public ArrayList<MainTO> PieChartData(String id, String i_day) {
+
+			List<MainTO> pie = (List<MainTO>)mapper.PieChartData(id, i_day);
+		
+			ArrayList<MainTO> pies = new ArrayList<>(pie);
+	    
+	    	return pies;
+		}
 
 }
 

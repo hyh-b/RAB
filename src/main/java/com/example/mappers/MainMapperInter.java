@@ -29,6 +29,11 @@ public interface MainMapperInter {
     //음식 칼로리, 영양분 for charts
     @Select("SELECT * FROM Breakfast WHERE b_day = '2023-07-08' AND m_seq = 30 UNION ALL SELECT * FROM Lunch WHERE l_day = '2023-07-08' AND m_seq = 30 UNION ALL SELECT * FROM Dinner WHERE d_day = '2023-07-08' AND m_seq = 30;")
     public List<MainTO> FoodData();
+    
+    
+    //pie Chart
+    @Select("SELECT m.m_seq, m.m_id, i.*  FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_id = #{id} and i.i_day= #{i_day};")
+    public List<MainTO> PieChartData(@Param("id") String id, @Param("i_day") String i_day);
 
 }
 
