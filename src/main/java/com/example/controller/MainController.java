@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.awt.PageAttributes.MediaType;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -313,29 +314,32 @@ public class MainController {
 	        
 			MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
 	        
-		    ArrayList<BreakfastTO> bars_b = dao.BarChartBreakfast(seq , day);
+		    ArrayList<MainTO> bars = dao.BarChartData(seq , day);
 		    
 		    JsonArray BarDatas = new JsonArray(); 
 	
-		    for (BreakfastTO b_to : bars_b) {
-		    	 JsonObject Breakfast = new JsonObject();
+		    for (MainTO to : bars) {
+		    	 JsonObject barsData = new JsonObject();
 		    	//아침
-		    	Breakfast.addProperty("b_seq", b_to.getB_seq());
-		    	Breakfast.addProperty("b_kcal", b_to.getB_kcal());
 		    	
-		    	if (b_to.getB_day() != null) {
+		    	 barsData.addProperty("i_breakfast_kcal", to.getI_breakfast_kcal());
+		    	 barsData.addProperty("i_lunch_kcal", to.getI_lunch_kcal());
+		    	 barsData.addProperty("i_dinner_kcal", to.getI_dinner_kcal());
+		    	
+		    	//Date값 한글화, 요일 형식으로 리턴
+		    	if (to.getI_day() != null) {
 		    	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 (E)", Locale.KOREA);
-		    	    String formattedDate = dateFormat.format(b_to.getB_day());
+		    	    String formattedDate = dateFormat.format(to.getI_day());
 		    	    
-		    	    Breakfast.addProperty("b_day", formattedDate);
+		    	    barsData.addProperty("i_day", formattedDate);
 		    	  }
 
-		        BarDatas.add(Breakfast); 
+		        BarDatas.add(barsData); 
 		    }	   	
 		    
 		    System.out.println("  BarDatas jsoned -> " +  BarDatas);
 		    
-		    ///update flag테스트------------------------------
+		    ///update 달력이 선택될때마다 실행------------------------------
 		    
 		    int flag_upd = dao.UnionPerDay(seq, day);
 		    int flag_uac = dao.UnionAllCalories(seq, day);

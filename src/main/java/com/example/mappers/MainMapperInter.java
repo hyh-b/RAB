@@ -37,11 +37,15 @@ public interface MainMapperInter {
     @Select("SELECT m.m_seq, m.m_id, i.*  FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_seq = #{seq} and i.i_day= #{day};")
     public List<MainTO> PieChartData(@Param("seq") int seq, @Param("day") String day);
     
-    //bar Chart Breakfast
-    @Select("SELECT B.* FROM Breakfast AS B INNER JOIN Member AS M ON B.m_seq = M.m_seq WHERE B.b_day BETWEEN DATE_SUB(#{day}, INTERVAL 3 DAY) AND DATE_ADD(#{day}, INTERVAL 3 DAY) AND M.m_seq = #{seq};")
-    public List<BreakfastTO> BarChartBreakfast(@Param("seq") int seq, @Param("day") String day);
+//    //bar Chart Breakfast
+//    @Select("SELECT B.* FROM Breakfast AS B INNER JOIN Member AS M ON B.m_seq = M.m_seq WHERE B.b_day BETWEEN DATE_SUB(#{day}, INTERVAL 3 DAY) AND DATE_ADD(#{day}, INTERVAL 3 DAY) AND M.m_seq = #{seq};")
+//    public List<BreakfastTO> BarChartBreakfast(@Param("seq") int seq, @Param("day") String day);
     
-//---update문---------------------------------
+    //enhanced bar Chart Breakfast
+    @Select("SELECT * FROM IntakeData WHERE m_seq = #{seq} AND i_day BETWEEN DATE_SUB(#{day}, INTERVAL 3 DAY) AND DATE_ADD(#{day}, INTERVAL 3 DAY);")
+    public List<MainTO> BarChartData(@Param("seq") int seq, @Param("day") String day);
+
+    //---update문---------------------------------
     
     //각 날짜마다 아점저 칼로리 합연산 이후 합쳐진 결과를 합산하는 거 하나 값이 요청될때마다 
     @Update("UPDATE IntakeData SET i_breakfast_kcal = (SELECT COALESCE(SUM(b_kcal), 0) FROM Breakfast WHERE Breakfast.b_day = #{day}), i_lunch_kcal = (SELECT COALESCE(SUM(l_kcal), 0) FROM Lunch WHERE Lunch.l_day = #{day}), i_dinner_kcal = (SELECT COALESCE(SUM(d_kcal), 0) FROM Dinner WHERE Dinner.d_day = #{day}) WHERE m_seq = #{seq} AND i_day = #{day};")

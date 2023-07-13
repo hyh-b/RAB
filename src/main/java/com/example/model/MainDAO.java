@@ -73,11 +73,11 @@ public class MainDAO {
 		
 //-----------bar---------------
 		
-		public ArrayList<BreakfastTO> BarChartBreakfast(int seq, String day) {
+		public ArrayList<MainTO> BarChartData(int seq, String day) {
 
-			List<BreakfastTO> bar_b = (List<BreakfastTO>)mapper.BarChartBreakfast(seq, day);
+			List<MainTO> bar_b = (List<MainTO>)mapper.BarChartData(seq, day);
 		
-			ArrayList<BreakfastTO> bars_b = new ArrayList<>(bar_b);
+			ArrayList<MainTO> bars_b = new ArrayList<>(bar_b);
 	    
 	    	return bars_b;
 		}
