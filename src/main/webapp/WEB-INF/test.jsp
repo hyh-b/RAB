@@ -66,6 +66,8 @@
     		loadDataFromDate();
     
     		PieDataForDate();
+    		
+    		BarChartForDate();
 
 		});
 
@@ -178,14 +180,16 @@
 			url: "/pie_chart_data",
 			type: "GET",
 			data: {
-  				i_day: selectedDate,
+  				day: selectedDate,
   				id: zzinid
 			},
 			success: function(pie) {
 				
-				console.log( " pie.영양소들 -> ", pie);
+				//console.log( " pie.영양소들 -> ", pie);
 				
 			 	var pies = JSON.parse(pie);
+			 	
+			 	//console.log( " pies.영양소들 -> ", pies);
 				
   				var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g
   					
@@ -234,16 +238,172 @@
 	}	
 	//---pie 함수 끝--------------------------------------------------
 
+////////
 	//---bar 함수----------------------------------------------------
 	
+	var barChart;
+
+	function BarChartForDate() {
+  		var zzinid = $("#zzinid").val();
+  		var selectedDate = $("#calendarCtInput").val();
+
+  		console.log("BarChartForDate 함수에서 zzinid -> ", zzinid);
+  		console.log("BarChartForDate 함수에서 selectedDate -> ", selectedDate);
+
+  		$.ajax({
+    		url: "/bar_chart_data",
+    		type: "GET",
+    		data: {
+  				day: selectedDate,
+  				id: zzinid
+			},
+			
+    		success: function (bar) {
+
+   			  var bars = JSON.parse(bar);
+   			  console.log("bars.영양소들 -> ", bars);
+   			  
+   			var BarsBreakfastKcal = [];
+   			var BarChartCategories = [];
+
+   			for (var i = 0; i < bars.length; i++) {
+   			  var dateParts = bars[i].b_day.split(' ');
+   			  
+   			  var barMonth = dateParts[1].replace("월",'');
+   			  var barDate = dateParts[2].replace("일",'');
+   			  var barDay = dateParts[3];
+   			  var BarDate = barMonth + '.' + barDate + ' ' + barDay;
+   			  
+   			  BarChartCategories.push(BarDate);
+   			  
+   			  BarsBreakfastKcal.push(bars[i].b_kcal);
+   			}
+
+   			var barData = [
+   			  { name: '아침', data: BarsBreakfastKcal }
+   			];
+			
+			console.log(" BarChartCategories 는 -> ", BarChartCategories);
+			console.log(" BarsBreakfastKcal 는 -> ", BarsBreakfastKcal);
+			
+      		var barData = [
+        		{ name: '아침', data: BarsBreakfastKcal },
+        		{ name: '점심', data: [30, 40, 50, 60, 70, 80, 90] },
+        		{ name: '저녁', data: [40, 50, 60, 70, 80, 90, 100] }
+      		];
+
+      		var barOptions = {
+        		series: barData,
+		        chart: {
+        		  type: 'bar',
+          		  height: 350,
+          		  stacked: true,
+          		
+          		toolbar: {
+            		show: true
+          		},
+          		zoom: {
+            		enabled: true
+          		}
+        	},
+        		responsive: [{
+          		breakpoint: 480,
+          		
+          		options: {
+            		legend: {
+              		position: 'bottom',
+              		offsetX: -10,
+              		offsetY: 0
+              	   }
+          	     }
+        	}],
+        	
+        	plotOptions: {
+          	
+        	bar: {
+           	 horizontal: false,
+            	borderRadius: 10,
+            	dataLabels: {
+              	total: {
+                	enabled: true,
+                style: {
+                  fontSize: '13px',
+                  fontWeight: 900
+                }
+               }
+             }
+          	},
+          },
+        	xaxis: {
+          	type: 'text',
+          		categories: BarChartCategories,
+        	},
+        	legend: {
+          	 position: 'top',
+       	     horizontalAlign: 'center',
+         	 offsetY: 10,
+        	 markers: {
+         	   radius: 12
+        	  }
+        	},
+      	  fill: {
+        	  opacity: 1
+       	 }
+      	};
+
+      	if (!barChart) {
+        	barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
+        	barChart.render();
+      	
+      	} else {
+        	barChart.updateOptions(barOptions);
+        	barChart.updateSeries(barData);
+      		}
+    	},
+    	error: function (e) {
+      	console.log("BarChartForDate에서 에러 ->", e);
+    	},
+  		});
+	}
+	
+	//---bar 함수 끝 -------------------------------------------------
+////////	
+	//---area 함수----------------------------------------------------
 	
 	
-	//---bar 함수 끝 ----------------------------------------------------
+	
+	//---area 함수 끝 -------------------------------------------------
+////////
+
+	//---line 함수----------------------------------------------------
 	
 	
 	
-	//--- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트----------------------------
-  $(document).ready(function() {
+	//---line 함수 끝 -------------------------------------------------
+////////
+
+	//---------------------------차트 함수화 끝------------------------------------------
+	
+	
+	
+	//---------------기본값으로 먼저 뿌려질 데이터 ( 기본값 , 정적 )----------------------------------------
+	
+		//$(document).ready(function() {
+    	// DOM이 완전히 로드된 후 실행할 코드
+    	//console.log("DOM이 완전히 로드되었습니다!");
+		//});
+	
+	
+	
+		//window.addEventListener("load", function() {
+   		// 이벤트로 따로 할당해서 documet.ready라 아예 구분시키기 시도
+   		//console.log("페이지와 모든 리소스가 로드되었습니다!");
+		//});
+	
+	//---------------기본값으로 먼저 뿌려질 데이터 끝----------------------------------------
+	
+//---------------------------- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트 ( 동적 )----------------------------
+ 	window.onload = function() {
 	   
 	//------------- ajax for charts -------------------------
       $.ajax({
@@ -265,67 +425,9 @@
         	// where PieChart used to place
 
 			/////////////////////////////////////////////////////
-    	  	var barOptions = {
-    	    	series: [
-    	      	{ name: '아침', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
-    	      	{ name: '점심', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
-    	      	{ name: '저녁', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
-    	    	],
-    	    	chart: {
-    	      	type: 'bar',
-    	      	height: 350,
-    	      	stacked: true,
-    	      	toolbar: {
-    	        	show: true
-    	      	},
-    	      	zoom: {
-    	        	enabled: true
-    	      	}
-    	    	},
-    	    	responsive: [{
-    	      	breakpoint: 480,
-    	      	options: {
-    	        legend: {
-    	        position: 'bottom',
-    	        offsetX: -10,
-    	        offsetY: 0
-    	        }
-    	      }
-    	    }],
-    	    plotOptions: {
-    	      bar: {
-    	        horizontal: false,
-    	        borderRadius: 10,
-    	        dataLabels: {
-    	          total: {
-    	            enabled: true,
-    	            style: {
-    	              fontSize: '13px',
-    	              fontWeight: 900
-    	            }
-    	          }
-    	        }
-    	      },
-    	    },
-    	    xaxis: {
-    	      type: 'text',
-    	      categories: ['월', '화', '수', '목','금','토','일'],
-    	    },
-    	    legend: {
-    	      position: 'top',
-    	      horizontalAlign: 'center',
-    	      offsetY: 10,
-    	      markers: {
-    	        radius: 12
-    	      }
-    	    },
-    	    fill: {
-    	      opacity: 1
-    	    }
-    	  };
-    	  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
-    	  barChart.render();
-		 
+			
+			// where BarChart used to place
+			
     	  /////////////////////////////////////////////////////
     	  var areaOptions = {
     	    series: [{
@@ -405,7 +507,7 @@
         
       })
       
-      //-------------Default chart끝---------------------
+      //-------------------------------------------------------------------------------
 
    	  //--달력 라벨 밸류 항상 디폴트는 현재값을 전달-----------------------------------------------
 		var currentDate = new Date();
@@ -435,12 +537,14 @@
             loadDataFromDate();
          
           	PieDataForDate();
+          	
+          	BarChartForDate();
             	
         });
         
-//////////////////  
-   }); //window.onload끝 
-/////////////////    
+//////
+  	};//window.onload끝 
+//////
 </script>
 
 

@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-     main RAB
+     Main RAB
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   
@@ -232,10 +232,35 @@
 	});
 			
 	}	
-//---pie 함수 끝-----------------------------------------------------------------------
+	//---pie 함수 끝--------------------------------------------------
 
-//--- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트----------------------------
-  $(document).ready(function() {
+	
+	//---bar 함수----------------------------------------------------
+	
+	
+	
+	//---bar 함수 끝 ----------------------------------------------------
+	
+	
+	
+	
+	
+	
+	//---기본값으로 먼저 뿌려질 데이터----------------------------------------
+	
+		//$(document).ready(function() {
+    	// DOM이 완전히 로드된 후 실행할 코드
+    	//console.log("DOM이 완전히 로드되었습니다!");
+		//});
+	
+	//--- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트 ( 동적 )----------------------------
+	
+		//window.addEventListener("load", function() {
+   		// 이벤트로 따로 할당해서 documet.ready라 아예 구분시키기 시도
+   		//console.log("페이지와 모든 리소스가 로드되었습니다!");
+		//});
+	
+ 	window.onload = function() {
 	   
 	//------------- ajax for charts -------------------------
       $.ajax({
@@ -257,6 +282,7 @@
         	// where PieChart used to place
 
 			/////////////////////////////////////////////////////
+			
     	  	var barOptions = {
     	    	series: [
     	      	{ name: '아침', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
@@ -431,7 +457,7 @@
         });
         
 //////////////////  
-   }); //window.onload끝 
+  	};//window.onload끝 
 /////////////////    
 </script>
 

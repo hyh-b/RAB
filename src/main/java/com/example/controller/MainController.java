@@ -1,10 +1,12 @@
 package com.example.controller;
 
 import java.awt.PageAttributes.MediaType;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.model.BreakfastTO;
 import com.example.model.MainDAO;
 import com.example.model.MainTO;
 import com.example.model.MemberDAO;
@@ -246,23 +249,23 @@ public class MainController {
 	
 	//---- Charts Below-----------------------------
 	
+//---pieData---------------------------------------------------
 	@RequestMapping("pie_chart_data")
 	public ResponseEntity<String> PieChartData(
 	Authentication authentication, ModelMap map, HttpServletRequest request, String mId, 
-	 @RequestParam("id") String id, @RequestParam("i_day") String i_day ) {
+	 @RequestParam("id") String id, @RequestParam("day") String day ) {
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
-	    ArrayList<MainTO> pieChart = dao.PieChartData(id, i_day);
+	    ArrayList<MainTO> pieChart = dao.PieChartData(id, day);
+	    
 	    JsonArray pieDatas = new JsonArray(); 
 	    
-	    System.out.println("  i_day pie Controller -> " + i_day);
+	    System.out.println("  day pie Controller -> " + day);
 	    System.out.println("  m_id pie Controller -> " + id );
-
-	   
-
+	    
 	    for (MainTO to : pieChart) {
 	    	
 	    	 JsonObject pieData = new JsonObject();
@@ -280,6 +283,8 @@ public class MainController {
 	        pieData.addProperty("i_cholesterol_mgl", to.getI_cholesterol_mgl());
 	        pieData.addProperty("i_sodium_mg", to.getI_sodium_mg());
 	        pieData.addProperty("i_sugar_g", to.getI_sugar_g());
+	        
+	        
 	        pieDatas.add(pieData); 
 	    }	   	
 	    
@@ -293,4 +298,43 @@ public class MainController {
 	  
 	}
 	
-}
+	
+//---BarData---------------------------------------------------
+	
+		@RequestMapping("bar_chart_data")
+		public ResponseEntity<String> BarChartData(
+		Authentication authentication, ModelMap map, HttpServletRequest request, String mId,
+		@RequestParam("id") String id, @RequestParam("day") String day ) {
+			
+			mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+	        
+			MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+	        
+		    ArrayList<BreakfastTO> bars_b = dao.BarChartBreakfast(id , day);
+		    
+		    JsonArray BarDatas = new JsonArray(); 
+	
+		    for (BreakfastTO b_to : bars_b) {
+		    	 JsonObject Breakfast = new JsonObject();
+		    	//아침
+		    	Breakfast.addProperty("b_seq", b_to.getB_seq());
+		    	Breakfast.addProperty("b_kcal", b_to.getB_kcal());
+		    	
+		    	if (b_to.getB_day() != null) {
+		    	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 (E)", Locale.KOREA);
+		    	    String formattedDate = dateFormat.format(b_to.getB_day());
+		    	    
+		    	    Breakfast.addProperty("b_day", formattedDate);
+		    	  }
+
+		        BarDatas.add(Breakfast); 
+		    }	   	
+		    
+		    System.out.println("  BarDatas jsoned -> " +  BarDatas);
+
+		    
+		   	return new ResponseEntity<String>( BarDatas.toString(), HttpStatus.OK);
+		  
+		}
+	
+	}

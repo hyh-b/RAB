@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.model.BreakfastTO;
 import com.example.model.MainTO;
 
 
@@ -34,8 +35,12 @@ public interface MainMapperInter {
     
     
     //pie Chart
-    @Select("SELECT m.m_seq, m.m_id, i.*  FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_id = #{id} and i.i_day= #{i_day};")
-    public List<MainTO> PieChartData(@Param("id") String id, @Param("i_day") String i_day);
+    @Select("SELECT m.m_seq, m.m_id, i.*  FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_id = #{id} and i.i_day= #{day};")
+    public List<MainTO> PieChartData(@Param("id") String id, @Param("day") String day);
+    
+    //bar Chart Breakfast
+    @Select("SELECT B.* FROM Breakfast AS B INNER JOIN Member AS M ON B.m_seq = M.m_seq WHERE B.b_day BETWEEN DATE_SUB(#{day}, INTERVAL 3 DAY) AND DATE_ADD(#{day}, INTERVAL 3 DAY) AND M.m_id = #{id};")
+    public List<BreakfastTO> BarChartBreakfast(@Param("id") String id, @Param("day") String day);
 
 }
 
