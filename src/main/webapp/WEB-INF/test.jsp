@@ -79,7 +79,8 @@
 
 		function loadDataFromDate() {
 	
-			var zzinid = $("#zzinid").val();
+			//var zzinid = $("#zzinid").val();
+			var zzinseq = $("#zzinseq").val();
 			selectedDate = $("#calendarCtInput").val();
 	
 			//console.log( " loadDataFromDate() id ->", zzinid );
@@ -90,8 +91,8 @@
       		dataType: 'json',
       		
       		data: {
-         		i_day: selectedDate,
-         		id: zzinid
+         		day: selectedDate,
+         		seq: zzinseq
       		},
       
       		success: function (elements) {
@@ -170,10 +171,11 @@
 	
 		function PieDataForDate() {
 		
-			var zzinid = $("#zzinid").val();
+			//var zzinid = $("#zzinid").val();
+			var zzinseq = $("#zzinseq").val();
 			var selectedDate = $("#calendarCtInput").val();
 			
-			console.log( " pie 함수에서 zzinid -> ", zzinid); 
+			//console.log( " pie 함수에서 zzinid -> ", zzinid); 
 			console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
 
 			$.ajax({
@@ -181,7 +183,7 @@
 			type: "GET",
 			data: {
   				day: selectedDate,
-  				id: zzinid
+  				seq: zzinseq
 			},
 			success: function(pie) {
 				
@@ -244,10 +246,13 @@
 	var barChart;
 
 	function BarChartForDate() {
-  		var zzinid = $("#zzinid").val();
+		
+  		//var zzinid = $("#zzinid").val();
   		var selectedDate = $("#calendarCtInput").val();
-
-  		console.log("BarChartForDate 함수에서 zzinid -> ", zzinid);
+		
+  		var zzinseq = $("#zzinseq").val();
+  		
+  		console.log("BarChartForDate 함수에서 zzinseq -> ", zzinseq);
   		console.log("BarChartForDate 함수에서 selectedDate -> ", selectedDate);
 
   		$.ajax({
@@ -255,7 +260,7 @@
     		type: "GET",
     		data: {
   				day: selectedDate,
-  				id: zzinid
+  				seq: zzinseq
 			},
 			
     		success: function (bar) {
@@ -560,6 +565,7 @@
   >
   
   <input type="hidden" id="zzinid" value="${zzinid}" />
+  <input type="hidden" id="zzinseq" value="${zzinseq}" />
     <!-- ===== Preloader Start ===== -->
     <div
   x-show="loaded"

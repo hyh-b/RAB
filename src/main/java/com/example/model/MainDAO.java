@@ -35,37 +35,19 @@ public class MainDAO {
 	
 //-------------------------------------------------------------------------
 	
-	public ArrayList<MainTO> DateData(String id, String i_day ) {
+	public ArrayList<MainTO> DateData(int seq, String day ) {
 
-		List<MainTO> datas = (List<MainTO>)mapper.DataFromDateForMain(i_day, id);
+		List<MainTO> datas = (List<MainTO>)mapper.DataFromDateForMain(seq, day);
 		
-		System.out.println(" i_day DAO -> " + i_day);
-		System.out.println("  m_id DAO -> " + id );
+		System.out.println(" i_day DAO -> " + day);
+		System.out.println("  m_id DAO -> " + seq );
 
 		
 	    ArrayList<MainTO> ddatas = new ArrayList<>(datas);
 	    
 	    return ddatas;
 	}
-	
-//---아이디당 1개의 레코드 중복없이 생성-------------------------------------------------------------------------
-	
-	public int InsertData(String mId) {
 		
-		int flag = 1;
-		
-		int result = mapper.InsertDataForMain(mId);
-		
-		if(result == 1 ) {
-			flag = 0;
-		}else if(result == 0) {
-			flag = 1;
-		}
-	
-		return flag;
-				
-	}
-	
 //-------------------------------------------------------------------------
 		public ArrayList<MainTO> foodData() {
 
@@ -80,9 +62,9 @@ public class MainDAO {
 		
 		
 //-----------pie---------------
-		public ArrayList<MainTO> PieChartData(String id, String day) {
+		public ArrayList<MainTO> PieChartData(int seq, String day) {
 
-			List<MainTO> pie = (List<MainTO>)mapper.PieChartData(id, day);
+			List<MainTO> pie = (List<MainTO>)mapper.PieChartData(seq, day);
 		
 			ArrayList<MainTO> pies = new ArrayList<>(pie);
 	    
@@ -91,13 +73,76 @@ public class MainDAO {
 		
 //-----------bar---------------
 		
-		public ArrayList<BreakfastTO> BarChartBreakfast(String id, String day) {
+		public ArrayList<BreakfastTO> BarChartBreakfast(int seq, String day) {
 
-			List<BreakfastTO> bar_b = (List<BreakfastTO>)mapper.BarChartBreakfast(id, day);
+			List<BreakfastTO> bar_b = (List<BreakfastTO>)mapper.BarChartBreakfast(seq, day);
 		
 			ArrayList<BreakfastTO> bars_b = new ArrayList<>(bar_b);
 	    
 	    	return bars_b;
 		}
+//----------besides select --------------------------
+		
+	//---아이디당 1개의 레코드 중복없이 생성-------------------------------------------------------------------------
+		
+		public int InsertData(String mId) {
+			
+			int flag = 1;
+			
+			int result = mapper.InsertDataForMain(mId);
+			
+			if(result == 1 ) {
+				flag = 0;
+			}else if(result == 0) {
+				flag = 1;
+			}
+		
+			return flag;
+					
+		}
+	
+		//---아 점 저 합연산--------------------------
+		
+		public int UnionPerDay(int seq, String day) {
+			
+			int flag_upd = 1;
+			
+			int result = mapper.UnionBLDperDay(seq, day);
+			
+			if(result == 1 ) {
+				
+				flag_upd = 0;
+				
+			}else if(result == 0) {
+				
+				flag_upd = 1;
+			}
+		
+			System.out.println( " flag_upd ->" + flag_upd);
+			
+			return flag_upd;
+					
+		}
+		
+		//---아 점 저 합연산 3개를 1개의 i_kcal로 총합연산--------------------------
+		
+		public int UnionAllCalories(int seq, String day) {
+			
+			int flag_uac = 1;
+			
+			int result = mapper.UnionAllCalories(seq, day);
+			
+			if(result == 1 ) {
+				flag_uac = 0;
+			}else if(result == 0) {
+				flag_uac = 1;
+			}
+			
+			System.out.println( " flag_uac ->" + flag_uac);
+		
+			return flag_uac;
+					
+		}
+		
 }
 

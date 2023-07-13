@@ -67,6 +67,8 @@ public class MainController {
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("flag", flag);
 		modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinseq", member.getM_seq());
+		
 
         modelAndView.setViewName("test");
         
@@ -92,7 +94,7 @@ public class MainController {
 		
 		// principal 객체를 CustomUserDetails 타입으로 캐스팅
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		System.out.println("seq가져와 "+customUserDetails.getM_seq());
+		System.out.println("seq가져와 "+ customUserDetails.getM_seq());
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
@@ -117,6 +119,7 @@ public class MainController {
 		modelAndView.addObject("flag", flag);
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinseq", member.getM_seq());
 		
 		System.out.println(" test.do m_id " + member.getM_id());
 		
@@ -209,16 +212,16 @@ public class MainController {
 	@RequestMapping("selected_data")
 	public ResponseEntity<String> MainForSelectedDate(
 	Authentication authentication, ModelMap map, HttpServletRequest request, String mId, 
-	 @RequestParam("id") String id, @RequestParam("i_day") String i_day ) {
+	 @RequestParam("seq") int seq, @RequestParam("day") String day ) {
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
-	    ArrayList<MainTO> ddatas = dao.DateData(i_day, id);
+	    ArrayList<MainTO> ddatas = dao.DateData(seq, day);
 	    
-	    System.out.println("  i_day Controller -> " + i_day);
-	    System.out.println("  m_id Controller -> " + id );
+	    System.out.println(" selected_data i_day Controller -> " + day);
+	    System.out.println(" selected_data seq Controller -> " + seq );
 
 	    JsonObject mainDatas = new JsonObject();
 
@@ -240,7 +243,7 @@ public class MainController {
 
 	    }	   	
 	    
-	    System.out.println(" mId Controller => " + mId);
+	    //System.out.println(" mId Controller => " + mId);
 	    
 	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
 	}
@@ -253,18 +256,18 @@ public class MainController {
 	@RequestMapping("pie_chart_data")
 	public ResponseEntity<String> PieChartData(
 	Authentication authentication, ModelMap map, HttpServletRequest request, String mId, 
-	 @RequestParam("id") String id, @RequestParam("day") String day ) {
+	 @RequestParam("seq") int seq, @RequestParam("day") String day ) {
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
-	    ArrayList<MainTO> pieChart = dao.PieChartData(id, day);
+	    ArrayList<MainTO> pieChart = dao.PieChartData(seq, day);
 	    
 	    JsonArray pieDatas = new JsonArray(); 
 	    
 	    System.out.println("  day pie Controller -> " + day);
-	    System.out.println("  m_id pie Controller -> " + id );
+	    System.out.println("  seq pie Controller -> " + seq );
 	    
 	    for (MainTO to : pieChart) {
 	    	
@@ -304,13 +307,13 @@ public class MainController {
 		@RequestMapping("bar_chart_data")
 		public ResponseEntity<String> BarChartData(
 		Authentication authentication, ModelMap map, HttpServletRequest request, String mId,
-		@RequestParam("id") String id, @RequestParam("day") String day ) {
+		@RequestParam("seq") int seq, @RequestParam("day") String day ) {
 			
 			mId = authentication.getName(); // Retrieve the m_id of the authenticated user
 	        
 			MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
 	        
-		    ArrayList<BreakfastTO> bars_b = dao.BarChartBreakfast(id , day);
+		    ArrayList<BreakfastTO> bars_b = dao.BarChartBreakfast(seq , day);
 		    
 		    JsonArray BarDatas = new JsonArray(); 
 	
@@ -331,6 +334,13 @@ public class MainController {
 		    }	   	
 		    
 		    System.out.println("  BarDatas jsoned -> " +  BarDatas);
+		    
+		    ///update flag테스트------------------------------
+		    
+		    int flag_upd = dao.UnionPerDay(seq, day);
+		    int flag_uac = dao.UnionAllCalories(seq, day);
+
+		    //--------------------------------------------------
 
 		    
 		   	return new ResponseEntity<String>( BarDatas.toString(), HttpStatus.OK);
