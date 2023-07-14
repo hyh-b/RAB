@@ -282,6 +282,25 @@ pageEncoding="UTF-8"%>
 	}
 	
 	/*---------------  운동 끝----------------------------  */
+	
+	/*---------------  당일 합계 시작----------------------------  */
+	
+	.total {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	    margin-left: 700px;
+	}
+	
+	.total .exTime {
+	    width: 200px;
+	}
+	
+	.total .exUsedKcal {
+	    width: 100px;
+	}
+	
+	/*---------------  당일 합계 시작----------------------------  */
 </style>
 
 <script type="text/javascript">
@@ -768,8 +787,7 @@ pageEncoding="UTF-8"%>
             <div class="flex flex-col gap-5.5 p-6.5">
             	<div>
 		            <form action="#" method="post" name="ffrm">
-						<input type="hidden" name="seq" id="seq" value="${seq}" />
-						<div id="resultFood1"></div>
+						<div id="total1"></div>
 					</form>
 	        	</div>
         	</div>
@@ -804,7 +822,8 @@ pageEncoding="UTF-8"%>
 		        <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
 		            <div class="flex items-center">
 		                <div style="padding-left: 50px; width: 650px;" class="exercise-name-header">운동명</div>
-		                <div class="exercise-time-header">운동 시간</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		                <div class="exercise-time-header">운동 시간</div>&nbsp;&nbsp;
+		                <button id="applyAll">모두 적용</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		                <div class="calories-burned-header">소모 칼로리</div>
 		            </div>
 		        </div>
@@ -1071,7 +1090,7 @@ pageEncoding="UTF-8"%>
 
 	displayImages(); 
 	
-	/*---------------운동 다이어로그 --------- */
+	/*---------------운동 다이어로그 시작--------- */
 	    
 	$( function() {
 		$( "#dialogContainer1" ).dialog({
@@ -1138,7 +1157,7 @@ pageEncoding="UTF-8"%>
 			$( "#dialogContainer1" ).dialog( "open" );
 		});
 	});
-	/* ㅡㅡㅡㅡ운동다이어로그 끝 ㅡㅡㅡㅡㅡ*/
+	
 
 	/* ㅡㅡㅡㅡ사용자 설정 운동 다이어로그 시작 ㅡㅡㅡㅡㅡ*/
 	$( function() {
@@ -1185,6 +1204,8 @@ pageEncoding="UTF-8"%>
 		                		        });
 		                		        customExerciseHtml += '</div>';
 		                		        $('#resultExercise2').html(customExerciseHtml);
+		                		     	// 사용자설정 운동 데이터 출력완료시 총 운동시간, 소모칼로리 업데이트
+		                		        calculateTotalTimeAndCalories();
 		                		    },
 		                		    error: function(jqXHR, textStatus, errorThrown) {
 		                		        console.error('Fetch error:', errorThrown);
@@ -1198,12 +1219,7 @@ pageEncoding="UTF-8"%>
 	                        console.error('Server response:', jqXHR.responseText);
 	                    }
 	                });
-					
 	                dialog.dialog( "close" );
-	                setTimeout(function() {
-		            	calculateTotalTimeAndCalories();
-	                }, 2000);
-		            
 	            },
 	            취소: function() {
 	                dialog.dialog( "close" );
@@ -1238,6 +1254,14 @@ pageEncoding="UTF-8"%>
 	    $(".ex_used_kcal").each(function(){
 	        totalExUsedKcal += parseInt($(this).text(), 10);
 	    });
+		
+	    let totalHtml = '';
+            totalHtml += 
+            	'<div class="total">' +
+	                '<div class="totalExtime">'+totalExTime+'</div>'+
+	                '<div class="totalExUsedKcal">'+totalExUsedKcal+'</div>'+
+	            '</div>';
+        $('#total1').html(totalHtml);
 
 	    // 여기서 totalExTime과 totalExUsedKcal을 원하는 곳에 표시하면 됩니다.
 	    console.log("총 운동시간: " + totalExTime + " 분");
@@ -1245,7 +1269,7 @@ pageEncoding="UTF-8"%>
 	}
 	
 	$(document).ready(function() {
-		// 다이어로그 내 검색 버튼
+		// 운동 다이어로그 내 검색 버튼
 		$('#searchButton1').click(function() {
 			let searchEx = $("#exerciseName1").val();
 			// 검색한 단어 서버로 보내고 검색결과 데이터 받아옴
@@ -1311,6 +1335,8 @@ pageEncoding="UTF-8"%>
 		        });
 		        customExerciseHtml += '</div>';
 		        $('#resultExercise2').html(customExerciseHtml);
+		        // 운동 데이터 출력완료시 총 운동시간, 소모칼로리 출력
+		        calculateTotalTimeAndCalories();
 		    },
 		    error: function(jqXHR, textStatus, errorThrown) {
 		        console.error('Fetch error:', errorThrown);
@@ -1356,9 +1382,8 @@ pageEncoding="UTF-8"%>
 		                    console.error('Server response:', jqXHR.responseText);
 		                }
 		            });
-		        	setTimeout(function() {
-		    		    calculateTotalTimeAndCalories();
-		    		},1000);
+		        	// 운동 시간 입력후 칼로리 계산이 끝나면 총 운동시간, 소모칼로리 업데이트
+		    		calculateTotalTimeAndCalories();
 		        },
 		        error: function(jqXHR, textStatus, errorThrown) {
 		            console.error('Fetch error:', errorThrown);
@@ -1366,10 +1391,6 @@ pageEncoding="UTF-8"%>
 		        }
 		    });
 		});
-		// 페이지 로드 1초 후 총 운동시간, 소모 칼로리 계산
-		setTimeout(function() {
-		    calculateTotalTimeAndCalories();
-		},1000);
 	});
 	
 </script>
