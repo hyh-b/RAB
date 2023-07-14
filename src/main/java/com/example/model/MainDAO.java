@@ -144,5 +144,27 @@ public class MainDAO {
 					
 		}
 		
+		//---탄단지 콜나당 하루치 총합--------------------------
+		
+		public int 	UnionAllNutritions(int seq, String day) {
+			
+			int flag_uan = 1;
+			
+			int result = mapper.UnionAllNutritions(seq, day);
+			
+			if(result == 1 ) {
+				flag_uan = 0;
+			}else if(result == 0) {
+				flag_uan= 1;
+			}
+			
+			System.out.println( " 탄단지 콜나당 flag isZero = " + flag_uan);
+		
+			return flag_uan;
+					
+		}
+
+		
+		
 }
 

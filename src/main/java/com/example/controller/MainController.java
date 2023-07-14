@@ -274,9 +274,9 @@ public class MainController {
 	    	
 	    	 JsonObject pieData = new JsonObject();
 	        
-	    	//기본 유저정보
+	    	//기본 유저정보,날짜
 	        pieData.addProperty("m_seq", to.getM_seq());
-	        pieData.addProperty("m_id", to.getM_id());
+	        pieData.addProperty("i_day", to.getI_day().toString());
 	        
 	        //단탄지
 	        pieData.addProperty("i_protein_g", to.getI_protein_g());
@@ -293,6 +293,12 @@ public class MainController {
 	    }	   	
 	    
 	    System.out.println(" pieData jsoned -> " + pieDatas);
+	    
+	    ///탄단지 콜나당 ------------------------------
+	    
+	    int flag_uan = dao.UnionAllNutritions(seq, day);
+
+	    //--------------------------------------------------
 
 	    
 	    //ModelAndView modelAndView = new ModelAndView();
