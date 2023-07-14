@@ -700,6 +700,7 @@
             </a>
           </li>
           <!-- Menu Item Profile2 -->
+       
 
           <!-- Menu Item Forms -->
 
@@ -725,6 +726,30 @@
             
      
           </li>
+          
+          <!--  마이페이지 li -->
+             
+           <li>
+            <a
+              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+
+              href="profile.do"
+              @click="selected = (selected === 'Profile' ? '':'Profile')"
+              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
+              :class="page === 'profile' && 'bg-graydark'"
+            >
+             <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="마이페이지.png"
+      			width="24"
+      			height="24"
+   			/>
+             	마이페이지
+            </a>
+          </li>
+          
+          <!--  -->
           
           <!-- Menu Item Tables -->
 		  <br/><br/>
@@ -838,6 +863,18 @@
     
     </div>
     <!--  검색 창  끝-->
+    
+   <!-- 몸무게들 업데이트 다이얼로그 
+   <div style="display: flex;">
+    <a href="#" class="inline-flex items-center justify-center rounded-full
+    	 bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
+        몸무게 업데이트
+    </a>
+	</div>
+
+      --> 
+    
+    <!--  끝 -->
 
     <div class="flex items-center gap-3 2xsm:gap-7">
       <ul class="flex items-center gap-2 2xsm:gap-4">
@@ -959,7 +996,26 @@
                 내 정보
               </a>
             </li>
+            
+               <li>
+              <a
+                href="profile.do"
+                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              >
+               <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="비고.png"
+      			width="24"
+      			height="24"
+   			/>
+                몸무게 업데이트
+              </a>
+            </li>
           </ul>
+          
+          <!-- 몸무게 업데이트 -->
+          
           
           <button
             class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"

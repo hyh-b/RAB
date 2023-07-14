@@ -45,7 +45,7 @@ public interface MainMapperInter {
     @Select("SELECT * FROM IntakeData WHERE m_seq = #{seq} AND i_day BETWEEN DATE_SUB(#{day}, INTERVAL 3 DAY) AND DATE_ADD(#{day}, INTERVAL 3 DAY);")
     public List<MainTO> BarChartData(@Param("seq") int seq, @Param("day") String day);
 
-    //---update문---------------------------------
+    //---update문  아 점 저 -> i_kcal 총 칼로리 ---------------------------------
     
     //각 날짜마다 아점저 칼로리 합연산 이후 합쳐진 결과를 합산하는 거 하나 값이 요청될때마다 
     @Update("UPDATE IntakeData SET i_breakfast_kcal = (SELECT COALESCE(SUM(b_kcal), 0) FROM Breakfast WHERE Breakfast.b_day = #{day}), i_lunch_kcal = (SELECT COALESCE(SUM(l_kcal), 0) FROM Lunch WHERE Lunch.l_day = #{day}), i_dinner_kcal = (SELECT COALESCE(SUM(d_kcal), 0) FROM Dinner WHERE Dinner.d_day = #{day}) WHERE m_seq = #{seq} AND i_day = #{day};")
@@ -54,5 +54,15 @@ public interface MainMapperInter {
     //연산결과 3개를 합쳐서 i_kcal에 할당하는거 하나, main페이지에서  때마다 실행, 추가된 값이 없다면 update만 안되고 나머지는 정상 작동
     @Update("UPDATE IntakeData SET i_kcal = COALESCE(i_breakfast_kcal, 0) + COALESCE(i_lunch_kcal, 0) + COALESCE(i_dinner_kcal, 0) WHERE m_seq = #{seq} AND i_day = #{day};")
     public int UnionAllCalories(@Param("seq") int seq, @Param("day") String day);
+    
+    //---update문  아 점 저 -> i_kcal 총 칼로리 ---------------------------------
+    
+//    //각 날짜마다 아점저 칼로리 합연산 이후 합쳐진 결과를 합산하는 거 하나 값이 요청될때마다 
+//    @Update("")
+//    public int UnionNuturitionperDay(@Param("seq") int seq, @Param("day") String day);
+//    
+//    //연산결과 3개를 합쳐서 i_kcal에 할당하는거 하나, main페이지에서  때마다 실행, 추가된 값이 없다면 update만 안되고 나머지는 정상 작동
+//    @Update("")
+//    public int UnionAllNutritions(@Param("seq") int seq, @Param("day") String day);
 }
 
