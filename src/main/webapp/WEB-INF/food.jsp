@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="seq" value="${requestScope.seq}" />
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -19,6 +18,7 @@ pageEncoding="UTF-8"%>
 	.radio-buttons {
     	display: flex; /* 가로 배치를 위해 flexbox 사용 */
   	}
+  	
   	.btn {
     	margin-right: 10px; /* 버튼 사이의 간격 조정 */
   	}
@@ -37,14 +37,15 @@ pageEncoding="UTF-8"%>
 	  	border: none;
 	}
 	
-	
     .accordion {
 	    margin-bottom: 10px;
 	}
+	
 	.accordion-title {
 	    cursor: pointer;
 	    padding: 5px;
 	}
+	
 	.accordion-content {
 	    display: none;
 	    margin-top: 10px;
@@ -52,69 +53,165 @@ pageEncoding="UTF-8"%>
     
 </style>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
   	
 	$(document).ready(function() {
+		
+		$( function() {
+			$( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+		} );
+		
 		
 		// 아침 , 점심 ,저녁 의 div 삭제 이벤트 전역변수
 		let divId = 1;
 		// 아침 , 점심 , 저녁 deleteBtn 이벤트
 		$(document).on('click', '.delete-btn', function() {
 	        let targetDiv = $(this).data('target');
-	        $('#' + targetDiv).remove();  // Remove the target div
+	        $('#' + targetDiv).remove();
 	    });
-	//==================================================== 아침 =================================================================
-		$('#searchButton1').click(function() {
-		    const data = $('#foodName1').val();
-		    console.log(data);
-			
-		    if (data === '') {
-		        alert('검색어를 입력해주세요!');
-		        return; 
+		
+		$('#submitMeal').on('click', function(){
+			let mealTime = $('#mealTime').val();
+			let url;
+			let resultFood = 'resultFood1';
+			let selectedMeal = $('#mealSelect').val();  // '#mealSelect'는 식사 선택을 위한 select 요소의 id여야 합니다.
+
+			if (selectedMeal === "") {
+				alert('Please select one of breakfast, lunch, or dinner.');
+				return;
+			}
+
+			if (selectedMeal === "breakfast") {
+				url = 'breakfastFoodData';
+			} else if (selectedMeal === "lunch") {
+				url = 'lunchFoodData';
+			} else if (selectedMeal === "dinner") {
+				url = 'dinnerFoodData';
+			}
+
+			submitData(resultFood, url);
+		});
+		
+		function submitData(resultFood, url) {
+		    let formData = new FormData($('form')[0]);
+		    let additionalData = [];
+		    let selectedDate = $("#datepicker").datepicker("getDate");
+		    let formattedDate = $.datepicker.formatDate('yy-mm-dd', selectedDate);
+		    
+		    if (!selectedDate) {
+		        alert('날짜를 선택해주세요!');
+		        return;
+		    }
+		    
+		    if ($('#' + resultFood).children().length === 0) {
+		        alert('음식을 조회 후 등록 버튼을 눌러주세요!');
+		        return; // 함수 실행 종료
 		    }
 
-		    
+		    $('#' + resultFood + ' > div').each(function() {
+		        let f_name = $(this).find('input[name="f_name"]').val();
+		        let f_carbohydrate_g = $(this).find('input[name="f_carbohydrate_g"]').val();
+		        let f_protein_g = $(this).find('input[name="f_protein_g"]').val();
+		        let f_fat_g = $(this).find('input[name="f_fat_g"]').val();
+		        let f_cholesterol_mg = $(this).find('input[name="f_cholesterol_mg"]').val();
+		        let f_sodium_mg = $(this).find('input[name="f_sodium_mg"]').val();
+		        let f_sugar_g = $(this).find('input[name="f_sugar_g"]').val();
+		        let f_kcal = $(this).find('input[name="f_kcal"]').val();
+		        additionalData.push({
+		            f_name: f_name,
+		            f_carbohydrate_g: f_carbohydrate_g,
+		            f_protein_g : f_protein_g,
+		            f_fat_g : f_fat_g,
+		            f_cholesterol_mg : f_cholesterol_mg,
+		            f_sodium_mg : f_sodium_mg,
+		            f_sugar_g : f_sugar_g,
+		            f_kcal : f_kcal
+		        });
+		    });
+			
+		    formData.append('formattedDate', formattedDate);
+		    formData.append('additionalData', JSON.stringify(additionalData));
+
 		    $.ajax({
-		        url: "/foodData",
-		        method: "post",
-		        data: {
-		            data: data
-		        },
-		        dataType: "json",
-		        success: function(json) {
-		        	console.log(json)
-		            if (json.f_name !== null) {
-		                let result = "";
-		                let totalKcal = 0;
-		                $(json).each(function(index, item) {
-		                    result += "<table>";
-		                    result += "<tr>";
-		                    result += "<td>" + item.f_name + "</td>";
-		                    result += "<td>" + item.f_carbohydrate_g + "</td>";
-		                    result += "<td>" + item.f_protein_g + "</td>";
-		                    result += "<td>" + item.f_fat_g + "</td>";
-		                    result += "<td>" + item.f_cholesterol_mg + "</td>";
-		                    result += "<td>" + item.f_sodium_mg + "</td>";
-		                    result += "<td>" + item.f_sugar_g + "</td>";
-		                    result += "<td>" + item.f_kcal + "</td>";
-		                    result += "</tr>";
-		                    result += "</table>";
-		                });
-		                $('#foodComent1').html(result); 
-		                $('#foodName1').val('');
+		        url : url,
+		        type : 'post',
+		        data : formData,
+		        processData: false,
+		        contentType: false,
+		        dataType : 'json',
+		        success : function(json){
+		            console.log('아침 클릭 '+json);
+		            if(json.flag == '1'){
+		                alert('등록 성공입니다.');
+		                // 등록 성공 후 div 제거
+		                $('#' + resultFood).empty(); 
 		            } else {
-		                alert("데이터가 없습니다. 다시 입력해주세요!");
+		                alert('음식을 조회 후 등록 버튼을 눌러주세요!');
 		            }
 		        },
-		        error: function(e) {
-		            alert("에러 발생: " + e.status);
+		        error : function(e){
+		            alert('[에러]'+e.status);
 		        }
 		    });
-		});
+		} 
+		
+	//==================================================== 식단 메모 =================================================================
+	$('#searchButton1').click(function() {
+	    const data = $('#foodName1').val();
+	    console.log(data);
+	
+	    if (data === '') {
+	        alert('검색어를 입력해주세요!');
+	        return;
+	    }
+	    
+	    $.ajax({
+	        url: "/foodData",
+	        method: "post",
+	        data: {
+	            data: data
+	        },
+	        dataType: "json",
+	        success: function(json) {
+	            console.log(json);
+	            if (json.length > 0) {
+	                let result = "<table>";
+	                $(json).each(function(index, item) {
+	                    result += "<tr class='selectable-row'>";
+	                    result += "<td><input type='checkbox' class='select-checkbox'></td>";
+	                    result += "<td>" + item.f_name + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_carbohydrate_g + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_protein_g + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_fat_g + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_cholesterol_mg + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_sodium_mg + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_sugar_g + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_kcal + "</td>";
+	                    result += "</tr>";
+	                });
+	                result += "</table>";
+	                $('#foodComent1').html(result);
+	                $('#foodName1').val('');
+	                // 선택 가능한 행에 클릭 이벤트 추가
+	                $('.selectable-row').click(function() {
+	                    $(this).toggleClass('selected');
+	                });
+	            } else {
+	                alert("데이터가 없습니다. 다시 입력해주세요!");
+	            }
+	        },
+	        error: function(e) {
+	            alert("에러 발생: " + e.status);
+	        }
+	    });
+	});
 		
 		$("#dialogContainer1").dialog({
 		    autoOpen: false,
@@ -125,487 +222,68 @@ pageEncoding="UTF-8"%>
 		        '취소': function() {
 		            $(this).dialog('close');
 		        },
-		        "확인": function() {
-		            // 아침 데이터를 선택한 후 확인 버튼을 클릭했을 때의 동작 처리
-		            // 예를 들어, 선택한 아침 데이터의 정보를 가져와서 다른 곳에 표시하거나 서버에 전송하는 등의 작업 수행
-		            let selectedData = [];
-		            $('#foodComent1 table').each(function() {
-		                let rowData = [];
-		                $(this).find('td').each(function() {
-		                    rowData.push($(this).text());
-		                });
-		                selectedData.push(rowData);
-		            });
-
-		            let result = '<div id="generated-div-' + divId + '">';
-		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-		            result += '<div>';
-		            result += '<table>';
-		            result += '<thead>';
-		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/><button class="delete-btn" data-target="generated-div-' + divId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
-		            result += '</tr>';
-		            result += '</thead>';
-		            result += '</table>';
-		            result += '</div>';
-		            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-		            result += '<thead></thead>';
-		            result += '<tbody>';
-		            result += '<tr>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][1] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][2] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][3] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][4] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][5] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][6] + '"/></td>';
-		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][7] + '"/></td>';
-		            result += '</tr>';
-		            result += '</tbody>';
-		            result += '</table>';
-		            result += '</div>';
-// 		            let result = '<div id="#">';
-// 		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-// 		            result += '<div>';
-// 		            result += '<table>';
-// 		            result += '<thead>';
-// 		            result += '<tr>';
-// 		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/></td>';
-// 		            result += '</tr>';
-// 		            result += '</thead>';
-// 		            result += '</table>';
-// 		            result += '</div>';
-// 		            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-// 		            result += '<thead></thead>';
-// 		            result += '<tbody>';
-// 		            result += '<tr>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][1] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][2] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][3] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][4] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][5] + '"/></td>';
-// 		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][6] + '"/></td>';
-// 		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name = "f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][7] + '"/></td>';
-// 		            result += '</tr>';
-// 		            result += '</tbody>';
-// 		            result += '</table>';
-// 		            result += '</div>';
-		         	// 선택한 데이터를 결과 div에 추가
-		            $('#resultFood1').append(result); 
+				"확인": function() {
 					
-		            divId++;
-		         	
-		            $(this).dialog("close");
+					if ($('.select-checkbox:checked').length == 0) {
+		                alert('해당 음식을 체크 누른 후 확인을 눌러주세요!');
+		                return false;
+		            }
+					
+				    let selectedData = [];
+				    $('.select-checkbox:checked').each(function() {
+				        let rowData = [];
+				        $(this).closest('tr').find('td').each(function() {
+				            rowData.push($(this).text());
+				        });
+				        selectedData.push(rowData);
+				    });
+				
+				    if (selectedData.length > 0) {
+				        selectedData.forEach(function(dataRow) {
+				            let rowId = "generated-div-" + divId;
+				            let result = '<div id="' + rowId + '" class="row-div">';
+				            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+				            result += '<div>';
+				            result += '<table>';
+				            result += '<thead>';
+				            result += '<tr>';
+				            result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
+				            result += '</tr>';
+				            result += '</thead>';
+				            result += '</table>';
+				            result += '</div>';
+				            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
+				            result += '<thead></thead>';
+				            result += '<tbody>';
+				            result += '<tr>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
+		                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
+		                    result += '</tr>';
+		                    result += '</tbody>';
+		                    result += '</table>';
+		                    result += '</div>';
+		                    result += '</div>';
+		                    $('#resultFood1').append(result);
+		                    divId++;
+		                });
+				        $('#foodComent1').empty();
+				        $('.select-checkbox').prop('checked', false);
+		                $(this).dialog("close");
+		            }
 		        }
 		    }
 		});
-		
-		
-		$('#fbtn1').on('click',function(){
-			
-	        let formData = new FormData($('form')[0]);
-	        let additionalData = [];
-	        
-	        if ($('#resultFood1').children().length === 0) {
-	            alert('음식을 조회 후 등록 버튼을 눌러주세요!');
-	            return; // 함수 실행 종료
-	        }
-	        
-	        $('#resultFood1 > div').each(function() {
-	            let f_name = $(this).find('input[name="f_name"]').val();
-	            let f_carbohydrate_g = $(this).find('input[name="f_carbohydrate_g"]').val();
-	            let f_protein_g = $(this).find('input[name="f_protein_g"]').val();
-	            let f_fat_g = $(this).find('input[name="f_fat_g"]').val();
-	            let f_cholesterol_mg = $(this).find('input[name="f_cholesterol_mg"]').val();
-	            let f_sodium_mg = $(this).find('input[name="f_sodium_mg"]').val();
-	            let f_sugar_g = $(this).find('input[name="f_sugar_g"]').val();
-	            let f_kcal = $(this).find('input[name="f_kcal"]').val();
-	            additionalData.push({
-	                f_name: f_name,
-	                f_carbohydrate_g: f_carbohydrate_g,
-	                f_protein_g : f_protein_g,
-	                f_fat_g : f_fat_g,
-	                f_cholesterol_mg : f_cholesterol_mg,
-	                f_sodium_mg : f_sodium_mg,
-	                f_sugar_g : f_sugar_g,
-	                f_kcal : f_kcal
-	            });
-	        });
-
-	        formData.append('additionalData', JSON.stringify(additionalData));
-	        
-	        
-	        $.ajax({
-	            url : '/breakfastFoodData',
-	            type : 'post',
-	            data : formData,
-	            processData: false,
-	            contentType: false,
-	            dataType : 'json',
-	            success : function(json){
-	                console.log('아침 클릭 '+json);
-	                if(json.flag == '1'){
-	                	alert('등록 성공입니다.');
-	                	// 등록 성공 후 div 제거
-	                    $('#resultFood1').empty();
-	                } else {
-	                	alert('음식을 조회 후 등록 버튼을 눌러주세요!');
-	                }
-	            },
-	            error : function(e){
-	                alert('[에러]'+e.status);
-	            }
-	        });
-	    }); 
-		
 		
 		$( '#btn1' ).button().on( 'click', function() {
 			$( '#dialogContainer1' ).dialog( 'open' ); 
 		});
 
-		//=========================================================================================================================
-		
-			
-		//================================================ 점심 =====================================================================
-		
-		$('#searchButton2').click(function() {
-		    const data = $('#foodName2').val();
-		    console.log(data);
-			
-		    if (data === '') {
-		        alert('검색어를 입력해주세요!');
-		        return; 
-		   	}
-
-		    
-		    $.ajax({
-		        url: "/foodData",
-		        method: "post",
-		        data: {
-		            data: data
-		        },
-		        dataType: "json",
-		        success: function(json) {
-		        	console.log(json)
-		            if (json.f_name !== null) {
-		                let result = "";
-		                let totalKcal = 0;
-		                $(json).each(function(index, item) {
-		                    result += "<table>";
-		                    result += "<tr>";
-		                    result += "<td>" + item.f_name + "</td>";
-		                    result += "<td>" + item.f_carbohydrate_g + "</td>";
-		                    result += "<td>" + item.f_protein_g + "</td>";
-		                    result += "<td>" + item.f_fat_g + "</td>";
-		                    result += "<td>" + item.f_cholesterol_mg + "</td>";
-		                    result += "<td>" + item.f_sodium_mg + "</td>";
-		                    result += "<td>" + item.f_sugar_g + "</td>";
-		                    result += "<td>" + item.f_kcal + "</td>";
-		                    result += "</tr>";
-		                    result += "</table>";
-		                });
-		                $('#foodComent2').html(result); 
-		                $('#foodName2').val('');
-		            } else {
-		                alert("데이터가 없습니다. 다시 입력해주세요!");
-		            }
-		        },
-		        error: function(e) {
-		            alert("에러 발생: " + e.status);
-		        }
-		    });
-		});
-
-		
-		$("#dialogContainer2").dialog({
-		    autoOpen: false,
-		    modal: true,
-		    width: 350,
-		    height: 400,
-		    buttons: {
-		        '취소': function() {
-		            $(this).dialog('close');
-		        },
-		        "확인": function() {
-		            // 아침 데이터를 선택한 후 확인 버튼을 클릭했을 때의 동작 처리
-		            // 예를 들어, 선택한 아침 데이터의 정보를 가져와서 다른 곳에 표시하거나 서버에 전송하는 등의 작업 수행
-		            let selectedData = [];
-		            $('#foodComent2 table').each(function() {
-		                let rowData = [];
-		                $(this).find('td').each(function() {
-		                    rowData.push($(this).text());
-		                });
-		                selectedData.push(rowData);
-		            });
-
-		            let result = '<div id="generated-div-' + divId + '">';
-		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-		            result += '<div>';
-		            result += '<table>';
-		            result += '<thead>';
-		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/><button class="delete-btn" data-target="generated-div-' + divId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
-		            result += '</tr>';
-		            result += '</thead>';
-		            result += '</table>';
-		            result += '</div>';
-		            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-		            result += '<thead></thead>';
-		            result += '<tbody>';
-		            result += '<tr>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][1] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][2] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][3] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][4] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][5] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][6] + '"/></td>';
-		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name = "f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][7] + '"/></td>';
-		            result += '</tr>';
-		            result += '</tbody>';
-		            result += '</table>';
-		            result += '</div>';
-		         	// 선택한 데이터를 결과 div에 추가
-		            $('#resultFood2').append(result); 
-					
-					divId++;		            
-		            
-		            $(this).dialog("close");
-		        }
-		    }
-		}); 
-		
-		$('#fbtn2').on('click',function(){
-			
-	        let formData = new FormData($('form')[0]);
-	        let additionalData = [];
-	        
-	        if ($('#resultFood2').children().length === 0) {
-	            alert('음식을 조회 후 등록 버튼을 눌러주세요!');
-	            return; // 함수 실행 종료
-	        }
-	        
-	        $('#resultFood2 > div').each(function() {
-	            let f_name = $(this).find('input[name="f_name"]').val();
-	            let f_carbohydrate_g = $(this).find('input[name="f_carbohydrate_g"]').val();
-	            let f_protein_g = $(this).find('input[name="f_protein_g"]').val();
-	            let f_fat_g = $(this).find('input[name="f_fat_g"]').val();
-	            let f_cholesterol_mg = $(this).find('input[name="f_cholesterol_mg"]').val();
-	            let f_sodium_mg = $(this).find('input[name="f_sodium_mg"]').val();
-	            let f_sugar_g = $(this).find('input[name="f_sugar_g"]').val();
-	            let f_kcal = $(this).find('input[name="f_kcal"]').val();
-	            additionalData.push({
-	                f_name: f_name,
-	                f_carbohydrate_g: f_carbohydrate_g,
-	                f_protein_g : f_protein_g,
-	                f_fat_g : f_fat_g,
-	                f_cholesterol_mg : f_cholesterol_mg,
-	                f_sodium_mg : f_sodium_mg,
-	                f_sugar_g : f_sugar_g,
-	                f_kcal : f_kcal
-	            });
-	        });
-
-	        formData.append('additionalData', JSON.stringify(additionalData));
-	        
-	        
-	        $.ajax({
-	            url : '/lunchFoodData',
-	            type : 'post',
-	            data : formData,
-	            processData: false,
-	            contentType: false,
-	            dataType : 'json',
-	            success : function(json){
-	                console.log('점심에대한 '+json);
-	                if(json.flag == '1'){
-	                	alert('등록 성공입니다.');
-	                	// 등록 성공 후 div 제거
-	                    $('#resultFood2').empty();
-	                } else {
-	                	alert('음식을 조회 후 등록 버튼을 눌러주세요!');
-	                }
-	            },
-	            error : function(e){
-	                alert('[에러]'+e.status);
-	            }
-	        });
-	    });
-		
-		$( '#btn2' ).button().on( 'click', function() {
-			$( '#dialogContainer2' ).dialog( 'open' ); 
-		});
-		
-		//=========================================================================================================================
-
-		//================================================ 저녁 =====================================================================
-			
-		// 저녁의 데이터 검색 Ajax 구문
-		$('#searchButton3').click(function() {
-		    const data = $('#foodName3').val();
-		    console.log(data);
-			
-		    if (data === '') {
-		        alert('검색어를 입력해주세요!');
-		        return; 
-		   	}
-		    
-		    $.ajax({
-		        url: "/foodData",
-		        method: "post",
-		        data: {
-		            data: data
-		        },
-		        dataType: "json",
-		        success: function(json) {
-		        	console.log(json)
-		            if (json.f_name !== null) {
-		                let result = "";
-		                let totalKcal = 0;
-		                $(json).each(function(index, item) {
-		                    result += "<table>";
-		                    result += "<tr>";
-		                    result += "<td>" + item.f_name + "</td>";
-		                    result += "<td>" + item.f_carbohydrate_g + "</td>";
-		                    result += "<td>" + item.f_protein_g + "</td>";
-		                    result += "<td>" + item.f_fat_g + "</td>";
-		                    result += "<td>" + item.f_cholesterol_mg + "</td>";
-		                    result += "<td>" + item.f_sodium_mg + "</td>";
-		                    result += "<td>" + item.f_sugar_g + "</td>";
-		                    result += "<td>" + item.f_kcal + "</td>";
-		                    result += "</tr>";
-		                    result += "</table>";
-		                });
-		                $('#foodComent3').html(result); 
-		                $('#foodName3').val('');
-		            } else {
-		                alert("데이터가 없습니다. 다시 입력해주세요!");
-		            }
-		        },
-		        error: function(e) {
-		            alert("에러 발생: " + e.status);
-		        }
-		    });
-		});
-		
-		$("#dialogContainer3").dialog({
-		    autoOpen: false,
-		    modal: true,
-		    width: 350,
-		    height: 400,
-		    buttons: {
-		        '취소': function() {
-		            $(this).dialog('close');
-		        },
-		        "확인": function() {
-		            // 아침 데이터를 선택한 후 확인 버튼을 클릭했을 때의 동작 처리
-		            // 예를 들어, 선택한 아침 데이터의 정보를 가져와서 다른 곳에 표시하거나 서버에 전송하는 등의 작업 수행
-		            let selectedData = [];
-		            $('#foodComent3 table').each(function() {
-		                let rowData = [];
-		                $(this).find('td').each(function() {
-		                    rowData.push($(this).text());
-		                });
-		                selectedData.push(rowData);
-		            });
-
-		            let result = '<div id="generated-div-' + divId + '">';
-		            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-		            result += '<div>';
-		            result += '<table>';
-		            result += '<thead>';
-		            result += '<tr>';
-		            result += '<td"><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][0] + '"/><button class="delete-btn" data-target="generated-div-' + divId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
-		            result += '</tr>';
-		            result += '</thead>';
-		            result += '</table>';
-		            result += '</div>';
-		            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-		            result += '<thead></thead>';
-		            result += '<tbody>';
-		            result += '<tr>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][1] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][2] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][3] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][4] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][5] + '"/></td>';
-		            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name = "f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][6] + '"/></td>';
-		            result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name = "f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + selectedData[0][7] + '"/></td>';
-		            result += '</tr>';
-		            result += '</tbody>';
-		            result += '</table>';
-		            result += '</div>'; 
-		         	// 선택한 데이터를 결과 div에 추가
-		            $('#resultFood3').append(result); 
-					
-					divId++;		            
-		            
-		            $(this).dialog("close");
-		        }
-		    }
-		}); 
-		
-		$('#fbtn3').on('click',function(){
-			
-	        let formData = new FormData($('form')[0]);
-	        let additionalData = [];
-	        
-	        if ($('#resultFood3').children().length === 0) {
-	            alert('음식을 조회 후 등록 버튼을 눌러주세요!');
-	            return; // 함수 실행 종료
-	        }
-	        
-	        $('#resultFood3 > div').each(function() {
-	            let f_name = $(this).find('input[name="f_name"]').val();
-	            let f_carbohydrate_g = $(this).find('input[name="f_carbohydrate_g"]').val();
-	            let f_protein_g = $(this).find('input[name="f_protein_g"]').val();
-	            let f_fat_g = $(this).find('input[name="f_fat_g"]').val();
-	            let f_cholesterol_mg = $(this).find('input[name="f_cholesterol_mg"]').val();
-	            let f_sodium_mg = $(this).find('input[name="f_sodium_mg"]').val();
-	            let f_sugar_g = $(this).find('input[name="f_sugar_g"]').val();
-	            let f_kcal = $(this).find('input[name="f_kcal"]').val();
-	            additionalData.push({
-	                f_name: f_name,
-	                f_carbohydrate_g: f_carbohydrate_g,
-	                f_protein_g : f_protein_g,
-	                f_fat_g : f_fat_g,
-	                f_cholesterol_mg : f_cholesterol_mg,
-	                f_sodium_mg : f_sodium_mg,
-	                f_sugar_g : f_sugar_g,
-	                f_kcal : f_kcal
-	            });
-	        });
-
-	        formData.append('additionalData', JSON.stringify(additionalData));
-	        
-	        
-	        $.ajax({
-	            url : '/dinnerFoodData',
-	            type : 'post',
-	            data : formData,
-	            processData: false,
-	            contentType: false,
-	            dataType : 'json',
-	            success : function(json){
-// 	                console.log('저녁 '+json);
-	                if(json.flag == '1'){
-	                	alert('등록 성공입니다.');
-	                	// 등록 성공 후 div 제거
-	                    $('#resultFood3').empty();
-	                } else {
-	                	alert('음식을 조회 후 등록 버튼을 눌러주세요!');
-	                }
-	            },
-	            error : function(e){
-	                alert('[에러]'+e.status);
-	            }
-	        });
-	    });
-		
-		$( '#btn3' ).button().on( 'click', function() {
-			$( '#dialogContainer3' ).dialog( 'open' ); 
-		});
-
-		//=========================================================================================================================
-	
+		//=========================================================================================================================	
 	});
 </script>
 
@@ -1151,27 +829,60 @@ pageEncoding="UTF-8"%>
         <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
         	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
 				<div class="flex items-center">
-			   		<h4 class="font-medium text-black dark:text-white mr-4">
-			    		아침
-			    	</h4>
-			    	<button id="btn1">
-			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-			    	</button>
-			    	<div style="display: flex; flex-direction: row;">
-						<button id="fbtn1" style="padding-left: 30px;">등록</buttoN>
+					<div>
+						<select id="mealSelect" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+							<option value="breakfast">아침</option>
+							<option value="lunch">점심</option>
+							<option value="dinner">저녁</option>
+						</select>
 					</div>
-			    	<div id="dialogContainer1" title="검색">
+					<button id="btn1">
+						<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
+					</button>
+					<div>
+						<!-- 날짜를 선택할 수 있는 입력 요소를 추가합니다. -->
+						<input type="text" id="datepicker" placeholder="날짜 선택" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+					</div>
+					<div>
+						<button id="submitMeal">등록</button>
+					</div>
+					<div id="dialogContainer1" title="검색">
 						<input type="text" id="foodName1" placeholder="검색어를 입력하세요">
 						<button id="searchButton1">검색</button>
 						<div id="foodComent1"></div>
 					</div>
 				</div>
 			</div>
+			<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+				<div class="flex items-center">
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-left: 50px; width: 650px;">
+			    		음식명
+			    	</label>
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 40px;">
+			    		탄수화물
+			    	</label>
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 40px;">
+			    		단백질
+			    	</label>
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 55px;">
+			    		지방
+			    	</label>
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 40px;">
+			    		콜레스토롤
+			    	</label>
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 50px;">
+			    		나트륨
+			    	</label>
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 50px;">
+			    		당
+			    	</label>
+			    	<label class="font-medium text-black dark:text-white mr-4">
+			    		칼로리
+			    	</label>
+				</div>
+			</div>
             <div class="flex flex-col gap-5.5 p-6.5">
             	<div>
-<!--            	<label class="mb-3 block font-medium text-sm text-black dark:text-white"> -->
-					<!-- Default Input -->
-<!--                </label> -->
 		            <form action="#" method="post" name="ffrm">
 						<input type="hidden" name="seq" id="seq" value="${seq}" />
 						<div id="resultFood1"></div>
@@ -1180,82 +891,7 @@ pageEncoding="UTF-8"%>
         	</div>
         </div>
         </div> 
-        <!-- =============================== 아침 끝 =========================== -->
-        
-        <!-- =============================== 점심 시작 =========================== -->
-        
-        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-
-        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-				<div class="flex items-center">
-			   		<h4 class="font-medium text-black dark:text-white mr-4">
-			    		점심
-			    	</h4>
-			    	<button id="btn2">
-			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-			    	</button>
-			    	<div style="display: flex; flex-direction: row;">
-						<button id="fbtn2" style="padding-left: 30px;">등록</buttoN>
-					</div>
-			    	<div id="dialogContainer2" title="검색">
-						<input type="text" id="foodName2" placeholder="검색어를 입력하세요">
-						<button id="searchButton2">검색</button>
-						<div id="foodComent2"></div>
-					</div>
-				</div>
-			</div>
-            <div class="flex flex-col gap-5.5 p-6.5">
-            	<div>
-		            <form action="#" method="post" name="ffrm">
-						<input type="hidden" name="seq" id="seq" value="${seq}" />
-						<div id="resultFood2"></div>
-					</form>
-	        	</div>
-        	</div>
-        </div>
-        
-        </div>
-        
-        <!-- =============================== 점심 끝 =========================== -->
-
-        <!-- =============================== 저녁 시작 =========================== -->
-        
-        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-
-        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-				<div class="flex items-center">
-			   		<h4 class="font-medium text-black dark:text-white mr-4">
-			    		저녁
-			    	</h4>
-			    	<button id="btn3">
-			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-			    	</button>
-			    	<div style="display: flex; flex-direction: row;">
-						<button id="fbtn3" style="padding-left: 30px;">등록</buttoN>
-					</div>
-			    	<div id="dialogContainer3" title="검색">
-						<input type="text" id="foodName3" placeholder="검색어를 입력하세요">
-						<button id="searchButton3">검색</button>
-						<div id="foodComent3"></div>
-					</div>
-				</div>
-			</div>
-            <div class="flex flex-col gap-5.5 p-6.5">
-            	<div>
-		            <form action="#" method="post" name="ffrm">
-						<input type="hidden" name="seq" id="seq" value="${seq}" />
-						<div id="resultFood3"></div>
-					</form>
-	        	</div>
-        	</div>
-        </div>
-        
-        </div>
-        
-        
-        <!-- =============================== 저녁 끝 =========================== -->
+        <!-- =============================== 식단메모 끝 =========================== -->
         
         <!-- =============================== div 끝 =========================== -->
 	  </main> 

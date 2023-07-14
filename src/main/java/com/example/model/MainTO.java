@@ -19,6 +19,8 @@ public class MainTO {
    private int m_seq;
    
    private BigDecimal  i_kcal ;   
+
+   private BigDecimal  i_weight ; 
    
    private BigDecimal i_carbohydrate_g;
    
