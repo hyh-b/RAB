@@ -300,17 +300,12 @@ public class MainController {
 
 	    //--------------------------------------------------
 
-	    
-	    //ModelAndView modelAndView = new ModelAndView();
-	    //modelAndView.setViewName("pie_chart_data");
-	    
 	   	return new ResponseEntity<String>(pieDatas.toString(), HttpStatus.OK);
 	  
 	}
 	
 	
 //---BarData---------------------------------------------------
-	
 		@RequestMapping("bar_chart_data")
 		public ResponseEntity<String> BarChartData(
 		Authentication authentication, ModelMap map, HttpServletRequest request, String mId,
@@ -319,7 +314,8 @@ public class MainController {
 			mId = authentication.getName(); // Retrieve the m_id of the authenticated user
 	        
 			MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
-	        
+	        			
+			///
 		    ArrayList<MainTO> bars = dao.BarChartData(seq , day);
 		    
 		    JsonArray BarDatas = new JsonArray(); 
@@ -352,7 +348,6 @@ public class MainController {
 
 		    //--------------------------------------------------
 
-		    
 		   	return new ResponseEntity<String>( BarDatas.toString(), HttpStatus.OK);
 		  
 		}
