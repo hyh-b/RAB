@@ -2,6 +2,23 @@
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="seq" value="${requestScope.seq}" />
+<c:set var="myto" value="${requestScope.myto}" />
+
+<c:set var="name" value="${myto.m_name}" />
+<c:set var="role" value="${myto.m_role}" />
+<c:set var="profilename" value="${myto.m_profilename}" />
+<c:set var="backgroundfilename" value="${myto.m_backgroundfilename}" />
+<c:set var="joinDate" value="${myto.m_join_date}" />
+<c:set var="tel" value="${myto.m_tel}" />
+<c:set var="height" value="${myto.m_height}" />
+<c:set var="weight" value="${myto.m_weight}" />
+<c:set var="targetCalorie" value="${myto.m_target_calorie}" />
+<c:set var="targetWeight" value="${myto.m_target_weight}" />
+<c:set var="birthday" value="${myto.m_birthday}" />
+<c:set var="id" value="${myto.m_id}" />
+<c:set var="mail" value="${myto.m_mail}" />
+
+ 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,27 +27,12 @@ pageEncoding="UTF-8"%>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mypage</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
- <c:set var="name" value="${myto.name}" />
- <c:set var="role" value="${myto.role}" />
- <c:set var="profilename" value="${myto.profilename}" />
- <c:set var="backgroundfilename" value="${myto.backgroundfilename}" />
- <c:set var="joinDate" value="${myto.joinDate}" />
- <c:set var="tel" value="${myto.tel}" />
- <c:set var="height" value="${myto.height}" />
- <c:set var="weight" value="${myto.weight}" />
- <c:set var="targetCalorie" value="${myto.targetCalorie}" />
- <c:set var="targetWeight" value="${myto.targetWeight}" />
- <c:set var="birthday" value="${myto.birthday}" />
- <c:set var="id" value="${myto.id}" />
- <c:set var="mail" value="${myto.mail}" />
-
-
 </head>
 
 <script type="text/javascript">
 function confirmDelete() {
 	  if ( confirm(" 탈퇴 후 복구가 불가능 합니다 정말 삭제하시겠습니까?") ) {
-	    location.href = "mypageDeleteOK.do?seq=${seq}";
+	    location.href = "mypageDeleteOK.do";
 	  }
 	}
 </script>
@@ -352,10 +354,11 @@ function confirmDelete() {
             ${name}
             </span>
             <span class="block text-xs font-medium">${role}</span>
+            
           </span>
 
           <span class="h-12 w-12 rounded-full">
-            <img src="src/images/upload/${profilename}" />
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" />
           </span>
 
           <svg
@@ -454,7 +457,7 @@ function confirmDelete() {
 
               <nav>
                 <ol class="flex items-center gap-2">
-                  <li><a class="font-medium" href="main.do?seq=${seq}">main /</a></li>
+                  <li><a class="font-medium" href="main.do">main /</a></li>
                   <li class="text-primary">Profile</li>
                 </ol>
               </nav>
@@ -466,7 +469,7 @@ function confirmDelete() {
               class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div class="relative z-20 h-35 md:h-65">
 <!--  배사 파일명 -->
-                <img src="src/images/upload/${backgroundfilename}" alt="profile cover"
+                <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${backgroundfilename}" alt="profile cover"
                   class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
                
                 </div>
@@ -476,7 +479,7 @@ function confirmDelete() {
                   class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
                   <div class="relative drop-shadow-2">
 <!--  프사  -->
-                    <img src="src/images/upload/${profilename}" alt="profile" />
+                    <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="profile" />
                   </div>
                 </div>
 <!--  마이페이지  -->                
@@ -487,7 +490,7 @@ function confirmDelete() {
                   <p class="font-medium">${joinDate} 가입</p>
                   <div class="mx-auto max-w-180">
                   
-             <form action="./mypage.do?seq=${seq}" method="post" name="wfrm" >
+             <form action="./mypage.do" method="post" name="wfrm" >
               <div class="p-7">
                       <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                         <div class="w-full sm:w-1/2">
@@ -534,7 +537,7 @@ function confirmDelete() {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="takeKcal" id="takeKcal" 
-						   value="<c:out value='${height}'/>" readonly />
+						   value="${height}" readonly />
 						    <img src="src/images/logo/cm.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -656,7 +659,7 @@ function confirmDelete() {
 		  <!-- 정보 수정 버튼 -->
 		  <button id="editButton"
 		    class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-		    onclick="location.href='mypageModify.do?seq=${seq}'">
+		    onclick="location.href='mypageModify.do'">
 		    정보 수정
 		  </button>
 		  
