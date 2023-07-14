@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,11 @@ import com.example.model.FoodTO;
 import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
 import com.example.security.CustomUserDetails;
+
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+
 
 @RestController
 public class FoodController {
@@ -114,13 +120,26 @@ public class FoodController {
 	@RequestMapping("/breakfastFoodData")
 	public Map<String, Object> breakfastFoodData(HttpServletRequest request) {
 	    System.out.println(request.getParameter("seq"));
-	    
+
 	    // 추가 데이터 처리
 	    String additionalDataJson = request.getParameter("additionalData");
 	    if (additionalDataJson != null) {
 	        try {
 	            JSONArray additionalDataArray = new JSONArray(additionalDataJson);
 	            Map<String, Object> response = new HashMap<>();
+
+	            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	            String b_dayStr = request.getParameter("formattedDate"); 
+	            Date b_day = null;
+
+	            if (b_dayStr != null) {
+	                try {
+	                    b_day = formatter.parse(b_dayStr);
+	                } catch (ParseException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+
 	            for (int i = 0; i < additionalDataArray.length(); i++) {
 	                JSONObject additionalData = additionalDataArray.getJSONObject(i);
 	                String f_name = additionalData.getString("f_name");
@@ -133,18 +152,22 @@ public class FoodController {
 	                BigDecimal f_sodium_mg = new BigDecimal(additionalData.getString("f_sodium_mg"));
 	                
 	                // 추가 데이터를 활용하여 새로운 BreakfastTO 객체 생성 후 DB에 저장
-	                BreakfastTO additionalTO = new BreakfastTO();
-	                additionalTO.setM_seq(Integer.parseInt(request.getParameter("seq")));
-	                additionalTO.setB_name(f_name);
-	                additionalTO.setB_kcal(f_kcal);
-	                additionalTO.setB_carbohydrate_g(f_carbohydrate_g);
-	                additionalTO.setB_protein_g(f_protein_g);
-	                additionalTO.setB_fat_g(f_fat_g);
-	                additionalTO.setB_sugar_g(f_sugar_g);
-	                additionalTO.setB_cholesterol_mg(f_cholesterol_mg);
-	                additionalTO.setB_sodium_mg(f_sodium_mg);
+	                BreakfastTO bto = new BreakfastTO();
+	                bto.setM_seq(Integer.parseInt(request.getParameter("seq")));
+	                bto.setB_name(f_name);
+	                bto.setB_kcal(f_kcal);
+	                bto.setB_carbohydrate_g(f_carbohydrate_g);
+	                bto.setB_protein_g(f_protein_g);
+	                bto.setB_fat_g(f_fat_g);
+	                bto.setB_sugar_g(f_sugar_g);
+	                bto.setB_cholesterol_mg(f_cholesterol_mg);
+	                bto.setB_sodium_mg(f_sodium_mg);
+	                bto.setB_day(b_day);  // set the parsed date
 	                
-	                int flag = bdao.insertBreakfast(additionalTO);
+	                
+	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
+	                
+	                int flag = bdao.insertBreakfast(bto);
 	                response.put("flag", flag);
 	            }
 	            
@@ -154,8 +177,9 @@ public class FoodController {
 	            e.printStackTrace();
 	        }
 	    }
-		return null;
+	    return null;
 	}
+
 	
 	// 점심 ajax 구문
 	@RequestMapping("/lunchFoodData")
@@ -168,6 +192,21 @@ public class FoodController {
 			try {
 				JSONArray additionalDataArray = new JSONArray(additionalDataJson);
 				Map<String, Object> response = new HashMap<>();
+				
+				
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	            String l_dayStr = request.getParameter("formattedDate"); 
+	            Date l_day = null;
+
+	            if (l_dayStr != null) {
+	                try {
+	                	l_day = formatter.parse(l_dayStr);
+	                } catch (ParseException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+				
+				
 				for (int i = 0; i < additionalDataArray.length(); i++) {
 					JSONObject additionalData = additionalDataArray.getJSONObject(i);
 					String l_name = additionalData.getString("f_name");
@@ -180,18 +219,18 @@ public class FoodController {
 					BigDecimal l_sodium_mg = new BigDecimal(additionalData.getString("f_sodium_mg"));
 					
 					// 추가 데이터를 활용하여 새로운 BreakfastTO 객체 생성 후 DB에 저장
-					LunchTO additionalTO = new LunchTO();
-					additionalTO.setM_seq(Integer.parseInt(request.getParameter("seq")));
-					additionalTO.setL_name(l_name);
-					additionalTO.setL_kcal(l_kcal);
-					additionalTO.setL_carbohydrate_g(l_carbohydrate_g);
-					additionalTO.setL_protein_g(l_protein_g);
-					additionalTO.setL_fat_g(l_fat_g);
-					additionalTO.setL_sugar_g(l_sugar_g);
-					additionalTO.setL_cholesterol_mg(l_cholesterol_mg);
-					additionalTO.setL_sodium_mg(l_sodium_mg);
-					
-					int flag = ldao.insertLunchData(additionalTO);
+					LunchTO lto = new LunchTO();
+					lto.setM_seq(Integer.parseInt(request.getParameter("seq")));
+					lto.setL_name(l_name);
+					lto.setL_kcal(l_kcal);
+					lto.setL_carbohydrate_g(l_carbohydrate_g);
+					lto.setL_protein_g(l_protein_g);
+					lto.setL_fat_g(l_fat_g);
+					lto.setL_sugar_g(l_sugar_g);
+					lto.setL_cholesterol_mg(l_cholesterol_mg);
+					lto.setL_sodium_mg(l_sodium_mg);
+					lto.setL_day(l_day);
+					int flag = ldao.insertLunchData(lto);
 					response.put("flag", flag);
 				}
 				
@@ -215,6 +254,19 @@ public class FoodController {
 			try {
 				JSONArray additionalDataArray = new JSONArray(additionalDataJson);
 				Map<String, Object> response = new HashMap<>();
+				
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	            String d_dayStr = request.getParameter("formattedDate"); 
+	            Date d_day = null;
+
+	            if (d_dayStr != null) {
+	                try {
+	                	d_day = formatter.parse(d_dayStr);
+	                } catch (ParseException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+				
 				for (int i = 0; i < additionalDataArray.length(); i++) {
 					JSONObject additionalData = additionalDataArray.getJSONObject(i);
 					String d_name = additionalData.getString("f_name");
@@ -227,18 +279,19 @@ public class FoodController {
 					BigDecimal d_sodium_mg = new BigDecimal(additionalData.getString("f_sodium_mg"));
 					
 					// 추가 데이터를 활용하여 새로운 BreakfastTO 객체 생성 후 DB에 저장
-					DinnerTO additionalTO = new DinnerTO();
-					additionalTO.setM_seq(Integer.parseInt(request.getParameter("seq")));
-					additionalTO.setD_name(d_name);
-					additionalTO.setD_kcal(d_kcal);
-					additionalTO.setD_carbohydrate_g(d_carbohydrate_g);
-					additionalTO.setD_protein_g(d_protein_g);
-					additionalTO.setD_fat_g(d_fat_g);
-					additionalTO.setD_sugar_g(d_sugar_g);
-					additionalTO.setD_cholesterol_mg(d_cholesterol_mg);
-					additionalTO.setD_sodium_mg(d_sodium_mg);
+					DinnerTO dto = new DinnerTO();
+					dto.setM_seq(Integer.parseInt(request.getParameter("seq")));
+					dto.setD_name(d_name);
+					dto.setD_kcal(d_kcal);
+					dto.setD_carbohydrate_g(d_carbohydrate_g);
+					dto.setD_protein_g(d_protein_g);
+					dto.setD_fat_g(d_fat_g);
+					dto.setD_sugar_g(d_sugar_g);
+					dto.setD_cholesterol_mg(d_cholesterol_mg);
+					dto.setD_sodium_mg(d_sodium_mg);
+					dto.setD_day(d_day);
 					
-					int flag = ddao.insertDinnerData(additionalTO);
+					int flag = ddao.insertDinnerData(dto);
 					response.put("flag", flag);
 				}
 				
