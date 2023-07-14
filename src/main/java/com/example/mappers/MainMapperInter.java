@@ -19,6 +19,7 @@ public interface MainMapperInter {
    @Select("SELECT m.*, i.i_kcal, i.i_weight, i.i_day, i.i_used_kcal FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_id = #{mId} and i.i_day= curdate();")
    public List<MainTO> DefaultDataForMain(String mId);
 	
+   	//달력값기준으로 4elements에 쿼리 전달
 	@Select("SELECT m.*, i.i_kcal, i.i_weight, i.i_day, i.i_used_kcal FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_id = #{id} and i.i_day= #{i_day};")
 	public List<MainTO> DataFromDateForMain(@Param("id") String id, @Param("i_day") String i_day);
 
@@ -26,7 +27,8 @@ public interface MainMapperInter {
     @Insert("INSERT INTO IntakeData (m_seq) SELECT m.m_seq FROM Member m LEFT JOIN IntakeData i ON m.m_seq = i.m_seq WHERE i.m_seq IS NULL AND m.m_id = #{mId} LIMIT 1;")
     public int InsertDataForMain(String mId);
     
-    //음식 칼로리, 영양분 for charts
+    
+    //Default음식 칼로리, 영양분 for charts
     @Select("SELECT * FROM Breakfast WHERE b_day = '2023-07-08' AND m_seq = 30 UNION ALL SELECT * FROM Lunch WHERE l_day = '2023-07-08' AND m_seq = 30 UNION ALL SELECT * FROM Dinner WHERE d_day = '2023-07-08' AND m_seq = 30;")
     public List<MainTO> FoodData();
     
