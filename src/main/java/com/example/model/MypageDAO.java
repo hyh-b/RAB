@@ -12,9 +12,7 @@ import com.example.mappers.MypageMapperInter;
 @MapperScan("com.example.mappers")
 public class MypageDAO {
 
-	
 	 @Autowired private MypageMapperInter mapper;
-	 
 
 	public MypageTO Mypage(MypageTO to) {
 		to = mapper.mypage(to);

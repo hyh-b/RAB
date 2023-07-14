@@ -25,8 +25,6 @@
    
 <c:set var="seq" value="${requestScope.seq}" />
 
- 
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
   <!-- jstl 로 lists 받아옴 -->
  <c:forEach var="item" items="${lists}">
@@ -51,6 +49,11 @@
    <c:set var="m_name" value="${item.m_name}" />       				     
 </c:forEach>
 
+ 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+  
 <script>
 
 //----------------------함수-----------------------------
@@ -66,6 +69,8 @@
     		loadDataFromDate();
     
     		PieDataForDate();
+    		
+    		BarChartForDate();
 
 		});
 
@@ -77,7 +82,8 @@
 
 		function loadDataFromDate() {
 	
-			var zzinid = $("#zzinid").val();
+			//var zzinid = $("#zzinid").val();
+			var zzinseq = $("#zzinseq").val();
 			selectedDate = $("#calendarCtInput").val();
 	
 			//console.log( " loadDataFromDate() id ->", zzinid );
@@ -88,8 +94,8 @@
       		dataType: 'json',
       		
       		data: {
-         		i_day: selectedDate,
-         		id: zzinid
+         		day: selectedDate,
+         		seq: zzinseq
       		},
       
       		success: function (elements) {
@@ -168,24 +174,27 @@
 	
 		function PieDataForDate() {
 		
-			var zzinid = $("#zzinid").val();
+			//var zzinid = $("#zzinid").val();
+			var zzinseq = $("#zzinseq").val();
 			var selectedDate = $("#calendarCtInput").val();
 			
-			console.log( " pie 함수에서 zzinid -> ", zzinid); 
+			//console.log( " pie 함수에서 zzinid -> ", zzinid); 
 			console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
 
 			$.ajax({
 			url: "/pie_chart_data",
 			type: "GET",
 			data: {
-  				i_day: selectedDate,
-  				id: zzinid
+  				day: selectedDate,
+  				seq: zzinseq
 			},
 			success: function(pie) {
 				
-				console.log( " pie.영양소들 -> ", pie);
+				//console.log( " pie.영양소들 -> ", pie);
 				
 			 	var pies = JSON.parse(pie);
+			 	
+			 	//console.log( " pies.영양소들 -> ", pies);
 				
   				var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g
   					
@@ -201,7 +210,16 @@
   	                        height: 350,
   	                    },
   	                  	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
-  	                    responsive: [{
+  	                  dataLabels: {
+  	                    enabled: true,
+  	                    style: {
+  	                        colors: ['#FFA500', '#FF4500', '#008000'], // 각 라벨의 색상을 바꾸려면 여기를 변경하세요
+  	                        fontSize: '14px', // 폰트 크기를 바꾸려면 여기를 변경하세요
+  	                        fontFamily: 'Helvetica, Arial, sans-serif', // 폰트를 바꾸려면 여기를 변경하세요
+  	                    },
+  	                	
+  	                  },
+					  responsive: [{
   	                        breakpoint: 480,
   	                        options: {
   	                            chart: {
@@ -234,16 +252,164 @@
 	}	
 	//---pie 함수 끝--------------------------------------------------
 
+////////
 	//---bar 함수----------------------------------------------------
+	var barChart;
+
+	function BarChartForDate() {
+	  var selectedDate = $("#calendarCtInput").val();
+	  var zzinseq = $("#zzinseq").val();
+
+	  console.log("BarChartForDate 함수에서 zzinseq -> ", zzinseq);
+	  console.log("BarChartForDate 함수에서 selectedDate -> ", selectedDate);
+
+	  $.ajax({
+	    url: "/bar_chart_data",
+	    type: "GET",
+	    data: {
+	      day: selectedDate,
+	      seq: zzinseq
+	    },
+	    success: function(bar) {
+	      var bars = JSON.parse(bar);
+	      console.log(" bars.요소들 -> ", bars);
+	      console.log(" i_breakfast_kcal -> ", bars[0].i_breakfast_kcal);
+	      console.log(" i_lunch -> ", bars[0].i_lunch_kcal);
+	      console.log(" i_dinner -> ", bars[0].i_dinner_kcal);
+	      console.log(" i_day bar차트에서 -> ", bars[0].i_day);
+
+	      var BreakfastKcal = [];
+	      var LunchKcal = [];
+	      var DinnerKcal = [];
+	      var BarChartCategories = [];
+
+	      for (var i = 0; i < bars.length; i++) {
+	        var dateParts = bars[i].i_day.split(' ');
+	        var barMonth = dateParts[1].replace("월", '');
+	        var barDate = dateParts[2].replace("일", '');
+	        var barDay = dateParts[3];
+	        var BarDate = barMonth + '.' + barDate + ' ' + barDay;
+
+	        BarChartCategories.push(BarDate);
+	        BreakfastKcal.push(bars[i].i_breakfast_kcal);
+	        LunchKcal.push(bars[i].i_lunch_kcal);
+	        DinnerKcal.push(bars[i].i_dinner_kcal);
+	      }
+
+	      var barData = [
+	        { name: '아침', data: BreakfastKcal },
+	        { name: '점심', data: LunchKcal },
+	        { name: '저녁', data: DinnerKcal }
+	      ];
+
+	      var barOptions = {
+	        series: barData,
+	        chart: {
+	          type: 'bar',
+	          height: 350,
+	          stacked: true,
+	          toolbar: {
+	            show: true
+	          },
+	          zoom: {
+	            enabled: true
+	          }
+	        },
+	        responsive: [{
+	          breakpoint: 480,
+	          options: {
+	            legend: {
+	              position: 'bottom',
+	              offsetX: -10,
+	              offsetY: 0
+	            }
+	          }
+	        }],
+	        plotOptions: {
+	          bar: {
+	            horizontal: false,
+	            borderRadius: 10,
+	            dataLabels: {
+	              total: {
+	                enabled: true,
+	                style: {
+	                  fontSize: '13px',
+	                  fontWeight: 900
+	                }
+	              }
+	            }
+	          }
+	        },
+	        xaxis: {
+	          type: 'text',
+	          categories: BarChartCategories
+	        },
+	        legend: {
+	          position: 'top',
+	          horizontalAlign: 'center',
+	          offsetY: 10,
+	          markers: {
+	            radius: 12
+	          }
+	        },
+	        fill: {
+	          opacity: 1
+	        }
+	      };
+
+	      if (!barChart) {
+	        barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
+	        barChart.render();
+	      } else {
+	        barChart.updateOptions(barOptions);
+	        barChart.updateSeries(barData);
+	      }
+	    },
+	    error: function(e) {
+	      console.log("BarChartForDate에서 에러 ->", e);
+	    },
+	  });
+	}
+
+	
+	//---bar 함수 끝 -------------------------------------------------
+////////	
+	//---area 함수----------------------------------------------------
 	
 	
 	
-	//---bar 함수 끝 ----------------------------------------------------
+	//---area 함수 끝 -------------------------------------------------
+////////
+
+	//---line 함수----------------------------------------------------
 	
 	
 	
-	//--- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트----------------------------
-  $(document).ready(function() {
+	//---line 함수 끝 -------------------------------------------------
+////////
+
+	//---------------------------차트 함수화 끝------------------------------------------
+	
+	
+	
+	//---------------기본값으로 먼저 뿌려질 데이터 ( 기본값 , 정적 )----------------------------------------
+	
+		//$(document).ready(function() {
+    	// DOM이 완전히 로드된 후 실행할 코드
+    	//console.log("DOM이 완전히 로드되었습니다!");
+		//});
+	
+	
+	
+		//window.addEventListener("load", function() {
+   		// 이벤트로 따로 할당해서 documet.ready라 아예 구분시키기 시도
+   		//console.log("페이지와 모든 리소스가 로드되었습니다!");
+		//});
+	
+	//---------------기본값으로 먼저 뿌려질 데이터 끝----------------------------------------
+	
+//---------------------------- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트 ( 동적 )----------------------------
+ 	window.onload = function() {
 	   
 	//------------- ajax for charts -------------------------
       $.ajax({
@@ -265,67 +431,9 @@
         	// where PieChart used to place
 
 			/////////////////////////////////////////////////////
-    	  	var barOptions = {
-    	    	series: [
-    	      	{ name: '아침', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
-    	      	{ name: '점심', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
-    	      	{ name: '저녁', data: [ b_kcal_data[0], b_kcal_data[1], b_kcal_data[2], b_kcal_data[3], b_kcal_data[4], b_kcal_data[5], b_kcal_data[6]] },
-    	    	],
-    	    	chart: {
-    	      	type: 'bar',
-    	      	height: 350,
-    	      	stacked: true,
-    	      	toolbar: {
-    	        	show: true
-    	      	},
-    	      	zoom: {
-    	        	enabled: true
-    	      	}
-    	    	},
-    	    	responsive: [{
-    	      	breakpoint: 480,
-    	      	options: {
-    	        legend: {
-    	        position: 'bottom',
-    	        offsetX: -10,
-    	        offsetY: 0
-    	        }
-    	      }
-    	    }],
-    	    plotOptions: {
-    	      bar: {
-    	        horizontal: false,
-    	        borderRadius: 10,
-    	        dataLabels: {
-    	          total: {
-    	            enabled: true,
-    	            style: {
-    	              fontSize: '13px',
-    	              fontWeight: 900
-    	            }
-    	          }
-    	        }
-    	      },
-    	    },
-    	    xaxis: {
-    	      type: 'text',
-    	      categories: ['월', '화', '수', '목','금','토','일'],
-    	    },
-    	    legend: {
-    	      position: 'top',
-    	      horizontalAlign: 'center',
-    	      offsetY: 10,
-    	      markers: {
-    	        radius: 12
-    	      }
-    	    },
-    	    fill: {
-    	      opacity: 1
-    	    }
-    	  };
-    	  var barChart = new ApexCharts(document.querySelector("#chartstacked"), barOptions);
-    	  barChart.render();
-		 
+			
+			// where BarChart used to place
+			
     	  /////////////////////////////////////////////////////
     	  var areaOptions = {
     	    series: [{
@@ -405,7 +513,7 @@
         
       })
       
-      //-------------Default chart끝---------------------
+      //-------------------------------------------------------------------------------
 
    	  //--달력 라벨 밸류 항상 디폴트는 현재값을 전달-----------------------------------------------
 		var currentDate = new Date();
@@ -425,6 +533,68 @@
 		var selectedDate = formattedDate;
 		/////////////////////////////
 		
+		
+			
+	//---  몸무게 업데이트 다이얼로그----------------------
+	
+    // 오늘의 몸무게
+	$('#weightTodayDropdown').click(function(e) {
+  		e.preventDefault();
+  	$('#weightForToday').dialog('open');
+	});
+
+	// 목표 몸무게 재설정
+	$('#targetWeightUpdateDropdown').click(function(e) {
+  		e.preventDefault();
+  	$('#targetWeightUpdate').dialog('open');
+	});
+
+	// 오늘의 몸무게 다이얼로그 설정
+	$('#weightForToday').dialog({
+	  autoOpen: false,
+	  modal: true,
+	  buttons: {
+	    '업데이트': function() {
+	      var weight = $(this).find('#weightInput').val();
+	      if(weight === '' || isNaN(weight)) { // 숫자 형식이 아니거나 빈 문자열인 경우
+	        alert('숫자를 입력해주세요');
+	      } else {
+	        alert('오늘의 몸무게를 ' + weight +'로 등록에 성공했습니다.');
+	        $(this).dialog('close');
+	      }
+	    },
+	    '취소': function() {
+	      $(this).dialog('close');
+	    }
+	  },
+	  close: function() {
+	    $(this).find('#weightInput').val('');
+	  }
+	});
+
+	// 목표 몸무게 다이얼로그 설정
+	$('#targetWeightUpdate').dialog({
+	  autoOpen: false,
+	  modal: true,
+	  buttons: {
+	    '업데이트': function() {
+	      var weight = $(this).find('#TweightInput').val();
+	      if(weight === '' || isNaN(weight)) { // 숫자 형식이 아니거나 빈 문자열인 경우
+	        alert('숫자를 입력해주세요');
+	      } else {
+	        alert('목표 몸무게를 ' + weight +'로 업데이트 했습니다.');
+	        $(this).dialog('close');
+	      }
+	    },
+	    '취소': function() {
+	      $(this).dialog('close');
+	    }
+	  },
+	  close: function() {
+	    $(this).find('#TweightInput').val('');
+	  }
+	});
+		
 	//---함수등록 칸  ------------------ 바뀌는 날짜에 대해서 모든 데이터가 비도이적으로 처리됨-----------------------------------------
     $("#calendarCtInput").on("change", function() {
         	
@@ -435,12 +605,15 @@
             loadDataFromDate();
          
           	PieDataForDate();
+          	
+          	BarChartForDate();
             	
         });
+
         
-//////////////////  
-   }); //window.onload끝 
-/////////////////    
+//////
+  	};//window.onload끝 
+//////
 </script>
 
 
@@ -456,6 +629,7 @@
   >
   
   <input type="hidden" id="zzinid" value="${zzinid}" />
+  <input type="hidden" id="zzinseq" value="${zzinseq}" />
     <!-- ===== Preloader Start ===== -->
     <div
   x-show="loaded"
@@ -601,6 +775,7 @@
             </a>
           </li>
           <!-- Menu Item Profile2 -->
+       
 
           <!-- Menu Item Forms -->
 
@@ -626,6 +801,30 @@
             
      
           </li>
+          
+          <!--  마이페이지 li -->
+             
+           <li>
+            <a
+              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+
+              href="profile.do"
+              @click="selected = (selected === 'Profile' ? '':'Profile')"
+              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
+              :class="page === 'profile' && 'bg-graydark'"
+            >
+             <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="마이페이지.png"
+      			width="24"
+      			height="24"
+   			/>
+             	마이페이지
+            </a>
+          </li>
+          
+          <!--  -->
           
           <!-- Menu Item Tables -->
 		  <br/><br/>
@@ -739,6 +938,26 @@
     
     </div>
     <!--  검색 창  끝-->
+    
+ <!-- 오늘의 몸무게 업데이트 다이얼로그 -->
+ <div id="weightForToday" title="오늘의 몸무게">
+  <form>
+    <label for="weightInput">몸무게 입력:</label>
+    <input type="text" id="weightInput" class="text ui-widget-content">
+    <br>
+  </form>
+</div>
+    <!-- 오늘의 몸무게 업데이트 끝 -->
+    
+ <!-- 목표 몸무게 업데이트 다이얼로그 -->
+ <div id="targetWeightUpdate" title="목표 몸무게 재설정">
+  <form>
+    <label for="TeightInput">목표 몸무게 설정:</label>
+    <input type="text" id="TweightInput" class="text ui-widget-content">
+    <br>
+  </form>
+</div>
+    <!-- 목표 몸무게 업데이트 끝 -->
 
     <div class="flex items-center gap-3 2xsm:gap-7">
       <ul class="flex items-center gap-2 2xsm:gap-4">
@@ -860,7 +1079,47 @@
                 내 정보
               </a>
             </li>
+            
+             <li>
+             <div id="weightTodayDropdown">
+              <a
+                href=""
+                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              >
+               <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="비고.png"
+      			width="24"
+      			height="24"
+   			/>
+                오늘의 몸무게
+              </a>
+              </div>
+            </li>
+            
+             <li>
+             <div id="targetWeightUpdateDropdown">
+              <a
+                href=""
+                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              >
+               <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="비고.png"
+      			width="24"
+      			height="24"
+   			/>
+                목표 몸무게 재설정
+              </a>
+              </div>
+            </li>
+            
           </ul>
+          
+          
+          
           
           <button
             class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
@@ -1072,7 +1331,7 @@
               <!-- Card Item End -->
             </div>
 
-            <!-- ====== Chart One Start -->
+            <!-- ====== Chart Ones Start -->
             <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
             
 			<!--  스택 그래프 -->
@@ -1088,16 +1347,16 @@
 			</div>
 			
 			<!-- ===== 파이 그래프 시작 ====== -->	
-<div class="col-span-12 rounded-sm border border-stroke bg-white p-10 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-    <div class="mb-6 justify-center">
-        <div style="width: 100%; height: 100%; padding-bottom: 20px;"> <!-- 여기서 padding-bottom을 추가하여 그래프를 아래로 이동 -->
-            <h4 class="mb-10 text-xl font-bold text-black dark:text-white">
-                일일 섭취 영양 성분
-            </h4>
-            <div id="chart" class="mx-auto flex justify-center mt-2"></div>
-        </div>
-    </div>
-</div>
+			<div class="col-span-12 rounded-sm border border-stroke bg-white p-10 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
+			    <div class="mb-6 justify-center">
+			        <div style="width: 100%; height: 100%; padding-bottom: 5px;"> <!-- 여기서 padding-bottom을 추가하여 그래프를 아래로 이동 -->
+			            <h4 class="mb-10 text-xl font-bold text-black dark:text-white">
+			                일일 섭취 영양 성분
+			            </h4>
+			            <div id="chart" class="mx-auto flex justify-center mt-2"></div>
+			        </div>
+			    </div>
+			</div>
 
 
 
