@@ -2,8 +2,13 @@ package com.example.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,9 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +31,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.example.model.ExerciseAlbumDAO;
 import com.example.model.ExerciseAlbumTO;
+import com.example.model.ExerciseDAO;
+import com.example.model.ExerciseTO;
+import com.example.model.MypageTO;
+import com.example.model.matDAO;
+import com.example.model.matTO;
 import com.example.security.CustomUserDetails;
 import com.example.security.CustomUserDetailsService;
 import com.example.upload.S3FileUploadService;
@@ -33,10 +46,18 @@ public class ExerciseController {
 	//CustomUserDetailsService customUserDetailsService = new CustomUserDetailsService();
 	
 	@Autowired
-	ExerciseAlbumDAO eaDao;
+	private ExerciseAlbumDAO eaDao;
+	
+	@Autowired
+	private matDAO mDao;
+	
+	@Autowired
+	private ExerciseDAO eDao;
+	
 	// 프로퍼티에서 버킷 이름 할당
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
+	
 	//프로퍼티에서 지역 코드 할당
 	@Value("${cloud.aws.region.static}")
 	private String region;
@@ -66,7 +87,6 @@ public class ExerciseController {
 		ArrayList<ExerciseAlbumTO> eaLists = eaDao.exerciseAlbumList(m_seq);
 		// 버킷에 저장되어있는 url과 일치시키는 작업
 		String bucketUrl = "https://" +bucket+".s3."+ region + ".amazonaws.com/";
-		
 		// 이미지 슬라이더에 넣을 이미지파일
 		StringBuilder sbHtml = new StringBuilder();
 		for(ExerciseAlbumTO to : eaLists) {
@@ -92,6 +112,7 @@ public class ExerciseController {
 		modelAndView.addObject("abHtml",abHtml.toString());
 		return modelAndView; 
 	}
+	
 	// 이미지 업로드
 	@RequestMapping("/exerciseAlbum_ok.do")
 	public ModelAndView exerciseAlbum_ok(HttpServletRequest request, Authentication authentication, MultipartFile upload) {
@@ -127,6 +148,7 @@ public class ExerciseController {
 		modelAndView.addObject("flag",flag);
 		return modelAndView; 
 	}
+	
 	// 사진전체보기에서 이미지 파일 삭제
 	@RequestMapping(value="/album_delete.do", method=RequestMethod.POST)
 	public ResponseEntity<String> deleteImage(@RequestParam("aSeq") String aSeq) {
@@ -148,4 +170,160 @@ public class ExerciseController {
 	        return new ResponseEntity<String>("삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
+	
+	// 운동종목 검색
+	@RequestMapping("/searchExercise")
+	public List<matTO> searchExercise(@RequestParam String mat_name) {
+
+		return mDao.searchMat(mat_name);
+	}
+	
+	// 추가한 운동종목 db에 저장
+	@RequestMapping(value = "/exerciseAdd", method = RequestMethod.POST)
+	public ResponseEntity<String> addExercise(@RequestBody Map<String, List<String>> getEx, Authentication authentication) {
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		
+		String m_seq = customUserDetails.getM_seq();
+		
+		List<String> exercise = getEx.get("exercise");
+		
+		try {
+            for (String exerciseName : exercise) {
+                ExerciseTO to = new ExerciseTO();
+                to.setEx_name(exerciseName);
+                to.setM_seq(m_seq);  
+                eDao.addExercise_ok(to);
+            }
+            return new ResponseEntity<>("운동 추가 성공", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	}
+	// 추가한 사용자 설정운동 db에 저장
+	@RequestMapping(value = "/addCustomExercise", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, String>> addCustomExercise(@RequestBody Map<String, String> payload, Authentication authentication) {
+	    authentication = SecurityContextHolder.getContext().getAuthentication();
+	    Object principal = authentication.getPrincipal();
+	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+	    
+	    String m_seq = customUserDetails.getM_seq();
+
+	    ExerciseTO to = new ExerciseTO();
+	    to.setM_seq(m_seq);
+
+	    try {
+	        to.setEx_name(payload.get("ex_name"));
+	        to.setEx_time(Integer.parseInt(payload.get("ex_time")));
+	        to.setEx_used_kcal(new BigDecimal(payload.get("ex_used_kcal")));
+	    } catch (NumberFormatException e) {
+	        System.out.println("Invalid number format");
+	        return new ResponseEntity<>(Map.of("result", "Error"), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	    
+	    int result = eDao.addCustomExercise_ok(to);
+	    
+	    eDao.totalCalorie(m_seq);
+	    
+	    if(result > 0) {
+	        return new ResponseEntity<>(Map.of("result", "Success"), HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(Map.of("result", "Error"), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+	
+	// 운동칸에 당일 추가한 운동 보여주기
+	@RequestMapping("/viewExercise")
+    public List<Map<String, Object>> viewExercises(Authentication authentication,HttpServletRequest request) {
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		
+		String m_seq = customUserDetails.getM_seq();
+		
+		List<Map<String, Object>> responseList = new ArrayList<>();
+		// true, false로 운동과 사용자설정 운동 구분
+		List<ExerciseTO> exercises = eDao.viewExercise(false,m_seq);
+		
+		for(ExerciseTO to : exercises) {
+			Map<String, Object> response = new HashMap<>();
+			
+			String ex_name = to.getEx_name();
+			int ex_time = to.getEx_time();
+			BigDecimal ex_used_kcal = to.getEx_used_kcal();
+			
+			response.put("ex_name",ex_name);
+			response.put("ex_time",ex_time);
+			response.put("ex_used_kcal",ex_used_kcal);
+			
+			responseList.add(response);
+		}
+		return responseList;
+    }
+	
+	// 운동칸에 당일 추가한 사용자설정 운동 보여주기
+	@RequestMapping("/viewCustomExercise")
+    public List<Map<String, Object>> viewCustomExercises(Authentication authentication,HttpServletRequest request) {
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		
+		String m_seq = customUserDetails.getM_seq();
+		
+		List<Map<String, Object>> responseList = new ArrayList<>();
+		// true, false로 운동과 사용자설정 운동 구분
+		List<ExerciseTO> exercises = eDao.viewExercise(true,m_seq);
+		for(ExerciseTO to : exercises) {
+			Map<String, Object> response = new HashMap<>();
+			
+			String ex_name = to.getEx_name();
+			int ex_time = to.getEx_time();
+			BigDecimal ex_used_kcal = to.getEx_used_kcal();
+			
+			response.put("ex_name",ex_name);
+			response.put("ex_time",ex_time);
+			response.put("ex_used_kcal",ex_used_kcal);
+			
+			responseList.add(response);
+		}
+		return responseList;
+    }
+	
+	// 운동 시간에 따른 소모칼로리 구하기
+	@RequestMapping(value = "/getCalories", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, BigDecimal> getCalories(@RequestBody Map<String, String> body) {
+		// 운동 이름
+		String ex_name = body.get("ex_name");
+        // 운동 시간
+        BigDecimal ex_time = new BigDecimal(body.get("ex_time"));
+        // 운동 종목에 따른 분당 소모 칼로리
+        BigDecimal getKcal = mDao.getCalorise(ex_name);
+        // 운동시간과 분당 소모 칼로리를 곱해 해당 운동 총 소모칼로리 구힘
+        BigDecimal totalCalories = ex_time.multiply(getKcal);
+
+        return Map.of("calories", totalCalories);
+    }
+	
+	// 운동 시간과 소모 칼로리 계산이 끝난 데이터 db에 업데이트
+	@RequestMapping(value = "/updateExercise", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateExercise(@RequestBody ExerciseTO to, Authentication authentication) {
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		
+		String m_seq = customUserDetails.getM_seq();
+		
+		int updated = eDao.updateExercise(to, m_seq);
+		
+	    eDao.totalCalorie(m_seq);
+	    if(updated > 0){
+	        return "업데이트과 완료되었습니다";
+	    }else{
+	        throw new RuntimeException("업데이트에 실패했습니다");
+	    }
+	}
+	
 }

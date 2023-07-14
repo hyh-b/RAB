@@ -187,6 +187,70 @@ pageEncoding="UTF-8"%>
 		            }
 		        }
 		    }
+		});$("#dialogContainer1").dialog({
+		    autoOpen: false,
+		    modal: true,
+		    width: 350,
+		    height: 400,
+		    buttons: {
+		        '취소': function() {
+		            $(this).dialog('close');
+		        },
+				"확인": function() {
+					
+					if ($('.select-checkbox:checked').length == 0) {
+		                alert('해당 음식을 체크 누른 후 확인을 눌러주세요!');
+		                return false;
+		            }
+					
+				    let selectedData = [];
+				    $('.select-checkbox:checked').each(function() {
+				        let rowData = [];
+				        $(this).closest('tr').find('td').each(function() {
+				            rowData.push($(this).text());
+				        });
+				        selectedData.push(rowData);
+				    });
+				
+				    if (selectedData.length > 0) {
+				        selectedData.forEach(function(dataRow) {
+				            let rowId = "generated-div-" + divId;
+				            let result = '<div id="' + rowId + '" class="row-div">';
+				            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+				            result += '<div>';
+				            result += '<table>';
+				            result += '<thead>';
+				            result += '<tr>';
+				            result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
+				            result += '</tr>';
+				            result += '</thead>';
+				            result += '</table>';
+				            result += '</div>';
+				            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
+				            result += '<thead></thead>';
+				            result += '<tbody>';
+				            result += '<tr>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
+		                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
+		                    result += '</tr>';
+		                    result += '</tbody>';
+		                    result += '</table>';
+		                    result += '</div>';
+		                    result += '</div>';
+		                    $('#resultFood1').append(result);
+		                    divId++;
+		                });
+				        $('#foodComent1').empty();
+				        $('.select-checkbox').prop('checked', false);
+		                $(this).dialog("close");
+		            }
+		        }
+		    }
 		});
 		
 		
