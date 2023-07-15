@@ -299,8 +299,6 @@ public class MainController {
 	    
 	    int flag_uan = dao.UnionAllNutritions(seq, day);
 
-	    //--------------------------------------------------
-
 	   	return new ResponseEntity<String>(pieDatas.toString(), HttpStatus.OK);
 	  
 	}

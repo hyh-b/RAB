@@ -57,7 +57,7 @@
 <script>
 
 //----------------------함수-----------------------------
-		
+
 		//반복해서 함수들이 그 자리를 대체하게 하는 함수
 		function assignDateChangeListener() {
 	
@@ -152,14 +152,14 @@
 			$("#firstElement").html(firstElementHtml);
 
 			//
-			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
+			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + (elements.i_kcal || 0) + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
 			$("#secondElement").html(secondElementHtml);
 
 			//
-			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
+			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + (elements.i_used_kcal || 0) + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
 			$("#thirdElement").html(thirdElementHtml);
 			//
-			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.i_weight +' kg</h4>';
+			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ (elements.i_weight || 0) +' kg</h4>';
 			$("#fourthElement").html(fourthElementHtml);
 			
       	},
@@ -258,6 +258,24 @@
 	//---pie 함수 끝--------------------------------------------------
 
 ////////
+var selectedDate;
+
+function generateDates(selectedDate) {
+  var dates = [];
+  var currentDate = new Date(selectedDate);
+  currentDate.setDate(currentDate.getDate() - 3);
+
+  for (var i = 0; i < 7; i++) {
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1;
+    var date = currentDate.getDate();
+    var formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+    dates.push(formattedDate);
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+}
 
 	//---bar 함수----------------------------------------------------
 	var barChart;
@@ -378,7 +396,6 @@
 	  });
 	}
 
-	
 	//---bar 함수 끝 -------------------------------------------------
 ////////	
 	//---area 함수----------------------------------------------------
@@ -574,7 +591,50 @@
 	  autoOpen: false,
 	  modal: true,
 	  buttons: {
-	    '업데이트': function() {
+	    '계속입력': function() {
+	        var weight = $(this).find('#weightInput').val();
+		      var date = $(this).find('#dateInput').val();
+	    	  var zzinseq = $("#zzinseq").val();
+	    	  
+	    	  console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
+	    	  console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
+	    	  console.log( " 몸무게 업데이트/날짜 -> ", date);
+	    	  
+		      
+		      if(weight === '' || isNaN(weight)) { 
+		        alert('숫자를 입력해주세요');
+		      } else if (!/^(\d*\.?\d{0,2})$/.test(weight)) {
+	              alert('특수문자 대신에 숫자를 입력해주세요 (소수점은 두자리 까지만!)');
+	          } else if ( date === ''){
+	              alert('날짜를 선택해주세요');
+	          }
+		      else {
+		    	  $.ajax({
+		              url: "/weight_update",
+		              method: "POST",
+		              data: {
+	            	  	seq: zzinseq, 
+		                i_weight: weight,
+		                dialogDate : date
+		              },
+		              success: function() {
+		                alert(' ' + weight + ' kg ' + date + ' 에 등록되었습니다.');
+		                loadDataFromDate();
+		              },
+		              error: function(jqXHR, textStatus, errorThrown) {
+	            	    //console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
+	            	    //console.log('Throw Error: ' + errorThrown); // 예외 정보
+	            	    //console.log('jqXHR Object: ' + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
+		                
+	            	    alert('업데이트에 실패했습니다');
+		              }
+		            });
+
+		            //$(this).dialog('close');
+		          }
+	    	
+	     },
+	    '입력': function() {
 	      var weight = $(this).find('#weightInput').val();
 	      var date = $(this).find('#dateInput').val();
     	  var zzinseq = $("#zzinseq").val();
@@ -689,10 +749,35 @@
             	
         });
 
-        
 //////
   	};//window.onload끝 
 //////
+
+////////////페이지 로드시 기본값 오늘데이터 뿌려주기///////////////////
+	var selectedDate;
+	
+	$(document).ready(function() {
+			//--오늘 날짜로 선택된 값을 바로 전달해서 ----------------------------------------------
+			var currentDate = new Date();
+	
+			var day = ("0" + currentDate.getDate()).slice(-2);
+			var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+			var year = currentDate.getFullYear();
+	
+			var formattedDate = year + "-" + month + "-" + day;
+	
+			var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + formattedDate + '" min="2023-01-01" max="2050-12-31"></li>';
+	    
+			$('#calendarCt').html(calendarhtml);
+		
+			console.log( " formattedDate -> " , formattedDate );
+	
+			selectedDate = formattedDate; 
+	
+			loadDataFromDate();
+			PieDataForDate();
+			BarChartForDate();
+	});
 </script>
 
 
@@ -1175,7 +1260,7 @@
       			width="24"
       			height="24"
    			/>
-                오늘의 몸무게
+                몸무게 입력
               </a>
               </div>
             </li>
