@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-     test RAB
+     Main RAB
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   
@@ -24,6 +24,7 @@
   
    
 <c:set var="seq" value="${requestScope.seq}" />
+
 
   
   <!-- jstl 로 lists 받아옴 -->
@@ -1201,7 +1202,7 @@ function generateDates(selectedDate) {
 
           <span class="h-12 w-12 rounded-full">
           <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
-            <img src="src/images/user/gh.png" alt="User" />
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
 
           </span>
 

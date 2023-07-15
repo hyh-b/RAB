@@ -25,6 +25,7 @@
    
 <c:set var="seq" value="${requestScope.seq}" />
 
+
   
   <!-- jstl 로 lists 받아옴 -->
  <c:forEach var="item" items="${lists}">
@@ -1201,7 +1202,7 @@ function generateDates(selectedDate) {
 
           <span class="h-12 w-12 rounded-full">
           <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
-            <img src="src/images/user/gh.png" alt="User" />
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
 
           </span>
 

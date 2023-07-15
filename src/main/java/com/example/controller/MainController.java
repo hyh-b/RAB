@@ -34,6 +34,7 @@ import com.example.model.MainTO;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
 import com.example.model.MypageDAO;
+import com.example.model.MypageTO;
 import com.example.security.CustomUserDetails;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -46,6 +47,8 @@ public class MainController {
 	
 	@Autowired
 	private MainDAO dao;
+
+	
 	
 	BCryptPasswordEncoder bcry = new BCryptPasswordEncoder();
 
@@ -54,6 +57,7 @@ public class MainController {
 	public ModelAndView test(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
 		ModelAndView modelAndView = new ModelAndView();
 		
+		MypageTO mypageTO = new MypageTO();
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
@@ -65,11 +69,15 @@ public class MainController {
         
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
+        
+        System.out.println("     m_mail: " + member.getM_mail());
   
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("flag", flag);
 		modelAndView.addObject("zzinid", member.getM_id());
 		modelAndView.addObject("zzinseq", member.getM_seq());
+		modelAndView.addObject("profilename", mypageTO.getM_profilename());
+		
 		
 
         modelAndView.setViewName("test");
@@ -87,6 +95,7 @@ public class MainController {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
+		MypageTO mypageTO = new MypageTO();
 		//원하는 유저 정보 가져오기 - security패키지의 CustomUserDetails 설정
 		//로그인한(인증된) 사용자의 정보를 authentication에 담음
 		
@@ -122,6 +131,7 @@ public class MainController {
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("zzinid", member.getM_id());
 		modelAndView.addObject("zzinseq", member.getM_seq());
+		modelAndView.addObject("profilename", mypageTO.getM_profilename());
 		
 		System.out.println(" test.do m_id " + member.getM_id());
 		
