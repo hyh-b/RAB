@@ -44,8 +44,14 @@ public class ExerciseDAO {
 	}
 	
 	// 당일 총 소모 칼로리 IntakeData에 업데이트
-	public int totalCalorie(String m_seq) {
+	public int totalCalorie(String m_seq, String today) {
 		
-		return mapper.totalCalorie(m_seq);
+		return mapper.totalCalorie(m_seq, today);
+	}
+	
+	// 운동칸에 추가한 운동 삭제
+	public int deleteExercise(ExerciseTO to) {
+		
+		return mapper.deleteExercise(to);
 	}
 }
