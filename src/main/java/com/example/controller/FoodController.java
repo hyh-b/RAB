@@ -1,12 +1,9 @@
 package com.example.controller;
 
 import java.math.BigDecimal;
-<<<<<<< HEAD
-=======
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
->>>>>>> main
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,14 +35,6 @@ import com.example.model.FoodTO;
 import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
 import com.example.security.CustomUserDetails;
-
-<<<<<<< HEAD
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import java.util.Date;
-
-=======
->>>>>>> main
 
 @RestController
 public class FoodController {
@@ -152,11 +141,7 @@ public class FoodController {
 	                    e.printStackTrace();
 	                }
 	            }
-<<<<<<< HEAD
-
-=======
 	            System.out.println("시작 디버깅");
->>>>>>> main
 	            for (int i = 0; i < additionalDataArray.length(); i++) {
 	                JSONObject additionalData = additionalDataArray.getJSONObject(i);
 	                String f_name = additionalData.getString("f_name");
@@ -181,11 +166,6 @@ public class FoodController {
 	                bto.setB_cholesterol_mg(f_cholesterol_mg);
 	                bto.setB_sodium_mg(f_sodium_mg);
 	                bto.setB_day(b_day);  // set the parsed date
-	                
-<<<<<<< HEAD
-	                
-=======
->>>>>>> main
 	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
 	                
 	                int flag = bdao.insertBreakfast(bto);
@@ -227,10 +207,6 @@ public class FoodController {
 	                }
 	            }
 				
-<<<<<<< HEAD
-				
-=======
->>>>>>> main
 				for (int i = 0; i < additionalDataArray.length(); i++) {
 					JSONObject additionalData = additionalDataArray.getJSONObject(i);
 					String l_name = additionalData.getString("f_name");

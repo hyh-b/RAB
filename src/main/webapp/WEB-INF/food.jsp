@@ -105,25 +105,16 @@ pageEncoding="UTF-8"%>
 	
 </style>
 
-<<<<<<< HEAD
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-=======
 
->>>>>>> main
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<<<<<<< HEAD
-=======
 
 <!-- 이미지 업로드를 위해 필요한 API -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.14.0/umd/react.development.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.14.0/umd/react-dom.development.js"></script>
 
->>>>>>> main
 <script>
 	$(document).ready(function() {
 		
@@ -132,10 +123,7 @@ pageEncoding="UTF-8"%>
 		} );
 		
 		
-<<<<<<< HEAD
-=======
 	//==================================================== 식단 등록 =================================================================
->>>>>>> main
 		// 아침 , 점심 ,저녁 의 div 삭제 이벤트 전역변수
 		let divId = 1;
 		// 아침 , 점심 , 저녁 deleteBtn 이벤트
@@ -148,17 +136,10 @@ pageEncoding="UTF-8"%>
 			let mealTime = $('#mealTime').val();
 			let url;
 			let resultFood = 'resultFood1';
-<<<<<<< HEAD
-			let selectedMeal = $('#mealSelect').val();  // '#mealSelect'는 식사 선택을 위한 select 요소의 id여야 합니다.
-
-			if (selectedMeal === "") {
-				alert('Please select one of breakfast, lunch, or dinner.');
-=======
 			let selectedMeal = $('#mealSelect').val();
 
 			if (selectedMeal === "") {
 				alert('아침 , 점심 , 저녁 중 선택을 하여 등록해야합니다.');
->>>>>>> main
 				return;
 			}
 
@@ -189,11 +170,7 @@ pageEncoding="UTF-8"%>
 		        return; // 함수 실행 종료
 		    }
 
-<<<<<<< HEAD
-		    $('#' + resultFood + ' > div').each(function() {
-=======
 		    $('#'+resultFood+' > div').each(function() {
->>>>>>> main
 		        let f_name = $(this).find('input[name="f_name"]').val();
 		        let f_carbohydrate_g = $(this).find('input[name="f_carbohydrate_g"]').val();
 		        let f_protein_g = $(this).find('input[name="f_protein_g"]').val();
@@ -239,7 +216,6 @@ pageEncoding="UTF-8"%>
 		        }
 		    });
 		} 
-<<<<<<< HEAD
 		
 	//==================================================== 식단 메모 =================================================================
 	$('#searchButton1').click(function() {
@@ -291,7 +267,6 @@ pageEncoding="UTF-8"%>
 	        }
 	    });
 	});
-=======
 	//==================================================== 식단 등록 끝 =================================================================
 		
 	//==================================================== 식단 메모 =================================================================
@@ -344,7 +319,6 @@ pageEncoding="UTF-8"%>
 		        }
 		    });
 		});
->>>>>>> main
 		
 		$("#dialogContainer1").dialog({
 		    autoOpen: false,
@@ -477,13 +451,6 @@ pageEncoding="UTF-8"%>
 		    }
 		});
 		
-<<<<<<< HEAD
-		$( '#btn1' ).button().on( 'click', function() {
-			$( '#dialogContainer1' ).dialog( 'open' ); 
-		});
-
-		//=========================================================================================================================	
-=======
 		$("#dialogContainer2").dialog({
 		    autoOpen: false,
 		    modal: true,
@@ -704,7 +671,6 @@ pageEncoding="UTF-8"%>
 		});
 		
 		//=================================================== 다이어로그 업로드 부분 끝 ================================================================
->>>>>>> main
 	});
 </script>
 
@@ -1260,18 +1226,13 @@ pageEncoding="UTF-8"%>
 					<button id="btn1">
 						<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
 					</button>
-<<<<<<< HEAD
-					<div>
-						<!-- 날짜를 선택할 수 있는 입력 요소를 추가합니다. -->
-						<input type="text" id="datepicker" placeholder="날짜 선택" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-=======
+
 					<button id="btn2" >
 					    <i class="fas fa-image"style="font-size: 17px;"></i>
 					</button>
 					<div>
 						<!-- 날짜를 선택할 수 있는 입력 요소를 추가합니다. -->
 						<input type="text" id="datepicker" placeholder="날짜 선택" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"/>
->>>>>>> main
 					</div>
 					<div>
 						<button id="submitMeal">등록</button>
