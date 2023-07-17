@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -298,8 +299,6 @@ public class MainController {
 	    
 	    int flag_uan = dao.UnionAllNutritions(seq, day);
 
-	    //--------------------------------------------------
-
 	   	return new ResponseEntity<String>(pieDatas.toString(), HttpStatus.OK);
 	  
 	}
@@ -351,5 +350,60 @@ public class MainController {
 		   	return new ResponseEntity<String>( BarDatas.toString(), HttpStatus.OK);
 		  
 		}
-	
+		
+		//----몸무게들-----------------------------------
+		
+		@ResponseBody
+		@RequestMapping(value = "/weight_update", method = RequestMethod.POST)
+		public int WeightUpdates(@Param("i_weight") BigDecimal i_weight,@Param("target_weight") BigDecimal target_weight,@Param("seq") int seq, @Param("dialogDate") String dialogDate) {
+			int result_for_both = 0;
+		    if(i_weight != null && dialogDate != null){
+		        int weight_update = dao.WeightUpdate(i_weight, seq, dialogDate);
+		        result_for_both += weight_update;
+		    }
+		    if(target_weight != null){
+		        int targetw_update = dao.TargetWeightUpdate(target_weight, seq);
+		        result_for_both += targetw_update;
+		    }
+
+			//System.out.println(" 컨트롤러에서 목몸 " + target_weight);
+			//System.out.println(" 컨트롤러에서 목몸 seq " +  seq);
+			if(result_for_both == 0) {
+				System.out.println(" 몸무게 업데이트 성공 "+ result_for_both);
+				return result_for_both;
+			} else if(result_for_both == 1) {
+				System.out.println(" 몸무게들 업데이트 실패 1이면 하나 실패 2이면 둘 다 실패 "+ result_for_both);
+				return result_for_both;
+			}else{
+			   //2일순 없음, 입력단이 나눠져있어서 1씩 두번이 들어올순 있어도
+				System.out.println(" 디폴트 "+ result_for_both);
+				return result_for_both;
+			}
+			//극단적으로 짧은 버전
+			//int weight_update = dao.WeightUpdate(i_weight, seq, dialogDate);
+			//int targetw_update = dao.TargetWeightUpdate(target_weight, seq);
+		    //result_for_both = weight_update + targetw_update;
+		    //return result_for_both;
+		}
+		
+//	  //해당 날짜 몸무게 업데이트----------
+//		@ResponseBody
+//		@RequestMapping(value = "/weight_update", method = RequestMethod.POST)
+//		public int WeightUpdates(	
+//		@Param("i_weight") BigDecimal i_weight,
+//		@Param("seq") int seq, @Param("dialogDate") String dialogDate) {
+//			int weight_update = dao.WeightUpdate(i_weight, seq, dialogDate);
+//			//System.out.println(" 컨트롤러에서 목몸 seq " +  seq);
+//			return weight_update;
+//		}
+//	  //목표 몸무게 업데이트----------
+//		@ResponseBody
+//		@RequestMapping(value = "/target_weight_update", method = RequestMethod.POST)
+//		public int WeightUpdates(
+//		@Param("target_weight") BigDecimal target_weight,
+//		@Param("seq") int seq) {
+//			int target_weight_flag = dao.TargetWeightUpdate(target_weight, seq);
+//			return target_weight_flag;
+//		}
+
 	}
