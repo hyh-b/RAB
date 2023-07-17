@@ -1,5 +1,6 @@
 package com.example.model;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -163,7 +164,44 @@ public class MainDAO {
 			return flag_uan;
 					
 		}
+		
+		//---몸무게들 업데이트--------------------------
+		
+		public int WeightUpdate(BigDecimal i_weight, int seq, String dialogDate) {
+			
+			int WeightUpdateFlag = 1;
+			
+			int result = mapper.WeightUpdate(i_weight, seq, dialogDate);
+			
+			if(result == 1 ) {
+				WeightUpdateFlag = 0;
+				System.out.println( " 그 날짜의 몸무게 업데이트 완료 , " + WeightUpdateFlag);
+			}else if(result == 0) {
+				WeightUpdateFlag = 1;
+				System.out.println( " 몸무게 날짜 업데이트 실패 , " + WeightUpdateFlag);
+			}
 
+			return WeightUpdateFlag;
+		}
+		
+		//--목표 몸무게------------------
+		public int TargetWeightUpdate(BigDecimal target_weight, int seq) {
+			
+			int TargetWeightUpdateFlag = 1;
+			
+			int result = mapper.TargetWeightUpdate(target_weight, seq);
+			
+			if(result == 1 ) {
+				TargetWeightUpdateFlag = 0;
+				System.out.println( " 목표 몸무게 업데이트 완료 , " + TargetWeightUpdateFlag);
+			}else if(result == 0) {
+				TargetWeightUpdateFlag = 1;
+				System.out.println( " 목표 몸무게 날짜 업데이트 실패 , " + TargetWeightUpdateFlag);
+			}
+
+			return TargetWeightUpdateFlag;
+		}
+		
 		
 		
 }

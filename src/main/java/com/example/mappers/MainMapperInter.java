@@ -1,5 +1,6 @@
 package com.example.mappers;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -59,14 +60,20 @@ public interface MainMapperInter {
     @Update("UPDATE IntakeData SET i_kcal = COALESCE(i_breakfast_kcal, 0) + COALESCE(i_lunch_kcal, 0) + COALESCE(i_dinner_kcal, 0) WHERE m_seq = #{seq} AND i_day = #{day};")
     public int UnionAllCalories(@Param("seq") int seq, @Param("day") String day);
     
-    //---update문 아점저의 그날치 탄단지콜나당을 다 통합해서 보여줌 ---------------------------------
+    //---아점저의 그날치 탄단지콜나당을 다 통합해서 보여줌 ---------------------------------
 
     @Update("UPDATE IntakeData SET i_carbohydrate_g = (SELECT COALESCE(SUM(b_carbohydrate_g), 0) FROM Breakfast WHERE Breakfast.b_day = #{day}) + (SELECT COALESCE(SUM(l_carbohydrate_g), 0) FROM Lunch WHERE Lunch.l_day = #{day}) + (SELECT COALESCE(SUM(d_carbohydrate_g), 0) FROM Dinner WHERE Dinner.d_day = #{day}), i_protein_g = (SELECT COALESCE(SUM(b_protein_g), 0) FROM Breakfast WHERE Breakfast.b_day = #{day}) + (SELECT COALESCE(SUM(l_protein_g), 0) FROM Lunch WHERE Lunch.l_day = #{day}) + (SELECT COALESCE(SUM(d_protein_g), 0) FROM Dinner WHERE Dinner.d_day = #{day}), i_fat_g = (SELECT COALESCE(SUM(b_fat_g), 0) FROM Breakfast WHERE Breakfast.b_day = #{day}) + (SELECT COALESCE(SUM(l_fat_g), 0) FROM Lunch WHERE Lunch.l_day = #{day}) + (SELECT COALESCE(SUM(d_fat_g), 0) FROM Dinner WHERE Dinner.d_day = #{day}), i_cholesterol_mgl = (SELECT COALESCE(SUM(b_cholesterol_mg), 0) FROM Breakfast WHERE Breakfast.b_day = #{day}) + ( SELECT COALESCE(SUM(l_cholesterol_mg), 0) FROM Lunch WHERE Lunch.l_day = #{day}) + (SELECT COALESCE(SUM(d_cholesterol_mg), 0) FROM Dinner WHERE Dinner.d_day = #{day}), i_sodium_mg = (SELECT COALESCE(SUM(b_sodium_mg), 0) FROM Breakfast WHERE Breakfast.b_day = #{day}) + (SELECT COALESCE(SUM(l_sodium_mg), 0) FROM Lunch WHERE Lunch.l_day = #{day}) + (SELECT COALESCE(SUM(d_sodium_mg), 0) FROM Dinner WHERE Dinner.d_day = #{day}), i_sugar_g = ( SELECT COALESCE(SUM(b_sugar_g), 0) FROM Breakfast WHERE Breakfast.b_day = #{day}) + (SELECT COALESCE(SUM(l_sugar_g), 0) FROM Lunch WHERE Lunch.l_day = #{day}) + (SELECT COALESCE(SUM(d_sugar_g), 0) FROM Dinner WHERE Dinner.d_day = #{day}) WHERE m_seq = #{seq} AND i_day = #{day};")
     public int UnionAllNutritions(@Param("seq") int seq, @Param("day") String day);
-
     
-   
+    //---몸무게, 타겟 몸무게 등록 쿼리---------------------------------------------
     
+    //날짜별 몸무게 업데이트
+    @Update("UPDATE IntakeData SET i_weight = #{i_weight} WHERE m_seq = #{seq} AND i_day = #{dialogDate};")
+    public int WeightUpdate(@Param("i_weight") BigDecimal i_weight, @Param("seq") int seq, @Param("dialogDate") String dialogDate);
+    
+    //목표 몸무게 업데이트
+    @Update("Update Member set m_target_weight = #{target_weight} where m_seq = #{seq};")
+    public int TargetWeightUpdate(@Param("target_weight") BigDecimal target_weight, @Param("seq") int seq);
     
 }
 
