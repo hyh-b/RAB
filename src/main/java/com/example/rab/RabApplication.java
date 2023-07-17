@@ -10,6 +10,6 @@ public class RabApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RabApplication.class, args);
-	}
+	}	
 
 }
