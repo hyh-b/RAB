@@ -82,6 +82,18 @@ public class MainDAO {
 	    
 	    	return bars;
 		}
+//-----------Area---------------
+
+		public ArrayList<MainTO> AreaChartData(int seq, String day) {
+
+			List<MainTO> area = (List<MainTO>)mapper.AreaChartData(seq, day);
+		
+			ArrayList<MainTO> areas = new ArrayList<>(area);
+			
+			//System.out.println(" dao 에서 가져온 년도마다의 데이터 -> " + lines);
+	    
+	    	return areas;
+		}
 		
 //-----------line---------------
 		

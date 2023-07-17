@@ -72,6 +72,8 @@
     		PieDataForDate();
     		
     		BarChartForDate();
+    		
+    		AreaChartForWeek();
 
 		});
 
@@ -258,7 +260,8 @@
 	}	
 	//---pie 함수 끝--------------------------------------------------
 
-////////
+////////bar함수 차트 undefined넘어와도 비율 안깨지게 날짜 포메팅 not finished--
+
 var selectedDate;
 
 function generateDates(selectedDate) {
@@ -400,7 +403,82 @@ function generateDates(selectedDate) {
 	//---bar 함수 끝 -------------------------------------------------
 ////////	
 	//---area 함수----------------------------------------------------
-	
+	var areaChart;
+
+	function AreaChartForWeek() {
+		
+		var selectedDate = $("#calendarCtInput").val();
+	    var zzinseq = $("#zzinseq").val();
+
+		 console.log(" AreaChartForDate 함수에서 zzinseq -> ", zzinseq);
+		 console.log(" AreaChartForDate 함수에서 selectedDate -> ", selectedDate);
+
+	    $.ajax({
+	        url: "/area_chart_data",
+	        type: "get",
+	        dataType: 'json',
+	        data: {
+	  	      day: selectedDate,
+	  	      seq: zzinseq
+	  	    },
+	        success: function (areaForWeeks) {
+	        	
+	        	//console.log(" areaForWeeks => ", areaForWeeks);
+	        	
+        	    var lastWeekData = areaForWeeks.lastWeekData.map(function(data) { return data.i_used_kcal; });
+        	    var thisWeekData = areaForWeeks.thisWeekData.map(function(data) { return data.i_used_kcal; });
+	        	
+	        	//console.log(" lastWeekData => ", lastWeekData);
+	        	//console.log(" thisWeekData => ", thisWeekData);
+	        	
+	            var areaOptions = {
+	                series: [{
+	                    name: '저번주',
+	                    data: lastWeekData
+	                }, {
+	                    name: '이번주',
+	                    data: thisWeekData
+	                }],
+	                chart: {
+	                    height: 350,
+	                    type: 'area'
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                stroke: {
+	                    curve: 'smooth'
+	                },
+	                xaxis: {
+	                    type: 'category',
+	                    categories: ['일', '월', '화', '수', '목', '금', '토'],
+	                    labels: {
+	                        show: true,
+	                        formatter: function (value, timestamp, opts) {
+	                            return value;
+	                        }
+	                    }
+	                },
+	                tooltip: {
+	                    x: {
+	                        format: 'dd'
+	                    },
+	                },
+	            };
+	            if(areaChart) {
+	                areaChart.updateOptions(areaOptions);
+	            } else {
+	                areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
+	                areaChart.render();
+	            }
+	        },
+	        error: function (error) {
+	            console.log('에러는 -> ', error);
+	            console.log('\n 응답 JSON -> ', error.responseJSON);
+	            console.log('\n 응답 본문 -> ', error.responseText);
+	        }
+	    });
+	}
 	
 	
 	//---area 함수 끝 -------------------------------------------------
@@ -411,14 +489,14 @@ function generateDates(selectedDate) {
 	var lineChart;
 
 	function LineChartForMonth() {
-		
+
 		var selectedYear = $("#yearSelectForLineChart").val();
 		var zzinseq = $("#zzinseq").val();
 		
-		console.log( " 년도 잘 골라졌나? -> ", selectedYear);
+		//console.log( " 선택된 년도 확인 -> ", selectedYear);
 		
 	    $.ajax({
-	        url: '/line_chart_data',  // 데이터를 받아올 서버의 API 엔드포인트를 입력하세요
+	        url: '/line_chart_data',
 	        method: 'GET',
 	        dataType: 'json',
 	        data: {
@@ -427,7 +505,8 @@ function generateDates(selectedDate) {
 	  	    },
 	        success: function(line) {
 	            //console.log("line ->", line);
-	
+	            
+				event.preventDefault(); // 스크롤 위로 튕기는 거 잡아줘야 되는데.
 	            
 	            var weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 	
@@ -494,81 +573,10 @@ function generateDates(selectedDate) {
 
 	
 //---------------------------- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트 ( 동적 )----------------------------
- 	window.onload = function() {
-	   
-	//------------- ajax for charts -------------------------
-      $.ajax({
-        
-        url: "/charts_data",
-   		type: "get",
-        dataType: 'json',
-        success: function (charts) {
-        
-        //	console.log( "charts ->", charts);
-        	
-        	var b_kcal_data = charts.fdatas.map(function(meal) {
-                return meal.meals.b_kcal;
-            });
-        	
-        	console.log( " b_kcal_data -> ", b_kcal_data[0] );
-        	//b_kcal_data
-        
-        	// where PieChart used to place
 
-			/////////////////////////////////////////////////////
-			
-			// where BarChart used to place
-			
-    	  /////////////////////////////////////////////////////
-    	  var areaOptions = {
-    	    series: [{
-    	      name: '저번주',
-    	      data: [31, 40, 28, 51, 42, 109, 100]
-    	    }, {
-    	      name: '이번주',
-    	      data: [11, 32, 45, 32, 34, 52, 41]
-    	    }],
-    	    chart: {
-    	      height: 350,
-    	      type: 'area'
-    	    },
-    	    dataLabels: {
-    	      enabled: false
-    	    },
-    	    stroke: {
-    	      curve: 'smooth'
-    	    },
-    	    xaxis: {
-    	      type: 'datetime',
-    	      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-    	    },
-    	    tooltip: {
-    	      x: {
-    	        format: 'dd/MM/yy HH:mm'
-    	      },
-    	    },
-    	  };
-    	  var areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
-    	  areaChart.render();
-    	  
-		  /////////////////////////////////////////////////////
-		  
-    	 //where linchart used to place
-	
-          //////////////////////////////////////////////
-        },
-        error: function (error) {
-        	console.log('에러는 -> ', error);
-        	console.log('\n 응답 JSON -> ', error.responseJSON);
-        	console.log('\n 응답 본문 -> ', error.responseText);
- 
-        }
-        
-      })
-      
-      //-------------------------------------------------------------------------------
-
-//--달력 라벨 밸류 항상 디폴트는 현재값을 전달-----------------------------------------------
+ window.onload = function() {
+		
+//--달력 라벨 밸류 디폴트는 현재로컬타임 기준으로 세팅됨----------------------------------------------
 		var currentDate = new Date();
 
 		var day = ("0" + currentDate.getDate()).slice(-2);
@@ -585,9 +593,7 @@ function generateDates(selectedDate) {
 
 		var selectedDate = formattedDate;
 		/////////////////////////////
-		
-		
-			
+
 //---  몸무게 업데이트 다이얼로그----------------------
 	
 	// 몸무게 다이얼로그 안 달력
@@ -774,13 +780,16 @@ function generateDates(selectedDate) {
          
           	PieDataForDate();
           	
-          	//LineChartForMonth();
+            AreaChartForWeek();
+
             	
         });
 	
 	//년도별로 월평균 보여주기.
     $("#yearSelectForLineChart").on("change", function() {
-
+    	
+    	event.preventDefault();
+    	  
     	console.log(" select 년도 확인 ->",  $(this).val());
     	
       	LineChartForMonth();
@@ -835,7 +844,9 @@ function generateDates(selectedDate) {
 			loadDataFromDate();
 			PieDataForDate();
 			BarChartForDate();
+			AreaChartForWeek();
 			LineChartForMonth();
+			
 	});
 </script>
 
