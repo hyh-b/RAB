@@ -128,9 +128,11 @@ public class MainTO {
    private BigDecimal d_sodium_mg;
    private BigDecimal d_trans_fat_g;
    
-
-
+   //합연산된 칼럼 아 점 저
    
+   private BigDecimal i_breakfast_kcal;
+   private BigDecimal i_lunch_kcal;
+   private BigDecimal i_dinner_kcal;
 
 
 }

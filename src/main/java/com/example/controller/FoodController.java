@@ -1,8 +1,15 @@
 package com.example.controller;
 
 import java.math.BigDecimal;
+<<<<<<< HEAD
+=======
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.ParseException;
+>>>>>>> main
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.kakaoicloud.KakaoApiService;
 import com.example.model.BreakfastDAO;
 import com.example.model.BreakfastTO;
 import com.example.model.DinnerDAO;
@@ -29,14 +39,17 @@ import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
 import com.example.security.CustomUserDetails;
 
+<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+=======
+>>>>>>> main
 
 @RestController
 public class FoodController {
-	 
+	
 	@Autowired
 	FoodDAO fdao;
 	
@@ -64,7 +77,7 @@ public class FoodController {
 		// principal 객체를 CustomUserDetails 타입으로 캐스팅
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		String seq = customUserDetails.getM_seq();
-		
+		System.out.println(seq);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("food");
 		modelAndView.addObject("seq", seq);
@@ -139,11 +152,16 @@ public class FoodController {
 	                    e.printStackTrace();
 	                }
 	            }
+<<<<<<< HEAD
 
+=======
+	            System.out.println("시작 디버깅");
+>>>>>>> main
 	            for (int i = 0; i < additionalDataArray.length(); i++) {
 	                JSONObject additionalData = additionalDataArray.getJSONObject(i);
 	                String f_name = additionalData.getString("f_name");
 	                BigDecimal f_kcal = new BigDecimal(additionalData.getString("f_kcal"));
+	                System.out.println("칼로리\t"+f_kcal);
 	                BigDecimal f_carbohydrate_g = new BigDecimal(additionalData.getString("f_carbohydrate_g"));
 	                BigDecimal f_protein_g = new BigDecimal(additionalData.getString("f_protein_g"));
 	                BigDecimal f_fat_g = new BigDecimal(additionalData.getString("f_fat_g"));
@@ -164,7 +182,10 @@ public class FoodController {
 	                bto.setB_sodium_mg(f_sodium_mg);
 	                bto.setB_day(b_day);  // set the parsed date
 	                
+<<<<<<< HEAD
 	                
+=======
+>>>>>>> main
 	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
 	                
 	                int flag = bdao.insertBreakfast(bto);
@@ -206,7 +227,10 @@ public class FoodController {
 	                }
 	            }
 				
+<<<<<<< HEAD
 				
+=======
+>>>>>>> main
 				for (int i = 0; i < additionalDataArray.length(); i++) {
 					JSONObject additionalData = additionalDataArray.getJSONObject(i);
 					String l_name = additionalData.getString("f_name");
@@ -306,8 +330,80 @@ public class FoodController {
 	
 	
 	
+	@Autowired
+	private final KakaoApiService kakaoApiService;	
 	
+	public FoodController(KakaoApiService kakaoApiService) {
+		this.kakaoApiService = kakaoApiService;
+	}
 	
-	
+	@RequestMapping("/api/upload")
+	public List<Map<String, Object>> uploadFile(@RequestParam("image") MultipartFile file) {
+	    try {
+	        String originalFileName = file.getOriginalFilename();
+	        // 임시 디렉토리에 저장
+	        Path tempFile = Files.createTempFile(null, originalFileName);
+	        Files.write(tempFile, file.getBytes());
+	        System.out.println("파일 이름 : \t"+tempFile);
+	        // kakao API 콜!
+	        String result = kakaoApiService.callKakaoVisionApi(tempFile.toString());
+
+	        // json으로 파싱
+	        JSONObject jsonObject = new JSONObject(result);
+	        JSONArray resultsArray = jsonObject.getJSONArray("result");
+
+	        // 모든 결과 처리
+	        List<Map<String, Object>> response = new ArrayList<>();
+	        for (int i = 0; i < resultsArray.length(); i++) {
+	            JSONObject res = resultsArray.getJSONObject(i);
+	            JSONArray classInfo = res.getJSONArray("class_info");
+
+	            // 모든 classInfo 처리
+	            for (int j = 0; j < classInfo.length(); j++) {
+	                JSONObject food = classInfo.getJSONObject(j);
+
+	                String foodName = food.getString("food_name");
+	                JSONObject foodNutrients = food.getJSONObject("food_nutrients");
+
+	                JSONObject perServingNutrients = foodNutrients.getJSONObject("1회제공량당_영양성분");
+	                String protein = perServingNutrients.getString("단백질(g)");
+	                String carbohydrates = perServingNutrients.getJSONObject("탄수화물").getString("총량(g)").replaceAll("\\s+", "");
+	                String fat = perServingNutrients.getJSONObject("지방").getString("총량(g)");
+	                String cholesterol = perServingNutrients.getString("콜레스테롤(mg)");
+	                String sodium = perServingNutrients.getString("나트륨(mg)");
+	                String sugar = perServingNutrients.getJSONObject("탄수화물").getString("당류(g)");
+	                String kcal = perServingNutrients.getString("열량(kcal)");
+	                
+	                System.out.println("음식 이름:\t" + foodName);
+	                System.out.println("단백질:\t" + protein);
+	                System.out.println("탄수화물:\t" + carbohydrates);
+	                System.out.println("지방:\t" + fat);
+	                System.out.println("콜레스테롤:\t" + cholesterol);
+	                System.out.println("나트륨:\t" + sodium);
+	                System.out.println("당:\t" + sugar);
+	                System.out.println("칼로리:\t"+kcal);
+
+	                Map<String, Object> foodInfo = new HashMap<>();
+	                foodInfo.put("foodName", foodName);
+	                foodInfo.put("protein", protein);
+	                foodInfo.put("carbohydrates", carbohydrates);
+	                foodInfo.put("fat", fat);
+	                foodInfo.put("cholesterol", cholesterol);
+	                foodInfo.put("sodium", sodium);
+	                foodInfo.put("sugar", sugar);
+	                foodInfo.put("kcal", kcal);
+
+	                response.add(foodInfo);
+	            }
+	        }
+
+	        // 로컬 임시 저장소에 저장된 이미지 삭제
+	        Files.delete(tempFile);
+
+	        return response;
+	    } catch (Exception e) {
+	        throw new RuntimeException("[에러]\t: " + e.getMessage());
+	    }
+	}
 	
 }
