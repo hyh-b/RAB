@@ -27,124 +27,7 @@
   <title>Mypage</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 </head>
-<script type="text/javascript">
-// 이메일 형식 검사==============================================================================================================
-function validateEmail() {
-	  const emailInput = document.getElementById('email');
-	  const email = emailInput.value.trim();
-	  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	  
-	  if (email === '') {
-	    alert('이메일을 입력하셔야 합니다.');
-	    return false;
-	  }
-	  
-	  if (!emailRegex.test(email)) {
-	    alert('올바른 이메일 형식이 아닙니다. 다시 입력해주세요.');
-	    return false;
-	  }
-	  
-	  return true;
-	}
 
-// 필수 입력값 =====================================================================================================================
-window.onload = function () {
-	document.getElementById('editButton').onclick = function () {
-		if( document.mfrm.name.value.trim() == '') {
-			alert('닉네임을 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.phoneNumber.value.trim() == '') {
-			alert('휴대폰 번호를 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.cm.value.trim() == '') {
-			alert('현재신장을 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.kg.value.trim() == '') {
-			alert('현재 몸무게를 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.takeKcal.value.trim() == '') {
-			alert('하루 목표 섭취 칼로리를 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.targetScale.value.trim() == '') {
-			alert('목표 체중을 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.birthday.value.trim() == '') {
-			alert('생년월일을 입력하셔야 합니다'); 
-			return false;
-		}
-		document.wfrm.submit();
-	};
-};
-
-// 배경 사진 사진 변경================================================================================================================
- const coverInput = document.getElementById('cover');
-
-//입력 요소에 change 이벤트 리스너를 추가
- coverInput.addEventListener('change', (event) => {
-   // 이벤트에서 선택된 파일
-   const file = event.target.files[0];
-
-   const reader = new FileReader();
-   reader.onload = function (e) {
-     // 미리보기 이미지를 표시하기 위해 새로운 <img> 요소를 생성
-     const previewImage = document.createElement('img');
-
-     // <img> 요소의 소스를 선택된 파일의 데이터 URL로 설정
-     previewImage.src = e.target.result;
-
-     // 미리보기 이미지에 적절한 스타일 클래스를 추가
-     previewImage.classList.add('h-40', 'w-40', 'object-cover');
-
-     // 미리보기 이미지를 표시할 컨테이너 요소
-     const previewContainer = document.getElementById('cover-container');
-
-     // 컨테이너 요소 비우기
-     previewContainer.innerHTML = '';
-
-     // 미리보기 이미지를 컨테이너에 추가
-     previewContainer.appendChild(previewImage);
-   };
-
-   // 선택된 파일을 데이터 URL로 읽어옴
-   reader.readAsDataURL(file);
- });
- 
- // 프로필 사진 변경 ===================================================================================================================
-const profileInput = document.getElementById('profile');
-
-profileInput.addEventListener('change', (event) => {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-
-  reader.onload = function (e) {
-    // 선택된 파일의 데이터 URL을 가져옴
-    const imageDataUrl = e.target.result;
-
-    // 프로필 이미지를 생성하고 소스를 설정
-    const profileImage = new Image();
-    profileImage.src = imageDataUrl;
-
-    // 프로필 이미지를 표시할 컨테이너 요소를 가져옵니다.
-    const profileContainer = document.getElementById('profile-container');
-
-    // 기존의 프로필 이미지를 제거합니다.
-    profileContainer.innerHTML = '';
-
-    // 프로필 이미지를 컨테이너에 추가합니다.
-    profileContainer.appendChild(profileImage);
-  };
-  
-	//선택된 파일을 데이터 URL로 읽어옴
-  reader.readAsDataURL(file);
-});
- 
-</script>
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
@@ -413,23 +296,19 @@ profileInput.addEventListener('change', (event) => {
 <form action="mypageModifyOK.do" method="post" name="mfrm" enctype="multipart/form-data">
 
 <!--  배사  -->
-            <div
-              class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div class="relative z-20 h-35 md:h-65">
-                <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${backgroundfilename}" alt="profile cover"
-                  class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
-                <div class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
-                  <label for="cover"
-                    class="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary py-1 px-2 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4">
-                    <input type="file" name="cover" id="cover" class="sr-only" />
-                    
-<!--                      <input type="file" -->
-<!--                      id = "cover" name ="cover" -->
-<!--                       class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" /> -->
-                    
-                    <span>
-                      <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
+            <div class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+		  <div class="relative z-20 h-35 md:h-65">
+			<div id="cover-container" class="relative h-full w-full">
+			  <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${backgroundfilename}" alt="profile cover"
+			    class="h-full w-full rounded-tl-sm rounded-tr-sm" style="object-fit: cover;" />
+			</div>
+		    <div class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
+		      <label for="cover"
+		        class="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary py-1 px-2 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4">
+		        <input type="file" name="cover" id="cover" class="sr-only" accept="image/jpeg, image/png, image/gif"/>
+		        <span>
+		          <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14" fill="none"
+		            xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                           d="M4.76464 1.42638C4.87283 1.2641 5.05496 1.16663 5.25 1.16663H8.75C8.94504 1.16663 9.12717 1.2641 9.23536 1.42638L10.2289 2.91663H12.25C12.7141 2.91663 13.1592 3.101 13.4874 3.42919C13.8156 3.75738 14 4.2025 14 4.66663V11.0833C14 11.5474 13.8156 11.9925 13.4874 12.3207C13.1592 12.6489 12.7141 12.8333 12.25 12.8333H1.75C1.28587 12.8333 0.840752 12.6489 0.512563 12.3207C0.184375 11.9925 0 11.5474 0 11.0833V4.66663C0 4.2025 0.184374 3.75738 0.512563 3.42919C0.840752 3.101 1.28587 2.91663 1.75 2.91663H3.77114L4.76464 1.42638ZM5.56219 2.33329L4.5687 3.82353C4.46051 3.98582 4.27837 4.08329 4.08333 4.08329H1.75C1.59529 4.08329 1.44692 4.14475 1.33752 4.25415C1.22812 4.36354 1.16667 4.51192 1.16667 4.66663V11.0833C1.16667 11.238 1.22812 11.3864 1.33752 11.4958C1.44692 11.6052 1.59529 11.6666 1.75 11.6666H12.25C12.4047 11.6666 12.5531 11.6052 12.6625 11.4958C12.7719 11.3864 12.8333 11.238 12.8333 11.0833V4.66663C12.8333 4.51192 12.7719 4.36354 12.6625 4.25415C12.5531 4.14475 12.4047 4.08329 12.25 4.08329H9.91667C9.72163 4.08329 9.53949 3.98582 9.4313 3.82353L8.43781 2.33329H5.56219Z"
                           fill="white" />
@@ -449,8 +328,9 @@ profileInput.addEventListener('change', (event) => {
                 <div
                   class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
                   <div class="relative drop-shadow-2">
-
-                    <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="profile" />
+					<div id="profile-container" class="relative h-full w-full">
+                    <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="profile"  style="object-fit: profile;" />
+                    </div>
                     <label for="profile"
                       class="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2">
                       <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14" fill="none"
@@ -462,7 +342,7 @@ profileInput.addEventListener('change', (event) => {
                           d="M7.00004 5.83329C6.03354 5.83329 5.25004 6.61679 5.25004 7.58329C5.25004 8.54979 6.03354 9.33329 7.00004 9.33329C7.96654 9.33329 8.75004 8.54979 8.75004 7.58329C8.75004 6.61679 7.96654 5.83329 7.00004 5.83329ZM4.08337 7.58329C4.08337 5.97246 5.38921 4.66663 7.00004 4.66663C8.61087 4.66663 9.91671 5.97246 9.91671 7.58329C9.91671 9.19412 8.61087 10.5 7.00004 10.5C5.38921 10.5 4.08337 9.19412 4.08337 7.58329Z"
                           fill="" />
                       </svg>
-                      <input type="file" name="profile" id="profile" value="" class="sr-only" />
+                      <input type="file" name="profile" id="profile" value="" class="sr-only" accept="image/jpeg, image/png, image/gif"/>
                     </label>
                   </div>
                 </div>
@@ -496,10 +376,14 @@ profileInput.addEventListener('change', (event) => {
                               </svg>
                             </span>
 							<input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-							       type="text" name="name" id="name" 
+							       type="text" name="name" id="name"  required oninput = "checkName()"
 							       value="${name}"  />
+                          <p id="nameOk" style="color:green; display:none;">사용가능한 닉네임입니다</p>
+           				 <p id="nameNo" style="color:red; display:none;">중복되는 닉네임입니다</p>
+                        
                           </div>
                         </div>
+                        
                         
 <!--  전화번호  -->
 						 <div class="w-full sm:w-1/2">
@@ -658,5 +542,171 @@ profileInput.addEventListener('change', (event) => {
   </div>
   <!-- ===== Page Wrapper End ===== -->
 <script defer src="bundle.js"></script></body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+//닉네임 중복 검사=======================================================================================================================
+function checkName(){
+	var name = document.getElementById("name").value;
+
+$.ajax({
+	url: "/nameCheck.do",
+    type: "POST",
+    data: {name: name},
+    
+    success: function (flag) {
+        
+        if (flag > 0 && name.length >0) {
+            // 닉네임이 중복됨
+            document.getElementById("nameNo").style.display = "inline-block";
+            document.getElementById("nameOk").style.display = "none";
+        } else if(flag == 0 && name.length >0){
+            // 사용 가능한 닉네임
+            document.getElementById("nameOk").style.display = "inline-block";
+            document.getElementById("nameNo").style.display = "none";
+        }else{
+        	//아무것도 입력하지 않을 경우
+        	document.getElementById("nameOk").style.display = "none";
+        	document.getElementById("nameNo").style.display = "none";
+        }
+    },
+    error: function (error) {
+        console.log(error);
+    }
+})
+}
+
+// 이메일 형식 검사==============================================================================================================
+function validateEmail() {
+	  const emailInput = document.getElementById('email');
+	  const email = emailInput.value.trim();
+	  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	  
+	  if (email === '') {
+	    alert('이메일을 입력하셔야 합니다.');
+	    return false;
+	  }
+	  
+	  if (!emailRegex.test(email)) {
+	    alert('올바른 이메일 형식이 아닙니다. 다시 입력해주세요.');
+	    return false;
+	  }
+	  
+	  return true;
+	}
+
+// 필수 입력값 =====================================================================================================================
+window.onload = function () {
+	document.getElementById('editButton').onclick = function () {
+		if( document.mfrm.name.value.trim() == '') {
+			alert('닉네임을 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.phoneNumber.value.trim() == '') {
+			alert('휴대폰 번호를 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.cm.value.trim() == '') {
+			alert('현재신장을 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.kg.value.trim() == '') {
+			alert('현재 몸무게를 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.takeKcal.value.trim() == '') {
+			alert('하루 목표 섭취 칼로리를 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.targetScale.value.trim() == '') {
+			alert('목표 체중을 입력하셔야 합니다'); 
+			return false;
+		}
+		if( document.mfrm.birthday.value.trim() == '') {
+			alert('생년월일을 입력하셔야 합니다'); 
+			return false;
+		}
+		
+		// 닉네임을 입력하지 않거나 중복인 경우에 알림창 표시
+		if (document.getElementById("nameNo").style.display == 'inline-block') {
+			alert('중복되는 닉네임은 사용할 수 없습니다'); 
+			return false;
+		}
+		document.mfrm.submit();
+	};
+};
+
+// 배경 사진 사진 변경================================================================================================================
+// 'cover' 요소를 가져옵니다.
+var coverInput = document.getElementById('cover');
+
+// 'coverInput'이 null이 아닌 경우에만 실행합니다.
+if (coverInput !== null) {
+  // 'change' 이벤트 리스너를 추가합니다.
+  coverInput.addEventListener('change', (event) => {
+    // 선택된 파일을 가져옵니다.
+    var file = event.target.files[0];
+    
+    // FileReader 객체를 생성합니다.
+    var reader = new FileReader();
+    
+    // 파일이 로드되었을 때의 동작을 정의합니다.
+    reader.onload = function (e) {
+      // 미리보기 이미지 요소를 생성합니다.
+      var previewImage = document.createElement('img');
+      
+      // 이미지가 로드된 후에 실행되는 동작을 정의합니다.
+      previewImage.onload = function () {
+        // 이미지가 로드된 후에 실행되는 로직입니다.
+        
+        // 미리보기 이미지를 표시할 컨테이너 요소를 가져옵니다.
+        var previewContainer = document.getElementById('cover-container');
+        
+        // 컨테이너 요소를 비웁니다.
+        previewContainer.innerHTML = '';
+        
+        // 미리보기 이미지를 컨테이너에 추가합니다.
+        previewContainer.appendChild(previewImage);
+      };
+      
+      // 미리보기 이미지의 소스를 선택된 파일의 데이터 URL로 설정합니다.
+      previewImage.src = e.target.result;
+      
+      // 미리보기 이미지에 클래스를 추가합니다.
+      previewImage.classList.add('h-full', 'w-full', 'rounded-tl-sm', 'rounded-tr-sm', 'object-cover');
+    };
+    
+    // 선택된 파일을 데이터 URL로 읽어옵니다.
+    reader.readAsDataURL(file);
+  });
+} else {
+  console.error("coverInput is null");
+}
+
+ 
+ // 프로필 사진 변경 ===================================================================================================================
+var profileInput = document.getElementById('profile');
+if (profileInput !== null) {
+	profileInput.addEventListener('change', (event) => {
+    var file = event.target.files[0];
+    
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var previewProfileImage = document.createElement('img');
+      previewProfileImage.onload = function () {
+        // 이미지가 로드된 후에 실행되는 로직
+        var previewProfileContainer = document.getElementById('profile-container');
+        previewProfileContainer.innerHTML = '';
+        previewProfileContainer.appendChild(previewProfileImage);
+      };
+      previewProfileImage.src = e.target.result;
+      previewProfileImage.classList.add('h-full', 'w-full', 'rounded-tl-sm', 'rounded-tr-sm', 'object-cover');
+    };
+    reader.readAsDataURL(file);
+  });
+} else {
+  console.error("profileInput is null");
+}
+
+</script>
 
 </html>

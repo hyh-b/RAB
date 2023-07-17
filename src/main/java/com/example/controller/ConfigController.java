@@ -122,12 +122,12 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
-	@RequestMapping("/cards.do")
-	public ModelAndView cards() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("cards");
-		return modelAndView; 
-	}
+//	@RequestMapping("/cards.do")
+//	public ModelAndView cards() {
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.setViewName("cards");
+//		return modelAndView; 
+//	}
 	
 	@RequestMapping("/chart.do")
 	public ModelAndView chart() {

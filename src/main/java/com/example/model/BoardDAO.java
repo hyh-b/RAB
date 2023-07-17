@@ -1,4 +1,6 @@
-package com.example.boardmodel;
+package com.example.model;
+
+import java.util.ArrayList;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,5 +15,11 @@ public class BoardDAO {
 	
 	@Autowired
 	private BoardMapperInter mapper;
+	
+	public ArrayList<BoardTO> boardList(BoardTO to) {
+		ArrayList<BoardTO> boardList = (ArrayList<BoardTO>)mapper.boardList(to);
+	    
+	    return boardList;
+	}
 
 }
