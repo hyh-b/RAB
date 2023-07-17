@@ -296,10 +296,6 @@ pageEncoding="UTF-8"%>
 	    gap: 10px;
 	}
 	
-<<<<<<< HEAD
-	.customExercise-info .ex_name {
-	    width: 200px;
-=======
 	.customExercise-info .dbtn {
 	    
 	    margin-left:12px;
@@ -309,16 +305,12 @@ pageEncoding="UTF-8"%>
 	.customExercise-info .ex_name {
 	    width: 200px;
 	    margin-left:30px;
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 	}
 	
 	.customExercise-info .ex_time {
 	    width: 100px;
-<<<<<<< HEAD
-=======
 	    margin-left:400px;
 	   
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 	}
 	
 	.customExercise-info .ex_used_kal {
@@ -826,10 +818,7 @@ pageEncoding="UTF-8"%>
 						<!-- 날짜를 선택할 수 있는 입력 요소를 추가합니다. -->
 						<input type="text" id="datepicker" placeholder="날짜 선택" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 					</div>
-<<<<<<< HEAD
-=======
 					<div style="width: 500px;"></div>
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 50px;">
 			    		총 운동시간
 			    	</label>
@@ -1215,40 +1204,11 @@ pageEncoding="UTF-8"%>
 						success: function(data) {
 							alert("운동등록에 성공했습니다.")
 							// db의 당일 운동 데이터 출력
-<<<<<<< HEAD
-							// 데이터가 서버로 넘어간 뒤 db에 들어가기 까지 시간이 걸리기에 1초 뒤에 db데이터 보여줌
-							setTimeout(function() {
-								$.ajax({
-								    url: '/viewExercise',
-								    type: 'GET',
-								    success: function(data) {
-								        let exerciseHtml = '<div class="exercise-item">';
-								        data.forEach(function(exercise, index) {
-								            exerciseHtml += 
-								            	// 각 행마다 인덱스 설정하여 구분
-								            	'<div class="exercise-info" data-index="'+index+'">' +
-									                '<div class="ex_name">'+exercise.ex_name+'</div>'+
-									                '<input class="ex_time" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
-									                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
-									            '</div>';
-								        });
-								        exerciseHtml += '</div>';
-								        $('#resultExercise1').html(exerciseHtml);
-								    },
-								    error: function(jqXHR, textStatus, errorThrown) {
-								        console.error('Fetch error:', errorThrown);
-								        console.error('Server response:', jqXHR.responseText);
-								    }
-								}); 
-			                }, 1000);
-=======
 							fetchExercises(selectedDate);
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 							
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
 							// 오류 처리
-							console.log("에러다 에러")
 							alert('운동등록에 실패했습니다'+ jqXHR.responseText)
 							console.error('Server response:', jqXHR.responseText);
 						}
@@ -1301,37 +1261,7 @@ pageEncoding="UTF-8"%>
 	                    dataType: "json", 
 	                    success: function(response) {
 	                    	alert('운동등록에 성공했습니다');
-<<<<<<< HEAD
-	                    	setTimeout(function() {
-		                    	// db의 당일 사용자설정 운동 데이터 출력
-		                		$.ajax({
-		                		    url: '/viewCustomExercise',
-		                		    type: 'GET',
-		                		    success: function(data) {
-		                		        let customExerciseHtml = '<div class="customExercise-item">';
-		                		        data.forEach(function(exercise, index) {
-		                		            customExerciseHtml += 
-		                		            	// 각 행마다 인덱스 설정하여 구분
-		                		            	'<div class="customExercise-info" data-index="'+index+'">' +
-		                			                '<div class="ex_name">'+exercise.ex_name+'</div>'+
-		                			                '<input class="ex_time" type="number" readonly value="' + exercise.ex_time + '">'+
-		                			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
-		                			            '</div>';
-		                		        });
-		                		        customExerciseHtml += '</div>';
-		                		        $('#resultExercise2').html(customExerciseHtml);
-		                		     	// 사용자설정 운동 데이터 출력완료시 총 운동시간, 소모칼로리 업데이트
-		                		        calculateTotalTimeAndCalories();
-		                		    },
-		                		    error: function(jqXHR, textStatus, errorThrown) {
-		                		        console.error('Fetch error:', errorThrown);
-		                		        console.error('Server response:', jqXHR.responseText);
-		                		    }
-		                		}); 
-			                }, 1000);
-=======
 		                	fetchExercises(selectedDate)
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 	                    },
 	                    error: function(jqXHR, textStatus, errorThrown) {
 	                        alert('운동 추가 실패: ' + errorThrown);
@@ -1387,10 +1317,7 @@ pageEncoding="UTF-8"%>
 	    console.log("총 소모 칼로리: " + totalExUsedKcal + " Kcal");
 	}
 	
-	
 	$(document).ready(function() {
-<<<<<<< HEAD
-=======
 		
 		//운동삭제
 		$(document).on('click', '.exercise-info .dbtn', function(e) {
@@ -1434,7 +1361,6 @@ pageEncoding="UTF-8"%>
 		    });
 		});
 		
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 		// 달력
 		var date = new Date();
 	
@@ -1447,60 +1373,14 @@ pageEncoding="UTF-8"%>
         $("#datepicker").datepicker({ 
             dateFormat: 'yy-mm-dd',
             onSelect: function(dateText) {
-<<<<<<< HEAD
-                $.ajax({
-                    url: '/viewExercise',
-                    type: 'GET',
-                    data: { selectedDate: dateText },
-                    success: function(data) {
-                        let exerciseHtml = '<div class="exercise-item">';
-                        data.forEach(function(exercise, index) {
-                        	if (exercise.ex_name) {
-	                            exerciseHtml += 
-	                            '<div class="exercise-info" data-index="'+index+'">' +
-	                                '<div class="ex_name">'+exercise.ex_name+'</div>'+
-	                                '<input class="ex_time" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
-	                                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
-	                            '</div>';
-                        	}
-                        });
-                        exerciseHtml += '</div>';
-                        $('#resultExercise1').html(exerciseHtml);
-                        
-                        let customExerciseHtml = '<div class="customExercise-item">';
-        		        data.forEach(function(exercise, index) {
-        		        	if (exercise.ex_name2) {
-	        		            customExerciseHtml += 
-        		            	// 각 행마다 인덱스 설정하여 구분
-        		            	'<div class="customExercise-info" data-index="'+index+'">' +
-        			                '<div class="ex_name">'+exercise.ex_name2+'</div>'+
-        			                '<input class="ex_time" type="number" readonly value="' + exercise.ex_time2 + '">'+
-        			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal2+'</div>'+
-        			            '</div>';
-        		        	}
-        		        });
-        		        customExerciseHtml += '</div>';
-        		        $('#resultExercise2').html(customExerciseHtml);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error('Fetch error:', errorThrown);
-                        console.error('Server response:', jqXHR.responseText);
-                    }
-                });
-=======
             	fetchExercises(dateText)
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
             }
         });
 	    // 달력의 기본 값을 오늘 날짜로 설정
 	    $("#datepicker").datepicker("setDate", today);
-<<<<<<< HEAD
-		
-=======
 	    fetchExercises(today);
 	    
 	    
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 		// 운동 다이어로그 내 검색 버튼
 		$('#searchButton1').click(function() {
 			let searchEx = $("#exerciseName1").val();
@@ -1521,8 +1401,6 @@ pageEncoding="UTF-8"%>
 		    		});
 		    		// 검색 결과를 화면에 표시합니다.
 		    		$('#exerciseDiv1').html(searchResultsHtml);
-		    		
-		    		
 		    	},
 		    	error: function(jqXHR, textStatus, errorThrown) {
 		    		// 오류 처리
@@ -1531,65 +1409,10 @@ pageEncoding="UTF-8"%>
 		    });
 		    
 		});
-<<<<<<< HEAD
-		// db의 당일 운동 데이터 출력
-		$.ajax({
-		    url: '/viewExercise',
-		    type: 'GET',
-		    success: function(data) {
-		        let exerciseHtml = '<div class="exercise-item">';
-		        data.forEach(function(exercise, index) {
-		            exerciseHtml += 
-		            	// 각 행마다 인덱스 설정하여 구분
-		            	'<div class="exercise-info" data-index="'+index+'">' +
-			                '<div class="ex_name">'+exercise.ex_name+'</div>'+
-			                '<input class="ex_time" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
-			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
-			            '</div>';
-		        });
-		        exerciseHtml += '</div>';
-		        $('#resultExercise1').html(exerciseHtml);
-		    },
-		    error: function(jqXHR, textStatus, errorThrown) {
-		        console.error('Fetch error:', errorThrown);
-		        console.error('Server response:', jqXHR.responseText);
-		    }
-		}); 
-		
-		// db의 당일 사용자설정 운동 데이터 출력
-		$.ajax({
-		    url: '/viewCustomExercise',
-		    type: 'GET',
-		    success: function(data) {
-		        let customExerciseHtml = '<div class="customExercise-item">';
-		        data.forEach(function(exercise, index) {
-		            customExerciseHtml += 
-		            	// 각 행마다 인덱스 설정하여 구분
-		            	'<div class="customExercise-info" data-index="'+index+'">' +
-			                '<div class="ex_name">'+exercise.ex_name+'</div>'+
-			                '<input class="ex_time" type="number" readonly value="' + exercise.ex_time + '">'+
-			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
-			            '</div>';
-		        });
-		        customExerciseHtml += '</div>';
-		        $('#resultExercise2').html(customExerciseHtml);
-		        // 운동 데이터 출력완료시 총 운동시간, 소모칼로리 출력
-		        calculateTotalTimeAndCalories();
-		    },
-		    error: function(jqXHR, textStatus, errorThrown) {
-		        console.error('Fetch error:', errorThrown);
-		        console.error('Server response:', jqXHR.responseText);
-		    }
-		}); 
-		
-		// 전체적용버튼-운동 시간대비 소모칼로리 계산하여 db저장후 출력
-		$('#applyAll').click(function() {
-=======
 		
 		// 전체적용버튼-운동 시간대비 소모칼로리 계산하여 db저장후 출력
 		$('#applyAll').click(function() {
 			let selectedDate = $('#datepicker').val();
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 		    const exerciseItems = [];
 		    $('.exercise-item .exercise-info').each(function() {
 		        const exerciseInfo = $(this);
@@ -1601,11 +1424,7 @@ pageEncoding="UTF-8"%>
 		        url: '/calculateCalories',
 		        type: 'POST',
 		        contentType: 'application/json',
-<<<<<<< HEAD
-		        data: JSON.stringify(exerciseItems),
-=======
 		        data: JSON.stringify({ exerciseItems: exerciseItems, selectedDate: selectedDate }),
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 		        success: function(data) {
 		            
 		            $('.exercise-item .exercise-info').each(function(i) {

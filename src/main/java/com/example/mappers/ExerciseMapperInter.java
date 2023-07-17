@@ -54,7 +54,6 @@ public interface ExerciseMapperInter {
 	public BigDecimal getCalories(String ex_name);
 	
 	// 운동시간과 소모 칼로리 업데이트
-
 	@Update("UPDATE Exercise SET ex_time=#{ex_time}, ex_used_kcal=#{ex_used_kcal} WHERE m_seq=#{m_seq} AND ex_day=#{ex_day} AND ex_name=#{ex_name}")
 	public int updateExercise(ExerciseTO to);
 	

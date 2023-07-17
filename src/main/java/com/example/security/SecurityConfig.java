@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers("/idCheck.do").permitAll()
 			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do").hasRole("ADMIN")
 			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/img/**","/src/images/**").permitAll()
-			.anyRequest().authenticated();
+			.anyRequest().permitAll();
 		
 		/*
 		http.authorizeRequests()
