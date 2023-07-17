@@ -134,5 +134,9 @@ public class MainTO {
    private BigDecimal i_lunch_kcal;
    private BigDecimal i_dinner_kcal;
 
+   // 월 별 몸무게 평균값 구하는 칼럼
+  // private BigDecimal avg_weight;
+   private Double avg_weight;
+   private String month;
 
 }

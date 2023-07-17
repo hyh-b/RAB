@@ -185,7 +185,7 @@
 			var selectedDate = $("#calendarCtInput").val();
 			
 			//console.log( " pie 함수에서 zzinid -> ", zzinid); 
-			console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
+			//console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
 
 			$.ajax({
 			url: "/pie_chart_data",
@@ -408,30 +408,90 @@ function generateDates(selectedDate) {
 
 	//---line 함수----------------------------------------------------
 	
+	var lineChart;
+
+	function LineChartForMonth() {
+		
+		var selectedYear = $("#yearSelectForLineChart").val();
+		var zzinseq = $("#zzinseq").val();
+		
+		console.log( " 년도 잘 골라졌나? -> ", selectedYear);
+		
+	    $.ajax({
+	        url: '/line_chart_data',  // 데이터를 받아올 서버의 API 엔드포인트를 입력하세요
+	        method: 'GET',
+	        dataType: 'json',
+	        data: {
+	  	      year: selectedYear,
+	  	      seq: zzinseq
+	  	    },
+	        success: function(line) {
+	            //console.log("line ->", line);
+	
+	            
+	            var weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	
+	            for(var i=0; i<line.length; i++) {
+	                var monthIndex = parseInt(line[i].month) - 1;  
+	                weights[monthIndex] = line[i].avg_weight; 
+	            
+
+	                //console.log(" line[i].month => ", line[i].month);
+	               //console.log(" line[i].avg_weight => ", line[i].avg_weight);
+	            }
+
+	            //console.log(" line weights => ", weights);
+	
+	            // 차트 옵션
+	            var lineOptions = {
+	                series: [{
+	                    name: "월별 몸무게",
+	                    data: weights
+	                }],
+	                chart: {
+	                    height: 350,
+	                    type: 'line',
+	                    zoom: {
+	                        enabled: false
+	                    }
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                stroke: {
+	                    curve: 'straight'
+	                },
+	                title: {
+	                    text: '단위 : kg',
+	                    align: 'left'
+	                },
+	                grid: {
+	                    row: {
+	                        colors: ['#000000', 'transparent'],
+	                        opacity: 0.5
+	                    },
+	                },
+	                xaxis: {
+	                    categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월','11월', '12월' ],
+	                }
+	            };
+	            
+	            // 차트를 새로 그립니다.
+	            if(lineChart) {
+	                lineChart.destroy();
+	            }
+	            lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
+	            lineChart.render();
+	        }
+	    });
+	}
 	
 	
 	//---line 함수 끝 -------------------------------------------------
 ////////
 
 	//---------------------------차트 함수화 끝------------------------------------------
-	
-	
-	
-	//---------------기본값으로 먼저 뿌려질 데이터 ( 기본값 , 정적 )----------------------------------------
-	
-		//$(document).ready(function() {
-    	// DOM이 완전히 로드된 후 실행할 코드
-    	//console.log("DOM이 완전히 로드되었습니다!");
-		//});
-	
-	
-	
-		//window.addEventListener("load", function() {
-   		// 이벤트로 따로 할당해서 documet.ready라 아예 구분시키기 시도
-   		//console.log("페이지와 모든 리소스가 로드되었습니다!");
-		//});
-	
-	//---------------기본값으로 먼저 뿌려질 데이터 끝----------------------------------------
+
 	
 //---------------------------- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트 ( 동적 )----------------------------
  	window.onload = function() {
@@ -492,42 +552,10 @@ function generateDates(selectedDate) {
     	  areaChart.render();
     	  
 		  /////////////////////////////////////////////////////
-    	  var lineOptions = {
-    	    series: [{
-    	      name: "Desktops",
-    	      data: [0, 0, 0, 0, 0, 0, 69, 91, 148, 150, 121, 178]
-    	    }],
-    	    chart: {
-    	      height: 350,
-    	      type: 'line',
-    	      zoom: {
-    	        enabled: false
-    	      }
-    	    },
-    	    dataLabels: {
-    	      enabled: false
-    	    },
-    	    stroke: {
-    	      curve: 'straight'
-    	    },
-    	    title: {
-    	      text: '단위 : 월',
-    	      align: 'left'
-    	    },
-    	    grid: {
-    	      row: {
-    	        colors: ['#000000', 'transparent'],
-    	        opacity: 0.5
-    	      },
-    	    },
-    	    xaxis: {
-    	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov', 'Dec'  ],
-    	    }
-    	  };
-    	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
-    	  lineChart.render();
+		  
+    	 //where linchart used to place
 	
-          
+          //////////////////////////////////////////////
         },
         error: function (error) {
         	console.log('에러는 -> ', error);
@@ -597,9 +625,9 @@ function generateDates(selectedDate) {
 		      var date = $(this).find('#dateInput').val();
 	    	  var zzinseq = $("#zzinseq").val();
 	    	  
-	    	  console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
-	    	  console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
-	    	  console.log( " 몸무게 업데이트/날짜 -> ", date);
+	    	  //console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
+	    	  //console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
+	    	  //console.log( " 몸무게 업데이트/날짜 -> ", date);
 	    	  
 		      
 		      if(weight === '' || isNaN(weight)) { 
@@ -640,9 +668,9 @@ function generateDates(selectedDate) {
 	      var date = $(this).find('#dateInput').val();
     	  var zzinseq = $("#zzinseq").val();
     	  
-    	  console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
-    	  console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
-    	  console.log( " 몸무게 업데이트/날짜 -> ", date);
+    	  //console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
+    	  //console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
+    	  //console.log( " 몸무게 업데이트/날짜 -> ", date);
     	  
 	      
 	      if(weight === '' || isNaN(weight)) { 
@@ -695,8 +723,8 @@ function generateDates(selectedDate) {
 	      var tweight = $(this).find('#TweightInput').val();
 	      var zzinseq = $("#zzinseq").val();
 
-	 	  console.log( " 목표 몸무게 업데이트/날짜 -> ", zzinseq);
-    	  console.log( " 목표 몸무게 업데이트/몸무게 -> ", tweight); 
+	 	  //console.log( " 목표 몸무게 업데이트/날짜 -> ", zzinseq);
+    	  //console.log( " 목표 몸무게 업데이트/몸무게 -> ", tweight); 
 	      
 	      if(tweight === '' || isNaN(tweight)) { 
 	          alert('숫자를 입력해주세요');
@@ -735,7 +763,7 @@ function generateDates(selectedDate) {
 	  }
 	});
 		
-	//---함수등록 칸  ------------------ 바뀌는 날짜에 대해서 모든 데이터가 비도이적으로 처리됨-----------------------------------------
+	//---함수등록 칸  ------------------ 바뀌는 날짜에 대해서 모든 데이터가 비동기적으로 처리됨-----------------------------------------
     $("#calendarCtInput").on("change", function() {
         	
         	selectedDate = $(this).val();
@@ -746,9 +774,18 @@ function generateDates(selectedDate) {
          
           	PieDataForDate();
           	
-          	BarChartForDate();
+          	//LineChartForMonth();
             	
         });
+	
+	//년도별로 월평균 보여주기.
+    $("#yearSelectForLineChart").on("change", function() {
+
+    	console.log(" select 년도 확인 ->",  $(this).val());
+    	
+      	LineChartForMonth();
+        	
+    });
 
 //////
   	};//window.onload끝 
@@ -774,10 +811,31 @@ function generateDates(selectedDate) {
 			console.log( " formattedDate -> " , formattedDate );
 	
 			selectedDate = formattedDate; 
+			
+			///
+			var ldate = new Date();
+			var lcurrentYear = ldate.getFullYear();
+			
+			// Create an option for the previous year, the current year, and the next year.
+			for(var lyear = lcurrentYear - 2; lyear <= lcurrentYear + 2; lyear++) {
+			    var option = document.createElement("option");
+			    option.value = lyear;
+			    option.text = lyear + " 년";
+			
+			    // If this is the current year, make it the default selection.
+			    if(lyear == lcurrentYear) {
+			        option.selected = true;
+			    }
+			
+			    document.getElementById("yearSelectForLineChart").appendChild(option);
+			}
+			
+			///
 	
 			loadDataFromDate();
 			PieDataForDate();
 			BarChartForDate();
+			LineChartForMonth();
 	});
 </script>
 
@@ -1558,6 +1616,10 @@ function generateDates(selectedDate) {
 				  <h4 class="mb-2 text-xl font-bold text-black dark:text-white">
 				    내 몸무게 변화
 				  </h4>
+				  <select id="yearSelectForLineChart" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+
+				  </select>
+				  
 <!-- 				    <div id="chartline" class="mx-auto flex justify-center"></div> -->
 				    <div id="chartline" class="mx-auto flex justify-center"></div>
 			</div>

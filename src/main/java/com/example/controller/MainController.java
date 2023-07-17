@@ -58,14 +58,18 @@ public class MainController {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		MypageTO mypageTO = new MypageTO();
+
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
         //v_memberIntakeData 정보
         ArrayList<MainTO> lists = dao.main_data(mId);
+        
+        
+        
+        //유저마다 한개의 참조 레코드 생성
         int flag = dao.InsertData(mId);
-     
         
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
@@ -77,8 +81,6 @@ public class MainController {
 		modelAndView.addObject("zzinid", member.getM_id());
 		modelAndView.addObject("zzinseq", member.getM_seq());
 		modelAndView.addObject("profilename", mypageTO.getM_profilename());
-		
-		
 
         modelAndView.setViewName("test");
         
@@ -360,7 +362,48 @@ public class MainController {
 		   	return new ResponseEntity<String>( BarDatas.toString(), HttpStatus.OK);
 		  
 		}
+//---lineData----------------------------------------------------------
 		
+		@RequestMapping("line_chart_data")
+		public ResponseEntity<String> LineChartData(
+		Authentication authentication, ModelMap map, HttpServletRequest request, String mId,
+		@RequestParam("seq") int seq, @RequestParam("year") String year) {
+			
+			mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+	        
+			MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+
+			//////////////////
+		    ArrayList<MainTO> lines = dao.LineChartData(seq, year);
+		    
+		    System.out.println(" controller에서 year 받냐? " + year);
+		    
+		    JsonArray LineDatas = new JsonArray(); 
+		    
+		    // Set up an array to represent each month's average weight
+	        double[] monthlyWeights = new double[12];
+	        Arrays.fill(monthlyWeights, 0.0);
+
+	        // Populate the array with actual data from the database
+	        for (MainTO to : lines) {
+	            int monthIndex = Integer.parseInt(to.getMonth().split("-")[1]) - 1;
+	            monthlyWeights[monthIndex] = to.getAvg_weight();
+	        }
+
+	        // Now create JSON objects for each month, even if some months have no data
+	        for(int i = 0; i < 12; i++) {
+	            JsonObject LineData = new JsonObject();
+	            LineData.addProperty("avg_weight", monthlyWeights[i]);
+	            LineData.addProperty("month", String.format("%02d", i + 1));
+
+	            LineDatas.add(LineData);
+	        }
+		    
+		    System.out.println("  LineDatas 데이터들 Controller에서-> " +  LineDatas);
+	
+		   	return new ResponseEntity<String>( LineDatas.toString(), HttpStatus.OK);
+		  
+		}
 		//----몸무게들-----------------------------------
 		
 		@ResponseBody
