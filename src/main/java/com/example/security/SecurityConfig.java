@@ -45,6 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/signup2.do").hasRole("SIGNUP")
+			.antMatchers("/signup.do").permitAll()
+			.antMatchers("/idCheck.do").permitAll()
 			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do").hasRole("ADMIN")
 			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/img/**","/src/images/**").permitAll()
 			.anyRequest().authenticated();
