@@ -165,5 +165,33 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
+	@RequestMapping("/admin.do")
+	public ModelAndView admin() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("admin");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/feedback.do")
+	public ModelAndView feedback() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("feedback");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/boardManagement.do")
+	public ModelAndView boardManagement() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("boardManagement");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/adminAnnouncement.do")
+	public ModelAndView adminAnnouncement() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("adminAnnouncement");
+		return modelAndView;
+	}
+	
 }
 

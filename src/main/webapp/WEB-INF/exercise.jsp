@@ -8,8 +8,6 @@ pageEncoding="UTF-8"%>
 	String m_name = (String)request.getAttribute("m_name");
 	String m_gender = (String)request.getAttribute("m_gender");
 	String abHtml = (String)request.getAttribute("abHtml");
-	System.out.println("닉네임"+m_name);
-	System.out.println("성별"+m_gender);
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -20,7 +18,11 @@ pageEncoding="UTF-8"%>
   <title>운동</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <style type="text/css">
 	.radio-buttons {
     	display: flex; /* 가로 배치를 위해 flexbox 사용 */
@@ -145,7 +147,7 @@ pageEncoding="UTF-8"%>
 
  /* --------------------------  파일업로드, 사진전체보기 버튼 끝---------------------------------------- */
 
-/*--------------- 다이어로그 창 시작----------------------------  */
+/*--------------- 사진전체보기 창 시작----------------------------  */
   
   
   #closeDialogBtn {
@@ -156,6 +158,8 @@ pageEncoding="UTF-8"%>
     }
     #photoDialog {
       display: none;
+      width:1200px; 
+      height:1120px;
       position: relative;
       top: 50%;
       left: 50%;
@@ -164,44 +168,181 @@ pageEncoding="UTF-8"%>
       background: white;
       padding: 20px;
       border: 1px solid black;
+      max-height: 90vh; /* 뷰포트 높이의 90%로 최대 높이 설정 */
+	  max-width: 90vw; /* 뷰포트 너비의 90%로 최대 너비 설정 */
+	  overflow-y: auto; /* 내용이 창 크기를 넘어갈 경우 스크롤 표시 */
     }
     #photoContainer {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+      column-count: 3; /* 3개의 열을 만듦 */
+  	  column-gap: 10px
     }
     #photoContainer img {
-      width: 30%;
+      width: 100%;
       margin-bottom: 20px;
     }
     
     .photoContainer div {
-            margin-bottom: 30px;
-        }
+    	break-inside: avoid; /* 한 div가 두 열 사이에 걸쳐 있지 않도록 함 */
+  	    padding-bottom: 10px;
+        margin-bottom: 25px;
+    }
         
      .photoContainer div img {
-            max-width: 380px;
-            max-height: 360px;
-            min-width: 250px;
-            min-height: 250px;
-            margin-right: 20px;
-            margin-bottom: 20px;
+     	width: 100%;
+  		height: auto;		
+        max-width: 380px;
+        max-height: 340px;
+        min-width: 220px;
+        min-height: 220px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+     }
+        
+	@media (max-width: 1600px) {
+	  .photoContainer div img {
+	    max-width: 280px;
+	    max-height: 160px;
+	    min-width: 150px;
+	    min-height: 150px;
+	    
+	  }
+	   #photoDialog {
+	      width:900px; 
+	      height:1000px;
+      	  left: 60%;
+      } 
+      #photoContainer div {
+            margin-bottom: 10px;
         }
+	}
+	
+	@media (max-width: 480px) {
+	  .photoContainer div img {
+	    max-width: 140px;
+	    max-height: 140px;
+	    min-width: 80px;
+	    min-height: 80px;
+	  }
+	  
+	  #photoDialog {
+	      width:450px; 
+	      height:500px;
+      	  left: 60%;
+      } 
+	}
         #previousPageBtn, #nextPageBtn {
             position: absolute;
             left: 20px;
-            bottom: 20px;
+            bottom: 10px;
             font-size:20px;
+            color: green;
+            font-weight: bold;
         }
         #nextPageBtn {
             left: 90px;
         }
+        
+    /*--------------- 사진전체보기 창 끝----------------------------  */
+    
+    /*---------------  운동 시작----------------------------  */
+    
+    .exercise-list {
+	    display: flex;
+	    flex-wrap: wrap;
+	    gap: 10px;
+	}
+	
+	.exercise-info {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	}
+	
+	.exercise-info .dbtn {
+	    
+	    margin-left:12px;
+	    margin-right:10px;
+	}
+	
+	.exercise-info .ex_name {
+	    width: 200px;
+	    margin-left:30px;
+	}
+	
+	.exercise-info .ex_time {
+	    width: 100px;
+	    margin-left:400px;
+	    margin-right:170px;
+	}
+	
+	.exercise-info .ex_used_kal {
+	    width: 150px;
+	}
+	
+	.ex_time_input {
+	    width: 100px;
+	    padding: 5px;
+	     border: 2px solid black;
+	    border-radius: 4px;
+	    /* 추가적인 스타일링을 적용할 수 있습니다 */
+	}
+	
+	.customExercise-info {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	}
+	
+	.customExercise-info .dbtn {
+	    
+	    margin-left:12px;
+	    margin-right:10px;
+	}
+	
+	.customExercise-info .ex_name {
+	    width: 200px;
+	    margin-left:30px;
+	}
+	
+	.customExercise-info .ex_time {
+	    width: 100px;
+	    margin-left:400px;
+	   
+	}
+	
+	.customExercise-info .ex_used_kal {
+	    width: 150px;
+	}
+	
+	/*---------------  운동 끝----------------------------  */
+	
+	/*---------------  당일 합계 시작----------------------------  */
+	
+	.total {
+	    display: flex;
+	    justify-content: flex-end;
+	    align-items: center;
+	    width: 100%;
+	}
+	
+	.totalExtime, .totalExUsedKcal {
+	  flex: 0 0 10px;
+	  text-align: center;
+	  margin-right: 300px;
+	}
+	
+	.totalExUsedKcal {
+	  margin-left: 0px; 
+	}
+	
+	/*---------------  당일 합계 끝----------------------------  */
 </style>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <script type="text/javascript">
+
 	window.onload = function(){
 		 document.getElementById('ubtn').onclick = function(){
 			
@@ -211,7 +352,6 @@ pageEncoding="UTF-8"%>
 			}
 			document.ufrm.submit();
 		} 
-		
 	}
 </script>
 
@@ -341,7 +481,7 @@ pageEncoding="UTF-8"%>
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do?seq=${seq}"
+              href="food.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
@@ -666,77 +806,144 @@ pageEncoding="UTF-8"%>
 
         <hr style="padding-bottom: 30px"/>
 
-        <!-- =============================== 아침 ========================= -->
-          	
+        <!-- =============================== 당일 합계 ========================= -->
+        
         <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+			<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
 				<div class="flex items-center">
-			   		<h4 class="font-medium text-black dark:text-white mr-4">
-			    		운동
-			    	</h4>
-			    	<button id="btn1">
-			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-			    	</button>
-			    	<div style="display: flex; flex-direction: row;">
-						<button id="fbtn1" style="padding-left: 30px;">등록</buttoN>
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-left: 50px; width: 150px;">
+			    		당일 합계
+			    	</label>
+			    	<div>
+						<!-- 날짜를 선택할 수 있는 입력 요소를 추가합니다. -->
+						<input type="text" id="datepicker" placeholder="날짜 선택" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 					</div>
-			    	<div id="dialogContainer1" title="검색">
-						<input type="text" id="foodName1" placeholder="검색어를 입력하세요">
-						<button id="searchButton1">검색</button>
-						<div id="foodComent1"></div>
-					</div>
+					<div style="width: 500px;"></div>
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 50px;">
+			    		총 운동시간
+			    	</label>
+			    	<label class="font-medium text-black dark:text-white mr-4">
+			    		총 소모 칼로리
+			    	</label>
 				</div>
 			</div>
             <div class="flex flex-col gap-5.5 p-6.5">
             	<div>
-<!--            	<label class="mb-3 block font-medium text-sm text-black dark:text-white"> -->
-					<!-- Default Input -->
-<!--                </label> -->
 		            <form action="#" method="post" name="ffrm">
-						<input type="hidden" name="seq" id="seq" value="${seq}" />
-						<div id="resultFood1"></div>
+						<div id="total1">
+						</div>
 					</form>
 	        	</div>
         	</div>
         </div>
         </div> 
-        <!-- =============================== 아침 끝 =========================== -->
+        <!-- =============================== 당일 합계 끝 =========================== -->
         
-        <!-- =============================== 점심 시작 =========================== -->
+        <!-- =============================== 운동 시작 =========================== -->
         
         <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-
-        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-				<div class="flex items-center">
-			   		<h4 class="font-medium text-black dark:text-white mr-4">
-			    		사용자 설정 운동
-			    	</h4>
-			    	<button id="btn2">
-			    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-			    	</button>
-			    	<div style="display: flex; flex-direction: row;">
-						<button id="fbtn2" style="padding-left: 30px;">등록</buttoN>
-					</div>
-			    	<div id="dialogContainer2" title="검색">
-						<input type="text" id="foodName2" placeholder="검색어를 입력하세요">
-						<button id="searchButton2">검색</button>
-						<div id="foodComent2"></div>
-					</div>
-				</div>
-			</div>
-            <div class="flex flex-col gap-5.5 p-6.5">
-            	<div>
-		            <form action="#" method="post" name="ffrm">
-						<input type="hidden" name="seq" id="seq" value="${seq}" />
-						<div id="resultFood2"></div>
-					</form>
-	        	</div>
-        	</div>
-        </div>
+		    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+		        <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+		            <div class="flex items-center">
+		                <h4 class="font-medium text-black dark:text-white mr-4">
+		                    운동
+		                </h4>
+		                <button id="btn1">
+		                    <img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
+		                </button>
+		               
+		       <!-- =============================== 운동 다이어로그 시작 =========================== -->
+		                <div id="dialogContainer1" title="검색">
+		                    <input type="text" id="exerciseName1" placeholder="운동종목을 입력하세요">
+		                    <button id="searchButton1">검색</button>
+		                    <div id="exerciseDiv1"></div>
+		                </div>
+		    <!-- =============================== 운동 다이어로그 끝 =========================== -->
+		            </div>
+		        </div>
+		        <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+		            <div class="flex items-center">
+		            	<div>삭제</div>
+		                <div style="padding-left: 50px; width: 650px;" class="exercise-name-header">운동명</div>
+		                <div class="exercise-time-header">운동 시간(분)</div>&nbsp;&nbsp;
+		                <button id="applyAll"><img src="/src/images/logo/kcal2.png" width=140px > </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		                <div class="calories-burned-header">소모 칼로리</div>
+		            </div>
+		        </div>
+		        <div class="flex flex-col gap-5.5 p-6.5">
+		            <div>
+		                <form action="#" method="post" name="ffrm">
+		                    <div id="resultExercise1" class="exercise-list"></div>
+		                </form>
+		            </div>
+		        </div>
+		    </div>
+		</div>
         
-        </div> 
-		  <br>
+        <!-- =============================== 운동 끝 =========================== -->
+
+        <!-- =============================== 사용자설정 운동 시작 =========================== -->
+        
+        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+		
+		        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
+		        	<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+						<div class="flex items-center">
+					   		<h4 class="font-medium text-black dark:text-white mr-4">
+					    		사용자 설정 운동
+					    	</h4>
+					    	<button id="btn2">
+					    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
+					    	</button>
+					    	
+		
+		     <!-------------------- 사용자 설정 운동 다이어로그 시작 ------------------->
+		                    <div id="dialog-form" title="운동 입력">
+							    <p class="validateTips">모든 항목을 채워주세요.</p>
+							    <form>
+							        <fieldset>
+							            <div>
+							                <label for="name">운동명</label>
+							                <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all">
+							            </div>
+							            <div>
+							                <label for="time">운동 시간</label>
+							                <input type="number" name="time" id="time" class="text ui-widget-content ui-corner-all">
+							            </div>
+							            <div>
+							                <label for="calorie">소모 칼로리</label>
+							                <input type="number" name="calorie" id="calorie" class="text ui-widget-content ui-corner-all">
+							            </div>
+							        </fieldset>
+							    </form>
+							</div>
+		<!-------------------- 사용자 설정 운동 다이어로그 끝 ------------------->
+					    	<div id="dialogContainer2" title="검색">
+								
+								<div id="exerciseDiv2"></div>
+							</div>
+						</div>
+					</div>
+					<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+						<div class="flex items-center">
+					    	<div style="padding-left: 50px; width: 650px;" class="exercise-name-header">운동명</div>
+				                <div class="exercise-time-header">운동 시간</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				                <div class="calories-burned-header">소모 칼로리</div>
+						</div>
+					</div>
+		            <div class="flex flex-col gap-5.5 p-6.5">
+		            	<div>
+				            <form action="#" method="post" name="ffrm">
+								<div id="resultExercise2"></div>
+							</form>
+			        	</div>
+		        	</div>
+		        </div>
+		        
+		</div>
+        
+	<!-- =============================== 사용자설정 운동 끝 =========================== -->   
+	     
 	<!------------------ 이미지 업로드 시작---------------------------------------------------->
 		  <form action="exerciseAlbum_ok.do" method="post" name="ufrm" enctype="multipart/form-data">
 		  <div class="button-container">
@@ -782,9 +989,9 @@ pageEncoding="UTF-8"%>
 	<!---------------- 이미지 슬라이드 끝 ----------------------------------------->
 	
 	<!---------------- 사진 전체보기 다이어로그 시작 ----------------------------------------->
-			<div id="photoDialog" style="display:none; width:1200px; height:1200px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: white; padding: 20px; border: 1px solid black;">
-		        <button id="closeDialogBtn" style="font-size: 30px; position: absolute; right: 20px; bottom: 20px;">닫기</button>
-		        <button id="deleteBtn" style="font-size: 30px; position: absolute; right: 100px; bottom: 20px;">삭제</button>
+			<div id="photoDialog" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: white; padding: 20px; border: 1px solid black;">
+		        <button id="closeDialogBtn" style="font-size: 25px; position: absolute; right: 20px; bottom: 10px; font-weight: bold;">닫기</button>
+		        <button id="deleteBtn" style="font-size: 25px; position: absolute; right: 100px; bottom: 10px; font-weight: bold;">삭제</button>
 			    <button id="previousPageBtn">이전</button>
 			    <button id="nextPageBtn">다음</button>
 		        <div id="photoContainer" class="photoContainer">
@@ -825,98 +1032,418 @@ pageEncoding="UTF-8"%>
 	
 	//   사진 전체보기 다이어로그 창 설정
 	document.getElementById('viewBtn').addEventListener('click', function() {
-	      document.getElementById('photoDialog').style.display = 'block';
-	    });
+		document.getElementById('photoDialog').style.display = 'block';
+	});
 
-	    document.getElementById('closeDialogBtn').addEventListener('click', function() {
-	      document.getElementById('photoDialog').style.display = 'none';
-	    });
+	document.getElementById('closeDialogBtn').addEventListener('click', function() {
+		document.getElementById('photoDialog').style.display = 'none';
+	});
 		
-	    let images = [
-	    	<%= abHtml%>
-	    ];
+	let images = [
+		<%= abHtml%>
+	];
 
-	    let currentPage = 1;
-	    let imagesPerPage = 9;
-	    let numOfPages = Math.ceil(images.length / imagesPerPage);
-	    let selectedImage = null;
-	    let selectedImageValue = null;
-		// 이미지 보이기
-	    function displayImages() {
-	      let start = (currentPage - 1) * imagesPerPage;
-	      let end = start + imagesPerPage;
-	      let imagesToDisplay = images.slice(start, end);
+	let currentPage = 1;
+	let imagesPerPage = 9;
+	let numOfPages = Math.ceil(images.length / imagesPerPage);
+	let selectedImage = null;
+	let selectedImageValue = null;
+	
+	// 이미지 보이기
+	function displayImages() {
+		let start = (currentPage - 1) * imagesPerPage;
+	    let end = start + imagesPerPage;
+	    let imagesToDisplay = images.slice(start, end);
 
-	      let html = '';
-	      for(let i = 0; i < imagesToDisplay.length; i++) {
-	          if (i % 3 === 0) {
-	            html += '<div style="display:flex">';
-	          }
-	          html += '<img src="' + imagesToDisplay[i].src + '" value="' + imagesToDisplay[i].aSeq + '" onclick="selectImage(this)" style="width: 100%; height: 100%; margin-bottom: 20px;">';
-	          if ((i+1) % 3 === 0 || i+1 === imagesToDisplay.length) {
-	            html += '</div>';
-	          }
+	    let html = '';
+	    
+	    for(let i = 0; i < imagesToDisplay.length; i++) {
+	    	if (i % 3 === 0) {
+	        	html += '<div style="display:flex">';
 	        }
-	      document.getElementById('photoContainer').innerHTML = html;
+	        html += '<img src="' + imagesToDisplay[i].src + '" value="' + imagesToDisplay[i].aSeq + '" onclick="selectImage(this)" style="width: 100%; height: 100%; margin-bottom: 20px;">';
+	        if ((i+1) % 3 === 0 || i+1 === imagesToDisplay.length) {
+	        	html += '</div>';
+	        }
 	    }
-	    // 이미지 선택 기능
-	    function selectImage(imageElement) {
-	        if (selectedImage) {
-	            selectedImage.style.border = 'none'; // Remove border from previously selected image
-	        }
+	    document.getElementById('photoContainer').innerHTML = html;
+	}
+	
+	// 이미지 선택 기능
+	function selectImage(imageElement) {
+		if (selectedImage) {
+	    	selectedImage.style.border = 'none'; // Remove border from previously selected image
+	    }
 	        imageElement.style.border = '2px solid red'; // Add border to the selected image
 	        selectedImage = imageElement;
 	        selectedImageValue = imageElement.getAttribute('value');
 	    }
-		// 이미지 삭제
-	    function deleteImage() {
-	        if (!selectedImageValue) {
-	            alert('Please select an image to delete.');
-	            return;
-	        }
-	        
-	        $.ajax({
-	            url: '/album_delete.do',
-	            method: 'POST',
-	            data: {
-	                aSeq: selectedImageValue
-	            }
-	        }).done(function(response) {
-	            
-	            alert('이미지가 삭제되었습니다');
-	            location.reload(); // 삭제데이터 반영을 위해 새로고침
-	        }).fail(function() {
-	            // The request has been completed, but status is not OK
-	            alert('삭제에 실패했습니다');
-	        }).always(function() {
-	            // 실행 후 이미지 선택 해제
-	            selectedImage.style.border = 'none';
-	            selectedImage = null;
-	            selectedImageValue = null;
-	        });
-	    }
 		
-	    document.getElementById('deleteBtn').addEventListener('click', deleteImage);
-	    // 다음 페이지
-	    function handleNextPage() {
-	      if (currentPage < numOfPages) {
-	        currentPage++;
-	        displayImages();
-	      }
+	// 이미지 삭제
+    function deleteImage() {
+        if (!selectedImageValue) {
+            alert('Please select an image to delete.');
+            
+	        return;
 	    }
-		// 이전 페이지
-	    function handlePreviousPage() {
-	      if (currentPage > 1) {
+	        
+	    $.ajax({
+	    	url: '/album_delete.do',
+	        method: 'POST',
+	        data: {
+	            aSeq: selectedImageValue
+	        }
+	    }).done(function(response) {
+	        alert('이미지가 삭제되었습니다');
+	        location.reload(); // 삭제데이터 반영을 위해 새로고침
+	    }).fail(function() {
+	        
+	        alert('삭제에 실패했습니다');
+	    }).always(function() {
+	        // 실행 후 이미지 선택 해제
+	        selectedImage.style.border = 'none';
+	        selectedImage = null;
+	        selectedImageValue = null;
+	    });
+	}
+		
+	document.getElementById('deleteBtn').addEventListener('click', deleteImage);
+	    
+	// 다음 페이지
+	function handleNextPage() {
+		if (currentPage < numOfPages) {
+	  		currentPage++;
+	        displayImages();
+	    }
+	}
+		
+	// 이전 페이지
+	function handlePreviousPage() {
+		if (currentPage > 1) {
 	        currentPage--;
 	        displayImages();
-	      }
-	    }
+		}
+	}
 
-	    document.getElementById('previousPageBtn').addEventListener('click', handlePreviousPage);
-	    document.getElementById('nextPageBtn').addEventListener('click', handleNextPage);
+	document.getElementById('previousPageBtn').addEventListener('click', handlePreviousPage);
+	document.getElementById('nextPageBtn').addEventListener('click', handleNextPage);
 
-	    displayImages(); 
+	displayImages(); 
+	
+	/*---------------운동 다이어로그 시작--------- */
+	
+	// 운동칸에 추가한 운동 정보 출력하는 함수
+	function fetchExercises(date) {
+		$.ajax({
+	        url: '/viewExercise',
+	        type: 'GET',
+	        data: { selectedDate: date },
+	        success: function(data) {
+	            let exerciseHtml = '<div class="exercise-item">';
+	            data.forEach(function(exercise, index) {
+	            	if (exercise.ex_name) {
+	                    exerciseHtml += 
+	                    // 각 행마다 인덱스 설정하여 구분
+	                    '<div class="exercise-info" data-index="'+index+'">' +
+	                    	'<button class="dbtn"><img src="src/images/logo/deleteBtn.png" width=10px height=10px /></button>'+
+	                        '<div class="ex_name">'+exercise.ex_name+'</div>'+
+	                        '<input class="ex_time" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
+	                        '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
+	                    '</div>';
+	            	}
+	            });
+	            exerciseHtml += '</div>';
+	            $('#resultExercise1').html(exerciseHtml);
+	            
+	            let customExerciseHtml = '<div class="customExercise-item">';
+		        data.forEach(function(exercise, index) {
+		        	if (exercise.ex_name2) {
+			            customExerciseHtml += 
+		            	// 각 행마다 인덱스 설정하여 구분
+		            	'<div class="customExercise-info" data-index="'+index+'">' +
+		            		'<button class="dbtn"><img src="src/images/logo/deleteBtn.png" width=10px height=10px /></button>'+
+			                '<div class="ex_name">'+exercise.ex_name2+'</div>'+
+			                '<input class="ex_time" type="number" readonly value="' + exercise.ex_time2 + '">'+
+			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal2+'</div>'+
+			            '</div>';
+		        	}
+		        });
+		        customExerciseHtml += '</div>';
+		        $('#resultExercise2').html(customExerciseHtml);
+		        calculateTotalTimeAndCalories();
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            console.error('Fetch error:', errorThrown);
+	            console.error('Server response:', jqXHR.responseText);
+	        }
+	    });
+	}
+	
+	// 다이어로그 내 추가, 취소 버튼 클릭시
+	$( function() {
+		$( "#dialogContainer1" ).dialog({
+			autoOpen: false,
+			buttons: {
+				"추가": function() {
+					if ($('.select-checkbox:checked').length == 0) {
+		                alert('추가할 운동을 선택해주세요');
+		                return false;
+		            }
+					let exercises = [];
+					let selectedDate = $('#datepicker').val();
+					// 체크박스에 체크된 데이터들 서버로 넘김
+					$("input[type='checkbox']:checked").each(function() {
+						let exerciseName = $(this).val();
+						exercises.push(exerciseName);
+					});
+					$.ajax({
+						url: '/exerciseAdd',  
+						type: 'POST',
+						data: JSON.stringify({ exercise: exercises, date: selectedDate }),
+						contentType: "application/json",
+						success: function(data) {
+							alert("운동등록에 성공했습니다.")
+							// db의 당일 운동 데이터 출력
+							fetchExercises(selectedDate);
+							
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							// 오류 처리
+							alert('운동등록에 실패했습니다'+ jqXHR.responseText)
+							console.error('Server response:', jqXHR.responseText);
+						}
+        			});
+					
+					$( this ).dialog( "close" );
+				},
+				"취소": function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
 
+		$( "#btn1" ).on( "click", function() {
+			$( "#dialogContainer1" ).dialog( "open" );
+		});
+	});
+	
+
+	/* ㅡㅡㅡㅡ사용자 설정 운동 다이어로그 시작 ㅡㅡㅡㅡㅡ*/
+	
+	$( function() {
+	    var dialog, form,
+	 
+	    dialog = $( "#dialog-form" ).dialog({
+	        autoOpen: false,
+	        height: 400,
+	        width: 350,
+	        modal: true,
+	        buttons: {
+	        	"추가": function() {
+	                var name = $('#name').val();
+	                var time = $('#time').val();
+	                var calorie = $('#calorie').val();
+	                if (name === '' ||time === '' ||calorie === '') {
+	    		        alert('추가할 운동 정보를 모두 입력해주세요');
+	    		        return;
+	    		    }
+	                let selectedDate = $('#datepicker').val();
+	                $.ajax({
+	                    url: '/addCustomExercise',  
+	                    type: 'POST',
+	                    data: JSON.stringify({
+	                        'ex_name': name,
+	                        'ex_time': time,
+	                        'ex_used_kcal': calorie,
+	                        'selectedDate' : selectedDate
+	                    }),
+	                    contentType: "application/json; charset=utf-8", 
+	                    dataType: "json", 
+	                    success: function(response) {
+	                    	alert('운동등록에 성공했습니다');
+		                	fetchExercises(selectedDate)
+	                    },
+	                    error: function(jqXHR, textStatus, errorThrown) {
+	                        alert('운동 추가 실패: ' + errorThrown);
+	                        console.error('Server response:', jqXHR.responseText);
+	                    }
+	                });
+	                dialog.dialog( "close" );
+	            },
+	            취소: function() {
+	                dialog.dialog( "close" );
+	            }
+	        },
+	        close: function() {
+	            form[ 0 ].reset();
+	        }
+	    });
+	
+	    form = dialog.find( "form" ).on( "submit", function( event ) {
+	        event.preventDefault();
+	        dialog.dialog( "close" );
+	    });
+	
+	    $( "#btn2" ).button().on( "click", function() {
+	        dialog.dialog( "open" );
+	    });
+	});
+	
+	
+	// 당일 총 운동시간, 소모칼로리 구하기
+	function calculateTotalTimeAndCalories() {
+	    var totalExTime = 0;
+	    var totalExUsedKcal = 0;
+		//모든 운동시간 요소를 확인하여 값을 더함
+	    $(".ex_time").each(function(){
+	    	var val = $(this).val();
+	        totalExTime += !isNaN(val) && val != '' ? parseInt(val, 10) : 0;
+	    });
+		// 모든 소모 칼로리 요소를 확인하여 값을 더함
+	    $(".ex_used_kcal").each(function(){
+	        totalExUsedKcal += parseInt($(this).text(), 10);
+	    });
+		
+	    let totalHtml = '';
+            totalHtml += 
+            	'<div class="total">' +
+	                '<div class="totalExtime">'+totalExTime+'</div>'+
+	                '<div class="totalExUsedKcal">'+totalExUsedKcal+'</div>'+
+	            '</div>';
+        $('#total1').html(totalHtml);
+
+	    // 여기서 totalExTime과 totalExUsedKcal을 원하는 곳에 표시하면 됩니다.
+	    console.log("총 운동시간: " + totalExTime + " 분");
+	    console.log("총 소모 칼로리: " + totalExUsedKcal + " Kcal");
+	}
+	
+	$(document).ready(function() {
+		
+		//운동삭제
+		$(document).on('click', '.exercise-info .dbtn', function(e) {
+			e.preventDefault();
+		    let parentDiv = $(this).parent();
+		    let exerciseName = parentDiv.find('.ex_name').text();
+		    let selectedDate = $('#datepicker').val();
+		    $.ajax({
+		        url: '/deleteExercise',
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify({ ex_name: exerciseName, ex_day: selectedDate }),
+		        success: function(response) {
+		            // 성공하면 리스트를 다시 불러옵니다.
+		            fetchExercises(selectedDate);
+		        },
+		        error: function(error) {
+		            console.error('Delete exercise error:', error);
+		        }
+		    });
+		});
+		
+		//사용자 운동삭제
+		$(document).on('click', '.customExercise-info .dbtn', function(e) {
+			e.preventDefault();
+		    let parentDiv = $(this).parent();
+		    let exerciseName = parentDiv.find('.ex_name').text();
+		    let selectedDate = $('#datepicker').val();
+		    $.ajax({
+		        url: '/deleteExercise',
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify({ ex_name: exerciseName, ex_day: selectedDate }),
+		        success: function(response) {
+		            // 성공하면 리스트를 다시 불러옵니다.
+		            fetchExercises(selectedDate);
+		        },
+		        error: function(error) {
+		            console.error('Delete customExercise error:', error);
+		        }
+		    });
+		});
+		
+		// 달력
+		var date = new Date();
+	
+	    // 'yyyy-mm-dd' 형태의 문자열로 변환
+	    var day = ("0" + date.getDate()).slice(-2);
+	    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+	    var today = date.getFullYear() + "-" + month + "-" + day;
+	    var selectedDate = $('#datepicker').val();
+	    
+        $("#datepicker").datepicker({ 
+            dateFormat: 'yy-mm-dd',
+            onSelect: function(dateText) {
+            	fetchExercises(dateText)
+            }
+        });
+	    // 달력의 기본 값을 오늘 날짜로 설정
+	    $("#datepicker").datepicker("setDate", today);
+	    fetchExercises(today);
+	    
+	    
+		// 운동 다이어로그 내 검색 버튼
+		$('#searchButton1').click(function() {
+			let searchEx = $("#exerciseName1").val();
+			if (searchEx === '') {
+		        alert('운동종목을 입력해주세요');
+		        return;
+		    }
+			// 검색한 단어 서버로 보내고 검색결과 데이터 받아옴
+		    $.ajax({
+		    	url: '/searchExercise',  
+		    	type: 'POST',
+		    	data: { mat_name: searchEx },
+		    	success: function(data) {
+		    		let searchResultsHtml = '';
+		    		data.forEach(function(matTO) {
+		    			// 각 검색 결과를 HTML 문자열로 변환합니다.
+		    			searchResultsHtml += '<div><input type="checkbox" class="select-checkbox" value="' + matTO.mat_name + '"> ' + matTO.mat_name + '</div>';
+		    		});
+		    		// 검색 결과를 화면에 표시합니다.
+		    		$('#exerciseDiv1').html(searchResultsHtml);
+		    	},
+		    	error: function(jqXHR, textStatus, errorThrown) {
+		    		// 오류 처리
+		    		console.error('Search error:', errorThrown);
+		    	}
+		    });
+		    
+		});
+		
+		// 전체적용버튼-운동 시간대비 소모칼로리 계산하여 db저장후 출력
+		$('#applyAll').click(function() {
+			let selectedDate = $('#datepicker').val();
+		    const exerciseItems = [];
+		    $('.exercise-item .exercise-info').each(function() {
+		        const exerciseInfo = $(this);
+		        const ex_name = $('.ex_name', exerciseInfo).text();
+		        const ex_time = $('.ex_time', exerciseInfo).val();
+		        exerciseItems.push({ ex_name, ex_time });
+		    });
+		    $.ajax({
+		        url: '/calculateCalories',
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify({ exerciseItems: exerciseItems, selectedDate: selectedDate }),
+		        success: function(data) {
+		            
+		            $('.exercise-item .exercise-info').each(function(i) {
+		                const exerciseInfo = $(this);
+		                $('.ex_used_kcal', exerciseInfo).text(data[i].ex_used_kcal);
+		            });
+		            // 계산된 소모 칼로리 적용 후 총 운동시간, 소모 칼로리 업데이트
+		            calculateTotalTimeAndCalories();
+		        },
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            console.error('Calculation failed:', errorThrown);
+		            console.error('Server response:', jqXHR.responseText);
+		        }
+		    });
+		});
+		
+		
+	});
+	
 </script>
 </body>
 </html>

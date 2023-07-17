@@ -1,13 +1,17 @@
 package com.example.controller;
 
 import java.awt.PageAttributes.MediaType;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.model.BreakfastTO;
 import com.example.model.MainDAO;
 import com.example.model.MainTO;
 import com.example.model.MemberDAO;
@@ -64,6 +69,8 @@ public class MainController {
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("flag", flag);
 		modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinseq", member.getM_seq());
+		
 
         modelAndView.setViewName("test");
         
@@ -89,7 +96,7 @@ public class MainController {
 		
 		// principal 객체를 CustomUserDetails 타입으로 캐스팅
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		System.out.println("seq가져와 "+customUserDetails.getM_seq());
+		System.out.println("seq가져와 "+ customUserDetails.getM_seq());
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
@@ -114,6 +121,7 @@ public class MainController {
 		modelAndView.addObject("flag", flag);
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinseq", member.getM_seq());
 		
 		System.out.println(" test.do m_id " + member.getM_id());
 		
@@ -206,16 +214,16 @@ public class MainController {
 	@RequestMapping("selected_data")
 	public ResponseEntity<String> MainForSelectedDate(
 	Authentication authentication, ModelMap map, HttpServletRequest request, String mId, 
-	 @RequestParam("id") String id, @RequestParam("i_day") String i_day ) {
+	 @RequestParam("seq") int seq, @RequestParam("day") String day ) {
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
-	    ArrayList<MainTO> ddatas = dao.DateData(i_day, id);
+	    ArrayList<MainTO> ddatas = dao.DateData(seq, day);
 	    
-	    System.out.println("  i_day Controller -> " + i_day);
-	    System.out.println("  m_id Controller -> " + id );
+	    System.out.println(" selected_data i_day Controller -> " + day);
+	    System.out.println(" selected_data seq Controller -> " + seq );
 
 	    JsonObject mainDatas = new JsonObject();
 
@@ -237,7 +245,7 @@ public class MainController {
 
 	    }	   	
 	    
-	    System.out.println(" mId Controller => " + mId);
+	    //System.out.println(" mId Controller => " + mId);
 	    
 	   	return new ResponseEntity<String>(mainDatas.toString(), HttpStatus.OK);
 	}
@@ -246,30 +254,30 @@ public class MainController {
 	
 	//---- Charts Below-----------------------------
 	
+//---pieData---------------------------------------------------
 	@RequestMapping("pie_chart_data")
 	public ResponseEntity<String> PieChartData(
 	Authentication authentication, ModelMap map, HttpServletRequest request, String mId, 
-	 @RequestParam("id") String id, @RequestParam("i_day") String i_day ) {
+	 @RequestParam("seq") int seq, @RequestParam("day") String day ) {
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
-	    ArrayList<MainTO> pieChart = dao.PieChartData(id, i_day);
+	    ArrayList<MainTO> pieChart = dao.PieChartData(seq, day);
+	    
 	    JsonArray pieDatas = new JsonArray(); 
 	    
-	    System.out.println("  i_day pie Controller -> " + i_day);
-	    System.out.println("  m_id pie Controller -> " + id );
-
-	   
-
+	    System.out.println("  day pie Controller -> " + day);
+	    System.out.println("  seq pie Controller -> " + seq );
+	    
 	    for (MainTO to : pieChart) {
 	    	
 	    	 JsonObject pieData = new JsonObject();
 	        
-	    	//기본 유저정보
+	    	//기본 유저정보,날짜
 	        pieData.addProperty("m_seq", to.getM_seq());
-	        pieData.addProperty("m_id", to.getM_id());
+	        pieData.addProperty("i_day", to.getI_day().toString());
 	        
 	        //단탄지
 	        pieData.addProperty("i_protein_g", to.getI_protein_g());
@@ -280,17 +288,122 @@ public class MainController {
 	        pieData.addProperty("i_cholesterol_mgl", to.getI_cholesterol_mgl());
 	        pieData.addProperty("i_sodium_mg", to.getI_sodium_mg());
 	        pieData.addProperty("i_sugar_g", to.getI_sugar_g());
+	        
+	        
 	        pieDatas.add(pieData); 
 	    }	   	
 	    
 	    System.out.println(" pieData jsoned -> " + pieDatas);
+	    
+	    ///탄단지 콜나당 ------------------------------
+	    
+	    int flag_uan = dao.UnionAllNutritions(seq, day);
 
-	    
-	    //ModelAndView modelAndView = new ModelAndView();
-	    //modelAndView.setViewName("pie_chart_data");
-	    
 	   	return new ResponseEntity<String>(pieDatas.toString(), HttpStatus.OK);
 	  
 	}
 	
-}
+	
+//---BarData---------------------------------------------------
+		@RequestMapping("bar_chart_data")
+		public ResponseEntity<String> BarChartData(
+		Authentication authentication, ModelMap map, HttpServletRequest request, String mId,
+		@RequestParam("seq") int seq, @RequestParam("day") String day ) {
+			
+			mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+	        
+			MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+	        			
+			///
+		    ArrayList<MainTO> bars = dao.BarChartData(seq , day);
+		    
+		    JsonArray BarDatas = new JsonArray(); 
+	
+		    for (MainTO to : bars) {
+		    	 JsonObject barsData = new JsonObject();
+		    	//아침
+		    	
+		    	 barsData.addProperty("i_breakfast_kcal", to.getI_breakfast_kcal());
+		    	 barsData.addProperty("i_lunch_kcal", to.getI_lunch_kcal());
+		    	 barsData.addProperty("i_dinner_kcal", to.getI_dinner_kcal());
+		    	
+		    	//Date값 한글화, 요일 형식으로 리턴
+		    	if (to.getI_day() != null) {
+		    	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 (E)", Locale.KOREA);
+		    	    String formattedDate = dateFormat.format(to.getI_day());
+		    	    
+		    	    barsData.addProperty("i_day", formattedDate);
+		    	  }
+
+		        BarDatas.add(barsData); 
+		    }	   	
+		    
+		    System.out.println("  BarDatas jsoned -> " +  BarDatas);
+		    
+		    ///update 달력이 선택될때마다 실행------------------------------
+		    
+		    int flag_upd = dao.UnionPerDay(seq, day);
+		    int flag_uac = dao.UnionAllCalories(seq, day);
+
+		    //--------------------------------------------------
+
+		   	return new ResponseEntity<String>( BarDatas.toString(), HttpStatus.OK);
+		  
+		}
+		
+		//----몸무게들-----------------------------------
+		
+		@ResponseBody
+		@RequestMapping(value = "/weight_update", method = RequestMethod.POST)
+		public int WeightUpdates(@Param("i_weight") BigDecimal i_weight,@Param("target_weight") BigDecimal target_weight,@Param("seq") int seq, @Param("dialogDate") String dialogDate) {
+			int result_for_both = 0;
+		    if(i_weight != null && dialogDate != null){
+		        int weight_update = dao.WeightUpdate(i_weight, seq, dialogDate);
+		        result_for_both += weight_update;
+		    }
+		    if(target_weight != null){
+		        int targetw_update = dao.TargetWeightUpdate(target_weight, seq);
+		        result_for_both += targetw_update;
+		    }
+
+			//System.out.println(" 컨트롤러에서 목몸 " + target_weight);
+			//System.out.println(" 컨트롤러에서 목몸 seq " +  seq);
+			if(result_for_both == 0) {
+				System.out.println(" 몸무게 업데이트 성공 "+ result_for_both);
+				return result_for_both;
+			} else if(result_for_both == 1) {
+				System.out.println(" 몸무게들 업데이트 실패 1이면 하나 실패 2이면 둘 다 실패 "+ result_for_both);
+				return result_for_both;
+			}else{
+			   //2일순 없음, 입력단이 나눠져있어서 1씩 두번이 들어올순 있어도
+				System.out.println(" 디폴트 "+ result_for_both);
+				return result_for_both;
+			}
+			//극단적으로 짧은 버전
+			//int weight_update = dao.WeightUpdate(i_weight, seq, dialogDate);
+			//int targetw_update = dao.TargetWeightUpdate(target_weight, seq);
+		    //result_for_both = weight_update + targetw_update;
+		    //return result_for_both;
+		}
+		
+//	  //해당 날짜 몸무게 업데이트----------
+//		@ResponseBody
+//		@RequestMapping(value = "/weight_update", method = RequestMethod.POST)
+//		public int WeightUpdates(	
+//		@Param("i_weight") BigDecimal i_weight,
+//		@Param("seq") int seq, @Param("dialogDate") String dialogDate) {
+//			int weight_update = dao.WeightUpdate(i_weight, seq, dialogDate);
+//			//System.out.println(" 컨트롤러에서 목몸 seq " +  seq);
+//			return weight_update;
+//		}
+//	  //목표 몸무게 업데이트----------
+//		@ResponseBody
+//		@RequestMapping(value = "/target_weight_update", method = RequestMethod.POST)
+//		public int WeightUpdates(
+//		@Param("target_weight") BigDecimal target_weight,
+//		@Param("seq") int seq) {
+//			int target_weight_flag = dao.TargetWeightUpdate(target_weight, seq);
+//			return target_weight_flag;
+//		}
+
+	}
