@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-     Main RAB
+     test RAB
     </title>
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   
@@ -57,7 +57,7 @@
 <script>
 
 //----------------------함수-----------------------------
-		
+
 		//반복해서 함수들이 그 자리를 대체하게 하는 함수
 		function assignDateChangeListener() {
 	
@@ -121,7 +121,12 @@
         	assignDateChangeListener();
        
         	//몸무게 동적처리
-			var toTarget = elements.i_weight - elements.m_target_weight;
+			//var toTarget = elements.i_weight - elements.m_target_weight;
+			//var toTarget = Math.abs(elements.i_weight - elements.m_target_weight);
+			
+			//절대값 처리, 소수점 둘째짜리까지 제한
+			var toTarget = parseFloat(Math.abs(elements.i_weight - elements.m_target_weight).toFixed(2));
+
         	var whtml = '';
 			
         	//console.log(" i 몸무게 -> ", elements.i_weight);
@@ -147,14 +152,14 @@
 			$("#firstElement").html(firstElementHtml);
 
 			//
-			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_kcal + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
+			let secondElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + (elements.i_kcal || 0) + ' kcal</h4><span class="text-sm font-medium">섭취 칼로리</span>';
 			$("#secondElement").html(secondElementHtml);
 
 			//
-			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + elements.i_used_kcal + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
+			let thirdElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">' + (elements.i_used_kcal || 0) + 'kcal</h4><span class="text-sm font-medium">소모 칼로리</span>';
 			$("#thirdElement").html(thirdElementHtml);
 			//
-			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ elements.i_weight +' kg</h4>';
+			let fourthElementHtml = '<h4 class="text-title-md font-bold text-black dark:text-white">'+ (elements.i_weight || 0) +' kg</h4>';
 			$("#fourthElement").html(fourthElementHtml);
 			
       	},
@@ -210,7 +215,16 @@
   	                        height: 350,
   	                    },
   	                  	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
-  	                    responsive: [{
+  	                  dataLabels: {
+  	                    enabled: true,
+  	                    style: {
+  	                        colors: ['#FFA500', '#FF4500', '#008000'], // 각 라벨의 색상을 바꾸려면 여기를 변경하세요
+  	                        fontSize: '14px', // 폰트 크기를 바꾸려면 여기를 변경하세요
+  	                        fontFamily: 'Helvetica, Arial, sans-serif', // 폰트를 바꾸려면 여기를 변경하세요
+  	                    },
+  	                	
+  	                  },
+					  responsive: [{
   	                        breakpoint: 480,
   	                        options: {
   	                            chart: {
@@ -244,6 +258,25 @@
 	//---pie 함수 끝--------------------------------------------------
 
 ////////
+var selectedDate;
+
+function generateDates(selectedDate) {
+  var dates = [];
+  var currentDate = new Date(selectedDate);
+  currentDate.setDate(currentDate.getDate() - 3);
+
+  for (var i = 0; i < 7; i++) {
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1;
+    var date = currentDate.getDate();
+    var formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+    dates.push(formattedDate);
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+}
+
 	//---bar 함수----------------------------------------------------
 	var barChart;
 
@@ -251,8 +284,8 @@
 	  var selectedDate = $("#calendarCtInput").val();
 	  var zzinseq = $("#zzinseq").val();
 
-	  console.log("BarChartForDate 함수에서 zzinseq -> ", zzinseq);
-	  console.log("BarChartForDate 함수에서 selectedDate -> ", selectedDate);
+	  //console.log("BarChartForDate 함수에서 zzinseq -> ", zzinseq);
+	  //console.log("BarChartForDate 함수에서 selectedDate -> ", selectedDate);
 
 	  $.ajax({
 	    url: "/bar_chart_data",
@@ -263,11 +296,12 @@
 	    },
 	    success: function(bar) {
 	      var bars = JSON.parse(bar);
-	      console.log(" bars.요소들 -> ", bars);
-	      console.log(" i_breakfast_kcal -> ", bars[0].i_breakfast_kcal);
-	      console.log(" i_lunch -> ", bars[0].i_lunch_kcal);
-	      console.log(" i_dinner -> ", bars[0].i_dinner_kcal);
-	      console.log(" i_day bar차트에서 -> ", bars[0].i_day);
+	      
+	      //console.log(" bars.요소들 -> ", bars);
+	      //console.log(" i_breakfast_kcal -> ", bars[0].i_breakfast_kcal);
+	      //console.log(" i_lunch -> ", bars[0].i_lunch_kcal);
+	      //console.log(" i_dinner -> ", bars[0].i_dinner_kcal);
+	      //console.log(" i_day bar차트에서 -> ", bars[0].i_day);
 
 	      var BreakfastKcal = [];
 	      var LunchKcal = [];
@@ -362,7 +396,6 @@
 	  });
 	}
 
-	
 	//---bar 함수 끝 -------------------------------------------------
 ////////	
 	//---area 함수----------------------------------------------------
@@ -506,7 +539,7 @@
       
       //-------------------------------------------------------------------------------
 
-   	  //--달력 라벨 밸류 항상 디폴트는 현재값을 전달-----------------------------------------------
+//--달력 라벨 밸류 항상 디폴트는 현재값을 전달-----------------------------------------------
 		var currentDate = new Date();
 
 		var day = ("0" + currentDate.getDate()).slice(-2);
@@ -526,34 +559,123 @@
 		
 		
 			
-	//---  몸무게 업데이트 다이얼로그----------------------
+//---  몸무게 업데이트 다이얼로그----------------------
 	
-    // 오늘의 몸무게
+	// 몸무게 다이얼로그 안 달력
+	$(function() {
+  		$("#dateInput").datepicker({
+	    dateFormat: "yy-mm-dd",
+	    minDate: new Date(2023, 0, 1),
+	    maxDate: new Date(2050, 11, 31),
+	    defaultDate: new Date(),
+	    onSelect: function(dateText, inst) {
+	      $(this).val(dateText);
+	    }
+	  });
+	});
+		
+    // 오늘의 몸무게 다이얼로그 팝업
 	$('#weightTodayDropdown').click(function(e) {
   		e.preventDefault();
   	$('#weightForToday').dialog('open');
 	});
 
-	// 목표 몸무게 재설정
+	// 목표 몸무게 재설정 다이얼로그 팝업
 	$('#targetWeightUpdateDropdown').click(function(e) {
   		e.preventDefault();
   	$('#targetWeightUpdate').dialog('open');
 	});
 
-	// 오늘의 몸무게 다이얼로그 설정
+	//  몸무게 다이얼로그 설정
 	$('#weightForToday').dialog({
 	  autoOpen: false,
 	  modal: true,
 	  buttons: {
-	    '업데이트': function() {
+	    '계속입력': function() {
+	        var weight = $(this).find('#weightInput').val();
+		      var date = $(this).find('#dateInput').val();
+	    	  var zzinseq = $("#zzinseq").val();
+	    	  
+	    	  console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
+	    	  console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
+	    	  console.log( " 몸무게 업데이트/날짜 -> ", date);
+	    	  
+		      
+		      if(weight === '' || isNaN(weight)) { 
+		        alert('숫자를 입력해주세요');
+		      } else if (!/^(\d*\.?\d{0,2})$/.test(weight)) {
+	              alert('특수문자 대신에 숫자를 입력해주세요 (소수점은 두자리 까지만!)');
+	          } else if ( date === ''){
+	              alert('날짜를 선택해주세요');
+	          }
+		      else {
+		    	  $.ajax({
+		              url: "/weight_update",
+		              method: "POST",
+		              data: {
+	            	  	seq: zzinseq, 
+		                i_weight: weight,
+		                dialogDate : date
+		              },
+		              success: function() {
+		                alert(' ' + weight + ' kg ' + date + ' 에 등록되었습니다.');
+		                loadDataFromDate();
+		              },
+		              error: function(jqXHR, textStatus, errorThrown) {
+	            	    //console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
+	            	    //console.log('Throw Error: ' + errorThrown); // 예외 정보
+	            	    //console.log('jqXHR Object: ' + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
+		                
+	            	    alert('업데이트에 실패했습니다');
+		              }
+		            });
+
+		            //$(this).dialog('close');
+		          }
+	    	
+	     },
+	    '입력': function() {
 	      var weight = $(this).find('#weightInput').val();
-	      if(weight === '' || isNaN(weight)) { // 숫자 형식이 아니거나 빈 문자열인 경우
+	      var date = $(this).find('#dateInput').val();
+    	  var zzinseq = $("#zzinseq").val();
+    	  
+    	  console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
+    	  console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
+    	  console.log( " 몸무게 업데이트/날짜 -> ", date);
+    	  
+	      
+	      if(weight === '' || isNaN(weight)) { 
 	        alert('숫자를 입력해주세요');
-	      } else {
-	        alert('오늘의 몸무게를 ' + weight +'로 등록에 성공했습니다.');
-	        $(this).dialog('close');
-	      }
-	    },
+	      } else if (!/^(\d*\.?\d{0,2})$/.test(weight)) {
+              alert('특수문자 대신에 숫자를 입력해주세요 (소수점은 두자리 까지만!)');
+          } else if ( date === ''){
+              alert('날짜를 선택해주세요');
+          }
+	      else {
+	    	  $.ajax({
+	              url: "/weight_update",
+	              method: "POST",
+	              data: {
+            	  	seq: zzinseq, 
+	                i_weight: weight,
+	                dialogDate : date
+	              },
+	              success: function() {
+	                alert(' ' + weight + ' kg ' + date + ' 에 등록되었습니다.');
+	                loadDataFromDate();
+	              },
+	              error: function(jqXHR, textStatus, errorThrown) {
+            	    //console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
+            	    //console.log('Throw Error: ' + errorThrown); // 예외 정보
+            	    //console.log('jqXHR Object: ' + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
+	                
+            	    alert('업데이트에 실패했습니다');
+	              }
+	            });
+
+	            $(this).dialog('close');
+	          }
+	        },
 	    '취소': function() {
 	      $(this).dialog('close');
 	    }
@@ -569,14 +691,40 @@
 	  modal: true,
 	  buttons: {
 	    '업데이트': function() {
-	      var weight = $(this).find('#TweightInput').val();
-	      if(weight === '' || isNaN(weight)) { // 숫자 형식이 아니거나 빈 문자열인 경우
-	        alert('숫자를 입력해주세요');
+	      var tweight = $(this).find('#TweightInput').val();
+	      var zzinseq = $("#zzinseq").val();
+
+	 	  console.log( " 목표 몸무게 업데이트/날짜 -> ", zzinseq);
+    	  console.log( " 목표 몸무게 업데이트/몸무게 -> ", tweight); 
+	      
+	      if(tweight === '' || isNaN(tweight)) { 
+	          alert('숫자를 입력해주세요');
+	      } else if (!/^(\d*\.?\d{0,2})$/.test(tweight)) {
+              alert('특수문자 대신에 숫자를 입력해주세요 (소수점은 두자리 까지만!)');
 	      } else {
-	        alert('목표 몸무게를 ' + weight +'로 업데이트 했습니다.');
-	        $(this).dialog('close');
-	      }
-	    },
+	    	  $.ajax({
+	              url: "/weight_update",
+	              method: "POST",
+	              data: {
+            	  	seq: zzinseq, 
+            	  	target_weight : tweight
+	              },
+	              success: function() {
+	                alert('목표 몸무게가' + tweight + ' kg로 설정되었습니다!');
+	                loadDataFromDate();
+	              },
+	              error: function(jqXHR, textStatus, errorThrown) {
+            	    console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
+            	    console.log('Throw Error: ' + errorThrown); // 예외 정보
+            	    console.log('jqXHR Object: ' + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
+	                
+            	    alert('업데이트에 실패했습니다');
+	              }
+	            });
+
+	            $(this).dialog('close');
+	      	 }
+	     },
 	    '취소': function() {
 	      $(this).dialog('close');
 	    }
@@ -601,10 +749,35 @@
             	
         });
 
-        
 //////
   	};//window.onload끝 
 //////
+
+////////////페이지 로드시 기본값 오늘데이터 뿌려주기///////////////////
+	var selectedDate;
+	
+	$(document).ready(function() {
+			//--오늘 날짜로 선택된 값을 바로 전달해서 ----------------------------------------------
+			var currentDate = new Date();
+	
+			var day = ("0" + currentDate.getDate()).slice(-2);
+			var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+			var year = currentDate.getFullYear();
+	
+			var formattedDate = year + "-" + month + "-" + day;
+	
+			var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + formattedDate + '" min="2023-01-01" max="2050-12-31"></li>';
+	    
+			$('#calendarCt').html(calendarhtml);
+		
+			console.log( " formattedDate -> " , formattedDate );
+	
+			selectedDate = formattedDate; 
+	
+			loadDataFromDate();
+			PieDataForDate();
+			BarChartForDate();
+	});
 </script>
 
 
@@ -931,10 +1104,13 @@
     <!--  검색 창  끝-->
     
  <!-- 오늘의 몸무게 업데이트 다이얼로그 -->
- <div id="weightForToday" title="오늘의 몸무게">
+<div id="weightForToday" title="몸무게 입력">
   <form>
     <label for="weightInput">몸무게 입력:</label>
     <input type="text" id="weightInput" class="text ui-widget-content">
+    <br>
+    <label for="dateInput"><u>날짜 선택</u></label>
+    <input type="text" id="dateInput" readonly>
     <br>
   </form>
 </div>
@@ -1084,7 +1260,7 @@
       			width="24"
       			height="24"
    			/>
-                오늘의 몸무게
+                몸무게 입력
               </a>
               </div>
             </li>
@@ -1322,7 +1498,7 @@
               <!-- Card Item End -->
             </div>
 
-            <!-- ====== Chart One Start -->
+            <!-- ====== Chart Ones Start -->
             <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
             
 			<!--  스택 그래프 -->
@@ -1338,16 +1514,16 @@
 			</div>
 			
 			<!-- ===== 파이 그래프 시작 ====== -->	
-<div class="col-span-12 rounded-sm border border-stroke bg-white p-10 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-    <div class="mb-6 justify-center">
-        <div style="width: 100%; height: 100%; padding-bottom: 20px;"> <!-- 여기서 padding-bottom을 추가하여 그래프를 아래로 이동 -->
-            <h4 class="mb-10 text-xl font-bold text-black dark:text-white">
-                일일 섭취 영양 성분
-            </h4>
-            <div id="chart" class="mx-auto flex justify-center mt-2"></div>
-        </div>
-    </div>
-</div>
+			<div class="col-span-12 rounded-sm border border-stroke bg-white p-10 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
+			    <div class="mb-6 justify-center">
+			        <div style="width: 100%; height: 100%; padding-bottom: 5px;"> <!-- 여기서 padding-bottom을 추가하여 그래프를 아래로 이동 -->
+			            <h4 class="mb-10 text-xl font-bold text-black dark:text-white">
+			                일일 섭취 영양 성분
+			            </h4>
+			            <div id="chart" class="mx-auto flex justify-center mt-2"></div>
+			        </div>
+			    </div>
+			</div>
 
 
 

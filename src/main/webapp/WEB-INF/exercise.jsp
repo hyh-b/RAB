@@ -281,6 +281,24 @@ pageEncoding="UTF-8"%>
 	    /* 추가적인 스타일링을 적용할 수 있습니다 */
 	}
 	
+	.customExercise-info {
+	    display: flex;
+	    align-items: center;
+	    gap: 10px;
+	}
+	
+	.customExercise-info .ex_name {
+	    width: 200px;
+	}
+	
+	.customExercise-info .ex_time {
+	    width: 100px;
+	}
+	
+	.customExercise-info .ex_used_kal {
+	    width: 150px;
+	}
+	
 	/*---------------  운동 끝----------------------------  */
 	
 	/*---------------  당일 합계 시작----------------------------  */
@@ -776,6 +794,10 @@ pageEncoding="UTF-8"%>
 			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-left: 50px; width: 650px;">
 			    		당일 합계
 			    	</label>
+			    	<div>
+						<!-- 날짜를 선택할 수 있는 입력 요소를 추가합니다. -->
+						<input type="text" id="datepicker" placeholder="날짜 선택" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+					</div>
 			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 50px;">
 			    		총 운동시간
 			    	</label>
@@ -807,9 +829,7 @@ pageEncoding="UTF-8"%>
 		                <button id="btn1">
 		                    <img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
 		                </button>
-		                <div style="display: flex; flex-direction: row;">
-		                    <button id="ebtn1" style="padding-left: 30px;">등록</button>
-		                </div>
+		               
 		       <!-- =============================== 운동 다이어로그 시작 =========================== -->
 		                <div id="dialogContainer1" title="검색">
 		                    <input type="text" id="exerciseName1" placeholder="운동종목을 입력하세요">
@@ -852,9 +872,7 @@ pageEncoding="UTF-8"%>
 					    	<button id="btn2">
 					    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
 					    	</button>
-					    	<div style="display: flex; flex-direction: row;">
-								<button id="ebtn2" style="padding-left: 30px;">등록</buttoN>
-							</div>
+					    	
 		
 		     <!-------------------- 사용자 설정 운동 다이어로그 시작 ------------------->
 		                    <div id="dialog-form" title="운동 입력">
@@ -878,8 +896,7 @@ pageEncoding="UTF-8"%>
 							</div>
 		<!-------------------- 사용자 설정 운동 다이어로그 끝 ------------------->
 					    	<div id="dialogContainer2" title="검색">
-								<input type="text" id="exerciseName2" placeholder="운동종목을 입력하세요">
-								<button id="searchButton2">검색</button>
+								
 								<div id="exerciseDiv2"></div>
 							</div>
 						</div>
@@ -1098,6 +1115,7 @@ pageEncoding="UTF-8"%>
 			buttons: {
 				"추가": function() {
 					let exercises = [];
+					let selectedDate = $('#datepicker').val();
 					// 체크박스에 체크된 데이터들 서버로 넘김
 					$("input[type='checkbox']:checked").each(function() {
 						let exerciseName = $(this).val();
@@ -1106,7 +1124,7 @@ pageEncoding="UTF-8"%>
 					$.ajax({
 						url: '/exerciseAdd',  
 						type: 'POST',
-						data: JSON.stringify({ exercise: exercises }),
+						data: JSON.stringify({ exercise: exercises, date: selectedDate }),
 						contentType: "application/json",
 						success: function(data) {
 							alert("운동등록에 성공했습니다.")
@@ -1124,7 +1142,6 @@ pageEncoding="UTF-8"%>
 								            	'<div class="exercise-info" data-index="'+index+'">' +
 									                '<div class="ex_name">'+exercise.ex_name+'</div>'+
 									                '<input class="ex_time" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
-									                '<button class="timeBtn">적용</button>'+
 									                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
 									            '</div>';
 								        });
@@ -1141,7 +1158,9 @@ pageEncoding="UTF-8"%>
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
 							// 오류 처리
+							console.log("에러다 에러")
 							alert('운동등록에 실패했습니다'+ jqXHR.responseText)
+							console.error('Server response:', jqXHR.responseText);
 						}
         			});
 					
@@ -1192,11 +1211,11 @@ pageEncoding="UTF-8"%>
 		                		    url: '/viewCustomExercise',
 		                		    type: 'GET',
 		                		    success: function(data) {
-		                		        let customExerciseHtml = '<div class="exercise-item">';
+		                		        let customExerciseHtml = '<div class="customExercise-item">';
 		                		        data.forEach(function(exercise, index) {
 		                		            customExerciseHtml += 
 		                		            	// 각 행마다 인덱스 설정하여 구분
-		                		            	'<div class="exercise-info" data-index="'+index+'">' +
+		                		            	'<div class="customExercise-info" data-index="'+index+'">' +
 		                			                '<div class="ex_name">'+exercise.ex_name+'</div>'+
 		                			                '<input class="ex_time" type="number" readonly value="' + exercise.ex_time + '">'+
 		                			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
@@ -1268,7 +1287,64 @@ pageEncoding="UTF-8"%>
 	    console.log("총 소모 칼로리: " + totalExUsedKcal + " Kcal");
 	}
 	
+	
 	$(document).ready(function() {
+		// 달력
+		var date = new Date();
+	
+	    // 'yyyy-mm-dd' 형태의 문자열로 변환
+	    var day = ("0" + date.getDate()).slice(-2);
+	    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+	    var today = date.getFullYear() + "-" + month + "-" + day;
+	    var selectedDate = $('#datepicker').val();
+	    
+        $("#datepicker").datepicker({ 
+            dateFormat: 'yy-mm-dd',
+            onSelect: function(dateText) {
+                $.ajax({
+                    url: '/viewExercise',
+                    type: 'GET',
+                    data: { selectedDate: dateText },
+                    success: function(data) {
+                        let exerciseHtml = '<div class="exercise-item">';
+                        data.forEach(function(exercise, index) {
+                        	if (exercise.ex_name) {
+	                            exerciseHtml += 
+	                            '<div class="exercise-info" data-index="'+index+'">' +
+	                                '<div class="ex_name">'+exercise.ex_name+'</div>'+
+	                                '<input class="ex_time" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
+	                                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
+	                            '</div>';
+                        	}
+                        });
+                        exerciseHtml += '</div>';
+                        $('#resultExercise1').html(exerciseHtml);
+                        
+                        let customExerciseHtml = '<div class="customExercise-item">';
+        		        data.forEach(function(exercise, index) {
+        		        	if (exercise.ex_name2) {
+	        		            customExerciseHtml += 
+        		            	// 각 행마다 인덱스 설정하여 구분
+        		            	'<div class="customExercise-info" data-index="'+index+'">' +
+        			                '<div class="ex_name">'+exercise.ex_name2+'</div>'+
+        			                '<input class="ex_time" type="number" readonly value="' + exercise.ex_time2 + '">'+
+        			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal2+'</div>'+
+        			            '</div>';
+        		        	}
+        		        });
+        		        customExerciseHtml += '</div>';
+        		        $('#resultExercise2').html(customExerciseHtml);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Fetch error:', errorThrown);
+                        console.error('Server response:', jqXHR.responseText);
+                    }
+                });
+            }
+        });
+	    // 달력의 기본 값을 오늘 날짜로 설정
+	    $("#datepicker").datepicker("setDate", today);
+		
 		// 운동 다이어로그 내 검색 버튼
 		$('#searchButton1').click(function() {
 			let searchEx = $("#exerciseName1").val();
@@ -1285,6 +1361,8 @@ pageEncoding="UTF-8"%>
 		    		});
 		    		// 검색 결과를 화면에 표시합니다.
 		    		$('#exerciseDiv1').html(searchResultsHtml);
+		    		
+		    		
 		    	},
 		    	error: function(jqXHR, textStatus, errorThrown) {
 		    		// 오류 처리
@@ -1305,7 +1383,6 @@ pageEncoding="UTF-8"%>
 		            	'<div class="exercise-info" data-index="'+index+'">' +
 			                '<div class="ex_name">'+exercise.ex_name+'</div>'+
 			                '<input class="ex_time" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
-			                '<button class="timeBtn">적용</button>'+
 			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
 			            '</div>';
 		        });
@@ -1323,11 +1400,11 @@ pageEncoding="UTF-8"%>
 		    url: '/viewCustomExercise',
 		    type: 'GET',
 		    success: function(data) {
-		        let customExerciseHtml = '<div class="exercise-item">';
+		        let customExerciseHtml = '<div class="customExercise-item">';
 		        data.forEach(function(exercise, index) {
 		            customExerciseHtml += 
 		            	// 각 행마다 인덱스 설정하여 구분
-		            	'<div class="exercise-info" data-index="'+index+'">' +
+		            	'<div class="customExercise-info" data-index="'+index+'">' +
 			                '<div class="ex_name">'+exercise.ex_name+'</div>'+
 			                '<input class="ex_time" type="number" readonly value="' + exercise.ex_time + '">'+
 			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
@@ -1344,49 +1421,31 @@ pageEncoding="UTF-8"%>
 		    }
 		}); 
 		
-		// 운동시간 입력후 적용버튼 클릭시 칼로리 계산
-		$(document).on('click', '.timeBtn', function(e) {
-		    e.preventDefault();
-		    const exerciseInfo = $(this).closest('.exercise-info');
-		    const index = exerciseInfo.data('index');
-		    const ex_time = $(`.ex_time`, exerciseInfo).val();
-		    const ex_name = $(`.ex_name`, exerciseInfo).text();
-		    // 운동종목과 운동시간데이터를 서버로 보내고 서버에서 운동 시간에 따른 총 소모칼로리 받아옴
+		// 전체적용버튼-운동 시간대비 소모칼로리 계산하여 db저장후 출력
+		$('#applyAll').click(function() {
+		    const exerciseItems = [];
+		    $('.exercise-item .exercise-info').each(function() {
+		        const exerciseInfo = $(this);
+		        const ex_name = $('.ex_name', exerciseInfo).text();
+		        const ex_time = $('.ex_time', exerciseInfo).val();
+		        exerciseItems.push({ ex_name, ex_time });
+		    });
 		    $.ajax({
-		        url: '/getCalories',
+		        url: '/calculateCalories',
 		        type: 'POST',
 		        contentType: 'application/json',
-		        data: JSON.stringify({
-		            ex_time: ex_time,
-		            ex_name: ex_name
-		        }),
+		        data: JSON.stringify(exerciseItems),
 		        success: function(data) {
-		        	const ex_used_kcal = data.calories;
-		        	$('.ex_used_kcal', exerciseInfo).text(ex_used_kcal);
-		        	
-		        	// 소모 칼로리 성공적으로 받아올 시 업데이트 된 운동시간과 소모칼로리 db에 업데이트
-		        	$.ajax({
-		                url: '/updateExercise',
-		                type: 'POST',
-		                contentType: 'application/json',
-		                data: JSON.stringify({
-		                    ex_name: ex_name,
-		                    ex_time: ex_time,
-		                    ex_used_kcal: ex_used_kcal,
-		                }),
-		                success: function(data) {
-		                    console.log('Exercise updated successfully.');
-		                },
-		                error: function(jqXHR, textStatus, errorThrown) {
-		                    console.error('Update failed:', errorThrown);
-		                    console.error('Server response:', jqXHR.responseText);
-		                }
+		            
+		            $('.exercise-item .exercise-info').each(function(i) {
+		                const exerciseInfo = $(this);
+		                $('.ex_used_kcal', exerciseInfo).text(data[i].ex_used_kcal);
 		            });
-		        	// 운동 시간 입력후 칼로리 계산이 끝나면 총 운동시간, 소모칼로리 업데이트
-		    		calculateTotalTimeAndCalories();
+		            // 계산된 소모 칼로리 적용 후 총 운동시간, 소모 칼로리 업데이트
+		            calculateTotalTimeAndCalories();
 		        },
 		        error: function(jqXHR, textStatus, errorThrown) {
-		            console.error('Fetch error:', errorThrown);
+		            console.error('Calculation failed:', errorThrown);
 		            console.error('Server response:', jqXHR.responseText);
 		        }
 		    });

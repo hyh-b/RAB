@@ -46,16 +46,16 @@ public interface ExerciseMapperInter {
 	public int addCustomExercise_ok(ExerciseTO to);
 	
 	// 당일 추가한 운동종목 표시
-	@Select("select * from Exercise where ex_custom = #{ex_custom} and ex_day = date(now()) and m_seq=#{m_seq}")
-	public List<ExerciseTO> viewExercise(Boolean ex_custom, String m_seq);
+	@Select("select * from Exercise where ex_custom = #{ex_custom} and ex_day = #{ex_day} and m_seq=#{m_seq}")
+	public List<ExerciseTO> viewExercise(ExerciseTO to);
 	
 	// 운동 정보에 따른 칼로리 구하기
 	@Select("select mat_value from mat where mat_name=#{ex_name}")
 	public BigDecimal getCalories(String ex_name);
 	
 	// 운동시간과 소모 칼로리 업데이트
-	@Update("UPDATE Exercise SET ex_time=#{to.ex_time}, ex_used_kcal=#{to.ex_used_kcal} WHERE m_seq=#{m_seq} AND ex_day=CURDATE() AND ex_name=#{to.ex_name}")
-	public int updateExercise(@Param("to") ExerciseTO to, @Param("m_seq") String m_seq);
+	@Update("UPDATE Exercise SET ex_time=#{ex_time}, ex_used_kcal=#{ex_used_kcal} WHERE m_seq=#{m_seq} AND ex_day=CURDATE() AND ex_name=#{ex_name}")
+	public int updateExercise(ExerciseTO to);
 	
 	// 당일 총 소모칼로리 IntakeData테이블에 삽입
 	@Update("update IntakeData SET i_used_kcal = (SELECT SUM(ex_used_kcal)FROM Exercise WHERE m_seq=#{m_seq} AND ex_day=CURDATE()) WHERE m_seq = #{m_seq} AND i_day = CURDATE();")
