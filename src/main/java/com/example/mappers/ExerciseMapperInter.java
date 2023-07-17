@@ -38,11 +38,11 @@ public interface ExerciseMapperInter {
 	public List<matTO> searchExercise(String mat_name);
 	
 	// 운동종목 추가
-	@Insert("insert into Exercise(m_seq,ex_name,ex_day,ex_custom) values(#{m_seq},#{ex_name},now(),0)")
+	@Insert("insert into Exercise(m_seq,ex_name,ex_day,ex_custom) values(#{m_seq},#{ex_name},#{ex_day},0)")
 	public int addExercise_ok(ExerciseTO to);
 	
 	// 사용자 설정 운동종목 추가
-	@Insert("insert into Exercise(m_seq,ex_name,ex_time,ex_used_kcal,ex_day,ex_custom) values(#{m_seq},#{ex_name},#{ex_time},#{ex_used_kcal},now(),1)")
+	@Insert("insert into Exercise(m_seq,ex_name,ex_time,ex_used_kcal,ex_day,ex_custom) values(#{m_seq},#{ex_name},#{ex_time},#{ex_used_kcal},#{ex_day},1)")
 	public int addCustomExercise_ok(ExerciseTO to);
 	
 	// 당일 추가한 운동종목 표시
@@ -54,11 +54,19 @@ public interface ExerciseMapperInter {
 	public BigDecimal getCalories(String ex_name);
 	
 	// 운동시간과 소모 칼로리 업데이트
+<<<<<<< HEAD
 	@Update("UPDATE Exercise SET ex_time=#{ex_time}, ex_used_kcal=#{ex_used_kcal} WHERE m_seq=#{m_seq} AND ex_day=CURDATE() AND ex_name=#{ex_name}")
+=======
+	@Update("UPDATE Exercise SET ex_time=#{ex_time}, ex_used_kcal=#{ex_used_kcal} WHERE m_seq=#{m_seq} AND ex_day=#{ex_day} AND ex_name=#{ex_name}")
+>>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 	public int updateExercise(ExerciseTO to);
 	
 	// 당일 총 소모칼로리 IntakeData테이블에 삽입
-	@Update("update IntakeData SET i_used_kcal = (SELECT SUM(ex_used_kcal)FROM Exercise WHERE m_seq=#{m_seq} AND ex_day=CURDATE()) WHERE m_seq = #{m_seq} AND i_day = CURDATE();")
-	public int totalCalorie(String m_seq);
+	@Update("update IntakeData SET i_used_kcal = (SELECT SUM(ex_used_kcal)FROM Exercise WHERE m_seq=#{m_seq} AND ex_day=#{today}) WHERE m_seq = #{m_seq} AND i_day = #{today};")
+	public int totalCalorie(String m_seq, String today);
+	
+	// 운동 삭제 
+	@Delete("delete from Exercise where m_seq=#{m_seq} and ex_name=#{ex_name} and ex_day=#{ex_day}")
+	public int deleteExercise(ExerciseTO to);
 	
 }
