@@ -42,9 +42,7 @@ public interface MypageMapperInter {
 	
 	
 	// 배사 수정
-	@Update("update Member set m_name=#{m_name}, m_height=#{m_height}, m_weight=#{m_weight}, m_mail=#{m_mail}, m_tel=#{m_tel}, "
-			+ " m_target_calorie=#{m_target_calorie}, m_target_weight=#{m_target_weight}, "
-			+ " m_backgroundfilename=#{m_backgroundfilename}, m_backgroundfilesize=#{m_backgroundfilesize} "
+	@Update("update Member set m_backgroundfilename=#{m_backgroundfilename}, m_backgroundfilesize=#{m_backgroundfilesize} "
 			+ "where m_seq = #{m_seq}")
 	public abstract int mypageModify_ok_Background(MypageTO to);
 	
@@ -56,9 +54,7 @@ public interface MypageMapperInter {
 	
 	
 	// 프사 수정
-	@Update("update Member set m_name=#{m_name}, m_height=#{m_height}, m_weight=#{m_weight}, m_mail=#{m_mail}, m_tel=#{m_tel}, "
-			+ " m_target_calorie=#{m_target_calorie}, m_target_weight=#{m_target_weight}, "
-			+ " m_profilename=#{m_profilename}, m_profilesize=#{m_profilesize} "
+	@Update("update Member set  m_profilename=#{m_profilename}, m_profilesize=#{m_profilesize} "
 			+ "where m_seq = #{m_seq}")
 	public abstract int mypageModify_ok_Profile(MypageTO to);
 	
@@ -69,9 +65,7 @@ public interface MypageMapperInter {
 //	public abstract int mypageModify_ok_Profile(MypageTO to);
 	
 	// 모두 다 수정
-	@Update("update Member set m_name=#{m_name}, m_height=#{m_height}, m_weight=#{m_weight}, m_mail=#{m_mail}, m_tel=#{m_tel}, "
-			+ " m_target_calorie=#{m_target_calorie}, m_target_weight=#{m_target_weight}, "
-			+ " m_profilename=#{m_profilename}, m_profilesize=#{m_profilesize}, m_backgroundfilename=#{m_backgroundfilename}, m_backgroundfilesize=#{m_backgroundfilesize} "
+	@Update("update Member set m_profilename=#{m_profilename}, m_profilesize=#{m_profilesize}, m_backgroundfilename=#{m_backgroundfilename}, m_backgroundfilesize=#{m_backgroundfilesize} "
 			+ "where m_seq = #{m_seq}")
 	public abstract int mypageModify_ok_All(MypageTO to);
 	

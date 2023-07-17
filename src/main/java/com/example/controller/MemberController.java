@@ -2,13 +2,17 @@ package com.example.controller;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.kakao.OAuthService;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
+import com.example.security.CustomUserDetails;
 
 @RestController
 public class MemberController {
@@ -30,14 +35,14 @@ public class MemberController {
 	
 	@RequestMapping("/signin.do")
 	public ModelAndView signin(Principal principal, HttpServletRequest request) {
-
+		    
 		ModelAndView modelAndView = new ModelAndView();
 		// 로그인 되어있는 사용자가 로그인페이지에 접근하면  main페이지로 돌려보냄
-	    if (principal != null && principal.getName() != null) {
+		if (principal != null && principal.getName() != null) {
 			
 	        modelAndView.setViewName("redirect:/main.do");
 	        
-	    } else {
+	    }else {
 	        
 	        modelAndView.setViewName("signin");
 	    }
@@ -146,15 +151,16 @@ public class MemberController {
 	@RequestMapping("/klogout.do")
 	public ModelAndView klogout(HttpSession session) {
 			
-		String access_Token = (String)session.getAttribute("access_Token");
+		//String access_Token = (String)session.getAttribute("access_Token");
+		//String access_Token = "tP6eyK52OtuC5YY0Zwd5fYV8dLTBeW7PrqQEHq7aCiolDQAAAYlhTn3C";
 		OAuthService oau = new OAuthService();
 		
 		ModelAndView modelAndView = new ModelAndView();
-		
+		/*oau.kakaoLogout(access_Token);
 		if(access_Token != null) {
 			oau.kakaoLogout((String)session.getAttribute("access_token"));
 			session.removeAttribute("acces_token"); session.removeAttribute("userInfo");
-		}
+		}*/
 			 
 		modelAndView.setViewName("kLogout");
 		

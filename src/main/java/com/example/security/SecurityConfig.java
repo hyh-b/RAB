@@ -32,6 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
 	
+	@Autowired
+    private CustomAuthenticationSuccessHandler successHandler;
+	
     @Autowired
     public SecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder) {
     	
@@ -41,22 +44,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/signup2.do").hasRole("SIGNUP")
-		//.antMatchers("/food.do").hasRole("ADMIN")
-		//.antMatchers("/tables.do").hasRole("kic매니저")
-		.anyRequest().permitAll();
-		/*.antMatchers("/","/signup.do","/signup_ok.do","kakao.do").permitAll()
-			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/src/images/**").permitAll()
+			.antMatchers("/signup2.do").hasRole("SIGNUP")
+			.antMatchers("/signup.do").permitAll()
+			.antMatchers("/idCheck.do").permitAll()
+			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do").hasRole("ADMIN")
+			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/img/**","/src/images/**").permitAll()
 			.anyRequest().authenticated();
-			
-		http.authorizeRequests()
 		
+		/*
+		http.authorizeRequests()
 		.anyRequest().permitAll();
 		*/
 		http.formLogin()
 			.loginPage("/signin.do")
 			.loginProcessingUrl("/signin_ok")
-			.defaultSuccessUrl("/main.do",true)
+			.successHandler(successHandler)
 			.failureUrl("/signin.do?error")
 			.usernameParameter("id")
 			.passwordParameter("password")
