@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -180,20 +182,22 @@ public class ExerciseController {
 	
 	// 추가한 운동종목 db에 저장
 	@RequestMapping(value = "/exerciseAdd", method = RequestMethod.POST)
-	public ResponseEntity<String> addExercise(@RequestBody Map<String, List<String>> getEx, Authentication authentication) {
+	public ResponseEntity<String> addExercise(@RequestBody Map<String, Object> getEx, Authentication authentication) {
 		authentication = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = authentication.getPrincipal();
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		
 		String m_seq = customUserDetails.getM_seq();
 		
-		List<String> exercise = getEx.get("exercise");
+		List<String> exercise = (List<String>)getEx.get("exercise");
+		String date = (String)getEx.get("date"); 
 		
 		try {
             for (String exerciseName : exercise) {
                 ExerciseTO to = new ExerciseTO();
                 to.setEx_name(exerciseName);
                 to.setM_seq(m_seq);  
+                to.setEx_day(date);
                 eDao.addExercise_ok(to);
             }
             return new ResponseEntity<>("운동 추가 성공", HttpStatus.OK);
@@ -201,7 +205,7 @@ public class ExerciseController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 	}
-	// 추가한 사용자 설정운동 db에 저장
+	// 추가한 사용자설정운동 db에 저장
 	@RequestMapping(value = "/addCustomExercise", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, String>> addCustomExercise(@RequestBody Map<String, String> payload, Authentication authentication) {
 	    authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -217,6 +221,7 @@ public class ExerciseController {
 	        to.setEx_name(payload.get("ex_name"));
 	        to.setEx_time(Integer.parseInt(payload.get("ex_time")));
 	        to.setEx_used_kcal(new BigDecimal(payload.get("ex_used_kcal")));
+	        to.setEx_day(payload.get("selectedDate"));
 	    } catch (NumberFormatException e) {
 	        System.out.println("Invalid number format");
 	        return new ResponseEntity<>(Map.of("result", "Error"), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -224,7 +229,7 @@ public class ExerciseController {
 	    
 	    int result = eDao.addCustomExercise_ok(to);
 	    
-	    eDao.totalCalorie(m_seq);
+	    eDao.totalCalorie(m_seq,payload.get("selectedDate"));
 	    
 	    if(result > 0) {
 	        return new ResponseEntity<>(Map.of("result", "Success"), HttpStatus.OK);
@@ -235,7 +240,7 @@ public class ExerciseController {
 	
 	// 운동칸에 당일 추가한 운동 보여주기
 	@RequestMapping("/viewExercise")
-    public List<Map<String, Object>> viewExercises(Authentication authentication,HttpServletRequest request) {
+    public List<Map<String, Object>> viewExercises(Authentication authentication,HttpServletRequest request, @RequestParam(value = "selectedDate") String selectedDate) {
 		authentication = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = authentication.getPrincipal();
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
@@ -244,14 +249,20 @@ public class ExerciseController {
 		
 		List<Map<String, Object>> responseList = new ArrayList<>();
 		// true, false로 운동과 사용자설정 운동 구분
-		List<ExerciseTO> exercises = eDao.viewExercise(false,m_seq);
+		ExerciseTO to = new ExerciseTO();
 		
-		for(ExerciseTO to : exercises) {
+		to.setM_seq(m_seq);
+		to.setEx_custom(false);
+		to.setEx_day(selectedDate);
+		
+		List<ExerciseTO> exercises = eDao.viewExercise(to);
+		
+		for(ExerciseTO to1 : exercises) {
 			Map<String, Object> response = new HashMap<>();
 			
-			String ex_name = to.getEx_name();
-			int ex_time = to.getEx_time();
-			BigDecimal ex_used_kcal = to.getEx_used_kcal();
+			String ex_name = to1.getEx_name();
+			int ex_time = to1.getEx_time();
+			BigDecimal ex_used_kcal = to1.getEx_used_kcal();
 			
 			response.put("ex_name",ex_name);
 			response.put("ex_time",ex_time);
@@ -259,71 +270,81 @@ public class ExerciseController {
 			
 			responseList.add(response);
 		}
-		return responseList;
-    }
-	
-	// 운동칸에 당일 추가한 사용자설정 운동 보여주기
-	@RequestMapping("/viewCustomExercise")
-    public List<Map<String, Object>> viewCustomExercises(Authentication authentication,HttpServletRequest request) {
-		authentication = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = authentication.getPrincipal();
-		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		
-		String m_seq = customUserDetails.getM_seq();
+		to.setM_seq(m_seq);
+		to.setEx_custom(true);
+		to.setEx_day(selectedDate);
 		
-		List<Map<String, Object>> responseList = new ArrayList<>();
-		// true, false로 운동과 사용자설정 운동 구분
-		List<ExerciseTO> exercises = eDao.viewExercise(true,m_seq);
-		for(ExerciseTO to : exercises) {
+		List<ExerciseTO> exercises2 = eDao.viewExercise(to);
+		
+		for(ExerciseTO to1 : exercises2) {
 			Map<String, Object> response = new HashMap<>();
 			
-			String ex_name = to.getEx_name();
-			int ex_time = to.getEx_time();
-			BigDecimal ex_used_kcal = to.getEx_used_kcal();
+			String ex_name = to1.getEx_name();
+			int ex_time = to1.getEx_time();
+			BigDecimal ex_used_kcal = to1.getEx_used_kcal();
 			
-			response.put("ex_name",ex_name);
-			response.put("ex_time",ex_time);
-			response.put("ex_used_kcal",ex_used_kcal);
+			response.put("ex_name2",ex_name);
+			response.put("ex_time2",ex_time);
+			response.put("ex_used_kcal2",ex_used_kcal);
 			
 			responseList.add(response);
 		}
 		return responseList;
     }
 	
-	// 운동 시간에 따른 소모칼로리 구하기
-	@RequestMapping(value = "/getCalories", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, BigDecimal> getCalories(@RequestBody Map<String, String> body) {
-		// 운동 이름
-		String ex_name = body.get("ex_name");
-        // 운동 시간
-        BigDecimal ex_time = new BigDecimal(body.get("ex_time"));
-        // 운동 종목에 따른 분당 소모 칼로리
-        BigDecimal getKcal = mDao.getCalorise(ex_name);
-        // 운동시간과 분당 소모 칼로리를 곱해 해당 운동 총 소모칼로리 구힘
-        BigDecimal totalCalories = ex_time.multiply(getKcal);
+	// 운동시간 대비 소모 칼로리 구한 뒤 db저장
+	@RequestMapping(value = "/calculateCalories", method = RequestMethod.POST)
+	public List<ExerciseTO> updateExercise(@RequestBody Map<String, Object> payload,Authentication authentication) {
+	    authentication = SecurityContextHolder.getContext().getAuthentication();
+	    Object principal = authentication.getPrincipal();
+	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+	    
+	    String m_seq = customUserDetails.getM_seq();
+	    
+	    List<Map<String, Object>> exercisesMap = (List<Map<String, Object>>) payload.get("exerciseItems");
+	    String selectedDate = (String) payload.get("selectedDate");
+	    
+	    List<ExerciseTO> exercises = exercisesMap.stream().map(map -> {
+	        ExerciseTO exercise = new ExerciseTO();
+	        exercise.setEx_name((String) map.get("ex_name"));
+	        exercise.setEx_time(Integer.parseInt((String) map.get("ex_time")));
+	        return exercise;
+	    }).collect(Collectors.toList());
+	    
+	    
+	    exercises.forEach(exercise -> {
+	    	// 소모 칼로리 계산 - 운동종목에 따른 분당 칼로리 * 운동 시간
+	        BigDecimal ex_used_kcal = mDao.getCalorise(exercise.getEx_name()).multiply(new BigDecimal(exercise.getEx_time()));
+	        exercise.setEx_used_kcal(ex_used_kcal);
+	        exercise.setM_seq(m_seq);
+	        exercise.setEx_day(selectedDate);
 
-        return Map.of("calories", totalCalories);
-    }
-	
-	// 운동 시간과 소모 칼로리 계산이 끝난 데이터 db에 업데이트
-	@RequestMapping(value = "/updateExercise", method = RequestMethod.POST)
-	@ResponseBody
-	public String updateExercise(@RequestBody ExerciseTO to, Authentication authentication) {
-		authentication = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = authentication.getPrincipal();
-		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		
-		String m_seq = customUserDetails.getM_seq();
-		
-		int updated = eDao.updateExercise(to, m_seq);
-		
-	    eDao.totalCalorie(m_seq);
-	    if(updated > 0){
-	        return "업데이트과 완료되었습니다";
-	    }else{
-	        throw new RuntimeException("업데이트에 실패했습니다");
-	    }
+	        // 소모 칼로리 계산 후 db에 업데이트
+	        eDao.updateExercise(exercise);
+	    });
+	    // 당일 총 소모칼로리 IntakeData에 업데이트
+	    eDao.totalCalorie(m_seq,selectedDate);
+	    return exercises; 
 	}
 	
+	// 추가한 운동 종목 삭제
+	@RequestMapping(value = "/deleteExercise", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteExercise(@RequestBody ExerciseTO to, Authentication authentication) {
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		    
+		String m_seq = customUserDetails.getM_seq();
+		
+		to.setM_seq(m_seq);
+        int result = eDao.deleteExercise(to);
+        if (result > 0) {
+        	// 당일 총 소모칼로리 IntakeData에 업데이트
+    	    eDao.totalCalorie(m_seq,to.getEx_day());
+            return new ResponseEntity<>("Exercise deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Failed to delete exercise", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

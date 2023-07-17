@@ -32,20 +32,26 @@ public class ExerciseDAO {
 	}
 	
 	// 추가한 운동들 운동칸에 보이기
-	public List<ExerciseTO> viewExercise(Boolean ex_custom, String m_seq){
+	public List<ExerciseTO> viewExercise(ExerciseTO to){
 		
-		return mapper.viewExercise(ex_custom, m_seq);
+		return mapper.viewExercise(to);
 	}
 	
 	// 운동시간과 소모칼로리 계산된 데이터 db에 업데이트
-	public int updateExercise(ExerciseTO to, String m_seq) {
+	public int updateExercise(ExerciseTO to) {
 		
-		return mapper.updateExercise(to, m_seq);
+		return mapper.updateExercise(to);
 	}
 	
 	// 당일 총 소모 칼로리 IntakeData에 업데이트
-	public int totalCalorie(String m_seq) {
+	public int totalCalorie(String m_seq, String today) {
 		
-		return mapper.totalCalorie(m_seq);
+		return mapper.totalCalorie(m_seq, today);
+	}
+	
+	// 운동칸에 추가한 운동 삭제
+	public int deleteExercise(ExerciseTO to) {
+		
+		return mapper.deleteExercise(to);
 	}
 }
