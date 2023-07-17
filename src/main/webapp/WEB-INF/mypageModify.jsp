@@ -1,50 +1,23 @@
-<%@page import="com.example.model.MypageTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-    	request.setCharacterEncoding("utf-8");
-    
-    	java.util.Date date = new java.util.Date();
-		
-    	MypageTO myto = (MypageTO)request.getAttribute("myto");
-    	System.out.println("profileModify.jsp TO >>>> " + myto );
-    	
-    	String name = myto.getM_name();
-    	String tel = myto.getM_tel();
-    	String height = myto.getM_height();
-    	String weight = myto.getM_weight();
-    	String targetCalorie = myto.getM_target_calorie();
-    	String targetWeight = myto.getM_target_weight();
-    	String id = myto.getM_id();
-    	String mail = myto.getM_mail();
-    	String role = myto.getM_role();
-    	String joinDate = myto.getM_join_date();
-    	String birthday = myto.getM_birthday();
-    	
-    	
-    	String backgroundfilename = myto.getM_backgroundfilename();
-    	long backgroundfilesize = myto.getM_backgroundfilesize();
-    	
-    	String profilename = myto.getM_profilename();
-    	long profilesize = myto.getM_profilesize();
-    	
-    	System.out.println("profileModify.jsp name >>>> " + name);
-    	System.out.println("profileModify.jsp tel >>>> " + tel);
-    	System.out.println("profileModify.jsp height >>>> " + height);
-    	System.out.println("profileModify.jsp weight>>>> " + weight);
-    	System.out.println("profileModify.jsp targetCalorie >>>> " + targetCalorie);
-    	System.out.println("profileModify.jsp targetWeight >>>> " + targetWeight);
-    	System.out.println("profileModify.jsp id >>>> " + id);
-    	System.out.println("profileModify.jsp mail >>>> " + mail);
-    	
-    	System.out.println("profileModify.jsp backgroundfilename >>>> " + backgroundfilename);
-    	System.out.println("profileModify.jsp backgroundfilesize >>>> " + backgroundfilesize);
-    	System.out.println("profileModify.jsp profilename >>>> " + profilename);
-    	System.out.println("profileModify.jsp profilesize >>>> " + profilesize);
-	
-    			
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="seq" value="${requestScope.seq}" />
+<c:set var="myto" value="${requestScope.myto}" />
 
+<c:set var="name" value="${myto.m_name}" />
+<c:set var="role" value="${myto.m_role}" />
+<c:set var="profilename" value="${myto.m_profilename}" />
+<c:set var="backgroundfilename" value="${myto.m_backgroundfilename}" />
+<c:set var="joinDate" value="${myto.m_join_date}" />
+<c:set var="tel" value="${myto.m_tel}" />
+<c:set var="height" value="${myto.m_height}" />
+<c:set var="weight" value="${myto.m_weight}" />
+<c:set var="targetCalorie" value="${myto.m_target_calorie}" />
+<c:set var="targetWeight" value="${myto.m_target_weight}" />
+<c:set var="birthday" value="${myto.m_birthday}" />
+<c:set var="id" value="${myto.m_id}" />
+<c:set var="mail" value="${myto.m_mail}" />
+ 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -323,13 +296,13 @@ profileInput.addEventListener('change', (event) => {
         >
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white">
-            <%=name %>
+            ${name}
             </span >
-            <span class="block text-xs font-medium"><%=role %></span>
+            <span class="block text-xs font-medium">${role}</span>
           </span>
 
           <span class="h-12 w-12 rounded-full">
-            <img src="src/images/upload/<%=profilename %>"/>
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}"/>
           </span>
 
           <svg
@@ -429,7 +402,8 @@ profileInput.addEventListener('change', (event) => {
               <nav>
                 <ol class="flex items-center gap-2">
                   <li><a class="font-medium" href="main.do">main /</a></li>
-                  <li class="text-primary">Profile</li>
+                  <li class="text-primary" href="profile
+                  .do">Profile</li>
                 </ol>
               </nav>
             </div>
@@ -442,7 +416,7 @@ profileInput.addEventListener('change', (event) => {
             <div
               class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div class="relative z-20 h-35 md:h-65">
-                <img src="src/images/upload/<%=backgroundfilename %>" alt="profile cover"
+                <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${backgroundfilename}" alt="profile cover"
                   class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
                 <div class="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
                   <label for="cover"
@@ -476,7 +450,7 @@ profileInput.addEventListener('change', (event) => {
                   class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
                   <div class="relative drop-shadow-2">
 
-                    <img src="src/images/upload/<%=profilename %>" alt="profile" />
+                    <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="profile" />
                     <label for="profile"
                       class="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2">
                       <svg class="fill-current" width="14" height="14" viewBox="0 0 14 14" fill="none"
@@ -497,9 +471,9 @@ profileInput.addEventListener('change', (event) => {
 <!-- 텍스트 필드 부분  -->                
                 <div class="mt-4">
                   <h3 class="mb-1.5 text-2xl font-medium text-black dark:text-white">
-                    <%=name %>
+     			   ${name}
                   </h3>
-                  <p class="font-medium"><%=joinDate %> 가입</p>
+                  <p class="font-medium">${joinDate} 가입</p>
                   <div class="mx-auto max-w-180">
                   
               <div class="p-7">
@@ -523,7 +497,7 @@ profileInput.addEventListener('change', (event) => {
                             </span>
 							<input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
 							       type="text" name="name" id="name" 
-							       value="<%=name %>"  />
+							       value="${name}"  />
                           </div>
                         </div>
                         
@@ -535,7 +509,7 @@ profileInput.addEventListener('change', (event) => {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="phoneNumber" id="phoneNumber"
-						    value="<%=tel %>"  />
+						    value="${tel}"  />
 						    <img src="src/images/logo/call.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -550,7 +524,7 @@ profileInput.addEventListener('change', (event) => {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="cm" id="cm" 
-						    value="<%=height %>"  />
+						    value="${height}"  />
 						    <img src="src/images/logo/cm.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -563,7 +537,7 @@ profileInput.addEventListener('change', (event) => {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="kg" id="kg"
-						    value="<%=weight %>"  />
+						    value="${weight}"  />
 						    <img src="src/images/logo/body.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -578,7 +552,7 @@ profileInput.addEventListener('change', (event) => {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="takeKcal" id="takeKcal" 
-						    value="<%=targetCalorie %>"  />
+						    value="${targetCalorie}"  />
 						    <img src="src/images/logo/mypageFood.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -591,7 +565,7 @@ profileInput.addEventListener('change', (event) => {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="targetScale" id="targetScale"
-						    value="<%=targetWeight %>"  />
+						    value="${targetWeight}"  />
 						    <img src="src/images/logo/work3.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
 						</div>
@@ -606,7 +580,7 @@ profileInput.addEventListener('change', (event) => {
 						  <div class="relative">
 						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
 						    type="text" name="birthday" id="birthday" 
-						    value="<%=birthday %>"  />
+						    value="${birthday}"  />
 						    <img src="src/images/logo/birthday.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
 						  </div>
                        </div>
@@ -632,7 +606,7 @@ profileInput.addEventListener('change', (event) => {
 						<input 
 							class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                              type="text" name="memberid" id="memberid"
-                             value="<%=id %>" readonly/>
+                             value="${id}" readonly/>
                         </div>
                       </div>
                      </div>
@@ -657,7 +631,7 @@ profileInput.addEventListener('change', (event) => {
                           </span>
                           <input
                             class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                            type="email" name="email" id="email" value="<%=mail %>" onblur="validateEmail()" />
+                            type="email" name="email" id="email" value="${mail}" onblur="validateEmail()" />
                         </div>
                       </div>
 
