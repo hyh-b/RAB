@@ -76,12 +76,38 @@ public class MainDAO {
 		
 		public ArrayList<MainTO> BarChartData(int seq, String day) {
 
-			List<MainTO> bar_b = (List<MainTO>)mapper.BarChartData(seq, day);
+			List<MainTO> bar = (List<MainTO>)mapper.BarChartData(seq, day);
 		
-			ArrayList<MainTO> bars_b = new ArrayList<>(bar_b);
+			ArrayList<MainTO> bars = new ArrayList<>(bar);
 	    
-	    	return bars_b;
+	    	return bars;
 		}
+//-----------Area---------------
+
+		public ArrayList<MainTO> AreaChartData(int seq, String day) {
+
+			List<MainTO> area = (List<MainTO>)mapper.AreaChartData(seq, day);
+		
+			ArrayList<MainTO> areas = new ArrayList<>(area);
+			
+			//System.out.println(" dao 에서 가져온 년도마다의 데이터 -> " + lines);
+	    
+	    	return areas;
+		}
+		
+//-----------line---------------
+		
+		public ArrayList<MainTO> LineChartData(int seq, String year) {
+
+			List<MainTO> line = (List<MainTO>)mapper.LineChartData(seq, year);
+		
+			ArrayList<MainTO> lines = new ArrayList<>(line);
+			
+			//System.out.println(" dao 에서 가져온 년도마다의 데이터 -> " + lines);
+	    
+	    	return lines;
+		}
+		
 //----------besides select --------------------------
 		
 	//---아이디당 1개의 레코드 중복없이 생성-------------------------------------------------------------------------
