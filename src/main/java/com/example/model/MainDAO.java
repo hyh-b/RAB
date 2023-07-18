@@ -228,6 +228,24 @@ public class MainDAO {
 			return TargetWeightUpdateFlag;
 		}
 		
+		//---피드백---------------------
+		
+		//피드백 입력
+		public int FeedbackReceived(int seq, String f_id, String f_name, String f_mail, String f_subject, String f_content) {
+			int feedbackFlag = 1;
+			
+			int result = mapper.FeedbackReceived(seq, f_id, f_name, f_mail, f_subject, f_content);
+			
+			if(result == 1 ) {
+				feedbackFlag = 0;
+				System.out.println( " feedbackFlag 완료 , " + feedbackFlag);
+			}else if(result == 0) {
+				feedbackFlag = 1;
+				System.out.println( " feedbackFlag 실패 , " + feedbackFlag);
+			}
+			
+			return feedbackFlag;
+		}
 		
 		
 }

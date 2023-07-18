@@ -75,11 +75,16 @@ public class MainController {
         System.out.println("     m_mail: " + member.getM_mail());
         
         System.out.println("     m_mail: " + member.getM_mail());
-  
+        
+        //아마도 삭제 될 친구들, 필없음.
 		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("flag", flag);
-		modelAndView.addObject("zzinid", member.getM_id());
+		
 		modelAndView.addObject("zzinseq", member.getM_seq());
+		modelAndView.addObject("zzinid", member.getM_id());		
+		modelAndView.addObject("zzinname", member.getM_name());
+		modelAndView.addObject("zzinmail", member.getM_mail());
+		
 		modelAndView.addObject("profilename", mypageTO.getM_profilename());
 
         modelAndView.setViewName("test");
@@ -131,8 +136,12 @@ public class MainController {
 
 		modelAndView.addObject("flag", flag);
 		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("zzinid", member.getM_id());
+		
 		modelAndView.addObject("zzinseq", member.getM_seq());
+		modelAndView.addObject("zzinid", member.getM_id());		
+		modelAndView.addObject("zzinname", member.getM_name());
+		modelAndView.addObject("zzinmail", member.getM_mail());
+		
 		modelAndView.addObject("profilename", mypageTO.getM_profilename());
 		
 		System.out.println(" test.do m_id " + member.getM_id());
@@ -392,5 +401,27 @@ public class MainController {
 //			int target_weight_flag = dao.TargetWeightUpdate(target_weight, seq);
 //			return target_weight_flag;
 //		}
+		
+//------피드백------------------------
+		
+//		@RequestMapping("/feedback.do")
+//		public ModelAndView feedback() {
+//			ModelAndView modelAndView = new ModelAndView();
+//			modelAndView.setViewName("feedback");
+//			return modelAndView;
+//		}
+		
+		  //목표 몸무게 업데이트----------
+			@ResponseBody
+			@RequestMapping(value = "/feedback_ok", method = RequestMethod.POST)
+			public int FeedBackOk(
+			@RequestParam("seq") int seq, @RequestParam("f_id") String f_id, @RequestParam("f_name") String f_name,
+			@RequestParam("f_mail") String f_mail, @RequestParam("f_subject") String f_subject, @RequestParam("f_content") String f_content) {
+				
+				int feedback_flag = dao.FeedbackReceived(seq, f_id, f_name, f_mail, f_subject, f_content);
+				
+				System.out.println( " feedback controller-> " + seq + " " +f_id + " " + f_name + " " + f_mail + " " + f_subject + " " + f_content);
+				return feedback_flag;
+			}
 
 	}

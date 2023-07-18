@@ -78,5 +78,12 @@ public interface MainMapperInter {
     @Update("Update Member set m_target_weight = #{target_weight} where m_seq = #{seq};")
     public int TargetWeightUpdate(@Param("target_weight") BigDecimal target_weight, @Param("seq") int seq);
     
+//---피드백 게시판-------------------------------------------------
+    
+    //피드백 다이얼로그 insert
+    @Insert("INSERT INTO feedback (m_seq, f_id, f_name, f_mail, f_subject, f_content) VALUES (#{seq}, #{f_id}, #{f_name}, #{f_mail}, #{f_subject}, #{f_content});")
+    public int FeedbackReceived(@Param("seq") int seq, @Param("f_id") String f_id, @Param("f_name") String f_name, @Param("f_mail") String f_mail, @Param("f_subject") String f_subject, @Param("f_content") String f_content);
+    
+    
 }
 
