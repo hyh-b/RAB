@@ -2,6 +2,7 @@ package com.example.model;
 
 import org.mybatis.spring.annotation.MapperScan;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -74,6 +75,27 @@ public class MemberDAO {
 	//이름 중복체크
 	public int nameCheck(String m_name) {
 		int flag = mapper.nameCheck(m_name);
+		
+		return flag;
+	}
+	
+	// 아이디 찾기
+	public List<MemberTO> findId(String m_mail){
+		List<MemberTO> idList = mapper.findId(m_mail);
+		
+		return idList;
+	}
+	
+	//비밀번호 찾기
+	public int findPw(MemberTO to) {
+		
+		int flag = mapper.findPw(to);
+		return flag;
+	}
+	
+	// 비밀번호 변경
+	public int changePw(MemberTO to) {
+		int flag = mapper.changePw(to);
 		
 		return flag;
 	}

@@ -1,35 +1,63 @@
 package com.example.controller;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.jwt.JwtTokenUtil;
 import com.example.kakao.OAuthService;
+import com.example.model.ExerciseTO;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
+import com.example.model.PasswordResetTokenTO;
 import com.example.security.CustomUserDetails;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @RestController
 public class MemberController {
 	
+	@Value("${myapp.secret-key}")
+    private String jwtSecretKey;
+	
+	@Autowired
+	private JavaMailSender javaMailSender;
+	
 	@Autowired
 	private MemberDAO mDao;
+	
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
 	
 	BCryptPasswordEncoder bcry = new BCryptPasswordEncoder();
 	
@@ -260,6 +288,110 @@ public class MemberController {
 		int flag = mDao.nameCheck(name);
 			
 		return flag; 
+	}
+	
+	// 아이디 찾기
+	@PostMapping("/findId")
+    public List<String> findId(@RequestBody Map<String, String> request) {
+		String m_mail = request.get("email");
+		System.out.println("시작");
+		System.out.println("메일"+m_mail);
+		List<MemberTO> members = mDao.findId(m_mail);
+	    List<String> id = new ArrayList<>();
+	    for(MemberTO member : members) {
+	        id.add(member.getM_id());
+	    }
+	    return id;
+    }
+	
+	// 비밀번호 찾기 - 메일 전송
+	@PostMapping("/password-reset")
+	public int findPw(@RequestBody MemberTO to) {
+		System.out.println(to.getM_id());
+		System.out.println(to.getM_mail());
+		
+		int flag = mDao.findPw(to);
+				
+		if(flag== 1) {
+			long expirationTimeMillis = 3600000; // 토큰의 유효 시간 (1시간)
+			
+			PasswordResetTokenTO tokenTO = new PasswordResetTokenTO();
+	        tokenTO.setId(to.getM_id());
+	        tokenTO.setTimestamp(System.currentTimeMillis());
+	        // 토큰에 만료 시간 설정
+	        tokenTO.setExpiration(System.currentTimeMillis() + expirationTimeMillis);
+	        String m_id = to.getM_id();
+	        
+	        String secretKey = jwtSecretKey; 
+	        System.out.println("컨트롤러 키:"+secretKey);
+	        // 페이지에서 받은 아이디값을 넣은 jwt토큰 생성
+	        String token = Jwts.builder()
+	                .setSubject(m_id)
+	                .claim("data", tokenTO)
+	                .setExpiration(new Date(tokenTO.getExpiration()))
+	                .signWith(SignatureAlgorithm.HS512, secretKey.getBytes(StandardCharsets.UTF_8))
+	                .compact();
+	        System.out.println("토큰: "+token);
+			String toEmail = to.getM_mail();
+			String toName = "RockAtYourBody";
+			String subject = "RAB 비밀번호 재설정";
+			String content = "비밀번호를 재설정하려면 다음 링크를 클릭하세요: <a href='http://localhost:8080/reset_password?token=" + token + "'>클릭하세요</a>)";
+			
+			this.mailSender1(toEmail, toName, subject, content);
+		}
+		
+		return flag;
+	}
+	
+	// 메일 전송 메서드
+	public void mailSender1(String toEmail,String toName, String subject, String content) {
+	    try {
+	        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+	        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+	        helper.setTo(toEmail);
+	        helper.setSubject(subject);
+	        helper.setText(content, true);
+	        helper.setSentDate(new Date());
+
+	        javaMailSender.send(mimeMessage);
+
+	        System.out.println("전송 완료");
+	    } catch (MessagingException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	// 비밀번호 재설정 페이지
+	@RequestMapping("/reset_password")
+	public ModelAndView boardManagement() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("reset_password");
+		return modelAndView;
+	}
+	
+	// 비밀번호 재설정 확인
+	@PostMapping("/reset_password_ok.do")
+	public ModelAndView handlePasswordReset(@RequestParam("token") String token,@RequestParam("password") String password) {
+	    ModelAndView modelAndView = new ModelAndView();
+	    modelAndView.setViewName("reset_password_ok");
+		System.out.println("받은 토큰"+token);
+		try {
+	        // 토큰에서 사용자 ID 추출
+	        String userId = jwtTokenUtil.getUserIdFromToken(token);
+	        MemberTO to = new MemberTO();
+	        to.setM_id(userId);
+	        to.setM_pw(bcry.encode(password));
+            int flag = mDao.changePw(to);
+            
+            if(flag == 1) {
+            	modelAndView.addObject("ok","ok");
+            }
+            
+	    } catch (Exception e) {
+	    	System.out.println("에러: "+e.getMessage());
+	    }
+	    return modelAndView;
 	}
 	
 }	
