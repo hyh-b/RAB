@@ -305,7 +305,7 @@ public class MemberController {
     }
 	
 	// 비밀번호 찾기 - 메일 전송
-	@PostMapping("/password-reset")
+	@PostMapping("/findPw")
 	public int findPw(@RequestBody MemberTO to) {
 		System.out.println(to.getM_id());
 		System.out.println(to.getM_mail());
@@ -371,7 +371,7 @@ public class MemberController {
 	}
 	
 	// 비밀번호 재설정 확인
-	@PostMapping("/reset_password_ok.do")
+	@PostMapping("/reset_password_ok")
 	public ModelAndView handlePasswordReset(@RequestParam("token") String token,@RequestParam("password") String password) {
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.setViewName("reset_password_ok");

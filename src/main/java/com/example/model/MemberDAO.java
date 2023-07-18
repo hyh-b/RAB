@@ -100,4 +100,17 @@ public class MemberDAO {
 		return flag;
 	}
 	
+	// 회원 리스트
+	public ArrayList<MemberTO> memberList(){
+		ArrayList<MemberTO> mList = mapper.memberList();
+		
+		return mList;
+	}
+	
+	// 회원 리스트 검색
+	public ArrayList<MemberTO> searchMemberList(String m_id){
+		ArrayList<MemberTO> sList = mapper.searchMemberList(m_id);
+		
+		return sList;
+	};
 }

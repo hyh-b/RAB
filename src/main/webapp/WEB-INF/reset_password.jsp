@@ -55,34 +55,29 @@
 	    element.value = element.value.replace(/\s/g, '');
 	}
 
-	window.onload = function() {
-		alert(${param.token})
-		document.getElementById( 'pwBtn' ).onclick = function() {
-			
-			// 비밀번호는 문자와 숫자가 필수로 포함된 6~20자리(='"사용불가)
-            var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?![^]*[\\'\\\"\\=]).{6,20}$/;
-            
-			if( document.pwfrm.password.value.trim() == '' ) {
-				alert( '비밀번호를 입력하셔야 합니다' );
-				return false;
-			}
-			if( document.pwfrm.r_password.value.trim() == '' ) {
-				alert( '비밀번호 확인을 입력하셔야 합니다' );
-				return false;
-			}
-			if( document.pwfrm.r_password.value.trim() !== document.pwfrm.password.value.trim() ) {
-				alert( '비밀번호 확인이 일치하지 않습니다' );
-				return false;
-			}
+	function submitForm() {
+		// 비밀번호 패턴 유효성 검사
+		var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?![^]*[\\'\\\"\\=]).{6,20}$/;
 
-            if (!passwordPattern.test(document.pwfrm.password.value.trim())) {
-                alert("비밀번호는 최소 6자이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \" 는 사용불가)");
-                event.preventDefault();
-                return false;
-            }
-            
-			document.pwfrm.submit(); 
-		};
+		if (document.pwfrm.password.value.trim() == '') {
+			alert('비밀번호를 입력하셔야 합니다');
+			return false;
+		}
+		if (document.pwfrm.r_password.value.trim() == '') {
+			alert('비밀번호 확인을 입력하셔야 합니다');
+			return false;
+		}
+		if (document.pwfrm.r_password.value.trim() !== document.pwfrm.password.value.trim()) {
+			alert('비밀번호 확인이 일치하지 않습니다');
+			return false;
+		}
+
+		if (!passwordPattern.test(document.pwfrm.password.value.trim())) {
+			alert("비밀번호는 최소 6자 이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \"는 사용불가)");
+			return false;
+		}
+
+		document.getElementById('pwfrm').submit();
 	};
 </script>
 </head>
@@ -95,7 +90,7 @@
 			    	비밀번호 재설정
 			    </h3>
 			</div>
-			<form action="reset_password_ok.do" id="pwfrm" name="pwfrm" method="post">
+			<form action="reset_password_ok" id="pwfrm" name="pwfrm" method="post">
 				<input type="hidden" name="token" value="${param.token}">
 				<div class="p-6.5" style=height:400px;>
 					<div class="mb-4.5">
@@ -112,9 +107,7 @@
 				        <input type="password" id="r_password" name="r_password" placeholder="비밀번호 확인" oninput="removeSpaces(this);"  class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
 				    </div> <br>
 				       
-					<button id="pwBtn" class="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">
-					  확인
-					</button>
+					<input id="pwBtn" type="button" class="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray" value="확인" onclick="submitForm()" />
 				</div>
 			</form>
 		</div>

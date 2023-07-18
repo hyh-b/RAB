@@ -1,5 +1,52 @@
+<%@page import="java.util.List"%>
+<%@page import="com.example.model.MemberTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	ArrayList<MemberTO> mList = (ArrayList) request.getAttribute("mList");
+
+	int totalRecord = mList.size();
+	int cpage = 1;
+	int recordPerPage = 10;
+	int blockPerPage = 5;
+	int totalPage = 1;
+	totalPage = ((totalRecord-1)/recordPerPage)+1;
+	
+	// 페이지 번호 파라미터 가져오기
+    if (request.getParameter("cpage") != null) {
+        cpage = Integer.parseInt(request.getParameter("cpage"));
+    }
+    
+    // 현재 페이지에 해당하는 회원 목록 가져오기
+    int startIndex = (cpage - 1) * recordPerPage;
+    int endIndex = Math.min(startIndex + recordPerPage, totalRecord);
+    List<MemberTO> currentPageMembers = mList.subList(startIndex, endIndex);
+	
+	StringBuilder sbHtml = new StringBuilder();
+	
+	for( MemberTO to : currentPageMembers){
+		String m_id = to.getM_id();
+		String m_real_name = to.getM_real_name();
+		String m_name = to.getM_name();
+		String m_mail = to.getM_mail();
+		
+		sbHtml.append("<tr class='flex cursor-pointer items-center hover:bg-whiten dark:hover:bg-boxdark-2'>");
+		sbHtml.append("<td class='w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]'>");
+		sbHtml.append("<p class='text-left font-medium'>"+m_id+"</p>");
+		sbHtml.append("</td>");
+		sbHtml.append("<td class='w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]'>");
+		sbHtml.append("<p class='text-left font-medium'>"+m_real_name+"</p>");
+		sbHtml.append("</td>");
+		sbHtml.append("<td class='w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]'>");
+		sbHtml.append("<p class='text-left font-medium'>"+m_name+"</p>");
+		sbHtml.append("</td>");
+		sbHtml.append("<td class='w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]'>");
+		sbHtml.append("<p class='text-left font-medium'>"+m_mail+"</p>");
+		sbHtml.append("</tr>");
+		
+	}
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +55,50 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>관리자 페이지</title>
-<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
+<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function () {
+	  // 검색 버튼 클릭 이벤트 처리
+	  $("#sbtn").click(function () {
+	    var searchId = $("#searchId").val();
+	    // AJAX 요청
+	    $.ajax({
+	      url: "searchId.do",
+	      type: "POST",
+	      data: { m_id: searchId },
+	      dataType: "json",
+	      success: function (data) {
+	    	  let searchHtml = '';
+	          data.forEach(function (item) {
+	            searchHtml += 
+	             "<tr class='flex cursor-pointer items-center hover:bg-whiten dark:hover:bg-boxdark-2'>"+
+	    		 "<td class='w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]'>"+
+	    		 "<p class='text-left font-medium'>"+item.m_id+"</p>"+
+	    		 "</td>"+
+	    		 "<td class='w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]'>" +
+	    		 "<p class='text-left font-medium'>"+item.m_real_name+"</p>" +
+	    		 "</td>" +
+	    		 "<td class='w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]'>" +
+	    		 "<p class='text-left font-medium'>"+item.m_name+"</p>" +
+	    		 "</td>" +
+	    		 "<td class='w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]'>" +
+	    		 "<p class='text-left font-medium'>"+item.m_mail+"</p>" +
+	    		 "</tr>" 
+	          });
+	          $('#mlist').html(searchHtml);
+	        },
+	        error: function (xhr, status, error) {
+	          console.log(error);
+	        }
+	    }); 
+	  }); 
+		/* $("#sbtn").click(function () {
+		    alert("안녕");
+		  }); */
+	});
+</script>
+</head>
 
 <body
   x-data="{ page: 'buttons', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -216,13 +306,130 @@
 </aside>
 
     <!-- ===== Sidebar End ===== -->
-
     
+    <!-- ===== Content Area Start ===== -->
+    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      
+      <!-- ===== Header End ===== -->
+
+      <!-- ===== Main Content Start ===== -->
+      <main class="u-min-h-screen">
+        <div class="mx-auto h-[calc(100vh-80px)] max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+          <!-- Breadcrumb Start -->
+          <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="text-title-md2 font-bold text-black dark:text-white">
+              회원관리
+            </h2>
+
+            
+          </div>
+          <!-- Breadcrumb End -->
+
+          <div class="h-[calc(100vh-186px)] overflow-hidden sm:h-[calc(100vh-174px)]">
+            <div x-data="{inboxSidebarToggle: false}" class="h-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark lg:flex">
+              <div class="flex h-full flex-col border-l border-stroke dark:border-strokedark lg:w-4/5">
+                <!-- ====== Inbox List Start -->
+                <div
+                  class="flex flex-col-reverse justify-between gap-6 py-4.5 pl-4 pr-4 sm:flex-row lg:pl-10 lg:pr-7.5">
+                  <div class="flex items-center gap-4">
+                    
+					총 회원 수 : <%= totalRecord %>명
+                  </div>
+
+                  <div class="relative">
+                    <input type="text" id="searchId" placeholder="Search id"
+                      class="block w-full bg-transparent pl-7 pr-25 font-medium outline-none" />
+                    <button id="sbtn" name="sbtn" class="absolute right-0 top-1/2 -translate-y-1/2">
+                      검색
+                    </button>
+                  </div>
+                </div>
+
+                <div class="h-full">
+                  <table class="h-full w-full table-auto">
+                    <thead>
+                      <tr class="flex border-y border-stroke dark:border-strokedark">
+                        <th class="w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]">
+                          <p class="text-left font-medium">아이디</p>
+                        </th>
+                        <th class="w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]">
+                          <p class="text-left font-medium">이름</p>
+                        </th>
+                        <th class="w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[20%]">
+                          <p class="text-left font-medium">닉네임</p>
+                        </th>
+                        <th class="w-[35%] py-6 pl-4 pr-4 lg:pr-10 xl:w-[40%]">
+                          <p class="text-left font-medium">이메일</p>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody id="mlist" class="block h-full max-h-full overflow-auto py-4">
+                    
+                     <%= sbHtml %> 
+                      
+                      
+                      
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  class="flex items-center justify-between border-t border-stroke p-4 dark:border-strokedark sm:px-6">
+                  <p class="text-base font-medium text-black dark:text-white md:text-lg">
+                   		 <%
+							int startBlock = cpage -(cpage-1)%blockPerPage;
+							int endBlock = cpage -(cpage-1)%blockPerPage+blockPerPage-1;
+							if(endBlock >= totalPage){
+								endBlock = totalPage;
+							}
+							
+							if(startBlock==1){
+								out.println("<span><a>&lt;&lt;</a></span>");
+							}else{
+								out.println("<span><a href='admin.do?cpage="+(startBlock-blockPerPage)+"'>&lt;&lt;</a></span>");
+							}
+						
+							out.println("&nbsp;");
+							
+							if(cpage==1){
+								out.println("<span><a>&lt;</a></span>");
+							}else{
+								out.println("<span><a href='admin.do?cpage="+(cpage-1)+"'>&lt;</a></span>");
+							}
+							out.println("&nbsp;&nbsp;");
+							for(int i=startBlock; i<=endBlock; i++){
+								if(cpage==i){
+									out.println("<span><a>"+"[ "+i+" ]"+"</a></span>");
+								}else{
+									out.println("<span><a href='admin.do?cpage="+i+"'>"+i+"</a></span>");
+								}
+							}
+							
+							if(cpage==totalPage){
+								out.println("<span><a>&gt;</a></span>");
+							}else{
+								out.println("<span><a href='admin.do?cpage="+(cpage+1)+"'>&gt;</a></span>");
+							}
+							out.println("&nbsp;");
+							if(endBlock==totalPage){
+								out.println("<span><a>&gt;&gt;</a></span>");
+							}else{
+								out.println("<span><a href='admin.do?cpage="+(startBlock+blockPerPage)+"'>&gt;&gt;</a></span>");
+							}
+						%>
+                  </p>
+                  
+                </div>
+                <!-- ====== Inbox List End -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
       <!-- ===== Main Content End ===== -->
     </div>
-    <!-- ===== Content Area End ===== -->
   </div>
   <!-- ===== Page Wrapper End ===== -->
-<script defer src="bundle.js"></script></body>
-
+<script defer src="bundle.js"></script>
+</body>
 </html>

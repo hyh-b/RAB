@@ -43,16 +43,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		/*http.authorizeRequests()
-			.antMatchers("/signup2.do").hasRole("SIGNUP")
-			.antMatchers("/signup.do","/signup_ok.do","/kSignup_ok.do","/kakao.do","/idCheck.do").permitAll()
-			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do").hasRole("ADMIN")
-			.antMatchers("/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/img/**","/src/images/**").permitAll()
-			.anyRequest().authenticated();*/
-		
-		
 		http.authorizeRequests()
-		.anyRequest().permitAll();
+			.antMatchers("/signup2.do").hasRole("SIGNUP")
+			.antMatchers("/signup.do","/signup_ok.do","/kSignup_ok.do","/kakao.do","/idCheck.do","/reset_password","/reset_password_ok","/findId","/findPw",
+					"/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/img/**","/src/images/**").permitAll()
+			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do").hasRole("ADMIN")
+			.anyRequest().authenticated();
+		
+		
+		/*http.authorizeRequests()
+		.anyRequest().permitAll();*/
 		
 		http.formLogin()
 			.loginPage("/signin.do")

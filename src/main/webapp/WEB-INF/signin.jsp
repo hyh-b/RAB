@@ -49,7 +49,7 @@
 			var id = $("#wId").val();
 			
 			$.ajax({
-				url: '/password-reset',  
+				url: '/findPw',  
 			      type: 'post',
 			      data: JSON.stringify({m_id: id, m_mail: email}),
 			      contentType: "application/json; charset=utf-8",
@@ -59,7 +59,7 @@
 			            alert("메일이 전송되었습니다.");
 			          }
 			          else {
-			            alert("메일 전송 실패 또는 아이디가 존재하지 않습니다.");
+			            alert("아이디와 이메일과 일치하는 회원이 존재하지 않습니다");
 			          }
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -397,6 +397,10 @@
 									가입 시 등록했던 이메일 주소를 입력해주세요.
 									</div>
 									<input type="email" class="form-control w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input" id="email2" aria-describedby="emailHelp">
+									<div><br></div>
+									<div class="form-text" style="font-weight: bold; font-size:15px;">
+									확인 버튼을 누르시면 잠시 후 메일이 전송됩니다
+									</div>
 								</div>
 							</form>
 							
