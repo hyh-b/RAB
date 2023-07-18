@@ -165,12 +165,12 @@ public class ConfigController {
 		return modelAndView; 
 	}
 	
-	@RequestMapping("/admin.do")
+	/*@RequestMapping("/admin.do")
 	public ModelAndView admin() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin");
 		return modelAndView;
-	}
+	}*/
 	
 	@RequestMapping("/feedback.do")
 	public ModelAndView feedback() {
