@@ -2,20 +2,8 @@
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="seq" value="${requestScope.seq}" />
-<c:set var="to" value="${requestScope.to}" />
-<c:set var="boardLists" value="${requestScope.boardLists}" />
-
-<c:set var="subject" value="${to.u_subject}" />
-<c:set var="category" value="${to.u_category}" />
-<c:set var="content" value="${to.u_content}" />
-<c:set var="wdate" value="${to.u_wdate}" />
-<c:set var="filename" value="${to.u_filename}" />
-<c:set var="hit" value="${to.u_hit}" />
-<c:set var="commentcount" value="${to.u_commentcount}" />
-
-<c:set var="profilename" value="${to.m_profilename}" />
-<c:set var="name" value="${to.m_name}" />
-
+<c:set var="sbHtml" value="${requestScope.sbHtml}" />
+<c:set var="listTo" value="${requestScope.listTo}" />
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -75,97 +63,14 @@ s
             </nav>
           </div>
           <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" >
-                <a href="#"
+                <a href="boardWrite.do"
                   class="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
                   글쓰기
                 </a>
          </div>
           <!-- Breadcrumb End -->
 
-          <div class="grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-3">
-            <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div class="flex items-center gap-3 py-5 px-6">
-                <div class="h-10 w-10 rounded-full">
-                  <img src="src/images/user/user-11.png" alt="User" />
-                </div>
-                <div>
-                  <h4 class="font-medium text-black dark:text-white">
-                    ${name}
-                  </h4>
-                </div>
-              </div>
-
-              <a href="#" class="block px-4">
-                <img src="src/images/cards/cards-01.png" alt="Cards" />
-              </a>
-
-              <div class="p-6">
-                <h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
-                  <a href="#">${subject}</a>
-                </h4>
-                <p class="font-medium">
-					${content}
-                </p>
-              </div>
-            </div>
-
-            <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div class="flex items-center gap-3 py-5 px-6">
-                <div class="h-10 w-10 rounded-full">
-                  <img src="src/images/user/user-12.png" alt="User" />
-                </div>
-                <div>
-                  <h4 class="font-medium text-black dark:text-white">
-                    Musharof Chy
-                  </h4>
-                  <p class="font-medium text-xs">Web Developer</p>
-                </div>
-              </div>
-
-              <a href="#" class="block px-4">
-                <img src="src/images/cards/cards-02.png" alt="Cards" />
-              </a>
-
-              <div class="p-6">
-                <h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
-                  <a href="#">Card Title here</a>
-                </h4>
-                <p class="font-medium">
-                  Lorem ipsum dolor sit amet, vehiculaum ero felis loreum
-                  fitiona fringilla goes scelerisque Interdum et.
-                </p>
-              </div>
-            </div>
-
-            <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div class="flex items-center gap-3 py-5 px-6">
-                <div class="h-10 w-10 rounded-full">
-                  <img src="src/images/user/user-13.png" alt="User" />
-                </div>
-                <div>
-                  <h4 class="font-medium text-black dark:text-white">
-                    Shafiq Hammad
-                  </h4>
-                  <p class="font-medium text-xs">Front-end Developer</p>
-                </div>
-              </div>
-
-              <a href="#" class="block px-4">
-                <img src="src/images/cards/cards-03.png" alt="Cards" />
-              </a>
-
-              <div class="p-6">
-                <h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
-                  <a href="#">Card Title here</a>
-                </h4>
-                <p class="font-medium">
-                  Lorem ipsum dolor sit amet, vehiculaum ero felis loreum
-                  fitiona fringilla goes scelerisque Interdum et.
-                </p>
-              </div>
-            </div>
-          </div>
-
+          ${sbHtml}
          
       <!-- ===== Main Content End ===== -->
     </div>
