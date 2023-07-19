@@ -17,15 +17,9 @@ public class ExerciseAlbumDAO {
 	
 	// 이미지 업로드
 	public int exerciseAlbum_ok(ExerciseAlbumTO to) {
-		int flag = 2;
 		
-		int result = mapper.exerciseAlbum_ok(to);
+		int flag = mapper.exerciseAlbum_ok(to);
 		
-		if(result ==1) {
-			flag = 0;
-		}else if(result==0){
-			flag=1;
-		}
 		return flag;
 	}
 	
@@ -38,15 +32,9 @@ public class ExerciseAlbumDAO {
 	
 	// 이미지 삭제
 	public int exerciseAlbumDelete_ok(ExerciseAlbumTO to) {
-		int flag = 2;
 		
-		int result = mapper.exerciseAlbumDelete_ok(to);
+		int flag = mapper.exerciseAlbumDelete_ok(to);
 		
-		if(result ==1) {
-			flag = 0;
-		}else if(result==0){
-			flag=1;
-		}
 		return flag;
 	}
 	
