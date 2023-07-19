@@ -14,49 +14,120 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
+   <title>
      test RAB
-    </title>
+   </title>
+<!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-  
-  <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
-  
-   
-<c:set var="seq" value="${requestScope.seq}" />
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script> 
 
-
-  
-  <!-- jstl 로 lists 받아옴 -->
- <c:forEach var="item" items="${lists}">
-   <c:set var="i_seq" value="${item.i_seq}" />
-   <c:set var="i_kcal" value="${item.i_kcal}" />
-   <c:set var="i_carbohydrate_g" value="${item.i_carbohydrate_g}" />
-   <c:set var="i_protein_g" value="${item.i_protein_g}" />
-   <c:set var="i_fat_g" value="${item.i_fat_g}" />
-   <c:set var="i_sugar_g" value="${item.i_sugar_g}" />
-   <c:set var="i_cholesterol_mgl" value="${item.i_cholesterol_mgl}" />
-   <c:set var="i_sodium_mg" value="${item.i_sodium_mg}" />
-   <c:set var="i_trans_fat_g" value="${item.i_trans_fat_g}" />
-   <c:set var="i_day" value="${item.i_day}" />
-   <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
-   
-   <c:set var="m_id" value="${item.m_id}"/>
-   <c:set var="m_weight" value="${item.m_weight}"/>
-    <c:set var="m_seq" value="${item.m_seq}"/>
-   <c:set var="m_gender" value="${item.m_gender}"/>
-   <c:set var="m_target_weight" value="${item.m_target_weight}"/>
-   <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
-   <c:set var="m_name" value="${item.m_name}" />       				     
-</c:forEach>
-
- 
+<!-- jQuery, jQuery Dialog, jQuery Calendar, fontAwesome --> 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   
+ <!--  피드백 아이콘 -->
+ <style>
+	.chatbot-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ff0000; 
+    position: fixed !important;
+    bottom: 20px !important;
+    
+    right: 33px !important;
+    
+    z-index: 1000;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	}
+	
+	.chatbot-icon .fas {
+	    font-size: 30px; 
+	    color: #ffffff;  
+	}
+	.chatbot-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    width: 400px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    display: none;
+	}
+	
+	.dialog-header {
+	    padding: 10px;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    border-bottom: 1px solid #e0e0e0;
+	}
+	
+	.dialog-title {
+	    font-weight: bold;
+	}
+	
+	.dialog-close {
+	    border: none;
+	    background: transparent;
+	    font-size: 20px;
+	    cursor: pointer;
+	    outline: none;
+	}
+	
+	.dialog-body {
+	    padding: 10px;
+	}
+	
+	.form-row {
+	    margin-bottom: 10px;
+	}
+	
+	.form-row label {
+	    display: block;
+	    font-weight: bold;
+	}
+	
+	.form-row input,
+	.form-row #f_content {
+	    width: 100%;
+	    padding: 5px;
+	    border-radius: 5px;
+	    border: 1px solid #e0e0e0;
+        
+	}
+	.form-row #f_content {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    height: 135px; 
+	}
+	
+	.dialog-footer {
+	    padding: 10px;
+	    text-align: right;
+	}
+	
+	.dialog-footer button {
+	    padding: 5px 10px;
+	    border-radius: 5px;
+	    background-color: #ff0000;
+	    color: #ffffff;
+	    border: none;
+	    cursor: pointer;
+	}
+	
+ </style>
+ 
 <script>
-
 //----------------------함수-----------------------------
 
 		//반복해서 함수들이 그 자리를 대체하게 하는 함수
@@ -104,15 +175,15 @@
       		success: function (elements) {
     	  
     	  	//console.log("  함수에서 selectedDate -> ", selectedDate);
-    	
-       //데이터 넘어오는거 검사 섹션
+		    	
+		//데이터 넘어오는거 검사 섹션
    	   
-       		//console.log("m_seq ->", elements.m_seq);
+       		console.log(" 메인칸 zzinseq ->", zzinseq);
    	   		//console.log(" m_id ->", elements.m_id);
        
    	   		//console.log("i_day ->", elements.i_day);
-       		//console.log("i_kcal ->", elements.i_kcal);
-       		//console.log("i_used_kcal ->", elements.i_used_kcal);
+       		console.log(" 메인칸 i_kcal ->", elements.i_kcal);
+       		console.log(" 메인칸 i_used_kcal ->", elements.i_used_kcal);
        		//console.log("m_weight ->", elements.m_weight);
        		//console.log("m_target_weight ->", elements.m_target_weight);
 
@@ -131,10 +202,6 @@
 			var toTarget = parseFloat(Math.abs(elements.i_weight - elements.m_target_weight).toFixed(2));
 
         	var whtml = '';
-			
-        	//console.log(" i 몸무게 -> ", elements.i_weight);
-        	//console.log(" 목표무게 -> ", elements.m_target_weight);
-        	//console.log("  목표까지 kg -> " , toTarget);
 
         	if(elements.i_weight === undefined || elements.m_target_weight === undefined ) {
        	   		whtml = '<span class="text-sm font-medium">달력에서 날짜를 선택해주세요</span>';
@@ -176,6 +243,8 @@
 		});
 	}
 	//---4elements 끝--------------------------------------------
+	
+//---------------------------차트 함수화 시작------------------------------------------
 	
 	//---pie 함수--------------------------
 		var pieChart;
@@ -262,24 +331,24 @@
 
 ////////bar함수 차트 undefined넘어와도 비율 안깨지게 날짜 포메팅 not finished--
 
-var selectedDate;
-
-function generateDates(selectedDate) {
-  var dates = [];
-  var currentDate = new Date(selectedDate);
-  currentDate.setDate(currentDate.getDate() - 3);
-
-  for (var i = 0; i < 7; i++) {
-    var year = currentDate.getFullYear();
-    var month = currentDate.getMonth() + 1;
-    var date = currentDate.getDate();
-    var formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
-    dates.push(formattedDate);
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-
-  return dates;
-}
+		var selectedDate;
+		
+		function generateDates(selectedDate) {
+		  var dates = [];
+		  var currentDate = new Date(selectedDate);
+		  currentDate.setDate(currentDate.getDate() - 3);
+		
+		  for (var i = 0; i < 7; i++) {
+		    var year = currentDate.getFullYear();
+		    var month = currentDate.getMonth() + 1;
+		    var date = currentDate.getDate();
+		    var formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+		    dates.push(formattedDate);
+		    currentDate.setDate(currentDate.getDate() + 1);
+		  }
+		
+		  return dates;
+		}
 
 	//---bar 함수----------------------------------------------------
 	var barChart;
@@ -795,6 +864,12 @@ function generateDates(selectedDate) {
       	LineChartForMonth();
         	
     });
+	
+	loadDataFromDate();
+	PieDataForDate();
+	BarChartForDate();
+	AreaChartForWeek();
+	LineChartForMonth();
 
 //////
   	};//window.onload끝 
@@ -847,6 +922,87 @@ function generateDates(selectedDate) {
 			AreaChartForWeek();
 			LineChartForMonth();
 			
+		// 피드백 다이얼로그
+			document.querySelector('.chatbot-icon').addEventListener('click', function() {
+			    document.querySelector('.chatbot-dialog').style.display = 'block';
+			    resetForm();
+			});
+
+			document.querySelector('.dialog-close').addEventListener('click', function() {
+			    document.querySelector('.chatbot-dialog').style.display = 'none';
+			    resetForm();
+			});
+			
+			//
+
+			
+			
+			document.querySelector('#submit-btn').addEventListener('click', function() {
+			    // Get input values
+			    
+			    var zzinseq = $("#zzinseq").val();
+			    var f_name = $("#zzinname").val();
+			    var f_id = $("#zzinid").val();
+			    var f_mail = $("#zzinmail").val();
+			    
+			    var f_subject = document.querySelector('#f_subject').value;
+			    var f_content = document.querySelector('#f_content').value;
+			    
+			    console.log(" feedback 데이터들 -> ", zzinseq, f_name, f_id, f_mail, f_subject, f_content  );
+			    // feedback ajax요청
+			    if (f_subject.trim() === "" || f_content.trim() === "") {
+			        alert("제목과 내용을 입력해주세요.");
+			      } else {
+			       
+			        $.ajax({
+			          url: "/feedback_ok",
+			          method: "POST",
+			          data: {
+		            	  	seq: zzinseq, 
+		            	  	f_id : f_id,
+		            	  	f_name : f_name,
+		            	  	f_mail : f_mail,
+		            	  	f_subject : f_subject,
+		            	  	f_content : f_content
+			              },
+			          success: function () {
+			            alert("소중한 피드백 감사합니다!");
+			            document.querySelector(".chatbot-dialog").style.display = "none";
+			            resetForm();
+			          },
+			          error: function (jqXHR, textStatus, errorThrown) {
+			            console.log("HTTP Status: " + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
+			            console.log("Throw Error: " + errorThrown); // 예외 정보
+			            console.log("jqXHR Object: " + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
+			            alert("업데이트에 실패했습니다");
+			          },
+			        });
+			      }
+			    });
+				
+			//클립보드 f_content에 붙혀서 가지고 오기, 파일업로드로 변경해야할듯?
+				document.querySelector('#f_content').addEventListener('paste', function (event) {
+				    var clipboardData = event.clipboardData || window.clipboardData;
+				    var pastedText = clipboardData.getData('text');
+				    
+				    // Prevent the default paste behavior
+				    event.preventDefault();
+				    
+				    // Set the pasted text to f_content input
+				    this.value = pastedText;
+				});
+			  
+			    document.querySelector("#f_name").value = $("#zzinname").val();
+			    document.querySelector("#f_id").value = $("#zzinid").val();
+			    document.querySelector("#f_mail").value = $("#zzinmail").val();
+			    
+			    //제목, 콘텐츠 입력칸 초기화
+			    function resetForm() {
+			        document.querySelector("#f_subject").value = "";
+			        document.querySelector("#f_content").value = "";
+			    }
+	    	/// 피드백 다이얼로그 끝
+
 	});
 </script>
 
@@ -864,6 +1020,8 @@ function generateDates(selectedDate) {
   
   <input type="hidden" id="zzinid" value="${zzinid}" />
   <input type="hidden" id="zzinseq" value="${zzinseq}" />
+  <input type="hidden" id="zzinname" value="${zzinname}" />
+  <input type="hidden" id="zzinmail" value="${zzinmail}" />
     <!-- ===== Preloader Start ===== -->
     <div
   x-show="loaded"
@@ -936,10 +1094,13 @@ function generateDates(selectedDate) {
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
     </nav>
+    <!-- 
+    <p>${flag}</p>
+     -->
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
-        flag : ${flag}
+
 
         <ul class="mb-6 flex flex-col gap-1.5">
           <!-- Menu Item Dashboard -->
@@ -1057,6 +1218,7 @@ function generateDates(selectedDate) {
              	마이페이지
             </a>
           </li>
+
           
           <!--  -->
           
@@ -1185,7 +1347,7 @@ function generateDates(selectedDate) {
   </form>
 </div>
     <!-- 오늘의 몸무게 업데이트 끝 -->
-    
+
  <!-- 목표 몸무게 업데이트 다이얼로그 -->
  <div id="targetWeightUpdate" title="목표 몸무게 재설정">
   <form>
@@ -1195,6 +1357,8 @@ function generateDates(selectedDate) {
   </form>
 </div>
     <!-- 목표 몸무게 업데이트 끝 -->
+    
+
 
     <div class="flex items-center gap-3 2xsm:gap-7">
       <ul class="flex items-center gap-2 2xsm:gap-4">
@@ -1264,9 +1428,9 @@ function generateDates(selectedDate) {
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white"
 
-              >${m_name}</span
+              >${zzinname}</span
             >
-            <span class="block text-xs font-medium">${m_gender}</span>
+            <span class="block text-xs font-medium">${zzingender}</span>
           </span>
 
           <span class="h-12 w-12 rounded-full">
@@ -1554,14 +1718,19 @@ function generateDates(selectedDate) {
                 </div>
                 
                 <div class="mt-4 flex items-end justify-between">
-                
-                  <div id="fourthElement">
 
-                  	</div>
-                  	
-               <div id="targetWeight">
-               
-                   </div>
+                
+<div class="mt-4 flex flex-col">
+    <div id="fourthElement">
+        <!-- fourthElement에 대한 기존 HTML 코드 -->
+    </div>
+    <br>
+    <div id="targetWeight">
+        <!-- 동적으로 처리되는 HTML이 삽입될 위치 -->
+    </div>
+</div>
+
+             
                    
                 </div>
               </div>
@@ -1648,8 +1817,52 @@ function generateDates(selectedDate) {
     </div>
     <!-- ===== Page Wrapper End ===== -->
   <script defer src="bundle.js"></script>
+ 
+     
+<div class="chatbot-icon">
+    <i class="fas fa-question"></i>
+</div>
 
-
+<div class="chatbot-dialog">
+    <div id="c_dialog">
+        <div class="dialog-header">
+            <span class="dialog-title">피드백 작성</span>
+            <button class="dialog-close">&times;</button>
+        </div>
+        <div class="dialog-body">
+            <form>
+                <div class="form-row">
+                    <label for="name">이름</label>
+                    <input type="text" id="f_name" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="id">아이디</label>
+                    <input type="text" id="f_id" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="mail">이메일</label>
+                    <input type="email" id="f_mail" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="subject">제목</label>
+                    <input type="text" id="f_subject">
+                </div>
+                <div class="form-row">
+                    <label for="content">내용</label>
+                    <div contenteditable="true" id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!         (Window + Shift + s로 캡쳐 후 Ctrl + V)"></div>
+                    
+                    <!--  
+                    <textarea id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!        
+                                      (Window + Shift + s로 캡쳐 후 Ctrl + V)"></textarea>
+                                      -->
+                </div>
+            </form>
+        </div>
+        <div class="dialog-footer">
+            <button id="submit-btn">전송</button>
+        </div>
+    </div>
+</div>
 
 </body>
     

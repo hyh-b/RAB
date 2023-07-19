@@ -9,6 +9,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>피드백 페이지</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+  
+  <script type="text/javascript">
+  
+  
+  </script>
 
 <body
   x-data="{ page: 'buttons', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"

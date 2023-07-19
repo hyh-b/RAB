@@ -36,18 +36,22 @@ import com.example.model.MemberTO;
 import com.example.model.MypageDAO;
 import com.example.model.MypageTO;
 import com.example.security.CustomUserDetails;
+import com.example.security.CustomUserDetailsService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @RestController
 public class MainController {
 	
+
 	@Autowired
 	private MemberDAO m_dao;
 	
 	@Autowired
 	private MainDAO dao;
 
+	@Autowired
+    private CustomUserDetailsService customUserDetailsService;
 	
 	
 	BCryptPasswordEncoder bcry = new BCryptPasswordEncoder();
@@ -58,29 +62,40 @@ public class MainController {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		MypageTO mypageTO = new MypageTO();
+		
+		customUserDetailsService.updateUserDetails();
+		
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		
+		String m_profilename =  customUserDetails.getM_profilename();
 
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
-        
-        //v_memberIntakeData 정보
-        ArrayList<MainTO> lists = dao.main_data(mId);
-        
-        
-        
+
         //유저마다 한개의 참조 레코드 생성
         int flag = dao.InsertData(mId);
         
+        System.out.println("     dao.InsertData(mId); " + flag);
+        
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
-        
-        System.out.println("     m_mail: " + member.getM_mail());
+
   
-		modelAndView.addObject("lists", lists);
 		modelAndView.addObject("flag", flag);
-		modelAndView.addObject("zzinid", member.getM_id());
+		
 		modelAndView.addObject("zzinseq", member.getM_seq());
-		modelAndView.addObject("profilename", mypageTO.getM_profilename());
+		modelAndView.addObject("zzinid", member.getM_id());		
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("zzinname", member.getM_real_name());
+		modelAndView.addObject("zzinmail", member.getM_mail());
+		modelAndView.addObject("zzingender", member.getM_gender());
+		
+		modelAndView.addObject("profilename", m_profilename);
+		
+		//ystem.out.println(" profilename -> controller에서 " +  m_profilename);
 
         modelAndView.setViewName("test");
         
@@ -97,10 +112,10 @@ public class MainController {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
-		MypageTO mypageTO = new MypageTO();
-		//원하는 유저 정보 가져오기 - security패키지의 CustomUserDetails 설정
-		//로그인한(인증된) 사용자의 정보를 authentication에 담음
 		
+		
+		
+
 		authentication = SecurityContextHolder.getContext().getAuthentication();
 		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
 		Object principal = authentication.getPrincipal();
@@ -118,9 +133,10 @@ public class MainController {
         	return modelAndView;
         }
         
-       
-        ArrayList<MainTO> lists = dao.main_data(mId);
+        //유저마다 한개의 참조 레코드 생성
         int flag = dao.InsertData(mId);
+        
+        System.out.println("     dao.InsertData(mId); " + flag);
         
     
         System.out.println("     m_id: " + member.getM_id());
@@ -130,10 +146,21 @@ public class MainController {
         
 
 		modelAndView.addObject("flag", flag);
-		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("zzinid", member.getM_id());
+		
+		//profile사진
+		customUserDetailsService.updateUserDetails();
+		String m_profilename =  customUserDetails.getM_profilename();
+		modelAndView.addObject("profilename", m_profilename);
+		//
+		
 		modelAndView.addObject("zzinseq", member.getM_seq());
-		modelAndView.addObject("profilename", mypageTO.getM_profilename());
+		modelAndView.addObject("zzinid", member.getM_id());		
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("zzinname", member.getM_real_name());
+		modelAndView.addObject("zzinmail", member.getM_mail());
+		modelAndView.addObject("zzingender", member.getM_gender());
+		
+		
 		
 		System.out.println(" test.do m_id " + member.getM_id());
 		
@@ -392,5 +419,27 @@ public class MainController {
 //			int target_weight_flag = dao.TargetWeightUpdate(target_weight, seq);
 //			return target_weight_flag;
 //		}
+		
+//------피드백------------------------
+		
+//		@RequestMapping("/feedback.do")
+//		public ModelAndView feedback() {
+//			ModelAndView modelAndView = new ModelAndView();
+//			modelAndView.setViewName("feedback");
+//			return modelAndView;
+//		}
+		
+		  //피드백----------
+			@ResponseBody
+			@RequestMapping(value = "/feedback_ok", method = RequestMethod.POST)
+			public int FeedBackOk(
+			@RequestParam("seq") int seq, @RequestParam("f_id") String f_id, @RequestParam("f_name") String f_name,
+			@RequestParam("f_mail") String f_mail, @RequestParam("f_subject") String f_subject, @RequestParam("f_content") String f_content) {
+				
+				int feedback_flag = dao.FeedbackReceived(seq, f_id, f_name, f_mail, f_subject, f_content);
+				
+				System.out.println( " feedback controller-> " + seq + " " +f_id + " " + f_name + " " + f_mail + " " + f_subject + " " + f_content);
+				return feedback_flag;
+			}
 
 	}

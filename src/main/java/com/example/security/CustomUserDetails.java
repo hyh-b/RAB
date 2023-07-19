@@ -28,12 +28,15 @@ public class CustomUserDetails implements UserDetails {
     private String m_seq;
     private String m_name;
     private String m_gender;
+    private String m_profilename;
     public CustomUserDetails(MemberTO to) {
         this.username = to.getM_id();
         this.password = to.getM_pw();
         this.m_seq = to.getM_seq();
         this.m_name = to.getM_name();
         this.m_gender = to.getM_gender();
+        this.m_profilename = to.getM_profilename();
+        
         // 권한 목록 확인
         List<String> roles = Collections.singletonList(to.getM_role());
 
