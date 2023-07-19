@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <title>
-    main RAB
+     main RAB
    </title>
 <!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
@@ -210,7 +210,7 @@
        		} else if(elements.i_weight > elements.m_target_weight) {
        	   		whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
       		} else if (elements.i_weight == elements.m_target_weight) {
-       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board.do"><u>당신의 성공을 공유하세요!</u></a></span>';
        	   //console.log(" undefined ? ->? ", elements.m_weight);
        		}
 			$('#targetWeight').html(whtml);
@@ -1132,7 +1132,7 @@
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
 
-              href="board_list.do"
+              href="board.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
@@ -1428,14 +1428,16 @@
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white"
 
-              >${zzinname}</span
+              >${zzinnickname}</span
             >
-            <span class="block text-xs font-medium">${zzingender}</span>
+            <!-- 
+            <span class="block text-xs font-medium"></span>
+			 -->	          
           </span>
 
           <span class="h-12 w-12 rounded-full">
           <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
-           <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
 
           </span>
 

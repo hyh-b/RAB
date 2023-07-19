@@ -111,10 +111,6 @@ public class MainController {
 	public ModelAndView main(Authentication authentication, ModelMap map, HttpServletRequest request, String mId) {
 		
 		ModelAndView modelAndView = new ModelAndView();
-		
-		
-		
-		
 
 		authentication = SecurityContextHolder.getContext().getAuthentication();
 		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
