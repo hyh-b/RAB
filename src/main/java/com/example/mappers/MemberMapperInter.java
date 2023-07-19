@@ -16,11 +16,11 @@ import com.example.model.MemberTO;
 public interface MemberMapperInter {
 	
 	//회원가입
-	@Insert("insert into Member(m_seq, m_id,m_pw,m_mail,m_iskakao,m_role,m_join_date) values (0,#{m_id},#{m_pw},#{m_mail},0,#{m_role},now());")
+	@Insert("insert into Member(m_seq, m_id,m_pw,m_mail,m_iskakao,m_role,m_join_date,m_profilename,m_backgroundfilename) values (0,#{m_id},#{m_pw},#{m_mail},0,#{m_role},now(),'KakaoTalk_20230719_171617369.jpg','KakaoTalk_20230719_171612219.png');")
 	public int signup_ok(MemberTO to);
 	
 	//카카오 회원가입
-	@Insert("insert into Member(m_seq, m_id,m_pw,m_mail,m_iskakao, m_role, m_join_date) values (0,#{m_id},#{m_pw},#{m_mail},1,#{m_role},now());")
+	@Insert("insert into Member(m_seq, m_id,m_pw,m_mail,m_iskakao, m_role, m_join_date,m_profilename,m_backgroundfilename) values (0,#{m_id},#{m_pw},#{m_mail},1,#{m_role},now(),'KakaoTalk_20230719_171617369.jpg','KakaoTalk_20230719_171612219.png');")
 	public int kSignup_ok(MemberTO to);
 	
 	//아이디를 통한 유저 정보조회
