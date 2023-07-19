@@ -292,17 +292,15 @@ public class ExerciseController {
 	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 	    
 	    String m_seq = customUserDetails.getM_seq();
-	    
 	    List<Map<String, Object>> exercisesMap = (List<Map<String, Object>>) payload.get("exerciseItems");
 	    String selectedDate = (String) payload.get("selectedDate");
-	    
 	    List<ExerciseTO> exercises = exercisesMap.stream().map(map -> {
 	        ExerciseTO exercise = new ExerciseTO();
 	        exercise.setEx_name((String) map.get("ex_name"));
 	        exercise.setEx_time(Integer.parseInt((String) map.get("ex_time")));
+	        exercise.setM_seq(m_seq);
 	        return exercise;
 	    }).collect(Collectors.toList());
-	    
 	    
 	    exercises.forEach(exercise -> {
 	    	// 소모 칼로리 계산 - 운동종목에 따른 분당 칼로리 * 운동 시간
@@ -310,7 +308,6 @@ public class ExerciseController {
 	        exercise.setEx_used_kcal(ex_used_kcal);
 	        exercise.setM_seq(m_seq);
 	        exercise.setEx_day(selectedDate);
-
 	        // 소모 칼로리 계산 후 db에 업데이트
 	        eDao.updateExercise(exercise);
 	    });

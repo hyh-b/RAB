@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="seq" value="${requestScope.seq}" />
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -217,6 +216,57 @@ pageEncoding="UTF-8"%>
 		        }
 		    });
 		} 
+		
+	//==================================================== 식단 메모 =================================================================
+	$('#searchButton1').click(function() {
+	    const data = $('#foodName1').val();
+	    console.log(data);
+	
+	    if (data === '') {
+	        alert('검색어를 입력해주세요!');
+	        return;
+	    }
+	    
+	    $.ajax({
+	        url: "/foodData",
+	        method: "post",
+	        data: {
+	            data: data
+	        },
+	        dataType: "json",
+	        success: function(json) {
+	            console.log(json);
+	            if (json.length > 0) {
+	                let result = "<table>";
+	                $(json).each(function(index, item) {
+	                    result += "<tr class='selectable-row'>";
+	                    result += "<td><input type='checkbox' class='select-checkbox'></td>";
+	                    result += "<td>" + item.f_name + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_carbohydrate_g + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_protein_g + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_fat_g + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_cholesterol_mg + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_sodium_mg + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_sugar_g + "</td>";
+	                    result += "<td style='display: none;'>" + item.f_kcal + "</td>";
+	                    result += "</tr>";
+	                });
+	                result += "</table>";
+	                $('#foodComent1').html(result);
+	                $('#foodName1').val('');
+	                // 선택 가능한 행에 클릭 이벤트 추가
+	                $('.selectable-row').click(function() {
+	                    $(this).toggleClass('selected');
+	                });
+	            } else {
+	                alert("데이터가 없습니다. 다시 입력해주세요!");
+	            }
+	        },
+	        error: function(e) {
+	            alert("에러 발생: " + e.status);
+	        }
+	    });
+	});
 	//==================================================== 식단 등록 끝 =================================================================
 		
 	//==================================================== 식단 메모 =================================================================
@@ -695,9 +745,6 @@ pageEncoding="UTF-8"%>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
 
         <ul class="mb-6 flex flex-col gap-1.5">
-          <!-- Menu Item Dashboard -->
-
-          <!-- Menu Item Calendar -->
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
@@ -718,7 +765,6 @@ pageEncoding="UTF-8"%>
                   fill=""
                 />
               </svg>
-
               공지사항
             </a>
           </li>
@@ -1176,6 +1222,7 @@ pageEncoding="UTF-8"%>
 					<button id="btn1">
 						<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
 					</button>
+
 					<button id="btn2" >
 					    <i class="fas fa-image"style="font-size: 17px;"></i>
 					</button>

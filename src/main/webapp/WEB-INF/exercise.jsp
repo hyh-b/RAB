@@ -1181,8 +1181,9 @@ pageEncoding="UTF-8"%>
 					let exercises = [];
 					let selectedDate = $('#datepicker').val();
 					// 체크박스에 체크된 데이터들 서버로 넘김
-					$("input[type='checkbox']:checked").each(function() {
+					$("input.select-checkbox[type='checkbox']:checked").each(function() {
 						let exerciseName = $(this).val();
+						
 						exercises.push(exerciseName);
 					});
 					$.ajax({

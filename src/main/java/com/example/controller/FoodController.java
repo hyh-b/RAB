@@ -36,7 +36,6 @@ import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
 import com.example.security.CustomUserDetails;
 
-
 @RestController
 public class FoodController {
 	
@@ -167,7 +166,6 @@ public class FoodController {
 	                bto.setB_cholesterol_mg(f_cholesterol_mg);
 	                bto.setB_sodium_mg(f_sodium_mg);
 	                bto.setB_day(b_day);  // set the parsed date
-	                
 	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
 	                
 	                int flag = bdao.insertBreakfast(bto);
