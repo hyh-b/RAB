@@ -10,7 +10,67 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>로그인</title>
-<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
+<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	
+	$(document).ready(function() {
+		//아이디 찾기 
+		$('#idBtn').click(function(event) {
+			event.preventDefault();
+			
+			var email = $('#email').val();
+			
+			$.ajax({
+				url: '/findId',
+				method: 'POST',
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify({ email: email }),
+				success: function(data) {
+					if(data.length > 0) {
+						var idString = "당신의 아이디는 " + data.join(", ") + " 입니다.";
+						$('#findId').text(idString);
+					} else {
+						$('#findId').text("해당 이메일로 가입된 아이디를 찾을 수 없습니다.");
+					}
+				},
+				error: function(error) {
+					console.log('Error:', error);
+				}
+			});
+		});
+		
+		
+		$('#pwBtn').click(function(event) {
+			event.preventDefault();
+			
+			var email = $('#email2').val();
+			var id = $("#wId").val();
+			
+			$.ajax({
+				url: '/findPw',  
+			      type: 'post',
+			      data: JSON.stringify({m_id: id, m_mail: email}),
+			      contentType: "application/json; charset=utf-8",
+			      dataType: "json",
+			      success: function(flag) {
+			          if (flag > 0) {
+			            alert("메일이 전송되었습니다.");
+			          }
+			          else {
+			            alert("아이디와 이메일과 일치하는 회원이 존재하지 않습니다");
+			          }
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+			        alert("오류가 발생했습니다. 다시 시도해주세요.");
+				}
+			});
+		});
+		
+	});
+</script>
+</head>
 <body
   x-data="{ page: 'signin', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
@@ -267,9 +327,101 @@
                         회원이 아니신가요?
                         <a href="signup.do" class="text-primary">회원가입</a>
                       </p>
+                     
                     </div>
                   </form>
+                  
+				<!-----------------아이디/비밀번호 찾기 ---------------> 
+				<div class="flex flex-wrap justify-center gap-5">
+					<div x-data="{modalOpen: false, reset() { this.modalOpen = false; document.getElementById('email').value = ''; document.getElementById('findId').innerHTML = ''; } }">
+						<button @click="modalOpen = true" >
+							아이디 찾기
+						</button>
+						<div x-show="modalOpen" x-transition class="fixed top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5">
+							<div @click.outside="reset" class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
+							<h3 class="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl ">
+							  아이디 찾기
+							</h3>
+							<span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+					
+							<form id="findIdForm">
+								<div class="mb-3">
+								  <div id="emailHelp" class="form-text" style="font-weight: bold; font-size:20px;">가입 시 등록했던 이메일 주소를 입력해주세요.
+								  </div>
+								  <input type="email" class="form-control w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input" id="email" aria-describedby="emailHelp">
+								</div>
+							</form>
+					  
+							<div id="findId" style="font-weight: bold; font-size:20px;">
+							</div><br>
+							
+							<div class="-mx-3 flex flex-wrap gap-y-4">
+								<div class="w-full px-3 2xsm:w-1/2">
+									<button id="idBtn" class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+										찾기
+									</button>
+								</div>
+								<div class="w-full px-3 2xsm:w-1/2">
+								    <button @click="modalOpen = false; reset()" class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90">
+								    	닫기
+								    </button>
+								</div>
+							</div>
+						</div>
+					</div>
                 </div>
+                
+          
+                
+				<div x-data="{modalOpen: false, reset() { this.modalOpen = false; document.getElementById('email').value = ''; document.getElementById('findId').innerHTML = ''; } }">
+					<button @click="modalOpen = true">
+					    비밀번호 찾기
+					</button>
+				
+					<div x-show="modalOpen" x-transition class="fixed top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5">
+				    <!-- 비밀번호 찾기 모달 내용 -->
+				    	<div @click.outside="reset" class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
+							<h3 class="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl ">
+							  비밀번호 찾기
+							</h3>
+							<span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+					
+							<form id="findPwForm">
+								<div class="mb-3">
+									<div id="writeIdHelp" class="form-text" style="font-weight: bold; font-size:20px;">
+								    아이디를 입력해주세요
+									</div>
+									<input type="text" class="form-control w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input" id="wId" aria-describedby="emailHelp">
+									<div><br></div>
+									<div id="pwEmailHelp" class="form-text" style="font-weight: bold; font-size:20px;">
+									가입 시 등록했던 이메일 주소를 입력해주세요.
+									</div>
+									<input type="email" class="form-control w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input" id="email2" aria-describedby="emailHelp">
+									<div><br></div>
+									<div class="form-text" style="font-weight: bold; font-size:15px;">
+									확인 버튼을 누르시면 잠시 후 메일이 전송됩니다
+									</div>
+								</div>
+							</form>
+							
+							<div class="-mx-3 flex flex-wrap gap-y-4">
+								<div class="w-full px-3 2xsm:w-1/2">
+									<button id="pwBtn" class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+										확인
+									</button>
+								</div>
+								<div class="w-full px-3 2xsm:w-1/2">
+								    <button @click="modalOpen = false; reset()" class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90">
+								    	닫기
+								    </button>
+								</div>
+							</div>
+				    
+				    
+				    </div>
+				</div>
+                
+                
               </div>
             </div>
           </div>
@@ -281,6 +433,9 @@
     <!-- ===== Content Area End ===== -->
   </div>
   <!-- ===== Page Wrapper End ===== -->
-<script defer src="bundle.js"></script></body>
+<script defer src="bundle.js"></script>
+<script type="text/javascript">
 
+</script>
+</body>
 </html>
