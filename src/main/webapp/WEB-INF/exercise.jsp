@@ -1183,8 +1183,7 @@ pageEncoding="UTF-8"%>
 					// 체크박스에 체크된 데이터들 서버로 넘김
 					$("input.select-checkbox[type='checkbox']:checked").each(function() {
 						let exerciseName = $(this).val();
-						console.log("체크된 체크박스:", $(this).prop('outerHTML'))
-						console.log("운동명"+exerciseName)
+						
 						exercises.push(exerciseName);
 					});
 					$.ajax({
