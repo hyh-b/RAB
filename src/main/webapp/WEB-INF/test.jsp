@@ -178,7 +178,7 @@
 		    	
 		//데이터 넘어오는거 검사 섹션
    	   
-       		console.log(" 메인칸 zzinseq ->", elements.m_seq);
+       		console.log(" 메인칸 zzinseq ->", zzinseq);
    	   		//console.log(" m_id ->", elements.m_id);
        
    	   		//console.log("i_day ->", elements.i_day);
@@ -1094,6 +1094,9 @@
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
     </nav>
+    <!-- 
+    <p>${flag}</p>
+     -->
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>

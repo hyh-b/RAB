@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <title>
-     main RAB
+    main RAB
    </title>
 <!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
@@ -178,7 +178,7 @@
 		    	
 		//데이터 넘어오는거 검사 섹션
    	   
-       		console.log(" 메인칸 zzinseq ->", elements.m_seq);
+       		console.log(" 메인칸 zzinseq ->", zzinseq);
    	   		//console.log(" m_id ->", elements.m_id);
        
    	   		//console.log("i_day ->", elements.i_day);
@@ -1094,6 +1094,9 @@
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
     </nav>
+    <!-- 
+    <p>${flag}</p>
+     -->
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
@@ -1432,7 +1435,7 @@
 
           <span class="h-12 w-12 rounded-full">
           <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
-            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
+           <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
 
           </span>
 

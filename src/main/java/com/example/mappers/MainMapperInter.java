@@ -29,7 +29,6 @@ public interface MainMapperInter {
     @Insert("INSERT INTO IntakeData (m_seq) SELECT m.m_seq FROM Member m LEFT JOIN IntakeData i ON m.m_seq = i.m_seq WHERE i.m_seq IS NULL AND m.m_id = #{mId} LIMIT 1;")
     public int InsertDataForMain(String mId);
 
-    
 //------------Charts-------------------------------------------------------------------------
     
     //pie Chart( 합연산 된 칼럼을 가져와서 뿌려줌 , 하루에 먹은 모든 음식의 탄단지가 파이로 그려짐)
