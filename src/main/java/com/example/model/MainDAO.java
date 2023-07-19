@@ -25,14 +25,6 @@ public class MainDAO {
 	@Autowired
 	private MainMapperInter mapper;
 	
-	public ArrayList<MainTO> main_data(String mId) {
-
-		List<MainTO> tlist = (List<MainTO>)mapper.DefaultDataForMain(mId);
-		
-	    ArrayList<MainTO> lists = new ArrayList<>(tlist);
-	    
-	    return lists;
-	}
 	
 //-------------------------------------------------------------------------
 	
@@ -40,8 +32,8 @@ public class MainDAO {
 
 		List<MainTO> datas = (List<MainTO>)mapper.DataFromDateForMain(seq, day);
 		
-		System.out.println(" i_day DAO -> " + day);
-		System.out.println("  m_id DAO -> " + seq );
+		//System.out.println(" i_day DAO -> " + day);
+		//System.out.println("  m_id DAO -> " + seq );
 
 		
 	    ArrayList<MainTO> ddatas = new ArrayList<>(datas);
@@ -49,15 +41,6 @@ public class MainDAO {
 	    return ddatas;
 	}
 		
-//-------------------------------------------------------------------------
-		public ArrayList<MainTO> foodData() {
-
-			List<MainTO> datas = (List<MainTO>)this.mapper.FoodData();
-		
-			ArrayList<MainTO> fdatas = new ArrayList<>(datas);
-	    
-	    	return fdatas;
-		}
 	
 //----------------------Charts below------------------------------------------------------
 		
@@ -76,12 +59,38 @@ public class MainDAO {
 		
 		public ArrayList<MainTO> BarChartData(int seq, String day) {
 
-			List<MainTO> bar_b = (List<MainTO>)mapper.BarChartData(seq, day);
+			List<MainTO> bar = (List<MainTO>)mapper.BarChartData(seq, day);
 		
-			ArrayList<MainTO> bars_b = new ArrayList<>(bar_b);
+			ArrayList<MainTO> bars = new ArrayList<>(bar);
 	    
-	    	return bars_b;
+	    	return bars;
 		}
+//-----------Area---------------
+
+		public ArrayList<MainTO> AreaChartData(int seq, String day) {
+
+			List<MainTO> area = (List<MainTO>)mapper.AreaChartData(seq, day);
+		
+			ArrayList<MainTO> areas = new ArrayList<>(area);
+			
+			//System.out.println(" dao 에서 가져온 년도마다의 데이터 -> " + lines);
+	    
+	    	return areas;
+		}
+		
+//-----------line---------------
+		
+		public ArrayList<MainTO> LineChartData(int seq, String year) {
+
+			List<MainTO> line = (List<MainTO>)mapper.LineChartData(seq, year);
+		
+			ArrayList<MainTO> lines = new ArrayList<>(line);
+			
+			//System.out.println(" dao 에서 가져온 년도마다의 데이터 -> " + lines);
+	    
+	    	return lines;
+		}
+		
 //----------besides select --------------------------
 		
 	//---아이디당 1개의 레코드 중복없이 생성-------------------------------------------------------------------------
@@ -110,6 +119,8 @@ public class MainDAO {
 			
 			int result = mapper.UnionBLDperDay(seq, day);
 			
+			System.out.println("  union dao 에서 seq -> " + seq );
+			
 			if(result == 1 ) {
 				
 				flag_upd = 0;
@@ -132,6 +143,8 @@ public class MainDAO {
 			int flag_uac = 1;
 			
 			int result = mapper.UnionAllCalories(seq, day);
+			
+			System.out.println("  union dao2 에서 seq -> " + seq );
 			
 			if(result == 1 ) {
 				flag_uac = 0;
@@ -202,6 +215,24 @@ public class MainDAO {
 			return TargetWeightUpdateFlag;
 		}
 		
+		//---피드백---------------------
+		
+		//피드백 입력
+		public int FeedbackReceived(int seq, String f_id, String f_name, String f_mail, String f_subject, String f_content) {
+			int feedbackFlag = 1;
+			
+			int result = mapper.FeedbackReceived(seq, f_id, f_name, f_mail, f_subject, f_content);
+			
+			if(result == 1 ) {
+				feedbackFlag = 0;
+				System.out.println( " feedbackFlag 완료 , " + feedbackFlag);
+			}else if(result == 0) {
+				feedbackFlag = 1;
+				System.out.println( " feedbackFlag 실패 , " + feedbackFlag);
+			}
+			
+			return feedbackFlag;
+		}
 		
 		
 }

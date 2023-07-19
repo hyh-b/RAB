@@ -29,7 +29,7 @@ public interface ExerciseMapperInter {
 	@Delete("delete from ExerciseAlbum where a_seq=#{a_seq}")
 	public int exerciseAlbumDelete_ok(ExerciseAlbumTO to);
 	
-	// 이미지 url알아내기
+	// 파일명 알아내기
 	@Select("select album_name from ExerciseAlbum where a_seq=#{a_seq}")
 	public String exerciseAlbumName(String a_seq);
 	
@@ -59,7 +59,7 @@ public interface ExerciseMapperInter {
 	
 	// 당일 총 소모칼로리 IntakeData테이블에 삽입
 	@Update("update IntakeData SET i_used_kcal = (SELECT SUM(ex_used_kcal)FROM Exercise WHERE m_seq=#{m_seq} AND ex_day=#{today}) WHERE m_seq = #{m_seq} AND i_day = #{today};")
-	public int totalCalorie(String m_seq, String today);
+	public int totalCalorie(@Param("m_seq") String m_seq,@Param("today") String today);
 	
 	// 운동 삭제 
 	@Delete("delete from Exercise where m_seq=#{m_seq} and ex_name=#{ex_name} and ex_day=#{ex_day}")

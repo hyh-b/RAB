@@ -35,5 +35,6 @@ public class MemberTO{
 	private BigDecimal m_target_weight;
 	private String m_birthday;
 	private String m_real_name;
+	private String m_profilename;
 	
 }

@@ -1,11 +1,15 @@
 package com.example.mappers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.model.ExerciseTO;
 import com.example.model.MemberTO;
 
 @Mapper
@@ -38,5 +42,25 @@ public interface MemberMapperInter {
 	//닉네임 중복확인
 	@Select("SELECT count(m_name) FROM Member WHERE m_name = #{m_name}")
 	public int nameCheck(String m_name);
-
+	
+	// 아이디 찾기
+	@Select("select m_id from Member where m_mail=#{m_mail}")
+	public List<MemberTO> findId(String m_mail);
+	
+	// 비밀번호 찾기
+	@Select("select count(*) from Member where m_id=#{m_id} and m_mail=#{m_mail}")
+	public int findPw(MemberTO to);
+	
+	// 비밀번호 변경
+	@Update("update Member set m_pw=#{m_pw} where m_id=#{m_id}")
+	public int changePw(MemberTO to);
+	
+	// 회원 리스트
+	@Select("select m_id, m_real_name, m_name, m_mail from Member")
+	public ArrayList<MemberTO> memberList();
+	
+	// 회원 리스트 검색
+	@Select("select m_id, m_real_name, m_name, m_mail from Member where m_id like concat('%', #{m_id}, '%')")
+	public ArrayList<MemberTO> searchMemberList(String m_id);
+	
 }
