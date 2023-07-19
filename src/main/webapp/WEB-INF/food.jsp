@@ -745,9 +745,6 @@ pageEncoding="UTF-8"%>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
 
         <ul class="mb-6 flex flex-col gap-1.5">
-          <!-- Menu Item Dashboard -->
-
-          <!-- Menu Item Calendar -->
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
@@ -768,7 +765,6 @@ pageEncoding="UTF-8"%>
                   fill=""
                 />
               </svg>
-
               공지사항
             </a>
           </li>
