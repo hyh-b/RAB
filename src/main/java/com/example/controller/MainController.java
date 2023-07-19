@@ -411,7 +411,7 @@ public class MainController {
 //			return modelAndView;
 //		}
 		
-		  //목표 몸무게 업데이트----------
+		  //피드백----------
 			@ResponseBody
 			@RequestMapping(value = "/feedback_ok", method = RequestMethod.POST)
 			public int FeedBackOk(

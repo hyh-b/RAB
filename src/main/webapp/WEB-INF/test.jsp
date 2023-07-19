@@ -122,14 +122,14 @@
 	}
 	
 	.form-row input,
-	.form-row textarea {
+	.form-row #f_content {
 	    width: 100%;
 	    padding: 5px;
 	    border-radius: 5px;
 	    border: 1px solid #e0e0e0;
         
 	}
-	.form-row textarea {
+	.form-row #f_content {
     width: 100%;
     padding: 5px;
     border-radius: 5px;
@@ -953,6 +953,9 @@
 			    resetForm();
 			});
 			
+			//
+
+			
 			
 			document.querySelector('#submit-btn').addEventListener('click', function() {
 			    // Get input values
@@ -996,7 +999,18 @@
 			        });
 			      }
 			    });
-
+				
+			//클립보드 f_content에 붙혀서 가지고 오기, 파일업로드로 변경해야할듯?
+				document.querySelector('#f_content').addEventListener('paste', function (event) {
+				    var clipboardData = event.clipboardData || window.clipboardData;
+				    var pastedText = clipboardData.getData('text');
+				    
+				    // Prevent the default paste behavior
+				    event.preventDefault();
+				    
+				    // Set the pasted text to f_content input
+				    this.value = pastedText;
+				});
 			  
 			    document.querySelector("#f_name").value = $("#zzinname").val();
 			    document.querySelector("#f_id").value = $("#zzinid").val();
@@ -1852,7 +1866,12 @@
                 </div>
                 <div class="form-row">
                     <label for="content">내용</label>
-                    <textarea id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!                          (Window + Shift + L로 캡쳐 후 Ctrl + V)"></textarea>
+                    <div contenteditable="true" id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!         (Window + Shift + s로 캡쳐 후 Ctrl + V)"></div>
+                    
+                    <!--  
+                    <textarea id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!        
+                                      (Window + Shift + s로 캡쳐 후 Ctrl + V)"></textarea>
+                                      -->
                 </div>
             </form>
         </div>
