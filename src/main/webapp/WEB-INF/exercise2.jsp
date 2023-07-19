@@ -343,7 +343,7 @@ pageEncoding="UTF-8"%>
 
 <script type="text/javascript">
 
-/* 	window.onload = function(){
+	window.onload = function(){
 		 document.getElementById('ubtn').onclick = function(){
 			
 			if(document.ufrm.upload.value.trim()==''){
@@ -352,7 +352,7 @@ pageEncoding="UTF-8"%>
 			}
 			document.ufrm.submit();
 		} 
-	} */
+	}
 </script>
 
 </head>
@@ -945,7 +945,7 @@ pageEncoding="UTF-8"%>
 	<!-- =============================== 사용자설정 운동 끝 =========================== -->   
 	     
 	<!------------------ 이미지 업로드 시작---------------------------------------------------->
-		  <form id="ufrm" method="post" name="ufrm" enctype="multipart/form-data">
+		  <form action="exerciseAlbum_ok.do" method="post" name="ufrm" enctype="multipart/form-data">
 		  <div class="button-container">
 		  <div class="upload-container">
 		  	<div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -956,9 +956,8 @@ pageEncoding="UTF-8"%>
 			        <div class="flex">
 			        	<input type="file" name="upload"
 			            	class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" />
-			            <button id="ubtn" 
-			              	class="inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer;">upload
-			            </button>
+			            <input type="button" id="ubtn" value="upload"
+			              	class="inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer;"/>
 			      	</div>
 			  	</div>
 			</div>
@@ -976,8 +975,8 @@ pageEncoding="UTF-8"%>
 		   
 	<!---------------- 이미지 슬라이드 시작 ----------------------------------------->
 			  <div class="swiper-container">
-				<div class="swiper-wrapper" id="imgSlide">
-				
+				<div class="swiper-wrapper">
+				${sbHtml}
 				</div>
 			
 				<!-- 네비게이션 -->
@@ -1006,57 +1005,76 @@ pageEncoding="UTF-8"%>
   </div>
 <script defer src="bundle.js"></script>
 <script>
+
+	// 이미지 슬라이드 설정
+	new Swiper('.swiper-container', {
+	
+		slidesPerView : 3, // 동시에 보여줄 슬라이드 갯수
+		spaceBetween : 30, // 슬라이드간 간격
+		slidesPerGroup : 3, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
+	
+		// 그룹수가 맞지 않을 경우 빈칸으로 메우기
+		// 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
+		loopFillGroupWithBlank : true,
+	
+		loop : false, // 무한 반복
+	
+		pagination : { // 페이징
+			el : '.swiper-pagination',
+			clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
+		},
+		navigation : { // 네비게이션
+			nextEl : '.swiper-button-next', // 다음 버튼 클래스명
+			prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
+		},
+	});
+	
 	
 	//   사진 전체보기 다이어로그 창 설정
-	$('#viewBtn').click(function() {
-    	$('#photoDialog').css('display', 'block');
+	document.getElementById('viewBtn').addEventListener('click', function() {
+		document.getElementById('photoDialog').style.display = 'block';
 	});
-	
-	$('#closeDialogBtn').click(function() {
-	    $('#photoDialog').css('display', 'none');
+
+	document.getElementById('closeDialogBtn').addEventListener('click', function() {
+		document.getElementById('photoDialog').style.display = 'none';
 	});
 		
+	let images = [
+		<%= abHtml%>
+	];
+
 	let currentPage = 1;
 	let imagesPerPage = 9;
+	let numOfPages = Math.ceil(images.length / imagesPerPage);
 	let selectedImage = null;
 	let selectedImageValue = null;
 	
-	function displayImages(){
-		$.ajax({
-			url: '/imgSlide', 
-			type: 'GET',
-			success: function(response) {
-				images = response;
-	            let html = '';
-	            let bucketUrl = 'https://rabfile.s3.ap-northeast-2.amazonaws.com/';
+	// 이미지 보이기
+	function displayImages() {
+		let start = (currentPage - 1) * imagesPerPage;
+	    let end = start + imagesPerPage;
+	    let imagesToDisplay = images.slice(start, end);
 
-	            let start = (currentPage - 1) * imagesPerPage;
-	            let end = start + imagesPerPage;
-	            let imagesToDisplay = images.slice(start, end);
-
-	            for (let i = 0; i < imagesToDisplay.length; i++) {
-	                if (i % 3 === 0) {
-	                    html += '<div style="display:flex">';
-	                }
-	                html += '<img src="' + bucketUrl + imagesToDisplay[i].album_name + '" value="' + imagesToDisplay[i].a_seq + '" onclick="selectImage(this)" style="width: 100%; height: 100%; margin-bottom: 20px;">';
-	                if ((i + 1) % 3 === 0 || i + 1 === imagesToDisplay.length) {
-	                    html += '</div>';
-	                }
-	            }
-				$('#photoContainer').html(html);
-			},
-			  error: function(xhr, status, error) {
-			    console.error('요청 실패. 상태 코드:', xhr.status);
-			}
-		});
-	} 
-
+	    let html = '';
+	    
+	    for(let i = 0; i < imagesToDisplay.length; i++) {
+	    	if (i % 3 === 0) {
+	        	html += '<div style="display:flex">';
+	        }
+	        html += '<img src="' + imagesToDisplay[i].src + '" value="' + imagesToDisplay[i].aSeq + '" onclick="selectImage(this)" style="width: 100%; height: 100%; margin-bottom: 20px;">';
+	        if ((i+1) % 3 === 0 || i+1 === imagesToDisplay.length) {
+	        	html += '</div>';
+	        }
+	    }
+	    document.getElementById('photoContainer').innerHTML = html;
+	}
+	
 	// 이미지 선택 기능
 	function selectImage(imageElement) {
 		if (selectedImage) {
-	    	selectedImage.style.border = 'none'; 
+	    	selectedImage.style.border = 'none'; // Remove border from previously selected image
 	    }
-	        imageElement.style.border = '2px solid red'; 
+	        imageElement.style.border = '2px solid red'; // Add border to the selected image
 	        selectedImage = imageElement;
 	        selectedImageValue = imageElement.getAttribute('value');
 	    }
@@ -1064,50 +1082,41 @@ pageEncoding="UTF-8"%>
 	// 이미지 삭제
     function deleteImage() {
         if (!selectedImageValue) {
-            alert('삭제할 이미지를 선택해 주세요');
+            alert('Please select an image to delete.');
             
 	        return;
 	    }
-	        console.log(selectedImageValue)
+	        
 	    $.ajax({
-	    	url: '/exDelete',
+	    	url: '/album_delete.do',
 	        method: 'POST',
 	        data: {
 	            aSeq: selectedImageValue
-	        },
-		    success: function(response) {
-		    	
-		    	if(response == "삭제 성공"){
-		            alert('이미지가 삭제되었습니다');
-		            imgSlide();
-		            displayImages();
-		    	}
-	        },
-	        error: function(xhr, status, error) {
-	            alert('삭제에 실패했습니다');
-	        },
-	        complete: function() {
-	            // 실행 후 이미지 선택 해제
-	            selectedImage.style.border = 'none';
-	            selectedImage = null;
-	            selectedImageValue = null;
 	        }
+	    }).done(function(response) {
+	        alert('이미지가 삭제되었습니다');
+	        location.reload(); // 삭제데이터 반영을 위해 새로고침
+	    }).fail(function() {
+	        
+	        alert('삭제에 실패했습니다');
+	    }).always(function() {
+	        // 실행 후 이미지 선택 해제
+	        selectedImage.style.border = 'none';
+	        selectedImage = null;
+	        selectedImageValue = null;
 	    });
 	}
 		
-    $('#deleteBtn').click(deleteImage);
-    
-    // 다음 페이지
-    function handleNextPage() {
-        let totalImages = images.length;
-        let totalPages = Math.ceil(totalImages / imagesPerPage);
-
-        if (currentPage < totalPages) {
-            currentPage++;
-            displayImages();
-        }
-    }
+	document.getElementById('deleteBtn').addEventListener('click', deleteImage);
 	    
+	// 다음 페이지
+	function handleNextPage() {
+		if (currentPage < numOfPages) {
+	  		currentPage++;
+	        displayImages();
+	    }
+	}
+		
 	// 이전 페이지
 	function handlePreviousPage() {
 		if (currentPage > 1) {
@@ -1116,9 +1125,11 @@ pageEncoding="UTF-8"%>
 		}
 	}
 
-	$('#previousPageBtn').click(handlePreviousPage);
-	$('#nextPageBtn').click(handleNextPage);
+	document.getElementById('previousPageBtn').addEventListener('click', handlePreviousPage);
+	document.getElementById('nextPageBtn').addEventListener('click', handleNextPage);
 
+	displayImages(); 
+	
 	/*---------------운동 다이어로그 시작--------- */
 	
 	// 운동칸에 추가한 운동 정보 출력하는 함수
@@ -1300,101 +1311,13 @@ pageEncoding="UTF-8"%>
 	                '<div class="totalExUsedKcal">'+totalExUsedKcal+'</div>'+
 	            '</div>';
         $('#total1').html(totalHtml);
-		
+
 	    // 여기서 totalExTime과 totalExUsedKcal을 원하는 곳에 표시하면 됩니다.
 	    console.log("총 운동시간: " + totalExTime + " 분");
 	    console.log("총 소모 칼로리: " + totalExUsedKcal + " Kcal");
 	}
-	// 이미지 슬라이드 출력
-	function imgSlide(){
-		console.log("이미지시작")
-		$.ajax({
-			url: '/imgSlide', 
-			type: 'GET',
-			success: function(response) {
-				console.log("이미지시작22")
-				let slideHtml = "";
-				let bucketUrl = "https://rabfile.s3.ap-northeast-2.amazonaws.com/";
-				for (var i = 0; i < response.length; i++) {
-					var fileName = response[i].album_name;
-					var albumDay = response[i].album_day;
-					slideHtml +=
-						'<div class="swiper-slide">'+
-						'<img src="'+bucketUrl+fileName+'">'+
-						'<div class="slideText">'+albumDay+'</div>'+
-						'</div>'
-				}
-				$('#imgSlide').html(slideHtml);
-					new Swiper('.swiper-container', {
-						
-						slidesPerView : 3, // 동시에 보여줄 슬라이드 갯수
-						spaceBetween : 30, // 슬라이드간 간격
-						slidesPerGroup : 3, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
-					
-						// 그룹수가 맞지 않을 경우 빈칸으로 메우기
-						// 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
-						loopFillGroupWithBlank : true,
-					
-						loop : false, // 무한 반복
-					
-						pagination : { // 페이징
-							el : '.swiper-pagination',
-							clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
-						},
-						navigation : { // 네비게이션
-							nextEl : '.swiper-button-next', // 다음 버튼 클래스명
-							prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
-						},
-					});
-			},
-			  error: function(xhr, status, error) {
-			    // 요청이 실패한 경우에 대한 처리 작성
-			    console.error('요청 실패. 상태 코드:', xhr.status);
-			}
-		});
-	} 
 	
 	$(document).ready(function() {
-		
-		imgSlide(); 
-		displayImages();
-		// 사진업로드
-		$('#ufrm').submit(function(event) {
-   			event.preventDefault(); // 기본 제출 동작 방지
-   			const form = $(this);
-   			const fileInput = form.find('input[type="file"]');
-   			const formData = new FormData(form[0]);
-   			console.log("제출시작")
-   			if (!fileInput.val()) {
-		        alert("파일을 선택해주세요");
-		        return;
-		    }
-			$.ajax({
-			    url: '/exUpload', // 서버 URL을 실제 서버 주소로 변경해야 합니다.
-			    type: 'POST',
-			    data: formData,
-			    processData: false,
-			    contentType: false,
-			    success: function(flag) {
-			    	if(flag == 1 ){
-			    		alert("이미지 업로드에 성공했습니다")
-			    		form[0].reset();
-			    	}else{
-			    		alert("이미지 업로드에 실패했습니다")
-			    	}
-			    	imgSlide();
-			    	displayImages();
-			    },
-			    error: function(xhr, status, error) {
-			      console.error('요청 실패. 상태 코드:', xhr.status);
-			    }
-			  });
-			});
-		
-		$('#ubtn').click(function(event) {
-			event.preventDefault(); // 기본 제출 동작 방지
-			$('#ufrm').submit(); // 폼 제출
-		});
 		
 		//운동삭제
 		$(document).on('click', '.exercise-info .dbtn', function(e) {

@@ -29,7 +29,7 @@
 				data: JSON.stringify({ email: email }),
 				success: function(data) {
 					if(data.length > 0) {
-						var idString = "당신의 아이디는 " + data.join(", ") + " 입니다.";
+						var idString = "등록된 아이디는 " + data.join(", ") + " 입니다.";
 						$('#findId').text(idString);
 					} else {
 						$('#findId').text("해당 이메일로 가입된 아이디를 찾을 수 없습니다.");

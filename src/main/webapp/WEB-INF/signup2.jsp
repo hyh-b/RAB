@@ -137,12 +137,17 @@
             if (heightInput.value === "") {
                 heightInput.value = null; 
             }
-            //닉네임을 입력안하거나 중복이 아닌경우에만 제출
-            if (window.getComputedStyle(nameOk).display == 'inline-block' || document.getElementById("name").value == '') {
+            //닉네임이 중복 아닌경우에만 제출
+            if (window.getComputedStyle(nameNo).display == 'none'){
             	document.sfrm.submit();
+            }else{
+	        	alert("닉네임이 중복됩니다")
+	        	return false;
 	        }
+          
 		}
-	}
+	} 
+	
 </script>
 </head>
 
@@ -230,8 +235,8 @@
                 <label for="m_gender">성별:</label>
                 <select id="gender" name="gender" class="relative z-20 w-30 h-12.5 appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
                     <option value="">선택</option>
-                    <option value="male">남성</option>
-                    <option value="female">여성</option>
+                    <option value="남성">남성</option>
+                    <option value="여성">여성</option>
                 </select>
                 
                 <label for="m_weight" style="margin-left:220px">체중 (kg):</label>

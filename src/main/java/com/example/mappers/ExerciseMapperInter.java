@@ -29,7 +29,7 @@ public interface ExerciseMapperInter {
 	@Delete("delete from ExerciseAlbum where a_seq=#{a_seq}")
 	public int exerciseAlbumDelete_ok(ExerciseAlbumTO to);
 	
-	// 이미지 url알아내기
+	// 파일명 알아내기
 	@Select("select album_name from ExerciseAlbum where a_seq=#{a_seq}")
 	public String exerciseAlbumName(String a_seq);
 	
