@@ -77,7 +77,8 @@ public class MainController {
 		
 		modelAndView.addObject("zzinseq", member.getM_seq());
 		modelAndView.addObject("zzinid", member.getM_id());		
-		modelAndView.addObject("zzinname", member.getM_name());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("zzinname", member.getM_real_name());
 		modelAndView.addObject("zzinmail", member.getM_mail());
 		modelAndView.addObject("zzingender", member.getM_gender());
 		
@@ -133,7 +134,8 @@ public class MainController {
 		
 		modelAndView.addObject("zzinseq", member.getM_seq());
 		modelAndView.addObject("zzinid", member.getM_id());		
-		modelAndView.addObject("zzinname", member.getM_name());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("zzinname", member.getM_real_name());
 		modelAndView.addObject("zzinmail", member.getM_mail());
 		modelAndView.addObject("zzingender", member.getM_gender());
 		

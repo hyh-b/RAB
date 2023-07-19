@@ -183,7 +183,7 @@
        
    	   		//console.log("i_day ->", elements.i_day);
        		console.log(" 메인칸 i_kcal ->", elements.i_kcal);
-       		//console.log("i_used_kcal ->", elements.i_used_kcal);
+       		console.log(" 메인칸 i_used_kcal ->", elements.i_used_kcal);
        		//console.log("m_weight ->", elements.m_weight);
        		//console.log("m_target_weight ->", elements.m_target_weight);
 
@@ -864,6 +864,12 @@
       	LineChartForMonth();
         	
     });
+	
+	loadDataFromDate();
+	PieDataForDate();
+	BarChartForDate();
+	AreaChartForWeek();
+	LineChartForMonth();
 
 //////
   	};//window.onload끝 

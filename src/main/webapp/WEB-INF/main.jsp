@@ -175,15 +175,15 @@
       		success: function (elements) {
     	  
     	  	//console.log("  함수에서 selectedDate -> ", selectedDate);
-    	
-       //데이터 넘어오는거 검사 섹션
+		    	
+		//데이터 넘어오는거 검사 섹션
    	   
-       		//console.log("m_seq ->", elements.m_seq);
+       		console.log(" 메인칸 zzinseq ->", elements.m_seq);
    	   		//console.log(" m_id ->", elements.m_id);
        
    	   		//console.log("i_day ->", elements.i_day);
-       		//console.log("i_kcal ->", elements.i_kcal);
-       		//console.log("i_used_kcal ->", elements.i_used_kcal);
+       		console.log(" 메인칸 i_kcal ->", elements.i_kcal);
+       		console.log(" 메인칸 i_used_kcal ->", elements.i_used_kcal);
        		//console.log("m_weight ->", elements.m_weight);
        		//console.log("m_target_weight ->", elements.m_target_weight);
 
@@ -864,6 +864,12 @@
       	LineChartForMonth();
         	
     });
+	
+	loadDataFromDate();
+	PieDataForDate();
+	BarChartForDate();
+	AreaChartForWeek();
+	LineChartForMonth();
 
 //////
   	};//window.onload끝 
