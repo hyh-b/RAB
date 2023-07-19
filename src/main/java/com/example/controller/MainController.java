@@ -42,6 +42,7 @@ import com.google.gson.JsonObject;
 @RestController
 public class MainController {
 	
+
 	@Autowired
 	private MemberDAO m_dao;
 	
@@ -64,26 +65,21 @@ public class MainController {
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
         //v_memberIntakeData 정보
-        ArrayList<MainTO> lists = dao.main_data(mId);
-        
-        
         
         //유저마다 한개의 참조 레코드 생성
-        int flag = dao.InsertData(mId);
+        //int flag = dao.InsertData(mId);
         
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
-        
-        System.out.println("     m_mail: " + member.getM_mail());
-        
-        //아마도 삭제 될 친구들, 필없음.
-		modelAndView.addObject("lists", lists);
-		modelAndView.addObject("flag", flag);
+
+  
+		//modelAndView.addObject("flag", flag);
 		
 		modelAndView.addObject("zzinseq", member.getM_seq());
 		modelAndView.addObject("zzinid", member.getM_id());		
 		modelAndView.addObject("zzinname", member.getM_name());
 		modelAndView.addObject("zzinmail", member.getM_mail());
+		modelAndView.addObject("zzingender", member.getM_gender());
 		
 		modelAndView.addObject("profilename", mypageTO.getM_profilename());
 
@@ -123,9 +119,7 @@ public class MainController {
         	return modelAndView;
         }
         
-       
-        ArrayList<MainTO> lists = dao.main_data(mId);
-        int flag = dao.InsertData(mId);
+        //int flag = dao.InsertData(mId);
         
     
         System.out.println("     m_id: " + member.getM_id());
@@ -134,13 +128,14 @@ public class MainController {
         map.addAttribute("user", member);
         
 
-		modelAndView.addObject("flag", flag);
-		modelAndView.addObject("lists", lists);
+		//modelAndView.addObject("flag", flag);
+
 		
 		modelAndView.addObject("zzinseq", member.getM_seq());
 		modelAndView.addObject("zzinid", member.getM_id());		
 		modelAndView.addObject("zzinname", member.getM_name());
 		modelAndView.addObject("zzinmail", member.getM_mail());
+		modelAndView.addObject("zzingender", member.getM_gender());
 		
 		modelAndView.addObject("profilename", mypageTO.getM_profilename());
 		

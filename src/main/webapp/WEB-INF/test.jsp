@@ -14,35 +14,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
+   <title>
      test RAB
-    </title>
-
-   
-<c:set var="seq" value="${requestScope.seq}" />
-  <!-- jstl 로 lists 받아옴 -->
- <c:forEach var="item" items="${lists}">
-   <c:set var="i_seq" value="${item.i_seq}" />
-   <c:set var="i_kcal" value="${item.i_kcal}" />
-   <c:set var="i_carbohydrate_g" value="${item.i_carbohydrate_g}" />
-   <c:set var="i_protein_g" value="${item.i_protein_g}" />
-   <c:set var="i_fat_g" value="${item.i_fat_g}" />
-   <c:set var="i_sugar_g" value="${item.i_sugar_g}" />
-   <c:set var="i_cholesterol_mgl" value="${item.i_cholesterol_mgl}" />
-   <c:set var="i_sodium_mg" value="${item.i_sodium_mg}" />
-   <c:set var="i_trans_fat_g" value="${item.i_trans_fat_g}" />
-   <c:set var="i_day" value="${item.i_day}" />
-   <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
-   
-   <c:set var="m_id" value="${item.m_id}"/>
-   <c:set var="m_weight" value="${item.m_weight}"/>
-    <c:set var="m_seq" value="${item.m_seq}"/>
-   <c:set var="m_gender" value="${item.m_gender}"/>
-   <c:set var="m_target_weight" value="${item.m_target_weight}"/>
-   <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
-   <c:set var="m_name" value="${item.m_name}" />       				     
-</c:forEach>
-
+   </title>
 <!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script> 
@@ -201,14 +175,14 @@
       		success: function (elements) {
     	  
     	  	//console.log("  함수에서 selectedDate -> ", selectedDate);
-    	
-       //데이터 넘어오는거 검사 섹션
+		    	
+		//데이터 넘어오는거 검사 섹션
    	   
-       		//console.log("m_seq ->", elements.m_seq);
+       		console.log(" 메인칸 zzinseq ->", elements.m_seq);
    	   		//console.log(" m_id ->", elements.m_id);
        
    	   		//console.log("i_day ->", elements.i_day);
-       		//console.log("i_kcal ->", elements.i_kcal);
+       		console.log(" 메인칸 i_kcal ->", elements.i_kcal);
        		//console.log("i_used_kcal ->", elements.i_used_kcal);
        		//console.log("m_weight ->", elements.m_weight);
        		//console.log("m_target_weight ->", elements.m_target_weight);
@@ -1117,7 +1091,7 @@
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
-        flag : ${flag}
+
 
         <ul class="mb-6 flex flex-col gap-1.5">
           <!-- Menu Item Dashboard -->
@@ -1445,9 +1419,9 @@
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white"
 
-              >${m_name}</span
+              >${zzinname}</span
             >
-            <span class="block text-xs font-medium">${m_gender}</span>
+            <span class="block text-xs font-medium">${zzingender}</span>
           </span>
 
           <span class="h-12 w-12 rounded-full">

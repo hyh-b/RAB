@@ -14,35 +14,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
+   <title>
      main RAB
-    </title>
-
-   
-<c:set var="seq" value="${requestScope.seq}" />
-  <!-- jstl 로 lists 받아옴 -->
- <c:forEach var="item" items="${lists}">
-   <c:set var="i_seq" value="${item.i_seq}" />
-   <c:set var="i_kcal" value="${item.i_kcal}" />
-   <c:set var="i_carbohydrate_g" value="${item.i_carbohydrate_g}" />
-   <c:set var="i_protein_g" value="${item.i_protein_g}" />
-   <c:set var="i_fat_g" value="${item.i_fat_g}" />
-   <c:set var="i_sugar_g" value="${item.i_sugar_g}" />
-   <c:set var="i_cholesterol_mgl" value="${item.i_cholesterol_mgl}" />
-   <c:set var="i_sodium_mg" value="${item.i_sodium_mg}" />
-   <c:set var="i_trans_fat_g" value="${item.i_trans_fat_g}" />
-   <c:set var="i_day" value="${item.i_day}" />
-   <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
-   
-   <c:set var="m_id" value="${item.m_id}"/>
-   <c:set var="m_weight" value="${item.m_weight}"/>
-    <c:set var="m_seq" value="${item.m_seq}"/>
-   <c:set var="m_gender" value="${item.m_gender}"/>
-   <c:set var="m_target_weight" value="${item.m_target_weight}"/>
-   <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
-   <c:set var="m_name" value="${item.m_name}" />       				     
-</c:forEach>
-
+   </title>
 <!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script> 
@@ -122,14 +96,14 @@
 	}
 	
 	.form-row input,
-	.form-row textarea {
+	.form-row #f_content {
 	    width: 100%;
 	    padding: 5px;
 	    border-radius: 5px;
 	    border: 1px solid #e0e0e0;
         
 	}
-	.form-row textarea {
+	.form-row #f_content {
     width: 100%;
     padding: 5px;
     border-radius: 5px;
@@ -953,6 +927,9 @@
 			    resetForm();
 			});
 			
+			//
+
+			
 			
 			document.querySelector('#submit-btn').addEventListener('click', function() {
 			    // Get input values
@@ -996,7 +973,18 @@
 			        });
 			      }
 			    });
-
+				
+			//클립보드 f_content에 붙혀서 가지고 오기, 파일업로드로 변경해야할듯?
+				document.querySelector('#f_content').addEventListener('paste', function (event) {
+				    var clipboardData = event.clipboardData || window.clipboardData;
+				    var pastedText = clipboardData.getData('text');
+				    
+				    // Prevent the default paste behavior
+				    event.preventDefault();
+				    
+				    // Set the pasted text to f_content input
+				    this.value = pastedText;
+				});
 			  
 			    document.querySelector("#f_name").value = $("#zzinname").val();
 			    document.querySelector("#f_id").value = $("#zzinid").val();
@@ -1103,7 +1091,7 @@
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
-        flag : ${flag}
+
 
         <ul class="mb-6 flex flex-col gap-1.5">
           <!-- Menu Item Dashboard -->
@@ -1431,9 +1419,9 @@
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white"
 
-              >${m_name}</span
+              >${zzinname}</span
             >
-            <span class="block text-xs font-medium">${m_gender}</span>
+            <span class="block text-xs font-medium">${zzingender}</span>
           </span>
 
           <span class="h-12 w-12 rounded-full">
@@ -1852,7 +1840,12 @@
                 </div>
                 <div class="form-row">
                     <label for="content">내용</label>
-                    <textarea id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!                          (Window + Shift + L로 캡쳐 후 Ctrl + V)"></textarea>
+                    <div contenteditable="true" id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!         (Window + Shift + s로 캡쳐 후 Ctrl + V)"></div>
+                    
+                    <!--  
+                    <textarea id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!        
+                                      (Window + Shift + s로 캡쳐 후 Ctrl + V)"></textarea>
+                                      -->
                 </div>
             </form>
         </div>

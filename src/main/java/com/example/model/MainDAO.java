@@ -25,14 +25,6 @@ public class MainDAO {
 	@Autowired
 	private MainMapperInter mapper;
 	
-	public ArrayList<MainTO> main_data(String mId) {
-
-		List<MainTO> tlist = (List<MainTO>)mapper.DefaultDataForMain(mId);
-		
-	    ArrayList<MainTO> lists = new ArrayList<>(tlist);
-	    
-	    return lists;
-	}
 	
 //-------------------------------------------------------------------------
 	
@@ -40,8 +32,8 @@ public class MainDAO {
 
 		List<MainTO> datas = (List<MainTO>)mapper.DataFromDateForMain(seq, day);
 		
-		System.out.println(" i_day DAO -> " + day);
-		System.out.println("  m_id DAO -> " + seq );
+		//System.out.println(" i_day DAO -> " + day);
+		//System.out.println("  m_id DAO -> " + seq );
 
 		
 	    ArrayList<MainTO> ddatas = new ArrayList<>(datas);
@@ -49,15 +41,6 @@ public class MainDAO {
 	    return ddatas;
 	}
 		
-//-------------------------------------------------------------------------
-		public ArrayList<MainTO> foodData() {
-
-			List<MainTO> datas = (List<MainTO>)this.mapper.FoodData();
-		
-			ArrayList<MainTO> fdatas = new ArrayList<>(datas);
-	    
-	    	return fdatas;
-		}
 	
 //----------------------Charts below------------------------------------------------------
 		
@@ -136,6 +119,8 @@ public class MainDAO {
 			
 			int result = mapper.UnionBLDperDay(seq, day);
 			
+			System.out.println("  union dao 에서 seq -> " + seq );
+			
 			if(result == 1 ) {
 				
 				flag_upd = 0;
@@ -158,6 +143,8 @@ public class MainDAO {
 			int flag_uac = 1;
 			
 			int result = mapper.UnionAllCalories(seq, day);
+			
+			System.out.println("  union dao2 에서 seq -> " + seq );
 			
 			if(result == 1 ) {
 				flag_uac = 0;
