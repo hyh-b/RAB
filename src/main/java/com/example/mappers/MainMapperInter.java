@@ -71,8 +71,14 @@ public interface MainMapperInter {
 //---몸무게, 타겟 몸무게 등록 쿼리, 다이얼로그 ---------------------------------------------
     
     //날짜별 몸무게 업데이트
+    @Update("UPDATE IntakeData JOIN Member ON IntakeData.m_seq = Member.m_seq SET IntakeData.i_weight = Member.m_weight WHERE IntakeData.i_day = CURDATE() and IntakeData.m_seq = #{seq};")
+    public int MandIweightsynced(@Param("seq") String seq);
+    
     @Update("UPDATE IntakeData SET i_weight = #{i_weight} WHERE m_seq = #{seq} AND i_day = #{dialogDate};")
     public int WeightUpdate(@Param("i_weight") BigDecimal i_weight, @Param("seq") int seq, @Param("dialogDate") String dialogDate);
+    
+//    @Update("UPDATE Member SET m_weight = #{i_weight} WHERE m_seq = #{seq} AND i_day = #{dialogDate};")
+//    public int WeightUpdate(@Param("i_weight") BigDecimal i_weight, @Param("seq") int seq, @Param("dialogDate") String dialogDate);
     
     //목표 몸무게 업데이트
     @Update("Update Member set m_target_weight = #{target_weight} where m_seq = #{seq};")

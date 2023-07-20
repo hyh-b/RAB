@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <title>
-     Main RAB
+     main RAB
    </title>
 <!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
@@ -621,6 +621,20 @@
 	                },
 	                xaxis: {
 	                    categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월','11월', '12월' ],
+	                },
+	                tooltip: {
+	                    y: {
+	                        formatter: function(val) {
+	                            return val.toFixed(2); // 데이터 포인트에 대한 소수점 둘째 자리까지 표시합니다.
+	                        }
+	                    }
+	                },
+	                yaxis: {
+	                    labels: {
+	                        formatter: function (val) {
+	                            return val.toFixed(0);  // 소수점 둘째 자리까지 표시합니다.
+	                        }
+	                    }
 	                }
 	            };
 	            
