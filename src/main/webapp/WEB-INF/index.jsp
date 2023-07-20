@@ -42,8 +42,7 @@
 			<!-- Header -->
 			<header id="header">
 				<h1>RockAt yourBody</h1>
-<!-- 				<p>당신의 몸을 &nbsp;&bull;&nbsp;상승시키세요&nbsp;&bull;&nbsp; With RAB</p> -->
-				<p>클라우드 기반 &nbsp;&bull;&nbsp;<span style="font-size: xx-large;">AI</span>&nbsp;&bull;&nbsp; 건강 데이터 차트</p>
+				<p>당신의 몸을 &nbsp;&bull;&nbsp;상승시키세요&nbsp;&bull;&nbsp; With RAB</p>
 				<nav>
 					<ul>
 						<li class="login">
@@ -60,6 +59,7 @@
 
 		<!-- Footer -->
 			<footer id="footer">
+				<p>클라우드 기반 &nbsp;&bull;&nbsp;<span style="font-size: xx-large;">AI</span>&nbsp;&bull;&nbsp; 건강 데이터 차트</p>
 			</footer>
 			
 		</div>
