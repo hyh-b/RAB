@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.model.ExerciseTO;
+import com.example.model.MainTO;
 import com.example.model.MemberTO;
 
 @Mapper
@@ -73,5 +74,9 @@ public interface MemberMapperInter {
 	
 	@Update("UPDATE IntakeData JOIN Member ON IntakeData.m_seq = Member.m_seq SET IntakeData.i_weight = Member.m_weight WHERE IntakeData.i_day = CURDATE() and IntakeData.m_seq = #{m_seq};")
     public int MandIweightsynced(String m_seq);
+	
+	@Update("UPDATE IntakeData SET i_weight=#{i_weight} WHERE m_seq=#{m_seq} AND i_day=CURDATE();")
+	public int i_weightUpdate(MainTO to);
+	
 
 }

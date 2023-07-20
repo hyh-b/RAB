@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.example.mappers.MainMapperInter;
 import com.example.mappers.MemberMapperInter;
 
 @Repository
@@ -16,7 +15,7 @@ public class MemberDAO {
 	
 	@Autowired
 	private MemberMapperInter mapper;
-
+	
 	@Autowired
 	public MemberDAO(MemberMapperInter mapper) {
 	    this.mapper = mapper;
@@ -133,19 +132,18 @@ public class MemberDAO {
         
         int syncFlag = 1;
         
-        //int result = mapper.MandIweightsynced(m_seq);
-        //System.out.println("result:"+result);
+        int result = mapper.MandIweightsynced(m_seq);
+        System.out.println("result:"+result);
         System.out.println("다오에스이큐: "+m_seq);
-        
-		/*
-		 * if(result == 1 ) { syncFlag = 0; System.out.println( " synced 정상-> , " +
-		 * syncFlag); }else if(result == 0) { syncFlag = 1; System.out.println(
-		 * " synced 비정상-> , " + syncFlag); }
-		 */
-        return mapper.MandIweightsynced(m_seq);
+        if(result == 1 ) {
+           syncFlag = 0;
+           System.out.println( " synced 정상-> , " + syncFlag);
+        }else if(result == 0) {
+           syncFlag = 1;
+           System.out.println( " synced 비정상-> , " + syncFlag);
+        }
+        return syncFlag;
 
 	}
-
-
 
 }

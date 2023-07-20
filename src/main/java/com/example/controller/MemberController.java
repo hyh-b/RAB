@@ -240,38 +240,10 @@ public class MemberController {
 		String targetWeightStr = request.getParameter("target_weight");
 		String birthday = request.getParameter("birthday_year")+"-"+request.getParameter("birthday_month")+"-"+request.getParameter("birthday_day");
 		   
-		BigDecimal weight = null;
-		BigDecimal height = null;
-		Integer targetCalorie = null;
-		BigDecimal target_weight = null;
-		//정보를 입력하지 않았을 경우 null처리
-		if(name == "") {
-			name=null;
-		}	
-		if(realName == "") {
-			realName=null;
-		}
-		if(tel == "") {
-			tel=null;
-		}
-		if(gender == "") {
-			gender=null;
-		}
-		if(request.getParameter("birthday_year") ==""||request.getParameter("birthday_month")==""||request.getParameter("birthday_day")=="") {
-			birthday = null;
-		}
-		if(sWeight != "") {
-			weight = new BigDecimal(sWeight);
-		}
-		if(sHeight !="") {
-			height = new BigDecimal(sHeight);
-		}
-		if (!targetCalorieStr.isEmpty()) {
-			targetCalorie = Integer.parseInt(targetCalorieStr);
-		}
-		if(targetWeightStr !="") {
-			target_weight = new BigDecimal(targetWeightStr);
-		}
+		BigDecimal weight = new BigDecimal(sWeight);
+		BigDecimal height = new BigDecimal(sHeight);
+		Integer targetCalorie = Integer.parseInt(targetCalorieStr);
+		BigDecimal target_weight = new BigDecimal(targetWeightStr);
 		
 		to.setM_id(id);
 		to.setM_name(name);
