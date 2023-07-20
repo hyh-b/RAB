@@ -182,18 +182,26 @@ public class ExerciseController {
 	
 	// 추가한 운동종목 db에 저장
 	@RequestMapping(value = "/exerciseAdd", method = RequestMethod.POST)
+<<<<<<< HEAD
 
 	public ResponseEntity<String> addExercise(@RequestBody Map<String, Object> getEx, Authentication authentication) {
 
+=======
+	public ResponseEntity<String> addExercise(@RequestBody Map<String, Object> getEx, Authentication authentication) {
+>>>>>>> cheolyun1
 		authentication = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = authentication.getPrincipal();
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		
 		String m_seq = customUserDetails.getM_seq();
 		
+<<<<<<< HEAD
 
 		List<String> exercise = (List<String>)getEx.get("exercise");
 
+=======
+		List<String> exercise = (List<String>)getEx.get("exercise");
+>>>>>>> cheolyun1
 		String date = (String)getEx.get("date"); 
 		
 		try {
@@ -274,7 +282,10 @@ public class ExerciseController {
 			
 			responseList.add(response);
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> cheolyun1
 		
 		to.setM_seq(m_seq);
 		to.setEx_custom(true);
@@ -301,14 +312,20 @@ public class ExerciseController {
 	// 운동시간 대비 소모 칼로리 구한 뒤 db저장
 	@RequestMapping(value = "/calculateCalories", method = RequestMethod.POST)
 	public List<ExerciseTO> updateExercise(@RequestBody Map<String, Object> payload,Authentication authentication) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> cheolyun1
 	    authentication = SecurityContextHolder.getContext().getAuthentication();
 	    Object principal = authentication.getPrincipal();
 	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 	    
 	    String m_seq = customUserDetails.getM_seq();
 	    
+<<<<<<< HEAD
 
+=======
+>>>>>>> cheolyun1
 	    List<Map<String, Object>> exercisesMap = (List<Map<String, Object>>) payload.get("exerciseItems");
 	    String selectedDate = (String) payload.get("selectedDate");
 	    
@@ -320,15 +337,22 @@ public class ExerciseController {
 	    }).collect(Collectors.toList());
 	    
 	    
+<<<<<<< HEAD
 
+=======
+>>>>>>> cheolyun1
 	    exercises.forEach(exercise -> {
 	    	// 소모 칼로리 계산 - 운동종목에 따른 분당 칼로리 * 운동 시간
 	        BigDecimal ex_used_kcal = mDao.getCalorise(exercise.getEx_name()).multiply(new BigDecimal(exercise.getEx_time()));
 	        exercise.setEx_used_kcal(ex_used_kcal);
 	        exercise.setM_seq(m_seq);
+<<<<<<< HEAD
 
 	        exercise.setEx_day(selectedDate);
 
+=======
+	        exercise.setEx_day(selectedDate);
+>>>>>>> cheolyun1
 
 	        // 소모 칼로리 계산 후 db에 업데이트
 	        eDao.updateExercise(exercise);
@@ -357,5 +381,8 @@ public class ExerciseController {
             return new ResponseEntity<>("Failed to delete exercise", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> cheolyun1
 }
