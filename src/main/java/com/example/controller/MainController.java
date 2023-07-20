@@ -79,6 +79,10 @@ public class MainController {
         System.out.println(" test.do에서 파라미터로 넘기는 seq -> " + seq);
         int flag = dao.CreateRecord(seq);
         
+        //몸무게들 동기화
+        int sync_flag = dao.MandIweightsynced(seq);
+        System.out.println(" main.do에서 synced seq -> " + seq);
+
         
         System.out.println("     dao.InsertData(mId); " + flag);
         
@@ -133,8 +137,11 @@ public class MainController {
         
         //유저마다 총 세달의 참조 레코드 생성
         String seq = member.getM_seq();
-        System.out.println(" test.do에서 파라미터로 넘기는 seq -> " + seq);
+        System.out.println(" main.do에서 파라미터로 넘기는 seq -> " + seq);
         int flag = dao.CreateRecord(seq);
+        //몸무게들 동기화
+        int sync_flag = dao.MandIweightsynced(seq);
+        System.out.println(" main.do에서 synced seq -> " + seq);
         
         System.out.println("     dao.InsertData(mId); " + flag);
         
@@ -241,7 +248,7 @@ public class MainController {
 	        pieDatas.add(pieData); 
 	    }	   	
 	    
-	    ///탄단지 콜나당 ------------------------------
+	    ///탄단지 콜나당 합연산 ------------------------------
 	    
 	    int flag_uan = dao.UnionAllNutritions(seq, day);
 

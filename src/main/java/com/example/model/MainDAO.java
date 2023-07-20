@@ -215,6 +215,28 @@ public class MainDAO {
 			return TargetWeightUpdateFlag;
 		}
 		
+		//---m_weight and i_weight 동기화
+		
+		public int MandIweightsynced(String seq) {
+					
+			int syncFlag = 1;
+			
+			int result = mapper.MandIweightsynced(seq);
+			
+			if(result == 1 ) {
+				syncFlag = 0;
+				System.out.println( " synced-> , " + syncFlag);
+			}else if(result == 0) {
+				syncFlag = 1;
+				System.out.println( " synced-> , " + syncFlag);
+			}
+
+			
+			return syncFlag;
+
+		}
+		
+		
 		//---피드백---------------------
 		
 		//피드백 입력

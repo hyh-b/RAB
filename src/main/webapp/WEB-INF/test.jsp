@@ -247,86 +247,141 @@
 //---------------------------차트 함수화 시작------------------------------------------
 	
 	//---pie 함수--------------------------
-	var pieChart;
-	
+	var basicPieChart;
+	var nutritionPieChart;
+
+	// 새로운 updatePieChart 함수를 생성하여 코드의 재사용성을 높임.
+		function updatePieChart(pies) {
+		    var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g];
+		
+		    // pieChart 객체가 없으면 생성하고, 있으면 데이터만 업데이트.
+		    if (!basicPieChart) {
+		        var pieOptions = {
+		            series: pieData,
+		            chart: {
+		                type: "pie",
+		                height: 350,
+		            },
+		            labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
+		            dataLabels: {
+		                enabled: true,
+		                style: {
+		                    colors: ['#FFA500', '#FF4500', '#008000'],
+		                    fontSize: '14px',
+		                    fontFamily: 'Helvetica, Arial, sans-serif',
+		                },
+		            },
+		            responsive: [{
+		                breakpoint: 480,
+		                options: {
+		                    chart: {
+		                        width: 200,
+		                    },
+		                    legend: {
+		                        position: "bottom",
+		                    },
+		                },
+		            }],
+		        };
+		        basicPieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+		    } else {
+		    	basicPieChart.updateSeries(pieData);
+		    	basicPieChart.updateOptions({
+		            labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g', '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g']
+		        });
+		    }
+		    basicPieChart.render();
+		}
+		
 		function PieDataForDate() {
+		    var zzinseq = $("#zzinseq").val();
+		    var selectedDate = $("#calendarCtInput").val();
 		
-			//var zzinid = $("#zzinid").val();
-			var zzinseq = $("#zzinseq").val();
-			var selectedDate = $("#calendarCtInput").val();
-			
-			//console.log( " pie 함수에서 zzinid -> ", zzinid); 
-			//console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
-
-			$.ajax({
-			url: "/pie_chart_data",
-			type: "GET",
-			data: {
-  				day: selectedDate,
-  				seq: zzinseq
-			},
-			success: function(pie) {
-				
-				//console.log( " pie.영양소들 -> ", pie);
-				
-			 	var pies = JSON.parse(pie);
-			 	
-			 	//console.log( " pies.영양소들 -> ", pies);
-				
-  				var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g
-  					
-  					];
-				
-  				//pie가 없으면 새로 만들고 있으면 업데이트 해서 파이가 무한으로 생겨나게 하는 방지 if 문
-  				 if (!pieChart) {
-  	                
-  	                var pieOptions = {
-  	                    series: pieData,
-  	                    chart: {
-  	                        type: "pie",
-  	                        height: 350,
-  	                    },
-  	                  	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
-  	                  dataLabels: {
-  	                    enabled: true,
-  	                    style: {
-  	                        colors: ['#FFA500', '#FF4500', '#008000'], // 각 라벨의 색상을 바꾸려면 여기를 변경하세요
-  	                        fontSize: '14px', // 폰트 크기를 바꾸려면 여기를 변경하세요
-  	                        fontFamily: 'Helvetica, Arial, sans-serif', // 폰트를 바꾸려면 여기를 변경하세요
-  	                    },
-  	                	
-  	                  },
-					  responsive: [{
-  	                        breakpoint: 480,
-  	                        options: {
-  	                            chart: {
-  	                                width: 200,
-  	                            },
-  	                            legend: {
-  	                                position: "bottom",
-  	                            },
-  	                        },
-  	                    }],
-  	                };
-  	                pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-  	                pieChart.render();
-  	            } else {
-  	                
-  	                pieChart.updateSeries(pieData);
-  	                
-  	              	pieChart.updateOptions({
-  	                	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g', '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g']
-  	            	});
-  	            }
-
-		},
+		    $.ajax({
+		        url: "/pie_chart_data",
+		        type: "GET",
+		        data: {
+		            day: selectedDate,
+		            seq: zzinseq
+		        },
+		        success: function(pie) {
+		            var pies = JSON.parse(pie);
+		            
+		            // 각 영양소 데이터가 0이나 null인지 검사하고, 둘 다 아니면 차트를 업데이트.
+		            if (pies && pies[0] && pies[0].i_carbohydrate_g && pies[0].i_protein_g && pies[0].i_fat_g) {
+		                updatePieChart(pies);
+		            }
+		        },
+		        error: function(e) {
+		            console.log("pie에서 에러 ->", e);
+		        },
+		    });
+		}
 		
-		error: function(e) {
-  		console.log("pie에서 에러 ->", e);
-		},
-	});
-			
-	}	
+//-------콜나당 pie-----------------------------------
+
+		function updatePieChartForNutrition(pies) {
+	    var pieData = [pies[0].i_cholesterol_mgl, pies[0].i_sodium_mg, pies[0].i_sugar_g];
+	
+	    if (!nutritionPieChart) {
+	        var pieOptions = {
+	            series: pieData,
+	            chart: {
+	                type: "pie",
+	                height: 350,
+	            },
+	            labels: ['콜레스테롤 ' + pies[0].i_cholesterol_mgl + 'mg/L', '나트륨 ' + pies[0].i_sodium_mg + 'mg', '당 ' + pies[0].i_sugar_g + 'g'],
+	            dataLabels: {
+	                enabled: true,
+	                style: {
+	                    colors: ['#FFA500', '#FF4500', '#008000'], // 각 라벨의 색상을 바꾸려면 여기를 변경하세요
+	                    fontSize: '14px', // 폰트 크기를 바꾸려면 여기를 변경하세요
+	                    fontFamily: 'Helvetica, Arial, sans-serif', // 폰트를 바꾸려면 여기를 변경하세요
+	                },
+	            },
+	            responsive: [{
+	                breakpoint: 480,
+	                options: {
+	                    chart: {
+	                        width: 200,
+	                    },
+	                    legend: {
+	                        position: "bottom",
+	                    },
+	                },
+	            }],
+	        };
+	
+	        nutritionPieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+	    } else {
+	    	nutritionPieChart.updateSeries(pieData);
+	    	nutritionPieChart.updateOptions({
+	            labels: ['콜레스테롤 ' + pies[0].i_cholesterol_mgl + 'mg/L', '나트륨 ' + pies[0].i_sodium_mg + 'mg', '당 ' + pies[0].i_sugar_g + 'g']
+	        });
+	    }
+	    nutritionPieChart.render();
+	}
+
+		$('#nutritionButton').click(function() {
+		    var zzinseq = $("#zzinseq").val();
+		    var selectedDate = $("#calendarCtInput").val();
+
+		    $.ajax({
+		        url: "/pie_chart_data",
+		        type: "GET",
+		        data: {
+		            day: selectedDate,
+		            seq: zzinseq
+		        },
+		        success: function(pie) {
+		            var pies = JSON.parse(pie);
+
+		            if (pies && pies[0] && pies[0].i_cholesterol_mgl && pies[0].i_sodium_mg && pies[0].i_sugar_g) {
+		                updatePieChartForNutrition(pies);
+		            }
+		        }
+		    });
+		});
 	//---pie 함수 끝--------------------------------------------------
 
 ////////bar함수 차트 undefined넘어와도 비율 안깨지게 날짜 포메팅 not finished--
@@ -621,6 +676,20 @@
 	                },
 	                xaxis: {
 	                    categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월','11월', '12월' ],
+	                },
+	                tooltip: {
+	                    y: {
+	                        formatter: function(val) {
+	                            return val.toFixed(2); // 데이터 포인트에 대한 소수점 둘째 자리까지 표시합니다.
+	                        }
+	                    }
+	                },
+	                yaxis: {
+	                    labels: {
+	                        formatter: function (val) {
+	                            return val.toFixed(0);  // 소수점 둘째 자리까지 표시합니다.
+	                        }
+	                    }
 	                }
 	            };
 	            
@@ -1692,11 +1761,16 @@
 			            <h4 class="mb-10 text-xl font-bold text-black dark:text-white">
 			                일일 섭취 영양 성분
 			            </h4>
+			            <div>
+			            <button id="nutritionButton">콜나당</button>
+			            </div>
 			            <div id="chart" class="mx-auto flex justify-center mt-2"></div>
 			        </div>
 			    </div>
 			</div>
-
+			
+			<div id="basicChart"></div>
+<div id="nutritionChart"></div>
 
 
 
