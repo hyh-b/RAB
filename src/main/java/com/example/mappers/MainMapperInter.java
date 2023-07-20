@@ -25,9 +25,13 @@ public interface MainMapperInter {
 	@Select("SELECT m.*, i.i_kcal, i.i_weight, i.i_day, i.i_used_kcal FROM Member m INNER JOIN IntakeData i ON m.m_seq = i.m_seq WHERE m.m_seq = #{seq} and i.i_day= #{day};")
 	public List<MainTO> DataFromDateForMain(@Param("seq") int seq, @Param("day") String day);
 
-//---------로그인과 동시에 참조레코드가 없다면 m_seq를 들어가서  중복없는 참조 레코드를 만듬
-    @Insert("INSERT INTO IntakeData (m_seq) SELECT m.m_seq FROM Member m LEFT JOIN IntakeData i ON m.m_seq = i.m_seq WHERE i.m_seq IS NULL AND m.m_id = #{mId} LIMIT 1;")
-    public int InsertDataForMain(String mId);
+//---------로그인과 동시에 참조레코드가 없다면 , 중복없는 참조 레코드를 만듬
+//    @Insert("INSERT INTO IntakeData (m_seq) SELECT m.m_seq FROM Member m LEFT JOIN IntakeData i ON m.m_seq = i.m_seq WHERE i.m_seq IS NULL AND m.m_id = #{mId} LIMIT 1;")
+//    public int InsertDataForMain(String mId);
+    
+//---------로그인과 동시에 참조레코드가 없다면 m_seq를 조회해서 앞뒤 한달치 레코드를 만들고, 하루하루 로그인 할때마다 하루씩 레코드가 앞당겨져서 생김
+    @Insert("INSERT INTO IntakeData (m_seq, i_day) SELECT #{seq}, DATE_ADD(CURRENT_DATE(), INTERVAL num DAY) AS i_day FROM (SELECT -30 + n1.n + n10.n * 10 AS num FROM (SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) n1 CROSS JOIN (SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) n10) n WHERE DATE_ADD(CURRENT_DATE(), INTERVAL num DAY) BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) AND DATE_ADD(CURRENT_DATE(), INTERVAL 1 MONTH) AND NOT EXISTS (SELECT 1 FROM IntakeData WHERE m_seq = #{seq} AND i_day = DATE_ADD(CURRENT_DATE(), INTERVAL num DAY) );")
+    public int CreateThreeMonthRecord(@Param("seq") String seq);
 
 //------------Charts-------------------------------------------------------------------------
     
@@ -42,9 +46,9 @@ public interface MainMapperInter {
     //area Chart (저번 주 , 이번 주 한번에 가져오기)
     @Select("SELECT i_used_kcal, i_day, '이번주' as week FROM IntakeData WHERE m_seq=#{seq} AND YEARWEEK(i_day) = YEARWEEK(#{day}) UNION ALL SELECT i_used_kcal, i_day, '저번주' as week FROM IntakeData WHERE m_seq=#{seq} AND YEARWEEK(i_day) = YEARWEEK(DATE_SUB(#{day}, INTERVAL 1 WEEK)) ORDER BY i_day;")
     public List<MainTO> AreaChartData(@Param("seq") int seq, @Param("day") String day);
-
+    
     //line Chart
-    @Select("SELECT ROUND(AVG(i_weight), 2) as avg_weight, DATE_FORMAT(i_day, '%Y-%m') as month FROM IntakeData WHERE m_seq=#{seq} AND DATE_FORMAT(i_day, '%Y') = #{year} GROUP BY month ORDER BY month;")
+    @Select("SELECT SUM(i_weight) as total_weight, DATE_FORMAT(i_day, '%Y-%m') as month, COUNT(DISTINCT CASE WHEN i_weight > 0 THEN DATE_FORMAT(i_day, '%Y-%m-%d') END) as dayCount FROM IntakeData WHERE m_seq=#{seq} AND DATE_FORMAT(i_day, '%Y') = #{year} GROUP BY month ORDER BY month;")
     public List<MainTO> LineChartData(@Param("seq") int seq, @Param("year") String year);
 
 //---update문  아 점 저 -> i_kcal 총 칼로리 ---------------------------------

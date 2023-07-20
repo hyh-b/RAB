@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <title>
-     main RAB
+     Main RAB
    </title>
 <!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
@@ -247,7 +247,7 @@
 //---------------------------차트 함수화 시작------------------------------------------
 	
 	//---pie 함수--------------------------
-		var pieChart;
+	var pieChart;
 	
 		function PieDataForDate() {
 		
@@ -575,7 +575,7 @@
 	        success: function(line) {
 	            //console.log("line ->", line);
 	            
-				event.preventDefault(); // 스크롤 위로 튕기는 거 잡아줘야 되는데.
+				event.preventDefault();
 	            
 	            var weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 	
@@ -584,8 +584,8 @@
 	                weights[monthIndex] = line[i].avg_weight; 
 	            
 
-	                //console.log(" line[i].month => ", line[i].month);
-	               //console.log(" line[i].avg_weight => ", line[i].avg_weight);
+	                console.log(" line[i].month => ", line[i].month);
+	                console.log(" line[i].avg_weight => ", line[i].avg_weight);
 	            }
 
 	            //console.log(" line weights => ", weights);
@@ -767,6 +767,7 @@
 	              success: function() {
 	                alert(' ' + weight + ' kg ' + date + ' 에 등록되었습니다.');
 	                loadDataFromDate();
+	                LineChartForMonth()
 	              },
 	              error: function(jqXHR, textStatus, errorThrown) {
             	    //console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
@@ -1048,18 +1049,13 @@
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-    <a href="/">
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
+    <a href="/main.do">
+<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> 
+		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+    </a>
     
-   <!--  사이트 로고  -->
-
-     <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
-    </a>
-  
-   <!--
-     <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
-    </a>
- -->
+    -->
 
     <button
       class="block lg:hidden"
@@ -1082,9 +1078,7 @@
   </div>
   <!-- SIDEBAR HEADER -->
 
-  <div
-    class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear"
-  >
+  <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
     <!-- Sidebar Menu -->
     <nav
       class="mt-5 py-4 px-4 lg:mt-9 lg:px-6"
@@ -1093,10 +1087,6 @@
         selected = JSON.parse(localStorage.getItem('selected'));
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
-    </nav>
-    <!-- 
-    <p>${flag}</p>
-     -->
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
@@ -1113,16 +1103,7 @@
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
-
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-
-              공지사항
+           	공지사항
             </a>
           </li>
           <!-- Menu Item Calendar -->
@@ -1137,14 +1118,7 @@
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-             <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="게시판.png"
-      			width="24"
-      			height="24"
-   			/>
-             	게시판
+            게시판
             </a>
           </li>
           <!-- Menu Item Profile -->
@@ -1158,15 +1132,7 @@
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="식단.png"
-      			width="24"
-      			height="24"
-   			/>
-             	식단
+           	식단
             </a>
           </li>
           <!-- Menu Item Profile2 -->
@@ -1183,14 +1149,6 @@
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
             >
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="운동.png"
-      			width="24"
-      			height="24"
-   			/>
-
               운동
             </a>
             
@@ -1208,14 +1166,7 @@
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-             <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="마이페이지.png"
-      			width="24"
-      			height="24"
-   			/>
-             	마이페이지
+             마이페이지
             </a>
           </li>
 
@@ -1235,13 +1186,6 @@
     			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
     			:class="page === 'settings' && 'bg-graydark'"
  			>
-   			<img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="로그아웃"
-      			width="24"
-      			height="24"
-   			/>
     			로그아웃
   			</a>
 		</li>
@@ -1249,31 +1193,7 @@
           <!-- Menu Item Settings -->
         </ul>
       </div>
-
-      <!-- Support Group -->
- 
-          <!-- Menu Item Messages -->
-        
-          <!-- Menu Item Chart -->
-         
-      
-          <!-- Menu Item Chart -->
-
-          <!-- Menu Item Ui Elements -->
-        
-          <!-- Menu Item Ui Elements -->
-
-          <!-- Menu Item Auth Pages -->
-          
-            <!-- Dropdown Menu End -->
-   
-          <!-- Menu Item Auth Pages -->
-       
-    <!-- Sidebar Menu -->
-
-    <!-- Promo Box -->
-
-    <!-- Promo Box -->
+      </nav>
   </div>
 </aside>
 
@@ -1466,23 +1386,7 @@
         >
           <ul
             class="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark"
-          >
-            <li>
-              <a
-                href="profile.do"
-                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-              >
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-                내 정보
-              </a>
-            </li>
-            
+          >     
              <li>
              <div id="weightTodayDropdown">
               <a
@@ -1517,6 +1421,33 @@
                 목표 몸무게 재설정
               </a>
               </div>
+            </li>
+            
+             <li>
+              <a
+                href="profile.do"
+                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                style="padding-left: 5px;"
+              >
+                <svg
+                  class="fill-current"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+                    fill=""
+                  />
+                  <path
+                    d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+                    fill=""
+                  />
+                </svg>
+                프로필
+              </a>
             </li>
             
           </ul>
