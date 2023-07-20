@@ -8,7 +8,7 @@
 	out.println( "<script type='text/javascript'>" );
 	if( flag == 0 ) {
 		out.println( "alert('정보입력에 성공');" );
-		out.println( "location.href='/main.do';" );
+		out.println( "location.href='/signup3.do';" );
 	} else {
 		out.println( "alert('정보입력에 실패');" );
 		out.println( "location.href='/signup2.do';" );

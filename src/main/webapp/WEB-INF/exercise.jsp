@@ -249,12 +249,6 @@ pageEncoding="UTF-8"%>
     
     /*---------------  운동 시작----------------------------  */
     
-    .exercise-list {
-	    display: flex;
-	    flex-wrap: wrap;
-	    gap: 10px;
-	}
-	
 	.exercise-info {
 	    display: flex;
 	    align-items: center;
@@ -267,27 +261,10 @@ pageEncoding="UTF-8"%>
 	    margin-right:10px;
 	}
 	
-	.exercise-info .ex_name {
-	    width: 200px;
-	    margin-left:30px;
-	}
-	
-	.exercise-info .ex_time {
-	    width: 100px;
-	    margin-left:400px;
-	    margin-right:170px;
-	}
-	
-	.exercise-info .ex_used_kal {
-	    width: 150px;
-	}
-	
 	.ex_time_input {
-	    width: 100px;
 	    padding: 5px;
 	     border: 2px solid black;
 	    border-radius: 4px;
-	    /* 추가적인 스타일링을 적용할 수 있습니다 */
 	}
 	
 	.customExercise-info {
@@ -302,20 +279,7 @@ pageEncoding="UTF-8"%>
 	    margin-right:10px;
 	}
 	
-	.customExercise-info .ex_name {
-	    width: 200px;
-	    margin-left:30px;
-	}
 	
-	.customExercise-info .ex_time {
-	    width: 100px;
-	    margin-left:400px;
-	   
-	}
-	
-	.customExercise-info .ex_used_kal {
-	    width: 150px;
-	}
 	
 	/*---------------  운동 끝----------------------------  */
 	
@@ -323,37 +287,17 @@ pageEncoding="UTF-8"%>
 	
 	.total {
 	    display: flex;
-	    justify-content: flex-end;
+	    justify-content: space-between;;
 	    align-items: center;
 	    width: 100%;
 	}
 	
-	.totalExtime, .totalExUsedKcal {
-	  flex: 0 0 10px;
-	  text-align: center;
-	  margin-right: 300px;
-	}
-	
 	.totalExUsedKcal {
-	  margin-left: 0px; 
-	}
+	  margin-right: 60px;
+	} 
 	
 	/*---------------  당일 합계 끝----------------------------  */
 </style>
-
-<script type="text/javascript">
-
-/* 	window.onload = function(){
-		 document.getElementById('ubtn').onclick = function(){
-			
-			if(document.ufrm.upload.value.trim()==''){
-				alert('이미지를 첨부하셔야 합니다');
-				return false;
-			}
-			document.ufrm.submit();
-		} 
-	} */
-</script>
 
 </head>
 <body
@@ -645,6 +589,8 @@ pageEncoding="UTF-8"%>
             class="relative m-0 block h-7.5 w-14 rounded-full"
           >
             <input
+              id="darkModeCheckbox"
+              onchange="checkDarkMode()"
               type="checkbox"
               :value="darkMode"
               @change="darkMode = !darkMode"
@@ -810,7 +756,7 @@ pageEncoding="UTF-8"%>
         
         <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
 			<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-				<div class="flex items-center">
+				<div class="flex items-center justify-between">
 			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-left: 50px; width: 150px;">
 			    		당일 합계
 			    	</label>
@@ -818,7 +764,6 @@ pageEncoding="UTF-8"%>
 						<!-- 날짜를 선택할 수 있는 입력 요소를 추가합니다. -->
 						<input type="text" id="datepicker" placeholder="날짜 선택" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 					</div>
-					<div style="width: 500px;"></div>
 			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 50px;">
 			    		총 운동시간
 			    	</label>
@@ -829,10 +774,9 @@ pageEncoding="UTF-8"%>
 			</div>
             <div class="flex flex-col gap-5.5 p-6.5">
             	<div>
-		            <form action="#" method="post" name="ffrm">
-						<div id="total1">
-						</div>
-					</form>
+					<div id="total1" >
+						
+					</div>
 	        	</div>
         	</div>
         </div>
@@ -862,18 +806,20 @@ pageEncoding="UTF-8"%>
 		            </div>
 		        </div>
 		        <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-		            <div class="flex items-center">
-		            	<div>삭제</div>
-		                <div style="padding-left: 50px; width: 650px;" class="exercise-name-header">운동명</div>
-		                <div class="exercise-time-header">운동 시간(분)</div>&nbsp;&nbsp;
-		                <button id="applyAll"><img src="/src/images/logo/kcal2.png" width=140px > </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		                <div class="calories-burned-header">소모 칼로리</div>
+		            <div style="display: flex;">
+		            	<div style="flex: 0.3;">삭제</div>
+		                <div style="flex: 1.9;" class="exercise-name-header">운동명</div>
+		                <div style="flex: 0.4;" class="exercise-time-header">운동 시간(분)</div>&nbsp;&nbsp;
+		                <button style="flex: 0.5;" id="applyAll"><img id="kcalImg" class="kcalImg"  src="/src/images/logo/kcal2.png" width=140px > </button>&emsp;&emsp;&emsp;
+		                <div style="flex: 0.3;" class="calories-burned-header">소모 칼로리</div>
 		            </div>
 		        </div>
 		        <div class="flex flex-col gap-5.5 p-6.5">
 		            <div>
 		                <form action="#" method="post" name="ffrm">
-		                    <div id="resultExercise1" class="exercise-list"></div>
+		                    <div id="resultExercise1" class="exercise-list">
+		                    
+		                    </div>
 		                </form>
 		            </div>
 		        </div>
@@ -893,23 +839,23 @@ pageEncoding="UTF-8"%>
 					    		사용자 설정 운동
 					    	</h4>
 					    	<button id="btn2">
-					    		<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
-					    	</button>
+		                    	<img src="https://m.ftscrt.com/static/images/foodadd/FA_add.png" width="17px" height="17px">
+		                	</button>
 					    	
 		
 		     <!-------------------- 사용자 설정 운동 다이어로그 시작 ------------------->
 		                    <div id="dialog-form" title="운동 입력">
-							    <p class="validateTips">모든 항목을 채워주세요.</p>
+							    <p class="validateTips">운동정보를 입력해 주세요</p><br>
 							    <form>
 							        <fieldset>
 							            <div>
 							                <label for="name">운동명</label>
 							                <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all">
-							            </div>
+							            </div><br>
 							            <div>
-							                <label for="time">운동 시간</label>
+							                <label for="time">운동 시간(분)</label>
 							                <input type="number" name="time" id="time" class="text ui-widget-content ui-corner-all">
-							            </div>
+							            </div><br>
 							            <div>
 							                <label for="calorie">소모 칼로리</label>
 							                <input type="number" name="calorie" id="calorie" class="text ui-widget-content ui-corner-all">
@@ -925,17 +871,18 @@ pageEncoding="UTF-8"%>
 						</div>
 					</div>
 					<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-						<div class="flex items-center">
-					    	<div style="padding-left: 50px; width: 650px;" class="exercise-name-header">운동명</div>
-				                <div class="exercise-time-header">운동 시간</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				                <div class="calories-burned-header">소모 칼로리</div>
+						<div style="display: flex;">
+							<div style="flex: 0.3;">삭제</div>
+					    	<div style="flex: 1.9;" class="exercise-name-header">운동명</div>
+				            <div style="flex: 1.1;" class="exercise-time-header">운동 시간(분)</div>
+				            <div style="flex: 0.3;" class="calories-burned-header">소모 칼로리</div>
 						</div>
 					</div>
 		            <div class="flex flex-col gap-5.5 p-6.5">
 		            	<div>
-				            <form action="#" method="post" name="ffrm">
-								<div id="resultExercise2"></div>
-							</form>
+								<div id="resultExercise2">
+								
+								</div>
 			        	</div>
 		        	</div>
 		        </div>
@@ -956,8 +903,8 @@ pageEncoding="UTF-8"%>
 			        <div class="flex">
 			        	<input type="file" name="upload"
 			            	class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" />
-			            <button id="ubtn" 
-			              	class="inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer;">upload
+			            <button id="ubtn" type="button"
+			              	class="inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10 dark:bg-white/30 dark:text-white" style="cursor: pointer;">upload
 			            </button>
 			      	</div>
 			  	</div>
@@ -968,7 +915,7 @@ pageEncoding="UTF-8"%>
 			
 	<!-------------------- 사진 전체보기 버튼 시작 ------------------------------------------------------>
 			<a href="#" id="viewBtn"
-                  class="button-view-all inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10">
+                  class="button-view-all inline-flex items-center justify-center rounded-md border border-black py-4 px-10 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10 dark:bg-white/30 dark:text-white">
                   사진전체보기
                 </a>
             </div>
@@ -1007,6 +954,55 @@ pageEncoding="UTF-8"%>
 <script defer src="bundle.js"></script>
 <script>
 	
+	// 이미지 슬라이드 출력
+	function imgSlide(){
+		console.log("이미지시작")
+		$.ajax({
+			url: '/imgSlide', 
+			type: 'GET',
+			success: function(response) {
+				console.log("이미지시작22")
+				let slideHtml = "";
+				let bucketUrl = "https://rabfile.s3.ap-northeast-2.amazonaws.com/";
+				for (var i = 0; i < response.length; i++) {
+					var fileName = response[i].album_name;
+					var albumDay = response[i].album_day;
+					slideHtml +=
+						'<div class="swiper-slide">'+
+						'<img src="'+bucketUrl+fileName+'">'+
+						'<div class="slideText">'+albumDay+'</div>'+
+						'</div>'
+				}
+				$('#imgSlide').html(slideHtml);
+					new Swiper('.swiper-container', {
+						
+						slidesPerView : 3, // 동시에 보여줄 슬라이드 갯수
+						spaceBetween : 30, // 슬라이드간 간격
+						slidesPerGroup : 3, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
+					
+						// 그룹수가 맞지 않을 경우 빈칸으로 메우기
+						// 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
+						loopFillGroupWithBlank : true,
+					
+						loop : false, // 무한 반복 x
+					
+						pagination : { // 페이징
+							el : '.swiper-pagination',
+							clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
+						},
+						navigation : { // 네비게이션
+							nextEl : '.swiper-button-next', // 다음 버튼 클래스명
+							prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
+						},
+					});
+			},
+			  error: function(xhr, status, error) {
+			    // 요청이 실패한 경우에 대한 처리 작성
+			    console.error('요청 실패. 상태 코드:', xhr.status);
+			}
+		});
+	} 
+	
 	//   사진 전체보기 다이어로그 창 설정
 	$('#viewBtn').click(function() {
     	$('#photoDialog').css('display', 'block');
@@ -1021,6 +1017,7 @@ pageEncoding="UTF-8"%>
 	let selectedImage = null;
 	let selectedImageValue = null;
 	
+	// 사진 전체보기 이미지 출력
 	function displayImages(){
 		$.ajax({
 			url: '/imgSlide', 
@@ -1121,6 +1118,15 @@ pageEncoding="UTF-8"%>
 
 	/*---------------운동 다이어로그 시작--------- */
 	
+	function adjustBrightness() {
+    var img = document.getElementById('kcalImg');
+    if (darkMode) {
+      img.style.filter = 'brightness(50%)';
+    } else {
+      img.style.filter = 'brightness(100%)';
+    }
+  }
+	
 	// 운동칸에 추가한 운동 정보 출력하는 함수
 	function fetchExercises(date) {
 		$.ajax({
@@ -1133,11 +1139,13 @@ pageEncoding="UTF-8"%>
 	            	if (exercise.ex_name) {
 	                    exerciseHtml += 
 	                    // 각 행마다 인덱스 설정하여 구분
-	                    '<div class="exercise-info" data-index="'+index+'">' +
-	                    	'<button class="dbtn"><img src="src/images/logo/deleteBtn.png" width=10px height=10px /></button>'+
-	                        '<div class="ex_name">'+exercise.ex_name+'</div>'+
-	                        '<input class="ex_time" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
-	                        '<div class="ex_used_kcal">'+exercise.ex_used_kcal+'</div>'+
+	                    '<div class="exercise-info" style="display: flex;" data-index="'+index+'">' +
+	                    	'<button class="dbtn" style="flex: 0.1;"><img src="src/images/logo/deleteBtn.png" width=10px height=10px /></button>'+
+	                    	'<div style="flex: 0.15;"></div>'+
+	                        '<div class="ex_name" style="flex: 2.6;">'+exercise.ex_name+'</div>'+
+	                        '<input class="ex_time dark:bg-form-input" style="flex: 0.3;" value='+exercise.ex_time+' type="number" placeholder="Enter time">'+
+	                        '<div style="flex: 0.7;"></div>'+
+	                        '<div class="ex_used_kcal" style="flex: 0.3;">'+exercise.ex_used_kcal+'</div>'+
 	                    '</div>';
 	            	}
 	            });
@@ -1149,11 +1157,14 @@ pageEncoding="UTF-8"%>
 		        	if (exercise.ex_name2) {
 			            customExerciseHtml += 
 		            	// 각 행마다 인덱스 설정하여 구분
-		            	'<div class="customExercise-info" data-index="'+index+'">' +
-		            		'<button class="dbtn"><img src="src/images/logo/deleteBtn.png" width=10px height=10px /></button>'+
-			                '<div class="ex_name">'+exercise.ex_name2+'</div>'+
-			                '<input class="ex_time" type="number" readonly value="' + exercise.ex_time2 + '">'+
-			                '<div class="ex_used_kcal">'+exercise.ex_used_kcal2+'</div>'+
+		            	'<div class="customExercise-info" style="display: flex;" data-index="'+index+'">' +
+		            		'<button class="dbtn" style="flex: 0.1;"><img src="src/images/logo/deleteBtn.png" width=10px height=10px /></button>'+
+		            		'<div style="flex: 0.15;"></div>'+
+			                '<div style="flex: 2.15;" class="ex_name">'+exercise.ex_name2+'</div>'+
+			                '<input "flex: 0.3;" class="ex_time dark:bg-boxdark" type="number" readonly value="' + exercise.ex_time2 + '">'+
+			                '<div style="flex: 0.6;"></div>'+
+			                '<div "flex: 0.3;" class="ex_used_kcal">'+exercise.ex_used_kcal2+'</div>'+
+			                '<div style="flex: 0.15;"></div>'+
 			            '</div>';
 		        	}
 		        });
@@ -1192,7 +1203,7 @@ pageEncoding="UTF-8"%>
 						data: JSON.stringify({ exercise: exercises, date: selectedDate }),
 						contentType: "application/json",
 						success: function(data) {
-							alert("운동등록에 성공했습니다.")
+							alert("운동등록에 성공했습니다. 운동 시간을 입력 한 뒤 칼로리 계산버튼을 눌러주세요.")
 							// db의 당일 운동 데이터 출력
 							fetchExercises(selectedDate);
 							
@@ -1205,6 +1216,8 @@ pageEncoding="UTF-8"%>
         			});
 					
 					$( this ).dialog( "close" );
+					$('#exerciseName1').val('');
+		            $('#exerciseDiv1').empty()
 				},
 				"취소": function() {
 					$( this ).dialog( "close" );
@@ -1275,7 +1288,7 @@ pageEncoding="UTF-8"%>
 	    });
 	
 	    $( "#btn2" ).button().on( "click", function() {
-	        dialog.dialog( "open" );
+	    	$( "#dialog-form" ).dialog( "open" );
 	    });
 	});
 	
@@ -1296,9 +1309,11 @@ pageEncoding="UTF-8"%>
 		
 	    let totalHtml = '';
             totalHtml += 
-            	'<div class="total">' +
-	                '<div class="totalExtime">'+totalExTime+'</div>'+
-	                '<div class="totalExUsedKcal">'+totalExUsedKcal+'</div>'+
+            	'<div class="total ">' +
+            	'<div style="width: 10px;"></div>'+
+            	'<div style="width: 10px;"></div>'+
+                '<div class="totalExtime">'+"&emsp;&emsp;"+totalExTime+'</div>'+
+                '<div class="totalExUsedKcal">'+totalExUsedKcal+'</div>'+
 	            '</div>';
         $('#total1').html(totalHtml);
 		
@@ -1306,57 +1321,23 @@ pageEncoding="UTF-8"%>
 	    console.log("총 운동시간: " + totalExTime + " 분");
 	    console.log("총 소모 칼로리: " + totalExUsedKcal + " Kcal");
 	}
-	// 이미지 슬라이드 출력
-	function imgSlide(){
-		console.log("이미지시작")
-		$.ajax({
-			url: '/imgSlide', 
-			type: 'GET',
-			success: function(response) {
-				console.log("이미지시작22")
-				let slideHtml = "";
-				let bucketUrl = "https://rabfile.s3.ap-northeast-2.amazonaws.com/";
-				for (var i = 0; i < response.length; i++) {
-					var fileName = response[i].album_name;
-					var albumDay = response[i].album_day;
-					slideHtml +=
-						'<div class="swiper-slide">'+
-						'<img src="'+bucketUrl+fileName+'">'+
-						'<div class="slideText">'+albumDay+'</div>'+
-						'</div>'
-				}
-				$('#imgSlide').html(slideHtml);
-					new Swiper('.swiper-container', {
-						
-						slidesPerView : 3, // 동시에 보여줄 슬라이드 갯수
-						spaceBetween : 30, // 슬라이드간 간격
-						slidesPerGroup : 3, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
-					
-						// 그룹수가 맞지 않을 경우 빈칸으로 메우기
-						// 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
-						loopFillGroupWithBlank : true,
-					
-						loop : false, // 무한 반복
-					
-						pagination : { // 페이징
-							el : '.swiper-pagination',
-							clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
-						},
-						navigation : { // 네비게이션
-							nextEl : '.swiper-button-next', // 다음 버튼 클래스명
-							prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
-						},
-					});
-			},
-			  error: function(xhr, status, error) {
-			    // 요청이 실패한 경우에 대한 처리 작성
-			    console.error('요청 실패. 상태 코드:', xhr.status);
-			}
-		});
-	} 
+	
+	// 다크모드 시 칼로리계산 이미지 밝기 낮추기 
+	function checkDarkMode() {
+		var darkModeCheckbox = document.getElementById('darkModeCheckbox');
+	    var kcalImg = document.getElementById('kcalImg');
+	    
+	    if (darkModeCheckbox.checked) {
+	        kcalImg.style.filter = 'brightness(50%)'; // 다크모드 ON시 이미지 밝기를 50%로 줄입니다.
+	    } else {
+	        kcalImg.style.filter = 'brightness(100%)'; // 다크모드 OFF시 이미지 밝기를 원래대로 복구합니다.
+	    }
+	}
 	
 	$(document).ready(function() {
 		
+		checkDarkMode();
+		 
 		imgSlide(); 
 		displayImages();
 		// 사진업로드
@@ -1488,6 +1469,12 @@ pageEncoding="UTF-8"%>
 		    
 		});
 		
+		$('#exerciseName1').on('keydown', function(e) {
+		    if (e.which == 13) {  // 'Enter' 키의 키코드는 13입니다.
+		        $('#searchButton1').click();  // 'Enter' 키를 누르면 '검색' 버튼을 클릭한 것처럼 동작합니다.
+		    }
+		});
+		
 		// 전체적용버튼-운동 시간대비 소모칼로리 계산하여 db저장후 출력
 		$('#applyAll').click(function() {
 			let selectedDate = $('#datepicker').val();
@@ -1511,6 +1498,7 @@ pageEncoding="UTF-8"%>
 		            });
 		            // 계산된 소모 칼로리 적용 후 총 운동시간, 소모 칼로리 업데이트
 		            calculateTotalTimeAndCalories();
+		            alert("운동 시간 대비 소모 칼로리가 계산되었습니다")
 		        },
 		        error: function(jqXHR, textStatus, errorThrown) {
 		            console.error('Calculation failed:', errorThrown);

@@ -63,4 +63,15 @@ public interface MemberMapperInter {
 	@Select("select m_id, m_real_name, m_name, m_mail from Member where m_id like concat('%', #{m_id}, '%')")
 	public ArrayList<MemberTO> searchMemberList(String m_id);
 	
+	// 신규유저 수 검색
+	@Select("select count(*) from Member where m_join_date=#{nDay}")
+	public int newMember(String nDay);
+	
+	// 삭제유저 수 검색
+	@Select("SELECT COUNT(*) FROM deletedMember where deletedDate = #{dDay}")
+	public int deletedMember(String dDay);
+	
+	@Update("UPDATE IntakeData JOIN Member ON IntakeData.m_seq = Member.m_seq SET IntakeData.i_weight = Member.m_weight WHERE IntakeData.i_day = CURDATE() and IntakeData.m_seq = #{m_seq};")
+    public int MandIweightsynced(String m_seq);
+
 }

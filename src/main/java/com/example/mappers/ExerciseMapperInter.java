@@ -61,6 +61,8 @@ public interface ExerciseMapperInter {
 	@Update("update IntakeData SET i_used_kcal = (SELECT SUM(ex_used_kcal)FROM Exercise WHERE m_seq=#{m_seq} AND ex_day=#{today}) WHERE m_seq = #{m_seq} AND i_day = #{today};")
 	public int totalCalorie(@Param("m_seq") String m_seq,@Param("today") String today);
 	
+	
+	
 	// 운동 삭제 
 	@Delete("delete from Exercise where m_seq=#{m_seq} and ex_name=#{ex_name} and ex_day=#{ex_day}")
 	public int deleteExercise(ExerciseTO to);

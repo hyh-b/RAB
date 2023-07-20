@@ -4,6 +4,24 @@
     <%
     	request.setCharacterEncoding("utf-8");
     %>
+<style>
+    .login img {
+        width: 60px;
+        height: 60px;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	/* 카카오 로그인을 눌렀을 때 로그인이 되어 있다면 alreadyLogin.do로 보냄 */
+    $(document).ready(function () {
+        var isLogin = '${login}'; 
+        if (isLogin === 'login') {
+            $('#loginLink').attr('href', 'alreadyLogin.do');
+        } else {
+            $('#loginLink').attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do');
+        }
+    });
+</script>
 <!DOCTYPE HTML>
 <!--
 	Aerial by HTML5 UP
@@ -45,8 +63,8 @@
 				<p>당신의 몸을 &nbsp;&bull;&nbsp;상승시키세요&nbsp;&bull;&nbsp; With RAB</p>
 				<nav>
 					<ul>
-						<li class="login">
-						    <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do">
+						<li class="login" >
+						<a id="loginLink" href=#>
 						        <i class="fa-brands fa-kickstarter-k fa-beat fa-2xl"></i>
 						    </a>
 						</li>
