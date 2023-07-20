@@ -567,13 +567,13 @@ pageEncoding="UTF-8"%>
       <!-- ===== Main Content Start ===== -->
       <main>
    <!-- ============  게시판 여기부터 시작	=================================== -->
-  <table>
+  <table >
        <h2 class="mt-10 mb-7.5 text-title-md2 font-bold text-black dark:text-white">
             공지사항
           </h2>     
 <div class="grid grid-cols-1 gap-7.5 sm:grid-cols-1 xl:grid-cols-1">
     <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <table style="width: 100%;">
+        <table style="width: 100%;" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <thead>
                 <tr>
                     <th class="text-xl font-semibold text-black dark:text-white" style="width: 10%;">번호</th>
@@ -586,7 +586,7 @@ pageEncoding="UTF-8"%>
                 <c:forEach var="noticeBoard" items="${noticeBoardList}">
                     <tr>
                         <td style="text-align: center;">${noticeBoard.n_seq}</td>
-                        <td><a href="/notice_board_view.do">${noticeBoard.n_subject}</a></td>
+                       <td><a href="/notice_board_view.do?cpage=${cpage}&n_seq=${noticeBoard.n_seq}">${noticeBoard.n_subject}</a></td>
                         <td style="text-align: center;">${noticeBoard.n_wdate}</td>
                         <td style="text-align: center;">${noticeBoard.n_hit}</td>
                     </tr>
@@ -596,7 +596,7 @@ pageEncoding="UTF-8"%>
         </table>
         <div class="btn_area">
 			<div class="align_right">		
-				<input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="location.href='notice_board_write.do'" />
+				<input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="location.href='notice_board_write.do?cpage=${cpage}'" />
 			</div>
 		
         <!--=======  페이징 시작 =========================================-->

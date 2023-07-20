@@ -182,22 +182,14 @@ public class ExerciseController {
 	
 	// 추가한 운동종목 db에 저장
 	@RequestMapping(value = "/exerciseAdd", method = RequestMethod.POST)
-<<<<<<< HEAD
-	public ResponseEntity<String> addExercise(@RequestBody Map<String, Object>> getEx, Authentication authentication) {
-=======
 	public ResponseEntity<String> addExercise(@RequestBody Map<String, Object> getEx, Authentication authentication) {
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 		authentication = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = authentication.getPrincipal();
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		
 		String m_seq = customUserDetails.getM_seq();
 		
-<<<<<<< HEAD
-		List<String> exercise = getEx.get("exercise");
-=======
 		List<String> exercise = (List<String>)getEx.get("exercise");
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 		String date = (String)getEx.get("date"); 
 		
 		try {
@@ -278,7 +270,6 @@ public class ExerciseController {
 			
 			responseList.add(response);
 		}
-<<<<<<< HEAD
 		
 		to.setM_seq(m_seq);
 		to.setEx_custom(true);
@@ -302,52 +293,15 @@ public class ExerciseController {
 		return responseList;
     }
 	
-	// 운동칸에 당일 추가한 사용자설정 운동 보여주기
-	/*@RequestMapping("/viewCustomExercise")
-    public List<Map<String, Object>> viewCustomExercises(Authentication authentication,HttpServletRequest request) {
-		authentication = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = authentication.getPrincipal();
-		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-=======
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
-		
-		to.setM_seq(m_seq);
-		to.setEx_custom(true);
-		to.setEx_day(selectedDate);
-		
-		List<ExerciseTO> exercises2 = eDao.viewExercise(to);
-		
-		for(ExerciseTO to1 : exercises2) {
-			Map<String, Object> response = new HashMap<>();
-			
-			String ex_name = to1.getEx_name();
-			int ex_time = to1.getEx_time();
-			BigDecimal ex_used_kcal = to1.getEx_used_kcal();
-			
-			response.put("ex_name2",ex_name);
-			response.put("ex_time2",ex_time);
-			response.put("ex_used_kcal2",ex_used_kcal);
-			
-			responseList.add(response);
-		}
-		return responseList;
-    }*/
-	
 	// 운동시간 대비 소모 칼로리 구한 뒤 db저장
 	@RequestMapping(value = "/calculateCalories", method = RequestMethod.POST)
-<<<<<<< HEAD
-	public List<ExerciseTO> updateExercise(@RequestBody List<ExerciseTO> exercises,Authentication authentication) {
-=======
 	public List<ExerciseTO> updateExercise(@RequestBody Map<String, Object> payload,Authentication authentication) {
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 	    authentication = SecurityContextHolder.getContext().getAuthentication();
 	    Object principal = authentication.getPrincipal();
 	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 	    
 	    String m_seq = customUserDetails.getM_seq();
 	    
-<<<<<<< HEAD
-=======
 	    List<Map<String, Object>> exercisesMap = (List<Map<String, Object>>) payload.get("exerciseItems");
 	    String selectedDate = (String) payload.get("selectedDate");
 	    
@@ -359,26 +313,17 @@ public class ExerciseController {
 	    }).collect(Collectors.toList());
 	    
 	    
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 	    exercises.forEach(exercise -> {
 	    	// 소모 칼로리 계산 - 운동종목에 따른 분당 칼로리 * 운동 시간
 	        BigDecimal ex_used_kcal = mDao.getCalorise(exercise.getEx_name()).multiply(new BigDecimal(exercise.getEx_time()));
 	        exercise.setEx_used_kcal(ex_used_kcal);
 	        exercise.setM_seq(m_seq);
-<<<<<<< HEAD
-=======
 	        exercise.setEx_day(selectedDate);
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 
 	        // 소모 칼로리 계산 후 db에 업데이트
 	        eDao.updateExercise(exercise);
 	    });
 	    // 당일 총 소모칼로리 IntakeData에 업데이트
-<<<<<<< HEAD
-	    eDao.totalCalorie(m_seq);
-	    return exercises; 
-	}
-=======
 	    eDao.totalCalorie(m_seq,selectedDate);
 	    return exercises; 
 	}
@@ -402,5 +347,4 @@ public class ExerciseController {
             return new ResponseEntity<>("Failed to delete exercise", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 }

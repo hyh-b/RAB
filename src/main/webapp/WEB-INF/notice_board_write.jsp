@@ -3,7 +3,7 @@
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<c:set var="seq" value="${requestScope.seq}" />
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -22,42 +22,36 @@ pageEncoding="UTF-8"%>
 
 <script>
 $(document).ready(function() {
-	
 	  $('#wbtn').click(function() {
-		
 	    if ($('#u_subject').val().trim() == '') {
-	      alert('제목울 입력하시오.');
+	      alert('제목을 입력하시오.');
 	      return false;
 	    }
-	    }
 	    
-	    const mailValue = ($('#checkMail').is(':checked')) ? 'y' : 'n';  
-	    
-	    let formData = new FormData($('form')[0]);
-	    formData.append('checkMail', mailValue);
-	    
+	    let formData = new FormData($('form')[0]);	   
+
 	    $.ajax({
-	    	url: 'notiece_board_write_ok.do',
-	    	data: formData,
-	    	dataType: 'json',
-	    	type: 'post',
-	    	contentType: false,
-	    	processData: false,
-	    	success: function(json) {
-// 	    		console.log(json);
-	    		if(json.flagAB == '0' && json.flagCF == '0'){
-	    			alert('쓰기 성공');
-	    			location.href='/';
-	    		} else {
-	    			alert('쓰기 실패');
-	    		}
-	    	},
-	    	error: function(e) {
-	    		alert('[에러]' + e.status);
-	    	}
+	      url: 'notice_board_write_ok.do',
+	      data: formData,
+	      dataType: 'json',
+	      type: 'post',
+	      contentType: false,
+	      processData: false,
+	      success: function(json) {
+// 	        if (json.flagAB == '0' && json.flagCF == '0') {
+// 	          alert('쓰기 성공');
+// 	          location.href = '/';
+// 	        } else {
+// 	          alert('쓰기 실패');
+// 	        }
+			console.log(json);
+	      },
+	      error: function(e) {
+	        alert('[에러]' + e.status);
+	      }
 	    });
+	  });
 	});
-});
 </script>
 
 
@@ -586,38 +580,48 @@ $(document).ready(function() {
       <main>
   			<!-- ============  write 여기부터 시작	=================================== -->
 
-				<div class="board_write">
-				<table>
-				<tr>
-					<th>제목</th>
-					<td colspan="3"><input type="text" name="u_subject" value="" id="u_subject" class="board_view_input" /></td>
-				</tr>			
-				<tr>
-					<th>내용</th>
-					<td colspan="3">
-						<textarea name="u_content" id="u_content" class="board_editor_area"></textarea>  
-					</td>
-				</tr>
-				<tr>
-					<th>이미지</th>
-					<td colspan="3">
-						<input type="file" name="upload" id="upload" value="" class="board_view_input" /><br /><br />
-					</td>
-				</tr>
-				</table>
+	<form action="notice_board_write_ok.do" method="post" name="ufrm" enctype="multipart/form-data">
+  <div class="button-container">
+    <div class="upload-container">
+      <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div class="board_write">
+          <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+            <table>
+              <tr>
+                <th>제목</th>
+                <td colspan="3"><input type="text" name="n_subject" value="" id="n_subject" class="board_view_input" /></td>
+              </tr>
+              <tr>
+                <th>내용</th>
+                <td colspan="3">
+                  <textarea name="n_content" id="n_content" class="board_editor_area"></textarea>
+                </td>
+              </tr>
+              <tr>
+                <th>사진 등록</th>
+                <td colspan="3">
+                  <div class="flex">
+                    <input type="file" name="upload" class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" />
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn_area">
+    <div class="align_left">
+      <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board.do?cpage=${noticeListTO.cpage}'" />
+    </div>
+    <div class="align_right">
+      <input type="submit" id="ubtn" value="upload1" class="btn_list btn_txt02" style="cursor: pointer;" />
+    </div>
+  </div>
+</form>
 
-			</div>
 
-			<div class="btn_area">
-				<div class="align_left">			
-					<input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='/'" />
-				</div>
-				<div class="align_right">			
-					<input type="button" value="쓰기" id="wbtn" class="btn_write btn_txt01" style="cursor: pointer;" />					
-				</div>	
-			</div>	
-		
-		</main>
 	    <!-- ============  Write 여기서 끝=================================== -->
 		
 				

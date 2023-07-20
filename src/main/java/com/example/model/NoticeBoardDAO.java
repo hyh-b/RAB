@@ -16,10 +16,23 @@ public class NoticeBoardDAO {
 	@Autowired
     private  NoticeBoardMapperInter mapper;
 
-
-    public List<NoticeBoardTO> getAllNoticeBoard() {
-  
-        return mapper.getAllNoticeBoard();
+	public NoticeBoardTO noticeBoardView(NoticeBoardTO to) {
+	    return mapper.noticeBoardView(to);
+	}
+	public NoticeAlbumTO noticeFileView(NoticeAlbumTO to) {
+		return mapper.noticeFileView(to);
+	}
+	
+	public List<NoticeBoardTO> getAllNoticeBoard() {
+	    return mapper.getAllNoticeBoard();
+	}
+    public int writeOK(NoticeBoardTO to) {
+    	int flag =0;
+	    int result = mapper.writeOK(to);
+	    if (result == 1) {
+	    	flag =1;  	
+	    }
+    	return flag;
     }
     
     

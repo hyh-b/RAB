@@ -1,6 +1,7 @@
 package com.example.model;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,15 @@ public class NoticeBoardTO {
 	public int nf_seq;
 	public String nf_filename;
 	public int nf_filesize;
+	private List<NoticeAlbumTO> noticeAlbumList;
+    
+    public List<NoticeAlbumTO> getNoticeAlbumList() {
+        return noticeAlbumList;
+    }
+    
+    public void setNoticeAlbumList(List<NoticeAlbumTO> noticeAlbumList) {
+        this.noticeAlbumList = noticeAlbumList;
+    }
 
 
 }

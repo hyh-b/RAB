@@ -54,11 +54,7 @@ public interface ExerciseMapperInter {
 	public BigDecimal getCalories(String ex_name);
 	
 	// 운동시간과 소모 칼로리 업데이트
-<<<<<<< HEAD
-	@Update("UPDATE Exercise SET ex_time=#{ex_time}, ex_used_kcal=#{ex_used_kcal} WHERE m_seq=#{m_seq} AND ex_day=CURDATE() AND ex_name=#{ex_name}")
-=======
 	@Update("UPDATE Exercise SET ex_time=#{ex_time}, ex_used_kcal=#{ex_used_kcal} WHERE m_seq=#{m_seq} AND ex_day=#{ex_day} AND ex_name=#{ex_name}")
->>>>>>> f1ac4e0bf71eee8b333d41ebfeb56ae42a321873
 	public int updateExercise(ExerciseTO to);
 	
 	// 당일 총 소모칼로리 IntakeData테이블에 삽입

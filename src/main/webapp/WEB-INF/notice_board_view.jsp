@@ -4,15 +4,25 @@ pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="listTO" value="${requestScope.listTO}"/>
+<c:set var="bto" value="${requestScope.bto}"/>
+<c:set var="n_seq" value="${bto.n_seq}" />
+<c:set var="n_subject" value="${bto.n_subject}" />
+<c:set var="n_content" value="${bto.n_content}" />
+<c:set var="ato" value="${requestScope.ato}"/>
+<c:set var="nf_filename" value="${ato.nf_filename}" />
+<c:set var="nf_filesize" value="${ato.nf_filesize}" />
+
+
+
+
 <c:set var="data" value="${requestScope.data}"/>
 <c:set var="filename" value="${requestScope.filename}"/>
 <!-- jstl 로 lists 받아옴 -->
- <c:forEach var="noticBoardList" items="${noticeBoardList}">
-   <c:set var="n_seq" value="${noticBoardList.n_seq}" />
-   <c:set var="n_subject" value="${noticBoardList.n_subject}" />
-   <c:set var="n_content" value="${noticBoardList.n_content}" />	   
-</c:forEach>
+<%--  <c:forEach var="noticBoardList" items="${noticeBoardList}"> --%>
+<%--    <c:set var="n_seq" value="${noticBoardList.n_seq}" /> --%>
+<%--    <c:set var="n_subject" value="${noticBoardList.n_subject}" /> --%>
+<%--    <c:set var="n_content" value="${noticBoardList.n_content}" />	    --%>
+<%-- </c:forEach> --%>
 
 
 
@@ -31,22 +41,6 @@ pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-<!-- jstl 로 lists 받아옴 -->
- <c:forEach var="item" items="${lists}">
-   <c:set var="i_seq" value="${item.i_seq}" />
-   <c:set var="i_kcal" value="${item.i_kcal}" />
-   <c:set var="i_carbohydrate_g" value="${item.i_carbohydrate_g}" />
-   <c:set var="i_protein_g" value="${item.i_protein_g}" />
-   <c:set var="i_fat_g" value="${item.i_fat_g}" />
-   <c:set var="i_sugar_g" value="${item.i_sugar_g}" />
-   <c:set var="i_cholesterol_mgl" value="${item.i_cholesterol_mgl}" />
-   <c:set var="i_sodium_mg" value="${item.i_sodium_mg}" />
-   <c:set var="i_trans_fat_g" value="${item.i_trans_fat_g}" />
-   <c:set var="i_day" value="${item.i_day}" />
-   <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
-     				     
-</c:forEach>
 
 
 
@@ -575,24 +569,69 @@ pageEncoding="UTF-8"%>
       
 <!-- ============  view 보여지는부분	=================================== -->
 <main>
-  <table>
+  <!-- <table>
     <tbody>
       <tr>
         <td>
           <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark flex flex-col justify-between h-full">
-              <c:set var="noticeBoard" value="${noticeBoardList[n_seq]}"/>
+            <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark flex flex-col justify-between ">
+              <c:set var="noticeBoard" value="${n_seq}"/>
               ${n_seq} 
               <h4 class="text-xl font-semibold text-black dark:text-white">
-                <a href="/notice_board_view.do" class="flex-grow">${noticeBoard.n_seq} ${noticeBoard.n_subject}</a>
-                <p class="font-medium flex-grow">${noticeBoard.n_content}</p>
+                <a href="/notice_board_view.do" class="flex-grow">${n_seq} ${n_subject}</a>
+                <p class="font-medium flex-grow">${n_content}</p>
               </h4>
             </div>
           </div>
         </td>
       </tr>
     </tbody>
-  </table>
+  </table>-->
+
+    <table border="1" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 100%; height: 100%;">
+  <tr>
+    <td>
+      <div class="flex items-center gap-3 py-5 px-6">
+        <!-- 유저 아이콘 & 닉네임 -->
+        <div class="h-10 w-10 rounded-full">
+          <img src="src/images/user/user-11.png" alt="User" />
+        </div>
+        <div>
+          <h4 class="font-medium text-black dark:text-white">
+            닉네임
+          </h4>
+          <p class="font-medium text-xs">직업</p>
+        </div>
+      </div>
+    </td>
+ <tr>
+     <td><h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
+          <a>${n_subject}</a>
+        </h4>
+        </tr>
+        </td>
+  </tr>
+  <tr>
+    <td>
+    <!--===================================== 이미지 보여주는 부분 =======================================  -->
+		<c:if test="${not empty nf_filename}">
+			  <a class="block px-4">
+			    <img src="${nf_filename}" alt="Cards" />
+			  </a>
+		</c:if>
+	<!--===================================== 이미지 보여주는 부분 =======================================  -->
+    </td>
+  </tr>
+  <tr>
+    <td> 
+      <div class="p-6">
+        <p class="font-medium">
+         <c:out value="${n_content}"/>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
 </main>
 
 
