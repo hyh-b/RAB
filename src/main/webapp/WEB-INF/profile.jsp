@@ -67,7 +67,7 @@ function confirmDelete() {
 >
   <!-- SIDEBAR HEADER -->
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-    <a href="/">
+    <a href="/main.do">
    <!--  사이트 로고  -->
 
 
