@@ -124,7 +124,10 @@ public class MainTO {
   // private BigDecimal avg_weight;
    private Double avg_weight;
    private String month;
+   private double dayCount;
+   private double total_weight;
    
    private String week;
+   
 
 }

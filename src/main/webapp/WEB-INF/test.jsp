@@ -210,7 +210,7 @@
        		} else if(elements.i_weight > elements.m_target_weight) {
        	   		whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
       		} else if (elements.i_weight == elements.m_target_weight) {
-       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board.do"><u>당신의 성공을 공유하세요!</u></a></span>';
        	   //console.log(" undefined ? ->? ", elements.m_weight);
        		}
 			$('#targetWeight').html(whtml);
@@ -247,86 +247,141 @@
 //---------------------------차트 함수화 시작------------------------------------------
 	
 	//---pie 함수--------------------------
-		var pieChart;
-	
+	var basicPieChart;
+	var nutritionPieChart;
+
+	// 새로운 updatePieChart 함수를 생성하여 코드의 재사용성을 높임.
+		function updatePieChart(pies) {
+		    var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g];
+		
+		    // pieChart 객체가 없으면 생성하고, 있으면 데이터만 업데이트.
+		    if (!basicPieChart) {
+		        var pieOptions = {
+		            series: pieData,
+		            chart: {
+		                type: "pie",
+		                height: 350,
+		            },
+		            labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
+		            dataLabels: {
+		                enabled: true,
+		                style: {
+		                    colors: ['#FFA500', '#FF4500', '#008000'],
+		                    fontSize: '14px',
+		                    fontFamily: 'Helvetica, Arial, sans-serif',
+		                },
+		            },
+		            responsive: [{
+		                breakpoint: 480,
+		                options: {
+		                    chart: {
+		                        width: 200,
+		                    },
+		                    legend: {
+		                        position: "bottom",
+		                    },
+		                },
+		            }],
+		        };
+		        basicPieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+		    } else {
+		    	basicPieChart.updateSeries(pieData);
+		    	basicPieChart.updateOptions({
+		            labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g', '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g']
+		        });
+		    }
+		    basicPieChart.render();
+		}
+		
 		function PieDataForDate() {
+		    var zzinseq = $("#zzinseq").val();
+		    var selectedDate = $("#calendarCtInput").val();
 		
-			//var zzinid = $("#zzinid").val();
-			var zzinseq = $("#zzinseq").val();
-			var selectedDate = $("#calendarCtInput").val();
-			
-			//console.log( " pie 함수에서 zzinid -> ", zzinid); 
-			//console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
-
-			$.ajax({
-			url: "/pie_chart_data",
-			type: "GET",
-			data: {
-  				day: selectedDate,
-  				seq: zzinseq
-			},
-			success: function(pie) {
-				
-				//console.log( " pie.영양소들 -> ", pie);
-				
-			 	var pies = JSON.parse(pie);
-			 	
-			 	//console.log( " pies.영양소들 -> ", pies);
-				
-  				var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g
-  					
-  					];
-				
-  				//pie가 없으면 새로 만들고 있으면 업데이트 해서 파이가 무한으로 생겨나게 하는 방지 if 문
-  				 if (!pieChart) {
-  	                
-  	                var pieOptions = {
-  	                    series: pieData,
-  	                    chart: {
-  	                        type: "pie",
-  	                        height: 350,
-  	                    },
-  	                  	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
-  	                  dataLabels: {
-  	                    enabled: true,
-  	                    style: {
-  	                        colors: ['#FFA500', '#FF4500', '#008000'], // 각 라벨의 색상을 바꾸려면 여기를 변경하세요
-  	                        fontSize: '14px', // 폰트 크기를 바꾸려면 여기를 변경하세요
-  	                        fontFamily: 'Helvetica, Arial, sans-serif', // 폰트를 바꾸려면 여기를 변경하세요
-  	                    },
-  	                	
-  	                  },
-					  responsive: [{
-  	                        breakpoint: 480,
-  	                        options: {
-  	                            chart: {
-  	                                width: 200,
-  	                            },
-  	                            legend: {
-  	                                position: "bottom",
-  	                            },
-  	                        },
-  	                    }],
-  	                };
-  	                pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-  	                pieChart.render();
-  	            } else {
-  	                
-  	                pieChart.updateSeries(pieData);
-  	                
-  	              	pieChart.updateOptions({
-  	                	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g', '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g']
-  	            	});
-  	            }
-
-		},
+		    $.ajax({
+		        url: "/pie_chart_data",
+		        type: "GET",
+		        data: {
+		            day: selectedDate,
+		            seq: zzinseq
+		        },
+		        success: function(pie) {
+		            var pies = JSON.parse(pie);
+		            
+		            // 각 영양소 데이터가 0이나 null인지 검사하고, 둘 다 아니면 차트를 업데이트.
+		            if (pies && pies[0] && pies[0].i_carbohydrate_g && pies[0].i_protein_g && pies[0].i_fat_g) {
+		                updatePieChart(pies);
+		            }
+		        },
+		        error: function(e) {
+		            console.log("pie에서 에러 ->", e);
+		        },
+		    });
+		}
 		
-		error: function(e) {
-  		console.log("pie에서 에러 ->", e);
-		},
-	});
-			
-	}	
+//-------콜나당 pie-----------------------------------
+
+		function updatePieChartForNutrition(pies) {
+	    var pieData = [pies[0].i_cholesterol_mgl, pies[0].i_sodium_mg, pies[0].i_sugar_g];
+	
+	    if (!nutritionPieChart) {
+	        var pieOptions = {
+	            series: pieData,
+	            chart: {
+	                type: "pie",
+	                height: 350,
+	            },
+	            labels: ['콜레스테롤 ' + pies[0].i_cholesterol_mgl + 'mg/L', '나트륨 ' + pies[0].i_sodium_mg + 'mg', '당 ' + pies[0].i_sugar_g + 'g'],
+	            dataLabels: {
+	                enabled: true,
+	                style: {
+	                    colors: ['#FFA500', '#FF4500', '#008000'], // 각 라벨의 색상을 바꾸려면 여기를 변경하세요
+	                    fontSize: '14px', // 폰트 크기를 바꾸려면 여기를 변경하세요
+	                    fontFamily: 'Helvetica, Arial, sans-serif', // 폰트를 바꾸려면 여기를 변경하세요
+	                },
+	            },
+	            responsive: [{
+	                breakpoint: 480,
+	                options: {
+	                    chart: {
+	                        width: 200,
+	                    },
+	                    legend: {
+	                        position: "bottom",
+	                    },
+	                },
+	            }],
+	        };
+	
+	        nutritionPieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+	    } else {
+	    	nutritionPieChart.updateSeries(pieData);
+	    	nutritionPieChart.updateOptions({
+	            labels: ['콜레스테롤 ' + pies[0].i_cholesterol_mgl + 'mg/L', '나트륨 ' + pies[0].i_sodium_mg + 'mg', '당 ' + pies[0].i_sugar_g + 'g']
+	        });
+	    }
+	    nutritionPieChart.render();
+	}
+
+		$('#nutritionButton').click(function() {
+		    var zzinseq = $("#zzinseq").val();
+		    var selectedDate = $("#calendarCtInput").val();
+
+		    $.ajax({
+		        url: "/pie_chart_data",
+		        type: "GET",
+		        data: {
+		            day: selectedDate,
+		            seq: zzinseq
+		        },
+		        success: function(pie) {
+		            var pies = JSON.parse(pie);
+
+		            if (pies && pies[0] && pies[0].i_cholesterol_mgl && pies[0].i_sodium_mg && pies[0].i_sugar_g) {
+		                updatePieChartForNutrition(pies);
+		            }
+		        }
+		    });
+		});
 	//---pie 함수 끝--------------------------------------------------
 
 ////////bar함수 차트 undefined넘어와도 비율 안깨지게 날짜 포메팅 not finished--
@@ -575,7 +630,7 @@
 	        success: function(line) {
 	            //console.log("line ->", line);
 	            
-				event.preventDefault(); // 스크롤 위로 튕기는 거 잡아줘야 되는데.
+				event.preventDefault();
 	            
 	            var weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 	
@@ -584,8 +639,8 @@
 	                weights[monthIndex] = line[i].avg_weight; 
 	            
 
-	                //console.log(" line[i].month => ", line[i].month);
-	               //console.log(" line[i].avg_weight => ", line[i].avg_weight);
+	                console.log(" line[i].month => ", line[i].month);
+	                console.log(" line[i].avg_weight => ", line[i].avg_weight);
 	            }
 
 	            //console.log(" line weights => ", weights);
@@ -621,6 +676,20 @@
 	                },
 	                xaxis: {
 	                    categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월','11월', '12월' ],
+	                },
+	                tooltip: {
+	                    y: {
+	                        formatter: function(val) {
+	                            return val.toFixed(2); // 데이터 포인트에 대한 소수점 둘째 자리까지 표시합니다.
+	                        }
+	                    }
+	                },
+	                yaxis: {
+	                    labels: {
+	                        formatter: function (val) {
+	                            return val.toFixed(0);  // 소수점 둘째 자리까지 표시합니다.
+	                        }
+	                    }
 	                }
 	            };
 	            
@@ -767,6 +836,7 @@
 	              success: function() {
 	                alert(' ' + weight + ' kg ' + date + ' 에 등록되었습니다.');
 	                loadDataFromDate();
+	                LineChartForMonth()
 	              },
 	              error: function(jqXHR, textStatus, errorThrown) {
             	    //console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
@@ -1048,18 +1118,13 @@
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-    <a href="/">
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
+    <a href="/main.do">
+<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> 
+		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+    </a>
     
-   <!--  사이트 로고  -->
-
-     <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
-    </a>
-  
-   <!--
-     <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
-    </a>
- -->
+    -->
 
     <button
       class="block lg:hidden"
@@ -1082,9 +1147,7 @@
   </div>
   <!-- SIDEBAR HEADER -->
 
-  <div
-    class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear"
-  >
+  <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
     <!-- Sidebar Menu -->
     <nav
       class="mt-5 py-4 px-4 lg:mt-9 lg:px-6"
@@ -1093,10 +1156,6 @@
         selected = JSON.parse(localStorage.getItem('selected'));
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
-    </nav>
-    <!-- 
-    <p>${flag}</p>
-     -->
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
@@ -1113,16 +1172,7 @@
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
-
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-
-              공지사항
+           	공지사항
             </a>
           </li>
           <!-- Menu Item Calendar -->
@@ -1132,19 +1182,12 @@
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
 
-              href="board_list.do"
+              href="board.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-             <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="게시판.png"
-      			width="24"
-      			height="24"
-   			/>
-             	게시판
+            게시판
             </a>
           </li>
           <!-- Menu Item Profile -->
@@ -1158,15 +1201,7 @@
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="식단.png"
-      			width="24"
-      			height="24"
-   			/>
-             	식단
+           	식단
             </a>
           </li>
           <!-- Menu Item Profile2 -->
@@ -1183,14 +1218,6 @@
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
             >
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="운동.png"
-      			width="24"
-      			height="24"
-   			/>
-
               운동
             </a>
             
@@ -1208,14 +1235,7 @@
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-             <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="마이페이지.png"
-      			width="24"
-      			height="24"
-   			/>
-             	마이페이지
+             마이페이지
             </a>
           </li>
 
@@ -1235,13 +1255,6 @@
     			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
     			:class="page === 'settings' && 'bg-graydark'"
  			>
-   			<img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="로그아웃"
-      			width="24"
-      			height="24"
-   			/>
     			로그아웃
   			</a>
 		</li>
@@ -1249,31 +1262,7 @@
           <!-- Menu Item Settings -->
         </ul>
       </div>
-
-      <!-- Support Group -->
- 
-          <!-- Menu Item Messages -->
-        
-          <!-- Menu Item Chart -->
-         
-      
-          <!-- Menu Item Chart -->
-
-          <!-- Menu Item Ui Elements -->
-        
-          <!-- Menu Item Ui Elements -->
-
-          <!-- Menu Item Auth Pages -->
-          
-            <!-- Dropdown Menu End -->
-   
-          <!-- Menu Item Auth Pages -->
-       
-    <!-- Sidebar Menu -->
-
-    <!-- Promo Box -->
-
-    <!-- Promo Box -->
+      </nav>
   </div>
 </aside>
 
@@ -1428,9 +1417,11 @@
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white"
 
-              >${zzinname}</span
+              >${zzinnickname}</span
             >
-            <span class="block text-xs font-medium">${zzingender}</span>
+            <!-- 
+            <span class="block text-xs font-medium"></span>
+			 -->	          
           </span>
 
           <span class="h-12 w-12 rounded-full">
@@ -1464,23 +1455,7 @@
         >
           <ul
             class="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark"
-          >
-            <li>
-              <a
-                href="profile.do"
-                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-              >
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-                내 정보
-              </a>
-            </li>
-            
+          >     
              <li>
              <div id="weightTodayDropdown">
               <a
@@ -1515,6 +1490,33 @@
                 목표 몸무게 재설정
               </a>
               </div>
+            </li>
+            
+             <li>
+              <a
+                href="profile.do"
+                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                style="padding-left: 5px;"
+              >
+                <svg
+                  class="fill-current"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+                    fill=""
+                  />
+                  <path
+                    d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+                    fill=""
+                  />
+                </svg>
+                프로필
+              </a>
             </li>
             
           </ul>
@@ -1759,11 +1761,16 @@
 			            <h4 class="mb-10 text-xl font-bold text-black dark:text-white">
 			                일일 섭취 영양 성분
 			            </h4>
+			            <div>
+			            <button id="nutritionButton">콜나당</button>
+			            </div>
 			            <div id="chart" class="mx-auto flex justify-center mt-2"></div>
 			        </div>
 			    </div>
 			</div>
-
+			
+			<div id="basicChart"></div>
+<div id="nutritionChart"></div>
 
 
 
