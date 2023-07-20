@@ -210,8 +210,8 @@ public class MemberController {
 		Object principal = authentication.getPrincipal();
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		String mId= customUserDetails.getM_id();
-		int flag = mainDao.InsertData(mId);
-		System.out.println("플래그:"+flag);
+		//int flag = mainDao.InsertData(mId);
+		//System.out.println("플래그:"+flag);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("signup2");
 		return modelAndView; 
@@ -225,7 +225,6 @@ public class MemberController {
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		
 		String m_seq = customUserDetails.getM_seq();
-		BigDecimal m_weight = customUserDetails.getM_weight();
 		
 		MemberTO to = new MemberTO();
 		   
@@ -292,10 +291,6 @@ public class MemberController {
 			
 		modelAndView.addObject("flag",flag);
 		modelAndView.setViewName("signup2_ok");
-		System.out.println("입력몸무게"+to.getM_weight());
-		System.out.println("적용몸무게"+m_weight);
-		mDao.MandIweightsynced(m_seq);
-		System.out.println("메서드 성공");
 		
 		return modelAndView; 
 	}
@@ -454,7 +449,6 @@ public class MemberController {
 		modelAndView.setViewName("signup3");
 		System.out.println("적용몸무게2:"+m_weight);
 		mDao.MandIweightsynced(m_seq);
-		System.out.println("메서드 성공2");
 		return modelAndView; 
 	}
 	
