@@ -125,6 +125,13 @@
 	    cursor: pointer;
 	}
 	
+	 #pieChartSelect {
+        background-color: lightgray;
+        color: black;
+        font-weight: bold;
+    }
+
+	
  </style>
  
 <script>
@@ -139,8 +146,8 @@
     		//selectedDate = $(this).val();
 
     		loadDataFromDate();
-    
-    		PieDataForDate();
+    		
+    		MacroPieChart();
     		
     		BarChartForDate();
     		
@@ -211,7 +218,7 @@
        	   		whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
       		} else if (elements.i_weight == elements.m_target_weight) {
        	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board.do"><u>당신의 성공을 공유하세요!</u></a></span>';
-       	   //console.log(" undefined ? ->? ", elements.m_weight);
+       	     //console.log(" undefined ? ->? ", elements.m_weight);
        		}
 			$('#targetWeight').html(whtml);
 
@@ -247,89 +254,138 @@
 //---------------------------차트 함수화 시작------------------------------------------
 	
 	//---pie 함수--------------------------
-	var pieChart;
+		var pieChart;
 	
-		function PieDataForDate() {
-		
-			//var zzinid = $("#zzinid").val();
-			var zzinseq = $("#zzinseq").val();
-			var selectedDate = $("#calendarCtInput").val();
-			
-			//console.log( " pie 함수에서 zzinid -> ", zzinid); 
-			//console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
 
-			$.ajax({
-			url: "/pie_chart_data",
-			type: "GET",
-			data: {
-  				day: selectedDate,
-  				seq: zzinseq
-			},
-			success: function(pie) {
-				
-				//console.log( " pie.영양소들 -> ", pie);
-				
-			 	var pies = JSON.parse(pie);
-			 	
-			 	//console.log( " pies.영양소들 -> ", pies);
-				
-  				var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g
-  					
-  					];
-				
-  				//pie가 없으면 새로 만들고 있으면 업데이트 해서 파이가 무한으로 생겨나게 하는 방지 if 문
-  				 if (!pieChart) {
-  	                
-  	                var pieOptions = {
-  	                    series: pieData,
-  	                    chart: {
-  	                        type: "pie",
-  	                        height: 350,
-  	                    },
-  	                  	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
-  	                  dataLabels: {
-  	                    enabled: true,
-  	                    style: {
-  	                        colors: ['#FFA500', '#FF4500', '#008000'], // 각 라벨의 색상을 바꾸려면 여기를 변경하세요
-  	                        fontSize: '14px', // 폰트 크기를 바꾸려면 여기를 변경하세요
-  	                        fontFamily: 'Helvetica, Arial, sans-serif', // 폰트를 바꾸려면 여기를 변경하세요
-  	                    },
-  	                	
-  	                  },
-					  responsive: [{
-  	                        breakpoint: 480,
-  	                        options: {
-  	                            chart: {
-  	                                width: 200,
-  	                            },
-  	                            legend: {
-  	                                position: "bottom",
-  	                            },
-  	                        },
-  	                    }],
-  	                };
-  	                pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-  	                pieChart.render();
-  	            } else {
-  	                
-  	                pieChart.updateSeries(pieData);
-  	                
-  	              	pieChart.updateOptions({
-  	                	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g', '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g']
-  	            	});
-  	            }
+		function MacroPieChart() {
+		    var zzinseq = $("#zzinseq").val();
+		    var selectedDate = $("#calendarCtInput").val();
 
-		},
-		
-		error: function(e) {
-  		console.log("pie에서 에러 ->", e);
-		},
-	});
-			
-	}	
+		    $.ajax({
+		        url: "/pie_chart_data",
+		        type: "GET",
+		        data: {
+		            day: selectedDate,
+		            seq: zzinseq
+		        },
+		        success: function(pie)  {
+		            var pies = JSON.parse(pie);
+		            var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g];
+
+		            var pieOptions = {
+		                series: pieData,
+		                chart: {
+		                    type: "pie",
+		                    height: 350,
+		                },
+		                labels: ['탄수', '단백', '지방'],
+		                dataLabels: {
+		                    enabled: true,
+		                    offset: 20,
+		                    formatter: function(val, opts) {
+		                        // opts.seriesIndex는 현재 데이터 포인트의 인덱스입니다.
+		                        var labels = ['탄수', '단백', '지방'];  // 라벨 배열
+		                        return labels[opts.seriesIndex] + ': ' + val.toFixed(2) + 'g';  // 라벨 포맷
+		                    },
+		                    style: {
+		                        colors: ['#FFA500', '#FF4500', '#008000'],
+		                        fontSize: '14px',
+		                        fontFamily: 'Helvetica, Arial, sans-serif',
+		                    },
+		                },
+		                responsive: [{
+		                    breakpoint: 480,
+		                    options: {
+		                        chart: {
+		                            width: 200,
+		                        },
+		                        legend: {
+		                            position: "bottom",
+		                        },
+		                    },
+		                }],
+		            };
+
+		            if (pieChart) {
+		                pieChart.destroy();
+		            }
+
+		            pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+		            pieChart.render();
+		        },
+		        error: function(e) {
+		            console.log("pie에서 에러 ->", e);
+		        },
+		    });
+		}
+
+		function SugarPieChart() {
+		    var zzinseq = $("#zzinseq").val();
+		    var selectedDate = $("#calendarCtInput").val();
+
+		    $.ajax({
+		        url: "/pie_chart_data",
+		        type: "GET",
+		        data: {
+		            day: selectedDate,
+		            seq: zzinseq
+		        },
+		        success: function(pie)  {
+		            var pies = JSON.parse(pie);
+		            var pieData = [pies[0].i_cholesterol_mgl/1000, pies[0].i_sodium_mg/1000, pies[0].i_sugar_g];
+
+		            var pieOptions = {
+		                series: pieData,
+		                chart: {
+		                    type: "pie",
+		                    height: 350,
+		                },
+		                labels: ['콜레스테롤', '나트륨', '설탕'],
+		                dataLabels: {
+		                    enabled: true,
+		                    offset: 20,
+		                    formatter: function(val, opts) {
+		                        // opts.seriesIndex는 현재 데이터 포인트의 인덱스입니다.
+		                        var labels = ['콜레스테롤', '나트륨', '설탕'];  // 라벨 배열
+		                        return labels[opts.seriesIndex] + ': ' + val.toFixed(2) + 'g';  // 라벨 포맷
+		                    },
+		                    style: {
+		                        colors: ['#FFA500', '#FF4500', '#008000'],
+		                        fontSize: '14px',
+		                        fontFamily: 'Helvetica, Arial, sans-serif',
+		                    },
+		                },
+		                responsive: [{
+		                    breakpoint: 480,
+		                    options: {
+		                        chart: {
+		                            width: 200,
+		                        },
+		                        legend: {
+		                            position: "bottom",
+		                        },
+		                    },
+		                }],
+		            };
+
+
+		            if (pieChart) {
+		                pieChart.destroy();
+		            }
+
+		            pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+		            pieChart.render();
+		        },
+		        error: function(e) {
+		            console.log("pie에서 에러 ->", e);
+		        },
+		    });
+		}
+	//---콜나당 끝----------------
+	
+
+
 	//---pie 함수 끝--------------------------------------------------
-
-////////bar함수 차트 undefined넘어와도 비율 안깨지게 날짜 포메팅 not finished--
 
 		var selectedDate;
 		
@@ -659,6 +715,14 @@
 
  window.onload = function() {
 		
+	    document.getElementById('pieChartSelect').addEventListener('change', function(e) {
+	        if (this.value === 'tandanji') {
+	            MacroPieChart();
+	        } else if (this.value === 'colnadang') {
+	            SugarPieChart();
+	        }
+	    });
+		
 //--달력 라벨 밸류 디폴트는 현재로컬타임 기준으로 세팅됨----------------------------------------------
 		var currentDate = new Date();
 
@@ -858,11 +922,13 @@
         	
         	selectedDate = $(this).val();
         	
-        	console.log("달력 value 확인 ->", selectedDate);
+        	//console.log("달력 value 확인 ->", selectedDate);
         	
             loadDataFromDate();
          
-          	PieDataForDate();
+          	//PieDataForDate();
+          	
+          	MacroPieChart();
           	
             AreaChartForWeek();
 
@@ -879,9 +945,10 @@
       	LineChartForMonth();
         	
     });
+
 	
 	loadDataFromDate();
-	PieDataForDate();
+	MacroPieChart();
 	BarChartForDate();
 	AreaChartForWeek();
 	LineChartForMonth();
@@ -894,7 +961,18 @@
 	var selectedDate;
 	
 	$(document).ready(function() {
-			//--오늘 날짜로 선택된 값을 바로 전달해서 ----------------------------------------------
+
+			///차트함수들
+	
+			loadDataFromDate();
+			MacroPieChart();
+			BarChartForDate();
+			AreaChartForWeek();
+			LineChartForMonth();
+			
+			///
+
+	//--lineChart 년도 파라미터 formatting----------------------------------------------
 			var currentDate = new Date();
 	
 			var day = ("0" + currentDate.getDate()).slice(-2);
@@ -928,16 +1006,9 @@
 			
 			    document.getElementById("yearSelectForLineChart").appendChild(option);
 			}
+			//--lineChart 년도 파라미터 formatting 끝 ----------------------------------------------
 			
-			///
-	
-			loadDataFromDate();
-			PieDataForDate();
-			BarChartForDate();
-			AreaChartForWeek();
-			LineChartForMonth();
-			
-		// 피드백 다이얼로그
+		//----------------------피드백 다이얼로그 시작-----------------------
 			document.querySelector('.chatbot-icon').addEventListener('click', function() {
 			    document.querySelector('.chatbot-dialog').style.display = 'block';
 			    resetForm();
@@ -950,8 +1021,6 @@
 			
 			//
 
-			
-			
 			document.querySelector('#submit-btn').addEventListener('click', function() {
 			    // Get input values
 			    
@@ -1016,7 +1085,7 @@
 			        document.querySelector("#f_subject").value = "";
 			        document.querySelector("#f_content").value = "";
 			    }
-	    	/// 피드백 다이얼로그 끝
+			  //----------------------피드백 다이얼로그 끝-----------------------
 
 	});
 </script>
@@ -1706,13 +1775,15 @@
 			            <h4 class="mb-10 text-xl font-bold text-black dark:text-white">
 			                일일 섭취 영양 성분
 			            </h4>
+			         	<select id="pieChartSelect" class="form-control">
+    						<option value="tandanji" id="tandanji">탄단지</option>
+						    <option value="colnadang" id="colnadang">콜나당</option>
+						</select>
 			            <div id="chart" class="mx-auto flex justify-center mt-2"></div>
+						
 			        </div>
 			    </div>
 			</div>
-
-
-
 
 
 		   <!-- ===== 파이 그래프 끝 ====== -->		
@@ -1737,7 +1808,7 @@
 			</div>
 
               <!-- ====== Chart Three End -->
-			<br/>
+	
               <!-- ====== Map One Start -->
               <div class="col-span-12 rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-7">
 				  <h4 class="mb-2 text-xl font-bold text-black dark:text-white">

@@ -80,8 +80,8 @@ public class MainController {
         int flag = dao.CreateRecord(seq);
         
         //몸무게들 동기화
-        int sync_flag = dao.MandIweightsynced(seq);
-        System.out.println(" main.do에서 synced seq -> " + seq);
+        //int sync_flag = dao.MandIweightsynced(seq);
+        //System.out.println(" main.do에서 synced seq -> " + seq);
 
         
         System.out.println("     dao.InsertData(mId); " + flag);
@@ -139,13 +139,13 @@ public class MainController {
         String seq = member.getM_seq();
         System.out.println(" main.do에서 파라미터로 넘기는 seq -> " + seq);
         int flag = dao.CreateRecord(seq);
+        
         //몸무게들 동기화
-        int sync_flag = dao.MandIweightsynced(seq);
-        System.out.println(" main.do에서 synced seq -> " + seq);
+        //int sync_flag = dao.MandIweightsynced(seq);
+        //System.out.println(" main.do에서 synced seq -> " + seq);
         
-        System.out.println("     dao.InsertData(mId); " + flag);
+        /////
         
-    
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
   
@@ -166,9 +166,7 @@ public class MainController {
 		modelAndView.addObject("zzinname", member.getM_real_name());
 		modelAndView.addObject("zzinmail", member.getM_mail());
 		modelAndView.addObject("zzingender", member.getM_gender());
-		
-		
-		
+
 		System.out.println(" test.do m_id " + member.getM_id());
 		
 		modelAndView.setViewName("main");
@@ -185,6 +183,7 @@ public class MainController {
 	    
 	    System.out.println(" selected_data i_day Controller -> " + day);
 	    System.out.println(" selected_data seq Controller -> " + seq );
+
 
 	    JsonObject mainDatas = new JsonObject();
 
@@ -247,6 +246,8 @@ public class MainController {
 	        
 	        pieDatas.add(pieData); 
 	    }	   	
+	    
+	    System.out.println( "\n 콜나당이 왜이래 이거-> " + pieDatas + "\n");
 	    
 	    ///탄단지 콜나당 합연산 ------------------------------
 	    
@@ -404,6 +405,7 @@ public class MainController {
 			//int targetw_update = dao.TargetWeightUpdate(target_weight, seq);
 		    //result_for_both = weight_update + targetw_update;
 		    //return result_for_both;
+
 		}
 		
 //	  //해당 날짜 몸무게 업데이트----------

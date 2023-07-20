@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.mappers.MainMapperInter;
 import com.example.mappers.MemberMapperInter;
 
 @Repository
@@ -15,7 +16,7 @@ public class MemberDAO {
 	
 	@Autowired
 	private MemberMapperInter mapper;
-	
+
 	@Autowired
 	public MemberDAO(MemberMapperInter mapper) {
 	    this.mapper = mapper;
@@ -144,5 +145,7 @@ public class MemberDAO {
         return mapper.MandIweightsynced(m_seq);
 
 	}
+
+
 
 }
