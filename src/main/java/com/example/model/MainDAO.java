@@ -110,6 +110,18 @@ public class MainDAO {
 			return flag;
 					
 		}
+		
+  //---정보입력 하루치 IntakeData 레코드 생성
+		
+		public int InsertDataForMain(String mId) {
+			
+			int irecord_flag = 1;
+			
+			int result = mapper.InsertDataForMain(mId);
+			
+			return result;
+			
+		}
 	
 		//---아 점 저 합연산--------------------------
 		

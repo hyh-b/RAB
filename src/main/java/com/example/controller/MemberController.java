@@ -210,7 +210,7 @@ public class MemberController {
 		Object principal = authentication.getPrincipal();
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		String mId= customUserDetails.getM_id();
-		int flag = mainDao.InsertData(mId);
+		int flag = mainDao.InsertDataForMain(mId);
 		System.out.println("플래그:"+flag);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("signup2");
