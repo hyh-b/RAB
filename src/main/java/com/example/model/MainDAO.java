@@ -95,11 +95,11 @@ public class MainDAO {
 		
 	//---아이디당 1개의 레코드 중복없이 생성-------------------------------------------------------------------------
 		
-		public int InsertData(String mId) {
+		public int CreateRecord(String seq) {
 			
 			int flag = 1;
 			
-			int result = mapper.InsertDataForMain(mId);
+			int result = mapper.CreateThreeMonthRecord(seq);
 			
 			if(result == 1 ) {
 				flag = 0;
