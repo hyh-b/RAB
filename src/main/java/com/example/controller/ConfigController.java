@@ -45,8 +45,11 @@ import com.example.model.MainTO;
 public class ConfigController {
 
 	@RequestMapping("/")
-	public ModelAndView index() {
+	public ModelAndView index(Principal principal) {
 		ModelAndView modelAndView = new ModelAndView();
+		if (principal != null && principal.getName() != null) {
+	        modelAndView.addObject("login","login");
+	    }
 		modelAndView.setViewName("index");
 		return modelAndView;
 	}
