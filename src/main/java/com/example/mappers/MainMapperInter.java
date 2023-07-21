@@ -59,21 +59,26 @@ public interface MainMapperInter {
     //---탄단지콜나당 통합---------------------------------
     @Update("UPDATE IntakeData SET i_carbohydrate_g = (SELECT COALESCE(SUM(b_carbohydrate_g), 0) FROM Breakfast WHERE Breakfast.b_day = #{day} AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_carbohydrate_g), 0) FROM Lunch WHERE Lunch.l_day = #{day} AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_carbohydrate_g), 0) FROM Dinner WHERE Dinner.d_day = #{day} AND Dinner.m_seq = #{seq}),i_protein_g = (SELECT COALESCE(SUM(b_protein_g), 0) FROM Breakfast WHERE Breakfast.b_day = #{day} AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_protein_g), 0) FROM Lunch WHERE Lunch.l_day = #{day} AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_protein_g), 0) FROM Dinner WHERE Dinner.d_day = #{day} AND Dinner.m_seq = #{seq}),i_fat_g = (SELECT COALESCE(SUM(b_fat_g), 0) FROM Breakfast WHERE Breakfast.b_day = #{day} AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_fat_g), 0) FROM Lunch WHERE Lunch.l_day = #{day} AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_fat_g), 0) FROM Dinner WHERE Dinner.d_day = #{day} AND Dinner.m_seq = #{seq}),i_cholesterol_mgl = (SELECT COALESCE(SUM(b_cholesterol_mg), 0) FROM Breakfast WHERE Breakfast.b_day = #{day} AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_cholesterol_mg), 0) FROM Lunch WHERE Lunch.l_day = #{day} AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_cholesterol_mg), 0) FROM Dinner WHERE Dinner.d_day = #{day} AND Dinner.m_seq = #{seq}), i_sodium_mg = (SELECT COALESCE(SUM(b_sodium_mg), 0) FROM Breakfast WHERE Breakfast.b_day = #{day} AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_sodium_mg), 0) FROM Lunch WHERE Lunch.l_day = #{day} AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_sodium_mg), 0) FROM Dinner WHERE Dinner.d_day = #{day} AND Dinner.m_seq = #{seq}),i_sugar_g = (SELECT COALESCE(SUM(b_sugar_g), 0) FROM Breakfast WHERE Breakfast.b_day = #{day} AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_sugar_g), 0) FROM Lunch WHERE Lunch.l_day = #{day} AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_sugar_g), 0) FROM Dinner WHERE Dinner.d_day = #{day} AND Dinner.m_seq = #{seq}) WHERE m_seq = #{seq} AND i_day = #{day};")
     public int UnionAllNutritions(@Param("seq") int seq, @Param("day") String day);
+
+//---String seq로 받아서 메인에서 뿌리기 시도 밑에 얘들---------------------------------------------------
     
+    @Update("UPDATE IntakeData SET i_breakfast_kcal = (SELECT COALESCE(SUM(b_kcal), 0) FROM Breakfast WHERE Breakfast.b_day = CURDATE() AND Breakfast.m_seq = #{seq}), i_lunch_kcal = (SELECT COALESCE(SUM(l_kcal), 0) FROM Lunch WHERE Lunch.l_day = CURDATE() AND Lunch.m_seq = #{seq}), i_dinner_kcal = (SELECT COALESCE(SUM(d_kcal), 0) FROM Dinner WHERE Dinner.d_day = CURDATE() AND Dinner.m_seq = #{seq}) WHERE m_seq = #{seq} AND i_day = CURDATE();")
+    public int MainUnionBLDperDay(@Param("seq") String seq);
+    
+    //연산결과 3개를 합쳐서 i_kcal에 할당하는거 하나, main페이지에서  때마다 실행, 추가된 값이 없다면 update만 안되고 나머지는 정상 작동
+    @Update("UPDATE IntakeData SET i_kcal = COALESCE(i_breakfast_kcal, 0) + COALESCE(i_lunch_kcal, 0) + COALESCE(i_dinner_kcal, 0) WHERE m_seq = #{seq} AND i_day = CURDATE();")
+    public int MainUnionAllCalories(@Param("seq") String seq);
+    
+    //---탄단지콜나당 통합---------------------------------
+    @Update("UPDATE IntakeData SET i_carbohydrate_g = (SELECT COALESCE(SUM(b_carbohydrate_g), 0) FROM Breakfast WHERE Breakfast.b_day = CURDATE() AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_carbohydrate_g), 0) FROM Lunch WHERE Lunch.l_day = CURDATE() AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_carbohydrate_g), 0) FROM Dinner WHERE Dinner.d_day = CURDATE() AND Dinner.m_seq = #{seq}),i_protein_g = (SELECT COALESCE(SUM(b_protein_g), 0) FROM Breakfast WHERE Breakfast.b_day = CURDATE() AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_protein_g), 0) FROM Lunch WHERE Lunch.l_day = CURDATE() AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_protein_g), 0) FROM Dinner WHERE Dinner.d_day = CURDATE() AND Dinner.m_seq = #{seq}),i_fat_g = (SELECT COALESCE(SUM(b_fat_g), 0) FROM Breakfast WHERE Breakfast.b_day = CURDATE() AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_fat_g), 0) FROM Lunch WHERE Lunch.l_day = CURDATE() AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_fat_g), 0) FROM Dinner WHERE Dinner.d_day = CURDATE() AND Dinner.m_seq = #{seq}),i_cholesterol_mgl = (SELECT COALESCE(SUM(b_cholesterol_mg), 0) FROM Breakfast WHERE Breakfast.b_day = CURDATE() AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_cholesterol_mg), 0) FROM Lunch WHERE Lunch.l_day = CURDATE() AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_cholesterol_mg), 0) FROM Dinner WHERE Dinner.d_day = CURDATE() AND Dinner.m_seq = #{seq}), i_sodium_mg = (SELECT COALESCE(SUM(b_sodium_mg), 0) FROM Breakfast WHERE Breakfast.b_day = CURDATE() AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_sodium_mg), 0) FROM Lunch WHERE Lunch.l_day = CURDATE() AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_sodium_mg), 0) FROM Dinner WHERE Dinner.d_day = CURDATE() AND Dinner.m_seq = #{seq}),i_sugar_g = (SELECT COALESCE(SUM(b_sugar_g), 0) FROM Breakfast WHERE Breakfast.b_day = CURDATE() AND Breakfast.m_seq = #{seq}) + (SELECT COALESCE(SUM(l_sugar_g), 0) FROM Lunch WHERE Lunch.l_day = CURDATE() AND Lunch.m_seq = #{seq}) + (SELECT COALESCE(SUM(d_sugar_g), 0) FROM Dinner WHERE Dinner.d_day = CURDATE() AND Dinner.m_seq = #{seq}) WHERE m_seq = #{seq} AND i_day = CURDATE();")
+    public int MainUnionAllNutritions(@Param("seq") String seq);
+
 //---몸무게, 타겟 몸무게 등록 쿼리, 다이얼로그 ---------------------------------------------
-    
-    //정보기입칸에 m_weight에 사용자가 입력하는 몸무게를 바로 i_weight에 동기화 시켜주는 쿼리 [ 단 한번만 실행되야 함// seq는 정보기입전에 이미 생성이 되는거겠지? ] 
-    @Update("UPDATE IntakeData JOIN Member ON IntakeData.m_seq = Member.m_seq SET IntakeData.i_weight = Member.m_weight WHERE IntakeData.i_day = CURDATE() and IntakeData.m_seq = #{str_seq};")
-    public int MandIweightsynced(@Param("str_seq") String str_seq);
-    
-    //몸무게 업데이트 구버전
+
+    //몸무게 업데이트 
     @Update("UPDATE IntakeData SET i_weight = #{i_weight} WHERE m_seq = #{seq} AND i_day = #{dialogDate};")
     public int WeightUpdate(@Param("i_weight") BigDecimal i_weight, @Param("seq") int seq, @Param("dialogDate") String dialogDate);
-    
-     //몸무게 업데이트 신버전( 업데이트도 되고 다른 걸 바꿔도 문제없지만 비동기처리가 안됨)
-//     @Update("UPDATE Member JOIN IntakeData ON Member.m_seq = IntakeData.m_seq SET Member.m_weight = #{i_weight} WHERE Member.m_seq = #{seq} AND IntakeData.i_day = #{dialogDate};")
-//     public int WeightUpdate(@Param("i_weight") BigDecimal i_weight, @Param("seq") int seq, @Param("dialogDate") String dialogDate);
-    
+
      //목표 몸무게 업데이트
      @Update("Update Member set m_target_weight = #{target_weight} where m_seq = #{seq};")
      public int TargetWeightUpdate(@Param("target_weight") BigDecimal target_weight, @Param("seq") int seq);
@@ -81,7 +86,7 @@ public interface MainMapperInter {
 //---피드백 게시판-------------------------------------------------
     
     //피드백 다이얼로그 insert
-    @Insert("INSERT INTO feedback (m_seq, f_id, f_name, f_mail, f_subject, f_content) VALUES (#{seq}, #{f_id}, #{f_name}, #{f_mail}, #{f_subject}, #{f_content});")
+    @Insert("INSERT INTO feedback (m_seq, f_id, f_name, f_mail, f_subject, f_content, f_day) VALUES (#{seq}, #{f_id}, #{f_name}, #{f_mail}, #{f_subject}, #{f_content}, CURDATE());")
     public int FeedbackReceived(@Param("seq") int seq, @Param("f_id") String f_id, @Param("f_name") String f_name, @Param("f_mail") String f_mail, @Param("f_subject") String f_subject, @Param("f_content") String f_content);
     
     

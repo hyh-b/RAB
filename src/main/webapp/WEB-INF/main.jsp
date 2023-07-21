@@ -15,10 +15,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <title>
-     main RAB
+     Main RAB
    </title>
+   
+   <link rel="stylesheet" href="style.css" >
+   
+   <link rel="stylesheet" href="/css/main.css" >
+   
 <!--  tailwindcss로 그린 아이콘, apexChart -->
-  <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+  <link rel="icon" href="favicon.ico">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script> 
 
 <!-- jQuery, jQuery Dialog, jQuery Calendar, fontAwesome --> 
@@ -26,114 +31,6 @@
   <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  
- <!--  피드백 아이콘 -->
- <style>
-	.chatbot-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #ff0000; 
-    position: fixed !important;
-    bottom: 20px !important;
-    
-    right: 33px !important;
-    
-    z-index: 1000;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-	}
-	
-	.chatbot-icon .fas {
-	    font-size: 30px; 
-	    color: #ffffff;  
-	}
-	.chatbot-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    width: 400px;
-    border-radius: 5px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    display: none;
-	}
-	
-	.dialog-header {
-	    padding: 10px;
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	    border-bottom: 1px solid #e0e0e0;
-	}
-	
-	.dialog-title {
-	    font-weight: bold;
-	}
-	
-	.dialog-close {
-	    border: none;
-	    background: transparent;
-	    font-size: 20px;
-	    cursor: pointer;
-	    outline: none;
-	}
-	
-	.dialog-body {
-	    padding: 10px;
-	}
-	
-	.form-row {
-	    margin-bottom: 10px;
-	}
-	
-	.form-row label {
-	    display: block;
-	    font-weight: bold;
-	}
-	
-	.form-row input,
-	.form-row #f_content {
-	    width: 100%;
-	    padding: 5px;
-	    border-radius: 5px;
-	    border: 1px solid #e0e0e0;
-        
-	}
-	.form-row #f_content {
-    width: 100%;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #e0e0e0;
-    height: 135px; 
-	}
-	
-	.dialog-footer {
-	    padding: 10px;
-	    text-align: right;
-	}
-	
-	.dialog-footer button {
-	    padding: 5px 10px;
-	    border-radius: 5px;
-	    background-color: #ff0000;
-	    color: #ffffff;
-	    border: none;
-	    cursor: pointer;
-	}
-	
-	 #pieChartSelect {
-        background-color: lightgray;
-        color: black;
-        font-weight: bold;
-    }
-
-	
- </style>
- 
 <script>
 //----------------------함수-----------------------------
 
@@ -1867,12 +1764,13 @@
                 </div>
                 <div class="form-row">
                     <label for="content">내용</label>
-                    <div contenteditable="true" id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!         (Window + Shift + s로 캡쳐 후 Ctrl + V)"></div>
                     
-                    <!--  
-                    <textarea id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!        
-                                      (Window + Shift + s로 캡쳐 후 Ctrl + V)"></textarea>
-                                      -->
+                    <!-- 
+                    <div contenteditable="true" id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!         (Window + Shift + s로 캡쳐 후 Ctrl + V)"></div>
+                     -->
+   
+                    <textarea id="f_content"></textarea>
+   
                 </div>
             </form>
         </div>

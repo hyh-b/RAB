@@ -111,7 +111,7 @@ public class MainDAO {
 					
 		}
 		
-  //---정보입력 하루치 IntakeData 레코드 생성
+  //---정보입력창에서 하루치 IntakeData 레코드 생성
 		
 		public int InsertDataForMain(String mId) {
 			
@@ -123,7 +123,7 @@ public class MainDAO {
 			
 		}
 	
-		//---아 점 저 합연산--------------------------
+  //---아 점 저 합연산--------------------------
 		
 		public int UnionPerDay(int seq, String day) {
 			
@@ -226,29 +226,85 @@ public class MainDAO {
 
 			return TargetWeightUpdateFlag;
 		}
-		
-		//---m_weight and i_weight 동기화
-//		
-//		public int MandIweightsynced(String str_seq) {
-//					
-//			int syncFlag = 1;
-//			
-//			int result = mapper.MandIweightsynced(str_seq);
-//			
-//			if(result == 1 ) {
-//				syncFlag = 0;
-//				System.out.println( " synced 정상-> , " + syncFlag);
-//			}else if(result == 0) {
-//				syncFlag = 1;
-//				System.out.println( " synced 비정상-> , " + syncFlag);
-//			}
-//
-//			
-//			return syncFlag;
-//
-//		}
+	//---main에서 합연산 쿼리들 실행 테스트--------------------
 		
 		
+
+		
+				public int MainUnionPerDay(String seq) {
+					
+					int mainflag_a = 1;
+					
+					int result = mapper.MainUnionBLDperDay(seq);
+					
+					System.out.println(" \n mainflag_a  에서 seq -> " + seq );
+					
+					if(result == 1 ) {
+						
+						mainflag_a = 0;
+						
+					}else if(result == 0) {
+						
+						mainflag_a = 1;
+					}
+				
+					System.out.println( " MainUnionPerDay ->" + mainflag_a );
+					
+					return mainflag_a ;
+							
+				}
+				
+				//---아 점 저 합연산 3개를 1개의 i_kcal로 총합연산--------------------------
+				
+				public int MainUnionAllCalories(String seq) {
+					
+					int mainflag_c = 1;
+					
+					int result = mapper.MainUnionAllCalories(seq);
+					
+					System.out.println("  String화 된 seq ->  " + seq );
+					
+					if(result == 1 ) {
+						mainflag_c = 0;
+					}else if(result == 0) {
+						mainflag_c = 1;
+					}
+					
+					System.out.println( " MainUnionAllCalories ->" + mainflag_c);
+				
+					return mainflag_c;
+							
+				}
+				
+				//---탄단지 콜나당 하루치 총합--------------------------
+				
+				public int 	MainUnionAllNutritions(String seq) {
+					
+					int mainflag_c= 1;
+					
+					int result = mapper.MainUnionAllNutritions(seq);
+					
+					if(result == 1 ) {
+						mainflag_c = 0;
+					}else if(result == 0) {
+						mainflag_c = 1;
+					}
+					
+					System.out.println( " MainUnionAllNutritions = " + mainflag_c + "\n");
+				
+					return mainflag_c;
+							
+				}
+
+				
+				
+				
+				
+	//---main에서 합연산 쿼리들 실행 테스트 끝 --------------------
+				
+				
+				
+	
 		//---피드백---------------------
 		
 		//피드백 입력
