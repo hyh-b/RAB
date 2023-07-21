@@ -227,10 +227,7 @@ public class MainDAO {
 			return TargetWeightUpdateFlag;
 		}
 	//---main에서 합연산 쿼리들 실행 테스트--------------------
-		
-		
 
-		
 				public int MainUnionPerDay(String seq) {
 					
 					int mainflag_a = 1;
@@ -297,9 +294,6 @@ public class MainDAO {
 				}
 
 				
-				
-				
-				
 	//---main에서 합연산 쿼리들 실행 테스트 끝 --------------------
 				
 				
@@ -322,6 +316,19 @@ public class MainDAO {
 			}
 			
 			return feedbackFlag;
+		}
+		
+	 //---피드백 게시판
+		
+		public ArrayList<MainTO> ListOfFeedback(){
+			
+			List<MainTO> feedback_list  = (List<MainTO>)mapper.FeedbackList();
+			
+			ArrayList<MainTO> feedback_lists  = new ArrayList<>(feedback_list);
+			
+			System.out.println(" feedback_lists dao 에서 -> " + feedback_lists);
+	    
+	    	return feedback_lists;
 		}
 		
 		

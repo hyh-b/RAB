@@ -6,12 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.annotations.Param;
+import org.eclipse.jdt.internal.compiler.batch.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -445,7 +447,41 @@ public class MainController {
 //			return modelAndView;
 //		}
 		
-		  //피드백----------
+	  //--------피드백----------------------------
+		
+		
+		@RequestMapping("/feedback.do")
+		public ModelAndView feedback() {
+			
+			ModelAndView modelAndView = new ModelAndView();
+		
+			
+			ArrayList<MainTO> feedback_lists = dao.ListOfFeedback();
+			
+			for( MainTO to : feedback_lists) {
+				
+			        int f_seq = to.getF_seq();
+			        String f_id = to.getF_id();
+			        String f_name = to.getF_name();
+			        String f_mail = to.getF_mail();
+			        String f_subject = to.getF_subject();
+			        String f_content = to.getF_content();
+			        String f_day = to.getF_day().toString();
+			        int m_seq = to.getM_seq();
+
+			        System.out.println("F_seq: " + f_seq + ", F_id: " + f_id + ", F_name: " + f_name + ", F_mail: " + f_mail + ", F_subject: " + f_subject + ", F_content: " + f_content + ", F_day: " + f_day + ", M_seq: " + m_seq);
+				
+			}
+
+			System.out.println( "\n 컨트롤러에서 feedback_lists" +feedback_lists);
+
+			modelAndView.addObject("feedback_lists", feedback_lists);
+			modelAndView.setViewName("feedback");
+			return modelAndView;
+		}
+				
+			 //--------feedback_board.do 끝----------------------------
+				
 			@ResponseBody
 			@RequestMapping(value = "/feedback_ok", method = RequestMethod.POST)
 			public int FeedBackOk(
@@ -457,5 +493,7 @@ public class MainController {
 				System.out.println( " feedback controller-> " + seq + " " +f_id + " " + f_name + " " + f_mail + " " + f_subject + " " + f_content);
 				return feedback_flag;
 			}
-
+	
+			
+	 //--------피드백 끝 ----------------------------
 	}

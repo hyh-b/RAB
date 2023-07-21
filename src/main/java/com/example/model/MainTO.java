@@ -129,5 +129,16 @@ public class MainTO {
    
    private String week;
    
+   //feedback 테이블
+   private int f_seq;
+   private String f_id;
+   private String f_name;
+   private String f_mail;
+   private String f_subject;
+   private String f_content;
+   private String f_ex;
+   private Date f_day;
+   
+   
 
 }

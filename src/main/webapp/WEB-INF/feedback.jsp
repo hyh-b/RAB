@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +14,41 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
   
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <style>
+        .feedback-table {
+            color: grey;
+        }
+    </style>
+
+  
   <script type="text/javascript">
+ 
+  $(document).ready(function() {
+	  // Get the table body
+	  var $tableBody = $('#feedbackTableBody');
+	  
+	  console.log(' 뭔데 ', $tableBody);
+	  
+	  // Iterate over each item in feedback_lists
+	  for(var i = 0; i < feedback_lists.length; i++) {
+	    var to = feedback_lists[i];
+	    
+	    // Create a new row and append it to the table body
+	    $tableBody.append('<tr>' +
+	      '<td>' + to.f_seq + '</td>' +
+	      '<td>' + to.f_id + '</td>' +
+	      '<td>' + to.f_name + '</td>' +
+	      '<td>' + to.f_mail + '</td>' +
+	      '<td>' + to.f_subject + '</td>' +
+	      '<td>' + to.f_content + '</td>' +
+	      '<td>' + to.f_day + '</td>' +
+	      '<td>' + to.m_seq + '</td>' +
+	      '</tr>');
+	  }
+	});
+	</script>
+  
   
   
   </script>
@@ -223,13 +259,31 @@
 </aside>
 
     <!-- ===== Sidebar End ===== -->
-
-    
-      <!-- ===== Main Content End ===== -->
+		
+ <div class="container mt-5">
+  <table class="table table-striped feedback-table">
+    <thead>
+      <tr>
+        <th scope="col">번호</th>
+        <th scope="col">아이디</th>
+        <th scope="col">이름</th>
+        <th scope="col">이메일</th>
+        <th scope="col">제목</th>
+        <th scope="col">내용</th>
+        <th scope="col">날짜</th>
+        <th scope="col">회원고유번호</th>
+      </tr>
+    </thead>
+    <tbody id="feedbackTableBody">
+      <!-- Rows will be added here by jQuery -->
+    </tbody>
+  </table>
+</div>
+  
     </div>
-    <!-- ===== Content Area End ===== -->
+
   </div>
-  <!-- ===== Page Wrapper End ===== -->
+
 <script defer src="bundle.js"></script></body>
 
 </html>

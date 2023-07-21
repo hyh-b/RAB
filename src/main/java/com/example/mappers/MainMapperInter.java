@@ -89,6 +89,11 @@ public interface MainMapperInter {
     @Insert("INSERT INTO feedback (m_seq, f_id, f_name, f_mail, f_subject, f_content, f_day) VALUES (#{seq}, #{f_id}, #{f_name}, #{f_mail}, #{f_subject}, #{f_content}, CURDATE());")
     public int FeedbackReceived(@Param("seq") int seq, @Param("f_id") String f_id, @Param("f_name") String f_name, @Param("f_mail") String f_mail, @Param("f_subject") String f_subject, @Param("f_content") String f_content);
     
+    //피드백 게시판 list
+    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback order by f_seq desc")
+    public List<MainTO> FeedbackList();
+
+    
     
 }
 
