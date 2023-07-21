@@ -1,5 +1,6 @@
 package com.example.security;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,12 +29,19 @@ public class CustomUserDetails implements UserDetails {
     private String m_seq;
     private String m_name;
     private String m_gender;
+    private String m_profilename;
+    private BigDecimal m_weight;
+    private String m_id;
     public CustomUserDetails(MemberTO to) {
         this.username = to.getM_id();
         this.password = to.getM_pw();
         this.m_seq = to.getM_seq();
         this.m_name = to.getM_name();
         this.m_gender = to.getM_gender();
+        this.m_profilename = to.getM_profilename();
+        this.m_weight = to.getM_weight();
+        this.m_id = to.getM_id();
+        
         // 권한 목록 확인
         List<String> roles = Collections.singletonList(to.getM_role());
 

@@ -22,7 +22,7 @@ public class matDAO {
 			
 			return exerciseList;
 		}
-		
+			
 		// 운동 종목별 분당 소모칼로리
 		public BigDecimal getCalorise(String ex_name) {
 			return mapper.getCalories(ex_name);

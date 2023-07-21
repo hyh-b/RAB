@@ -14,48 +14,127 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-     test RAB
-    </title>
+   <title>
+     main RAB
+   </title>
+<!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-  
-  <!-- $.noConflict() 메소드를 제공합니다. 이 메소드를 사용하면 jQuery가 사용하는 전역 변수인 $를 다른 값으로 바꿀 수 있습니다. -->
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script>
-  
-   
-<c:set var="seq" value="${requestScope.seq}" />
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script> 
 
-  
-  <!-- jstl 로 lists 받아옴 -->
- <c:forEach var="item" items="${lists}">
-   <c:set var="i_seq" value="${item.i_seq}" />
-   <c:set var="i_kcal" value="${item.i_kcal}" />
-   <c:set var="i_carbohydrate_g" value="${item.i_carbohydrate_g}" />
-   <c:set var="i_protein_g" value="${item.i_protein_g}" />
-   <c:set var="i_fat_g" value="${item.i_fat_g}" />
-   <c:set var="i_sugar_g" value="${item.i_sugar_g}" />
-   <c:set var="i_cholesterol_mgl" value="${item.i_cholesterol_mgl}" />
-   <c:set var="i_sodium_mg" value="${item.i_sodium_mg}" />
-   <c:set var="i_trans_fat_g" value="${item.i_trans_fat_g}" />
-   <c:set var="i_day" value="${item.i_day}" />
-   <c:set var="i_used_kcal" value="${item.i_used_kcal}" />
-   
-   <c:set var="m_id" value="${item.m_id}"/>
-   <c:set var="m_weight" value="${item.m_weight}"/>
-    <c:set var="m_seq" value="${item.m_seq}"/>
-   <c:set var="m_gender" value="${item.m_gender}"/>
-   <c:set var="m_target_weight" value="${item.m_target_weight}"/>
-   <c:set var="totarget" value="${item.m_weight- item.m_target_weight}" />
-   <c:set var="m_name" value="${item.m_name}" />       				     
-</c:forEach>
-
- 
+<!-- jQuery, jQuery Dialog, jQuery Calendar, fontAwesome --> 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   
-<script>
+ <!--  피드백 아이콘 -->
+ <style>
+	.chatbot-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ff0000; 
+    position: fixed !important;
+    bottom: 20px !important;
+    
+    right: 33px !important;
+    
+    z-index: 1000;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	}
+	
+	.chatbot-icon .fas {
+	    font-size: 30px; 
+	    color: #ffffff;  
+	}
+	.chatbot-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    width: 400px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    display: none;
+	}
+	
+	.dialog-header {
+	    padding: 10px;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    border-bottom: 1px solid #e0e0e0;
+	}
+	
+	.dialog-title {
+	    font-weight: bold;
+	}
+	
+	.dialog-close {
+	    border: none;
+	    background: transparent;
+	    font-size: 20px;
+	    cursor: pointer;
+	    outline: none;
+	}
+	
+	.dialog-body {
+	    padding: 10px;
+	}
+	
+	.form-row {
+	    margin-bottom: 10px;
+	}
+	
+	.form-row label {
+	    display: block;
+	    font-weight: bold;
+	}
+	
+	.form-row input,
+	.form-row #f_content {
+	    width: 100%;
+	    padding: 5px;
+	    border-radius: 5px;
+	    border: 1px solid #e0e0e0;
+        
+	}
+	.form-row #f_content {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    height: 135px; 
+	}
+	
+	.dialog-footer {
+	    padding: 10px;
+	    text-align: right;
+	}
+	
+	.dialog-footer button {
+	    padding: 5px 10px;
+	    border-radius: 5px;
+	    background-color: #ff0000;
+	    color: #ffffff;
+	    border: none;
+	    cursor: pointer;
+	}
+	
+	 #pieChartSelect {
+        background-color: lightgray;
+        color: black;
+        font-weight: bold;
+    }
 
+	
+ </style>
+ 
+<script>
 //----------------------함수-----------------------------
 
 		//반복해서 함수들이 그 자리를 대체하게 하는 함수
@@ -67,10 +146,12 @@
     		//selectedDate = $(this).val();
 
     		loadDataFromDate();
-    
-    		PieDataForDate();
+    		
+    		MacroPieChart();
     		
     		BarChartForDate();
+    		
+    		AreaChartForWeek();
 
 		});
 
@@ -101,15 +182,15 @@
       		success: function (elements) {
     	  
     	  	//console.log("  함수에서 selectedDate -> ", selectedDate);
-    	
-       //데이터 넘어오는거 검사 섹션
+		    	
+		//데이터 넘어오는거 검사 섹션
    	   
-       		//console.log("m_seq ->", elements.m_seq);
+       		console.log(" 메인칸 zzinseq ->", zzinseq);
    	   		//console.log(" m_id ->", elements.m_id);
        
    	   		//console.log("i_day ->", elements.i_day);
-       		//console.log("i_kcal ->", elements.i_kcal);
-       		//console.log("i_used_kcal ->", elements.i_used_kcal);
+       		console.log(" 메인칸 i_kcal ->", elements.i_kcal);
+       		console.log(" 메인칸 i_used_kcal ->", elements.i_used_kcal);
        		//console.log("m_weight ->", elements.m_weight);
        		//console.log("m_target_weight ->", elements.m_target_weight);
 
@@ -128,10 +209,6 @@
 			var toTarget = parseFloat(Math.abs(elements.i_weight - elements.m_target_weight).toFixed(2));
 
         	var whtml = '';
-			
-        	//console.log(" i 몸무게 -> ", elements.i_weight);
-        	//console.log(" 목표무게 -> ", elements.m_target_weight);
-        	//console.log("  목표까지 kg -> " , toTarget);
 
         	if(elements.i_weight === undefined || elements.m_target_weight === undefined ) {
        	   		whtml = '<span class="text-sm font-medium">달력에서 날짜를 선택해주세요</span>';
@@ -140,8 +217,8 @@
        		} else if(elements.i_weight > elements.m_target_weight) {
        	   		whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
       		} else if (elements.i_weight == elements.m_target_weight) {
-       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list.do"><u>당신의 성공을 공유하세요!</u></a></span>';
-       	   //console.log(" undefined ? ->? ", elements.m_weight);
+       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+       	     //console.log(" undefined ? ->? ", elements.m_weight);
        		}
 			$('#targetWeight').html(whtml);
 
@@ -174,108 +251,160 @@
 	}
 	//---4elements 끝--------------------------------------------
 	
+//---------------------------차트 함수화 시작------------------------------------------
+	
 	//---pie 함수--------------------------
 		var pieChart;
 	
-		function PieDataForDate() {
-		
-			//var zzinid = $("#zzinid").val();
-			var zzinseq = $("#zzinseq").val();
-			var selectedDate = $("#calendarCtInput").val();
-			
-			//console.log( " pie 함수에서 zzinid -> ", zzinid); 
-			console.log( " pie 함수에서 selectedDate -> ", selectedDate); 
 
-			$.ajax({
-			url: "/pie_chart_data",
-			type: "GET",
-			data: {
-  				day: selectedDate,
-  				seq: zzinseq
-			},
-			success: function(pie) {
-				
-				//console.log( " pie.영양소들 -> ", pie);
-				
-			 	var pies = JSON.parse(pie);
-			 	
-			 	//console.log( " pies.영양소들 -> ", pies);
-				
-  				var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g
-  					
-  					];
-				
-  				//pie가 없으면 새로 만들고 있으면 업데이트 해서 파이가 무한으로 생겨나게 하는 방지 if 문
-  				 if (!pieChart) {
-  	                
-  	                var pieOptions = {
-  	                    series: pieData,
-  	                    chart: {
-  	                        type: "pie",
-  	                        height: 350,
-  	                    },
-  	                  	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g' , '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g'],
-  	                  dataLabels: {
-  	                    enabled: true,
-  	                    style: {
-  	                        colors: ['#FFA500', '#FF4500', '#008000'], // 각 라벨의 색상을 바꾸려면 여기를 변경하세요
-  	                        fontSize: '14px', // 폰트 크기를 바꾸려면 여기를 변경하세요
-  	                        fontFamily: 'Helvetica, Arial, sans-serif', // 폰트를 바꾸려면 여기를 변경하세요
-  	                    },
-  	                	
-  	                  },
-					  responsive: [{
-  	                        breakpoint: 480,
-  	                        options: {
-  	                            chart: {
-  	                                width: 200,
-  	                            },
-  	                            legend: {
-  	                                position: "bottom",
-  	                            },
-  	                        },
-  	                    }],
-  	                };
-  	                pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
-  	                pieChart.render();
-  	            } else {
-  	                
-  	                pieChart.updateSeries(pieData);
-  	                
-  	              	pieChart.updateOptions({
-  	                	labels: ['탄수 ' + pies[0].i_carbohydrate_g + 'g', '단백 ' + pies[0].i_protein_g + 'g', '지방 ' + pies[0].i_fat_g + 'g']
-  	            	});
-  	            }
+		function MacroPieChart() {
+		    var zzinseq = $("#zzinseq").val();
+		    var selectedDate = $("#calendarCtInput").val();
 
-		},
-		
-		error: function(e) {
-  		console.log("pie에서 에러 ->", e);
-		},
-	});
-			
-	}	
+		    $.ajax({
+		        url: "/pie_chart_data",
+		        type: "GET",
+		        data: {
+		            day: selectedDate,
+		            seq: zzinseq
+		        },
+		        success: function(pie)  {
+		            var pies = JSON.parse(pie);
+		            var pieData = [pies[0].i_carbohydrate_g, pies[0].i_protein_g, pies[0].i_fat_g];
+
+		            var pieOptions = {
+		                series: pieData,
+		                chart: {
+		                    type: "pie",
+		                    height: 350,
+		                },
+		                labels: ['탄수', '단백', '지방'],
+		                dataLabels: {
+		                    enabled: true,
+		                    offset: 20,
+		                    formatter: function(val, opts) {
+		                        // opts.seriesIndex는 현재 데이터 포인트의 인덱스입니다.
+		                        var labels = ['탄수', '단백', '지방'];  // 라벨 배열
+		                        return labels[opts.seriesIndex] + ': ' + val.toFixed(2) + 'g';  // 라벨 포맷
+		                    },
+		                    style: {
+		                        colors: ['#FFA500', '#FF4500', '#008000'],
+		                        fontSize: '14px',
+		                        fontFamily: 'Helvetica, Arial, sans-serif',
+		                    },
+		                },
+		                responsive: [{
+		                    breakpoint: 480,
+		                    options: {
+		                        chart: {
+		                            width: 200,
+		                        },
+		                        legend: {
+		                            position: "bottom",
+		                        },
+		                    },
+		                }],
+		            };
+
+		            if (pieChart) {
+		                pieChart.destroy();
+		            }
+
+		            pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+		            pieChart.render();
+		        },
+		        error: function(e) {
+		            console.log("pie에서 에러 ->", e);
+		        },
+		    });
+		}
+
+		function SugarPieChart() {
+		    var zzinseq = $("#zzinseq").val();
+		    var selectedDate = $("#calendarCtInput").val();
+
+		    $.ajax({
+		        url: "/pie_chart_data",
+		        type: "GET",
+		        data: {
+		            day: selectedDate,
+		            seq: zzinseq
+		        },
+		        success: function(pie)  {
+		            var pies = JSON.parse(pie);
+		            var pieData = [pies[0].i_cholesterol_mgl/1000, pies[0].i_sodium_mg/1000, pies[0].i_sugar_g];
+
+		            var pieOptions = {
+		                series: pieData,
+		                chart: {
+		                    type: "pie",
+		                    height: 350,
+		                },
+		                labels: ['콜레스테롤', '나트륨', '설탕'],
+		                dataLabels: {
+		                    enabled: true,
+		                    offset: 20,
+		                    formatter: function(val, opts) {
+		                        // opts.seriesIndex는 현재 데이터 포인트의 인덱스입니다.
+		                        var labels = ['콜레스테롤', '나트륨', '설탕'];  // 라벨 배열
+		                        return labels[opts.seriesIndex] + ': ' + val.toFixed(2) + 'g';  // 라벨 포맷
+		                    },
+		                    style: {
+		                        colors: ['#FFA500', '#FF4500', '#008000'],
+		                        fontSize: '14px',
+		                        fontFamily: 'Helvetica, Arial, sans-serif',
+		                    },
+		                },
+		                responsive: [{
+		                    breakpoint: 480,
+		                    options: {
+		                        chart: {
+		                            width: 200,
+		                        },
+		                        legend: {
+		                            position: "bottom",
+		                        },
+		                    },
+		                }],
+		            };
+
+
+		            if (pieChart) {
+		                pieChart.destroy();
+		            }
+
+		            pieChart = new ApexCharts(document.querySelector("#chart"), pieOptions);
+		            pieChart.render();
+		        },
+		        error: function(e) {
+		            console.log("pie에서 에러 ->", e);
+		        },
+		    });
+		}
+	//---콜나당 끝----------------
+	
+
+
 	//---pie 함수 끝--------------------------------------------------
 
-////////
-var selectedDate;
-
-function generateDates(selectedDate) {
-  var dates = [];
-  var currentDate = new Date(selectedDate);
-  currentDate.setDate(currentDate.getDate() - 3);
-
-  for (var i = 0; i < 7; i++) {
-    var year = currentDate.getFullYear();
-    var month = currentDate.getMonth() + 1;
-    var date = currentDate.getDate();
-    var formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
-    dates.push(formattedDate);
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-
-  return dates;
-}
+		var selectedDate;
+		
+		function generateDates(selectedDate) {
+		  var dates = [];
+		  var currentDate = new Date(selectedDate);
+		  currentDate.setDate(currentDate.getDate() - 3);
+		
+		  for (var i = 0; i < 7; i++) {
+		    var year = currentDate.getFullYear();
+		    var month = currentDate.getMonth() + 1;
+		    var date = currentDate.getDate();
+		    var formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+		    dates.push(formattedDate);
+		    currentDate.setDate(currentDate.getDate() + 1);
+		  }
+		
+		  return dates;
+		}
 
 	//---bar 함수----------------------------------------------------
 	var barChart;
@@ -399,7 +528,82 @@ function generateDates(selectedDate) {
 	//---bar 함수 끝 -------------------------------------------------
 ////////	
 	//---area 함수----------------------------------------------------
-	
+	var areaChart;
+
+	function AreaChartForWeek() {
+		
+		var selectedDate = $("#calendarCtInput").val();
+	    var zzinseq = $("#zzinseq").val();
+
+		 console.log(" AreaChartForDate 함수에서 zzinseq -> ", zzinseq);
+		 console.log(" AreaChartForDate 함수에서 selectedDate -> ", selectedDate);
+
+	    $.ajax({
+	        url: "/area_chart_data",
+	        type: "get",
+	        dataType: 'json',
+	        data: {
+	  	      day: selectedDate,
+	  	      seq: zzinseq
+	  	    },
+	        success: function (areaForWeeks) {
+	        	
+	        	//console.log(" areaForWeeks => ", areaForWeeks);
+	        	
+        	    var lastWeekData = areaForWeeks.lastWeekData.map(function(data) { return data.i_used_kcal; });
+        	    var thisWeekData = areaForWeeks.thisWeekData.map(function(data) { return data.i_used_kcal; });
+	        	
+	        	//console.log(" lastWeekData => ", lastWeekData);
+	        	//console.log(" thisWeekData => ", thisWeekData);
+	        	
+	            var areaOptions = {
+	                series: [{
+	                    name: '저번주',
+	                    data: lastWeekData
+	                }, {
+	                    name: '이번주',
+	                    data: thisWeekData
+	                }],
+	                chart: {
+	                    height: 350,
+	                    type: 'area'
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                stroke: {
+	                    curve: 'smooth'
+	                },
+	                xaxis: {
+	                    type: 'category',
+	                    categories: ['일', '월', '화', '수', '목', '금', '토'],
+	                    labels: {
+	                        show: true,
+	                        formatter: function (value, timestamp, opts) {
+	                            return value;
+	                        }
+	                    }
+	                },
+	                tooltip: {
+	                    x: {
+	                        format: 'dd'
+	                    },
+	                },
+	            };
+	            if(areaChart) {
+	                areaChart.updateOptions(areaOptions);
+	            } else {
+	                areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
+	                areaChart.render();
+	            }
+	        },
+	        error: function (error) {
+	            console.log('에러는 -> ', error);
+	            console.log('\n 응답 JSON -> ', error.responseJSON);
+	            console.log('\n 응답 본문 -> ', error.responseText);
+	        }
+	    });
+	}
 	
 	
 	//---area 함수 끝 -------------------------------------------------
@@ -407,139 +611,119 @@ function generateDates(selectedDate) {
 
 	//---line 함수----------------------------------------------------
 	
+	var lineChart;
+
+	function LineChartForMonth() {
+
+		var selectedYear = $("#yearSelectForLineChart").val();
+		var zzinseq = $("#zzinseq").val();
+		
+		//console.log( " 선택된 년도 확인 -> ", selectedYear);
+		
+	    $.ajax({
+	        url: '/line_chart_data',
+	        method: 'GET',
+	        dataType: 'json',
+	        data: {
+	  	      year: selectedYear,
+	  	      seq: zzinseq
+	  	    },
+	        success: function(line) {
+	            //console.log("line ->", line);
+	            
+				event.preventDefault();
+	            
+	            var weights = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	
+	            for(var i=0; i<line.length; i++) {
+	                var monthIndex = parseInt(line[i].month) - 1;  
+	                weights[monthIndex] = line[i].avg_weight; 
+	            
+
+	                console.log(" line[i].month => ", line[i].month);
+	                console.log(" line[i].avg_weight => ", line[i].avg_weight);
+	            }
+
+	            //console.log(" line weights => ", weights);
+	
+	            // 차트 옵션
+	            var lineOptions = {
+	                series: [{
+	                    name: "월별 몸무게",
+	                    data: weights
+	                }],
+	                chart: {
+	                    height: 350,
+	                    type: 'line',
+	                    zoom: {
+	                        enabled: false
+	                    }
+	                },
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                stroke: {
+	                    curve: 'straight'
+	                },
+	                title: {
+	                    text: '단위 : kg',
+	                    align: 'left'
+	                },
+	                grid: {
+	                    row: {
+	                        colors: ['#000000', 'transparent'],
+	                        opacity: 0.5
+	                    },
+	                },
+	                xaxis: {
+	                    categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월','11월', '12월' ],
+	                },
+	                tooltip: {
+	                    y: {
+	                        formatter: function(val) {
+	                            return val.toFixed(2); // 데이터 포인트에 대한 소수점 둘째 자리까지 표시합니다.
+	                        }
+	                    }
+	                },
+	                yaxis: {
+	                    labels: {
+	                        formatter: function (val) {
+	                            return val.toFixed(0);  // 소수점 둘째 자리까지 표시합니다.
+	                        }
+	                    }
+	                }
+	            };
+	            
+	            // 차트를 새로 그립니다.
+	            if(lineChart) {
+	                lineChart.destroy();
+	            }
+	            lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
+	            lineChart.render();
+	        }
+	    });
+	}
 	
 	
 	//---line 함수 끝 -------------------------------------------------
 ////////
 
 	//---------------------------차트 함수화 끝------------------------------------------
-	
-	
-	
-	//---------------기본값으로 먼저 뿌려질 데이터 ( 기본값 , 정적 )----------------------------------------
-	
-		//$(document).ready(function() {
-    	// DOM이 완전히 로드된 후 실행할 코드
-    	//console.log("DOM이 완전히 로드되었습니다!");
-		//});
-	
-	
-	
-		//window.addEventListener("load", function() {
-   		// 이벤트로 따로 할당해서 documet.ready라 아예 구분시키기 시도
-   		//console.log("페이지와 모든 리소스가 로드되었습니다!");
-		//});
-	
-	//---------------기본값으로 먼저 뿌려질 데이터 끝----------------------------------------
+
 	
 //---------------------------- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트 ( 동적 )----------------------------
- 	window.onload = function() {
-	   
-	//------------- ajax for charts -------------------------
-      $.ajax({
-        
-        url: "/charts_data",
-   		type: "get",
-        dataType: 'json',
-        success: function (charts) {
-        
-        //	console.log( "charts ->", charts);
-        	
-        	var b_kcal_data = charts.fdatas.map(function(meal) {
-                return meal.meals.b_kcal;
-            });
-        	
-        	console.log( " b_kcal_data -> ", b_kcal_data[0] );
-        	//b_kcal_data
-        
-        	// where PieChart used to place
 
-			/////////////////////////////////////////////////////
-			
-			// where BarChart used to place
-			
-    	  /////////////////////////////////////////////////////
-    	  var areaOptions = {
-    	    series: [{
-    	      name: '저번주',
-    	      data: [31, 40, 28, 51, 42, 109, 100]
-    	    }, {
-    	      name: '이번주',
-    	      data: [11, 32, 45, 32, 34, 52, 41]
-    	    }],
-    	    chart: {
-    	      height: 350,
-    	      type: 'area'
-    	    },
-    	    dataLabels: {
-    	      enabled: false
-    	    },
-    	    stroke: {
-    	      curve: 'smooth'
-    	    },
-    	    xaxis: {
-    	      type: 'datetime',
-    	      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-    	    },
-    	    tooltip: {
-    	      x: {
-    	        format: 'dd/MM/yy HH:mm'
-    	      },
-    	    },
-    	  };
-    	  var areaChart = new ApexCharts(document.querySelector("#barchart"), areaOptions);
-    	  areaChart.render();
-    	  
-		  /////////////////////////////////////////////////////
-    	  var lineOptions = {
-    	    series: [{
-    	      name: "Desktops",
-    	      data: [0, 0, 0, 0, 0, 0, 69, 91, 148, 150, 121, 178]
-    	    }],
-    	    chart: {
-    	      height: 350,
-    	      type: 'line',
-    	      zoom: {
-    	        enabled: false
-    	      }
-    	    },
-    	    dataLabels: {
-    	      enabled: false
-    	    },
-    	    stroke: {
-    	      curve: 'straight'
-    	    },
-    	    title: {
-    	      text: '단위 : 월',
-    	      align: 'left'
-    	    },
-    	    grid: {
-    	      row: {
-    	        colors: ['#000000', 'transparent'],
-    	        opacity: 0.5
-    	      },
-    	    },
-    	    xaxis: {
-    	      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov', 'Dec'  ],
-    	    }
-    	  };
-    	  var lineChart = new ApexCharts(document.querySelector("#chartline"), lineOptions);
-    	  lineChart.render();
-	
-          
-        },
-        error: function (error) {
-        	console.log('에러는 -> ', error);
-        	console.log('\n 응답 JSON -> ', error.responseJSON);
-        	console.log('\n 응답 본문 -> ', error.responseText);
- 
-        }
-        
-      })
-      
-      //-------------------------------------------------------------------------------
-
-//--달력 라벨 밸류 항상 디폴트는 현재값을 전달-----------------------------------------------
+ window.onload = function() {
+		
+	    document.getElementById('pieChartSelect').addEventListener('change', function(e) {
+	        if (this.value === 'tandanji') {
+	            MacroPieChart();
+	        } else if (this.value === 'colnadang') {
+	            SugarPieChart();
+	        }
+	    });
+		
+//--달력 라벨 밸류 디폴트는 현재로컬타임 기준으로 세팅됨----------------------------------------------
 		var currentDate = new Date();
 
 		var day = ("0" + currentDate.getDate()).slice(-2);
@@ -556,9 +740,7 @@ function generateDates(selectedDate) {
 
 		var selectedDate = formattedDate;
 		/////////////////////////////
-		
-		
-			
+
 //---  몸무게 업데이트 다이얼로그----------------------
 	
 	// 몸무게 다이얼로그 안 달력
@@ -596,9 +778,9 @@ function generateDates(selectedDate) {
 		      var date = $(this).find('#dateInput').val();
 	    	  var zzinseq = $("#zzinseq").val();
 	    	  
-	    	  console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
-	    	  console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
-	    	  console.log( " 몸무게 업데이트/날짜 -> ", date);
+	    	  //console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
+	    	  //console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
+	    	  //console.log( " 몸무게 업데이트/날짜 -> ", date);
 	    	  
 		      
 		      if(weight === '' || isNaN(weight)) { 
@@ -639,9 +821,9 @@ function generateDates(selectedDate) {
 	      var date = $(this).find('#dateInput').val();
     	  var zzinseq = $("#zzinseq").val();
     	  
-    	  console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
-    	  console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
-    	  console.log( " 몸무게 업데이트/날짜 -> ", date);
+    	  //console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
+    	  //console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
+    	  //console.log( " 몸무게 업데이트/날짜 -> ", date);
     	  
 	      
 	      if(weight === '' || isNaN(weight)) { 
@@ -663,6 +845,7 @@ function generateDates(selectedDate) {
 	              success: function() {
 	                alert(' ' + weight + ' kg ' + date + ' 에 등록되었습니다.');
 	                loadDataFromDate();
+	                LineChartForMonth()
 	              },
 	              error: function(jqXHR, textStatus, errorThrown) {
             	    //console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
@@ -694,8 +877,8 @@ function generateDates(selectedDate) {
 	      var tweight = $(this).find('#TweightInput').val();
 	      var zzinseq = $("#zzinseq").val();
 
-	 	  console.log( " 목표 몸무게 업데이트/날짜 -> ", zzinseq);
-    	  console.log( " 목표 몸무게 업데이트/몸무게 -> ", tweight); 
+	 	  //console.log( " 목표 몸무게 업데이트/날짜 -> ", zzinseq);
+    	  //console.log( " 목표 몸무게 업데이트/몸무게 -> ", tweight); 
 	      
 	      if(tweight === '' || isNaN(tweight)) { 
 	          alert('숫자를 입력해주세요');
@@ -734,20 +917,41 @@ function generateDates(selectedDate) {
 	  }
 	});
 		
-	//---함수등록 칸  ------------------ 바뀌는 날짜에 대해서 모든 데이터가 비도이적으로 처리됨-----------------------------------------
+	//---함수등록 칸  ------------------ 바뀌는 날짜에 대해서 모든 데이터가 비동기적으로 처리됨-----------------------------------------
     $("#calendarCtInput").on("change", function() {
         	
         	selectedDate = $(this).val();
         	
-        	console.log("달력 value 확인 ->", selectedDate);
+        	//console.log("달력 value 확인 ->", selectedDate);
         	
             loadDataFromDate();
          
-          	PieDataForDate();
+          	//PieDataForDate();
           	
-          	BarChartForDate();
+          	MacroPieChart();
+          	
+            AreaChartForWeek();
+
             	
         });
+	
+	//년도별로 월평균 보여주기.
+    $("#yearSelectForLineChart").on("change", function() {
+    	
+    	event.preventDefault();
+    	  
+    	console.log(" select 년도 확인 ->",  $(this).val());
+    	
+      	LineChartForMonth();
+        	
+    });
+
+	
+	loadDataFromDate();
+	MacroPieChart();
+	BarChartForDate();
+	AreaChartForWeek();
+	LineChartForMonth();
 
 //////
   	};//window.onload끝 
@@ -757,7 +961,18 @@ function generateDates(selectedDate) {
 	var selectedDate;
 	
 	$(document).ready(function() {
-			//--오늘 날짜로 선택된 값을 바로 전달해서 ----------------------------------------------
+
+			///차트함수들
+	
+			loadDataFromDate();
+			MacroPieChart();
+			BarChartForDate();
+			AreaChartForWeek();
+			LineChartForMonth();
+			
+			///
+
+	//--lineChart 년도 파라미터 formatting----------------------------------------------
 			var currentDate = new Date();
 	
 			var day = ("0" + currentDate.getDate()).slice(-2);
@@ -773,10 +988,105 @@ function generateDates(selectedDate) {
 			console.log( " formattedDate -> " , formattedDate );
 	
 			selectedDate = formattedDate; 
-	
-			loadDataFromDate();
-			PieDataForDate();
-			BarChartForDate();
+			
+			///
+			var ldate = new Date();
+			var lcurrentYear = ldate.getFullYear();
+			
+			// Create an option for the previous year, the current year, and the next year.
+			for(var lyear = lcurrentYear - 2; lyear <= lcurrentYear + 2; lyear++) {
+			    var option = document.createElement("option");
+			    option.value = lyear;
+			    option.text = lyear + " 년";
+			
+			    // If this is the current year, make it the default selection.
+			    if(lyear == lcurrentYear) {
+			        option.selected = true;
+			    }
+			
+			    document.getElementById("yearSelectForLineChart").appendChild(option);
+			}
+			//--lineChart 년도 파라미터 formatting 끝 ----------------------------------------------
+			
+		//----------------------피드백 다이얼로그 시작-----------------------
+			document.querySelector('.chatbot-icon').addEventListener('click', function() {
+			    document.querySelector('.chatbot-dialog').style.display = 'block';
+			    resetForm();
+			});
+
+			document.querySelector('.dialog-close').addEventListener('click', function() {
+			    document.querySelector('.chatbot-dialog').style.display = 'none';
+			    resetForm();
+			});
+			
+			//
+
+			document.querySelector('#submit-btn').addEventListener('click', function() {
+			    // Get input values
+			    
+			    var zzinseq = $("#zzinseq").val();
+			    var f_name = $("#zzinname").val();
+			    var f_id = $("#zzinid").val();
+			    var f_mail = $("#zzinmail").val();
+			    
+			    var f_subject = document.querySelector('#f_subject').value;
+			    var f_content = document.querySelector('#f_content').value;
+			    
+			    console.log(" feedback 데이터들 -> ", zzinseq, f_name, f_id, f_mail, f_subject, f_content  );
+			    // feedback ajax요청
+			    if (f_subject.trim() === "" || f_content.trim() === "") {
+			        alert("제목과 내용을 입력해주세요.");
+			      } else {
+			       
+			        $.ajax({
+			          url: "/feedback_ok",
+			          method: "POST",
+			          data: {
+		            	  	seq: zzinseq, 
+		            	  	f_id : f_id,
+		            	  	f_name : f_name,
+		            	  	f_mail : f_mail,
+		            	  	f_subject : f_subject,
+		            	  	f_content : f_content
+			              },
+			          success: function () {
+			            alert("소중한 피드백 감사합니다!");
+			            document.querySelector(".chatbot-dialog").style.display = "none";
+			            resetForm();
+			          },
+			          error: function (jqXHR, textStatus, errorThrown) {
+			            console.log("HTTP Status: " + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
+			            console.log("Throw Error: " + errorThrown); // 예외 정보
+			            console.log("jqXHR Object: " + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
+			            alert("업데이트에 실패했습니다");
+			          },
+			        });
+			      }
+			    });
+				
+			//클립보드 f_content에 붙혀서 가지고 오기, 파일업로드로 변경해야할듯?
+				document.querySelector('#f_content').addEventListener('paste', function (event) {
+				    var clipboardData = event.clipboardData || window.clipboardData;
+				    var pastedText = clipboardData.getData('text');
+				    
+				    // Prevent the default paste behavior
+				    event.preventDefault();
+				    
+				    // Set the pasted text to f_content input
+				    this.value = pastedText;
+				});
+			  
+			    document.querySelector("#f_name").value = $("#zzinname").val();
+			    document.querySelector("#f_id").value = $("#zzinid").val();
+			    document.querySelector("#f_mail").value = $("#zzinmail").val();
+			    
+			    //제목, 콘텐츠 입력칸 초기화
+			    function resetForm() {
+			        document.querySelector("#f_subject").value = "";
+			        document.querySelector("#f_content").value = "";
+			    }
+			  //----------------------피드백 다이얼로그 끝-----------------------
+
 	});
 </script>
 
@@ -794,6 +1104,8 @@ function generateDates(selectedDate) {
   
   <input type="hidden" id="zzinid" value="${zzinid}" />
   <input type="hidden" id="zzinseq" value="${zzinseq}" />
+  <input type="hidden" id="zzinname" value="${zzinname}" />
+  <input type="hidden" id="zzinmail" value="${zzinmail}" />
     <!-- ===== Preloader Start ===== -->
     <div
   x-show="loaded"
@@ -820,18 +1132,13 @@ function generateDates(selectedDate) {
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-    <a href="/">
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
+    <a href="/main.do">
+<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> 
+		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+    </a>
     
-   <!--  사이트 로고  -->
-
-     <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
-    </a>
-  
-   <!--
-     <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
-    </a>
- -->
+    -->
 
     <button
       class="block lg:hidden"
@@ -854,9 +1161,7 @@ function generateDates(selectedDate) {
   </div>
   <!-- SIDEBAR HEADER -->
 
-  <div
-    class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear"
-  >
+  <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
     <!-- Sidebar Menu -->
     <nav
       class="mt-5 py-4 px-4 lg:mt-9 lg:px-6"
@@ -865,11 +1170,10 @@ function generateDates(selectedDate) {
         selected = JSON.parse(localStorage.getItem('selected'));
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
-    </nav>
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
-        flag : ${flag}
+
 
         <ul class="mb-6 flex flex-col gap-1.5">
           <!-- Menu Item Dashboard -->
@@ -882,16 +1186,7 @@ function generateDates(selectedDate) {
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
-
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-
-              공지사항
+           	공지사항
             </a>
           </li>
           <!-- Menu Item Calendar -->
@@ -901,19 +1196,12 @@ function generateDates(selectedDate) {
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
 
-              href="board_list.do"
+              href="board.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-             <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="게시판.png"
-      			width="24"
-      			height="24"
-   			/>
-             	게시판
+            게시판
             </a>
           </li>
           <!-- Menu Item Profile -->
@@ -927,15 +1215,7 @@ function generateDates(selectedDate) {
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="식단.png"
-      			width="24"
-      			height="24"
-   			/>
-             	식단
+           	식단
             </a>
           </li>
           <!-- Menu Item Profile2 -->
@@ -952,14 +1232,6 @@ function generateDates(selectedDate) {
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
             >
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="운동.png"
-      			width="24"
-      			height="24"
-   			/>
-
               운동
             </a>
             
@@ -977,16 +1249,10 @@ function generateDates(selectedDate) {
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-             <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="마이페이지.png"
-      			width="24"
-      			height="24"
-   			/>
-             	마이페이지
+             마이페이지
             </a>
           </li>
+
           
           <!--  -->
           
@@ -1003,13 +1269,6 @@ function generateDates(selectedDate) {
     			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
     			:class="page === 'settings' && 'bg-graydark'"
  			>
-   			<img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="로그아웃"
-      			width="24"
-      			height="24"
-   			/>
     			로그아웃
   			</a>
 		</li>
@@ -1017,31 +1276,7 @@ function generateDates(selectedDate) {
           <!-- Menu Item Settings -->
         </ul>
       </div>
-
-      <!-- Support Group -->
- 
-          <!-- Menu Item Messages -->
-        
-          <!-- Menu Item Chart -->
-         
-      
-          <!-- Menu Item Chart -->
-
-          <!-- Menu Item Ui Elements -->
-        
-          <!-- Menu Item Ui Elements -->
-
-          <!-- Menu Item Auth Pages -->
-          
-            <!-- Dropdown Menu End -->
-   
-          <!-- Menu Item Auth Pages -->
-       
-    <!-- Sidebar Menu -->
-
-    <!-- Promo Box -->
-
-    <!-- Promo Box -->
+      </nav>
   </div>
 </aside>
 
@@ -1115,7 +1350,7 @@ function generateDates(selectedDate) {
   </form>
 </div>
     <!-- 오늘의 몸무게 업데이트 끝 -->
-    
+
  <!-- 목표 몸무게 업데이트 다이얼로그 -->
  <div id="targetWeightUpdate" title="목표 몸무게 재설정">
   <form>
@@ -1125,6 +1360,8 @@ function generateDates(selectedDate) {
   </form>
 </div>
     <!-- 목표 몸무게 업데이트 끝 -->
+    
+
 
     <div class="flex items-center gap-3 2xsm:gap-7">
       <ul class="flex items-center gap-2 2xsm:gap-4">
@@ -1194,14 +1431,16 @@ function generateDates(selectedDate) {
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white"
 
-              >${m_name}</span
+              >${zzinnickname}</span
             >
-            <span class="block text-xs font-medium">${m_gender}</span>
+            <!-- 
+            <span class="block text-xs font-medium"></span>
+			 -->	          
           </span>
 
           <span class="h-12 w-12 rounded-full">
           <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
-            <img src="src/images/user/gh.png" alt="User" />
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
 
           </span>
 
@@ -1230,23 +1469,7 @@ function generateDates(selectedDate) {
         >
           <ul
             class="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark"
-          >
-            <li>
-              <a
-                href="profile.do"
-                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-              >
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-                내 정보
-              </a>
-            </li>
-            
+          >     
              <li>
              <div id="weightTodayDropdown">
               <a
@@ -1281,6 +1504,33 @@ function generateDates(selectedDate) {
                 목표 몸무게 재설정
               </a>
               </div>
+            </li>
+            
+             <li>
+              <a
+                href="profile.do"
+                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                style="padding-left: 5px;"
+              >
+                <svg
+                  class="fill-current"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+                    fill=""
+                  />
+                  <path
+                    d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+                    fill=""
+                  />
+                </svg>
+                프로필
+              </a>
             </li>
             
           </ul>
@@ -1484,14 +1734,19 @@ function generateDates(selectedDate) {
                 </div>
                 
                 <div class="mt-4 flex items-end justify-between">
-                
-                  <div id="fourthElement">
 
-                  	</div>
-                  	
-               <div id="targetWeight">
-               
-                   </div>
+                
+<div class="mt-4 flex flex-col">
+    <div id="fourthElement">
+        <!-- fourthElement에 대한 기존 HTML 코드 -->
+    </div>
+    <br>
+    <div id="targetWeight">
+        <!-- 동적으로 처리되는 HTML이 삽입될 위치 -->
+    </div>
+</div>
+
+             
                    
                 </div>
               </div>
@@ -1520,13 +1775,15 @@ function generateDates(selectedDate) {
 			            <h4 class="mb-10 text-xl font-bold text-black dark:text-white">
 			                일일 섭취 영양 성분
 			            </h4>
+			         	<select id="pieChartSelect" class="form-control">
+    						<option value="tandanji" id="tandanji">탄단지</option>
+						    <option value="colnadang" id="colnadang">콜나당</option>
+						</select>
 			            <div id="chart" class="mx-auto flex justify-center mt-2"></div>
+						
 			        </div>
 			    </div>
 			</div>
-
-
-
 
 
 		   <!-- ===== 파이 그래프 끝 ====== -->		
@@ -1551,12 +1808,16 @@ function generateDates(selectedDate) {
 			</div>
 
               <!-- ====== Chart Three End -->
-			<br/>
+	
               <!-- ====== Map One Start -->
               <div class="col-span-12 rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-7">
 				  <h4 class="mb-2 text-xl font-bold text-black dark:text-white">
 				    내 몸무게 변화
 				  </h4>
+				  <select id="yearSelectForLineChart" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+
+				  </select>
+				  
 <!-- 				    <div id="chartline" class="mx-auto flex justify-center"></div> -->
 				    <div id="chartline" class="mx-auto flex justify-center"></div>
 			</div>
@@ -1574,8 +1835,52 @@ function generateDates(selectedDate) {
     </div>
     <!-- ===== Page Wrapper End ===== -->
   <script defer src="bundle.js"></script>
+ 
+     
+<div class="chatbot-icon">
+    <i class="fas fa-question"></i>
+</div>
 
-
+<div class="chatbot-dialog">
+    <div id="c_dialog">
+        <div class="dialog-header">
+            <span class="dialog-title">피드백 작성</span>
+            <button class="dialog-close">&times;</button>
+        </div>
+        <div class="dialog-body">
+            <form>
+                <div class="form-row">
+                    <label for="name">이름</label>
+                    <input type="text" id="f_name" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="id">아이디</label>
+                    <input type="text" id="f_id" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="mail">이메일</label>
+                    <input type="email" id="f_mail" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="subject">제목</label>
+                    <input type="text" id="f_subject">
+                </div>
+                <div class="form-row">
+                    <label for="content">내용</label>
+                    <div contenteditable="true" id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!         (Window + Shift + s로 캡쳐 후 Ctrl + V)"></div>
+                    
+                    <!--  
+                    <textarea id="f_content" placeholder="캡쳐본을 붙혀넣으실 수 있습니다!        
+                                      (Window + Shift + s로 캡쳐 후 Ctrl + V)"></textarea>
+                                      -->
+                </div>
+            </form>
+        </div>
+        <div class="dialog-footer">
+            <button id="submit-btn">전송</button>
+        </div>
+    </div>
+</div>
 
 </body>
     

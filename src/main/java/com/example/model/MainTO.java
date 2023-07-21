@@ -72,20 +72,6 @@ public class MainTO {
    
    private BigDecimal m_target_weight;
    
-   // 아점저 Meals ----------------------------
-
-//   private int e_seq;
-//   
-//   private Date e_day;           
-//   private BigDecimal e_carbohydrate_g;       
-//   private BigDecimal e_protein_g;         
-//   private BigDecimal e_fat_g;                       
-//   private BigDecimal e_sugar_g;               
-//   private BigDecimal e_cholesterol_mg; 
-//   private BigDecimal e_sodium_mg;      
-//   private BigDecimal e_trans_fat_g;    
-//   private String e_name;
- 
    //Breakfast
    private int b_seq;
    private BigDecimal b_kcal;
@@ -134,5 +120,14 @@ public class MainTO {
    private BigDecimal i_lunch_kcal;
    private BigDecimal i_dinner_kcal;
 
+   // 월 별 몸무게 평균값 구하는 칼럼
+  // private BigDecimal avg_weight;
+   private Double avg_weight;
+   private String month;
+   private double dayCount;
+   private double total_weight;
+   
+   private String week;
+   
 
 }
