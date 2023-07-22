@@ -16,6 +16,7 @@ public class NoticeBoardDAO {
 	@Autowired
     private  NoticeBoardMapperInter mapper;
 
+	
 	public NoticeBoardTO noticeBoardView(NoticeBoardTO to) {
 	    return mapper.noticeBoardView(to);
 	}
@@ -33,6 +34,23 @@ public class NoticeBoardDAO {
 	    	flag =1;  	
 	    }
     	return flag;
+    }
+    public int updateBoard(NoticeBoardTO to) {
+    	int flag =0;
+	    int result = mapper.updateBoard(to);
+	    if (result == 1) {
+	    	flag =1;  	
+	    }
+    	return flag;
+    }
+    public int updateHitOK(NoticeBoardTO to) {
+    	int result = mapper.updateHitOK(to); // Assuming the method in the mapper is named "writeHit"
+
+        if (result == 1) {
+            return 1; // 조회수 증가 성공
+        } else {
+            return 0; // 조회수 증가 실패
+        }
     }
     
     
@@ -77,5 +95,18 @@ public class NoticeBoardDAO {
 //	    listTO.setEndBlock(Math.min(((cpage - 1) / blockPerPage) * blockPerPage + blockPerPage, totalPage));
 	    listTO.setEndBlock(Math.min(listTO.getStartBlock() + blockPerPage - 1, listTO.getTotalPage()));
 	    return listTO;
+	}
+	
+	public int noticeDelete_ok(NoticeBoardTO to) {
+		int flag = 2;
+		
+		int result = mapper.noticeDelete_ok(to);
+		
+		if(result ==1) {
+			flag = 0;
+		}else if(result==0){
+			flag=1;
+		}
+		return flag;
 	}
 }

@@ -3,30 +3,7 @@
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<c:set var="noticeListTO" value="${requestScope.noticeListTO}"/>
-<c:set var="bto" value="${requestScope.bto}"/>
-<c:set var="n_seq" value="${bto.n_seq}" />
-<c:set var="n_subject" value="${bto.n_subject}" />
-<c:set var="n_content" value="${bto.n_content}" />
-<c:set var="ato" value="${requestScope.ato}"/>
-<c:set var="nf_filename" value="${ato.nf_filename}" />
-<c:set var="nf_filesize" value="${ato.nf_filesize}" />
-
-
-
-
-<c:set var="data" value="${requestScope.data}"/>
-<c:set var="filename" value="${requestScope.filename}"/>
-<!-- jstl 로 lists 받아옴 -->
-<%--  <c:forEach var="noticBoardList" items="${noticeBoardList}"> --%>
-<%--    <c:set var="n_seq" value="${noticBoardList.n_seq}" /> --%>
-<%--    <c:set var="n_subject" value="${noticBoardList.n_subject}" /> --%>
-<%--    <c:set var="n_content" value="${noticBoardList.n_content}" />	    --%>
-<%-- </c:forEach> --%>
-
-
-
+<c:set var="n_seq" value="${requestScope.n_seq}" />
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -43,6 +20,39 @@ pageEncoding="UTF-8"%>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
+<script>
+$(document).ready(function() {
+	  $('#wbtn').click(function() {
+	    if ($('#u_subject').val().trim() == '') {
+	      alert('제목을 입력하시오.');
+	      return false;
+	    }
+	    
+	    let formData = new FormData($('form')[0]);	   
+
+	    $.ajax({
+	      url: 'notice_board_write_ok.do',
+	      data: formData,
+	      dataType: 'json',
+	      type: 'post',
+	      contentType: false,
+	      processData: false,
+	      success: function(json) {
+// 	        if (json.flagAB == '0' && json.flagCF == '0') {
+// 	          alert('쓰기 성공');
+// 	          location.href = '/';
+// 	        } else {
+// 	          alert('쓰기 실패');
+// 	        }
+			console.log(json);
+	      },
+	      error: function(e) {
+	        alert('[에러]' + e.status);
+	      }
+	    });
+	  });
+	});
+</script>
 
 
 </head>
@@ -567,85 +577,54 @@ pageEncoding="UTF-8"%>
       <!-- ===== Header End ===== -->
 
       <!-- ===== Main Content Start ===== -->
-      
-<!-- ============  view 보여지는부분	=================================== -->
-<main>
-  <!-- <table>
-    <tbody>
-      <tr>
-        <td>
-          <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark flex flex-col justify-between ">
-              <c:set var="noticeBoard" value="${n_seq}"/>
-              ${n_seq} 
-              <h4 class="text-xl font-semibold text-black dark:text-white">
-                <a href="/notice_board_view.do" class="flex-grow">${n_seq} ${n_subject}</a>
-                <p class="font-medium flex-grow">${n_content}</p>
-              </h4>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>-->
+      <main>
+  			<!-- ============  write 여기부터 시작	=================================== -->
 
-    <table border="1" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 100%; height: 100%;">
-  <tr>
-    <td>
-      <div class="flex items-center gap-3 py-5 px-6">
-        <!-- 유저 아이콘 & 닉네임 -->
-        <div class="h-10 w-10 rounded-full">
-          <img src="src/images/user/user-11.png" alt="User" />
-        </div>
-        <div>
-          <h4 class="font-medium text-black dark:text-white">
-            닉네임
-          </h4>
-          <p class="font-medium text-xs">직업</p>
+	<form action="notice_board_modify_ok.do?n_seq=${n_seq}" method="post" name="ufrm" enctype="multipart/form-data">
+  <div class="button-container">
+    <div class="upload-container">
+      <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div class="board_write">
+          <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+            <table>
+              <tr>
+                <th>제목</th>
+                <td colspan="3"><input type="text" name="n_subject" value="" id="n_subject" class="board_view_input" /></td>
+              </tr>
+              <tr>
+                <th>내용</th>
+                <td colspan="3">
+                  <textarea name="n_content" id="n_content" class="board_editor_area"></textarea>
+                </td>
+              </tr>
+              <tr>
+                <th>사진 등록</th>
+                <td colspan="3">
+                  <div class="flex">
+                    <input type="file" name="upload" class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" />
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
-    </td>
- <tr>
-     <td><h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
-          <a>${n_subject}</a>
-        </h4>
-        </tr>
-        </td>
-  </tr>
-  <tr>
-    <td>
-    <!--===================================== 이미지 보여주는 부분 =======================================  -->
-		<c:if test="${not empty nf_filename}">
-			  <a class="block px-4">
-			    <img src="${nf_filename}" alt="Cards" />
-			  </a>
-		</c:if>
-	<!--===================================== 이미지 보여주는 부분 =======================================  -->
-    </td>
-  </tr>
-  <tr>
-    <td> 
-      <div class="p-6">
-        <p class="font-medium">
-         <c:out value="${n_content}"/>
-        </p>
-      </div>
-    </td>
-  </tr>
-</table>
-	<div class="align_left">
+    </div>
+  </div>
+  <div class="btn_area">
+    <div class="align_left">
       <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board.do?cpage=${noticeListTO.cpage}'" />
     </div>
-	<div class="align_left">
-      <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board_modify.do?n_seq=${n_seq}'" />
+    <div class="align_right">
+      <input type="submit" id="ubtn" value="upload1" class="btn_list btn_txt02" style="cursor: pointer;" />
     </div>
-	<input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board_delete_ok.do?n_seq=${n_seq}'" />
+  </div>
+</form>
 
 
-</main>
-
-
-<!-- ============  view 보여지는부분	=================================== -->
+	    <!-- ============  Write 여기서 끝=================================== -->
+		
+				
       <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Content Area End ===== -->

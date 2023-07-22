@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
-
+import org.apache.ibatis.annotations.Update;
 
 import com.example.model.NoticeAlbumTO;
 import com.example.model.NoticeBoardTO;
@@ -41,14 +41,22 @@ public interface NoticeBoardMapperInter {
 	@Select("select * from NoticeFile where n_seq=#{n_seq}")
 	public ArrayList<NoticeAlbumTO> NoticeAlbumList(String n_seq);
 	
-	// 이미지 삭제
-	@Delete("delete from NoticeFile where nf_seq=#{n_seq}")
-	public int noticeAlbumDelete_ok(NoticeAlbumTO to);
+	//삭제
+	@Delete("delete from NoticeBoard where n_seq=#{n_seq}")
+	public int noticeDelete_ok(NoticeBoardTO to);
 	// 이미지 url알아내기
 	@Select("select nf_filename from NoticeFile where n_seq=#{n_seq}")
 	public String noticeAlbumName(String n_seq);
 	
+	@Update("UPDATE NoticeBoard SET n_hit = n_hit + 1 WHERE n_seq = #{n_seq}")
+	public abstract int updateHitOK(NoticeBoardTO to);
+
+	@Update("UPDATE NoticeBoard SET n_subject = #{n_subject}, n_content = #{n_content}, n_wdate = now(), n_hit = 0 WHERE n_seq = #{n_seq}")
+	public abstract int updateBoard(NoticeBoardTO to);
 	
+	@Update("UPDATE NoticeFile SET nf_filename = #{nf_filename}, nf_filesize = #{nf_filesize} WHERE n_seq = #{n_seq}")
+	public int updateNoticeAlbum(NoticeAlbumTO to);
+
 	}
 
 
