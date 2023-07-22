@@ -3,6 +3,7 @@ package com.example.model;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -137,7 +138,7 @@ public class MainTO {
    private String f_subject;
    private String f_content;
    private String f_ex;
-   private Date f_day;
+   private Timestamp f_day;
    
    
 

@@ -229,12 +229,13 @@ public class MainController {
 		MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
         
 	    ArrayList<MainTO> pieChart = dao.PieChartData(seq, day);
-	    
-	    JsonArray pieDatas = new JsonArray(); 
-	    
 	    //System.out.println("  day pie Controller -> " + day);
 	    //System.out.println("  seq pie Controller -> " + seq );
 	    
+	    
+	    JsonArray pieDatas = new JsonArray(); 
+	    
+	
 	    for (MainTO to : pieChart) {
 	    	
 	    	 JsonObject pieData = new JsonObject();
@@ -440,12 +441,57 @@ public class MainController {
 		
 //------피드백------------------------
 		
-//		@RequestMapping("/feedback.do")
-//		public ModelAndView feedback() {
-//			ModelAndView modelAndView = new ModelAndView();
-//			modelAndView.setViewName("feedback");
-//			return modelAndView;
-//		}
+		//데이터 형식
+		@RequestMapping("feedback_list")
+		public ResponseEntity<String> FeedbackList(@RequestParam Integer page) {
+
+		    JsonArray feedback_datas = new JsonArray(); 
+		    
+		    
+		    System.out.println( " page 수 -> " + page);
+		    int pageSize = 10;  // 한 페이지에 보여줄 데이터의 개수
+	        int offset = page * pageSize;  // 가져올 데이터의 시작 위치
+		    
+		    ArrayList<MainTO> lists = dao.ListOfFeedback(pageSize, offset);
+		    
+			
+		    for (MainTO to : lists) {
+		    	
+	    	 JsonObject feedback_data = new JsonObject();
+		        
+	    	//
+	    	 feedback_data.addProperty("f_seq", to.getF_seq());
+	    	 feedback_data.addProperty("f_id", to.getF_id());
+	    	 feedback_data.addProperty("f_name", to.getF_name());
+	    	 feedback_data.addProperty("f_mail", to.getF_mail() );
+	    	 
+	    	 String subject = to.getF_subject();
+	    	 if (subject.length() > 10) {
+	    		 	subject = subject.substring(0, 10) + "...";
+	    		}
+	    	 feedback_data.addProperty("f_subject", subject);
+	    	
+	    	 String content = to.getF_content();
+	    	  if (content.length() > 15) {
+	    		    content = content.substring(0, 15) + "...";
+	    		}
+	    	 feedback_data.addProperty("f_content",  content);
+	    	  
+	    	 
+	    	  
+	    	 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    	 feedback_data.addProperty("f_day", sdf.format(to.getF_day()));
+	    	 
+	    	 feedback_data.addProperty("m_seq", to.getM_seq());
+		        
+		        
+	    	 feedback_datas.add(feedback_data); 
+		    }	   	
+		    
+		    System.out.println( "\n 피드백 ajax 시작-> " + feedback_datas + "\n");
+
+		    return new ResponseEntity<String>( feedback_datas.toString(), HttpStatus.OK);
+		}
 		
 	  //--------피드백----------------------------
 		
@@ -456,27 +502,18 @@ public class MainController {
 			ModelAndView modelAndView = new ModelAndView();
 		
 			
-			ArrayList<MainTO> feedback_lists = dao.ListOfFeedback();
-			
-			for( MainTO to : feedback_lists) {
-				
-			        int f_seq = to.getF_seq();
-			        String f_id = to.getF_id();
-			        String f_name = to.getF_name();
-			        String f_mail = to.getF_mail();
-			        String f_subject = to.getF_subject();
-			        String f_content = to.getF_content();
-			        String f_day = to.getF_day().toString();
-			        int m_seq = to.getM_seq();
-
-			        System.out.println("F_seq: " + f_seq + ", F_id: " + f_id + ", F_name: " + f_name + ", F_mail: " + f_mail + ", F_subject: " + f_subject + ", F_content: " + f_content + ", F_day: " + f_day + ", M_seq: " + m_seq);
-				
-			}
-
-			System.out.println( "\n 컨트롤러에서 feedback_lists" +feedback_lists);
-
-			modelAndView.addObject("feedback_lists", feedback_lists);
 			modelAndView.setViewName("feedback");
+			return modelAndView;
+		}
+		
+
+		@RequestMapping("/feedback_view.do")
+		public ModelAndView feedback_test() {
+			
+			ModelAndView modelAndView = new ModelAndView();
+		
+			
+			modelAndView.setViewName("feedback_view");
 			return modelAndView;
 		}
 				
@@ -493,6 +530,61 @@ public class MainController {
 				System.out.println( " feedback controller-> " + seq + " " +f_id + " " + f_name + " " + f_mail + " " + f_subject + " " + f_content);
 				return feedback_flag;
 			}
+			
+	 //---feedback.do 검색
+			@RequestMapping("feedback_search")
+			public ResponseEntity<String> FeedbackSerch(@RequestParam String searchKey, @RequestParam String searchWord) {
+
+			    JsonArray feedback_datas = new JsonArray(); 
+			    
+			    ArrayList<MainTO> searchingMethod = dao.SearchingFeedback(searchKey, searchWord);
+			    	
+			    searchWord = "%" + searchWord + "%";
+			    
+			    System.out.println( " searchKey -> " + searchKey);
+			    System.out.println( " searchWord -> " + searchWord);
+	
+			    for (MainTO to : searchingMethod) {
+				    	
+				    	 JsonObject feedback_data = new JsonObject();
+					        
+				    	//
+				    	 feedback_data.addProperty("f_seq", to.getF_seq());
+				    	 feedback_data.addProperty("f_id", to.getF_id());
+				    	 feedback_data.addProperty("f_name", to.getF_name());
+				    	 feedback_data.addProperty("f_mail", to.getF_mail() );
+				    	 
+				    	 String subject = to.getF_subject();
+				    	 if (subject.length() > 10) {
+				    		 	subject = subject.substring(0, 10) + "...";
+				    		}
+				    	 feedback_data.addProperty("f_subject", subject);
+				    	
+				    	 String content = to.getF_content();
+				    	  if (content.length() > 15) {
+				    		    content = content.substring(0, 15) + "...";
+				    		}
+				    	 feedback_data.addProperty("f_content",  content);
+				    	  
+				    	 
+				    	  
+				    	 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				    	 feedback_data.addProperty("f_day", sdf.format(to.getF_day()));
+				    	 
+				    	 feedback_data.addProperty("m_seq", to.getM_seq());
+					        
+					        
+				    	 feedback_datas.add(feedback_data); 
+					    }	   	
+				    
+				    System.out.println( "\n 검색 시작-> " + feedback_datas + "\n");
+					    
+		
+
+			    return new ResponseEntity<String>( feedback_datas.toString(), HttpStatus.OK);
+			}
+			
+	//------
 	
 			
 	 //--------피드백 끝 ----------------------------

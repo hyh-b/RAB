@@ -320,15 +320,44 @@ public class MainDAO {
 		
 	 //---피드백 게시판
 		
-		public ArrayList<MainTO> ListOfFeedback(){
+		public ArrayList<MainTO> ListOfFeedback(int pageSize, int offset){
 			
-			List<MainTO> feedback_list  = (List<MainTO>)mapper.FeedbackList();
+			List<MainTO> feedback_list  = (List<MainTO>)mapper.FeedbackList(pageSize, offset);
 			
 			ArrayList<MainTO> feedback_lists  = new ArrayList<>(feedback_list);
 			
 			System.out.println(" feedback_lists dao 에서 -> " + feedback_lists);
 	    
 	    	return feedback_lists;
+		}
+		
+	//----피드백 검색기능
+		
+		public ArrayList<MainTO> SearchingFeedback(String searchKey, String searchWord){
+			
+			
+			searchWord = "%" + searchWord + "%";
+			
+			System.out.println( "dao 에서 키-> " + searchKey);
+			System.out.println( "dao 에서 word-> " + searchWord);
+			
+			
+			
+			 switch (searchKey) {
+		        case "아이디":
+		            List<MainTO> idSearchResult = (List<MainTO>) mapper.FidList(searchWord);
+		            return new ArrayList<>(idSearchResult);
+		        case "이름":
+		            List<MainTO> nameSearchResult = (List<MainTO>) mapper.FnameList(searchWord);
+		            return new ArrayList<>(nameSearchResult);
+		        case "제목":
+		            List<MainTO> subjectSearchResult = (List<MainTO>) mapper.FsubjectList(searchWord);
+		            return new ArrayList<>(subjectSearchResult);
+		        default:
+		            // 검색 키가 잘못된 경우, 빈 리스트를 반환하거나 원하는 에러 처리를 수행합니다.
+		        	System.out.println(" 명단에 없습니다");
+		            return new ArrayList<>();
+		    }
 		}
 		
 		

@@ -85,15 +85,29 @@ public interface MainMapperInter {
     
 //---피드백 게시판-------------------------------------------------
     
-    //피드백 다이얼로그 insert
-    @Insert("INSERT INTO feedback (m_seq, f_id, f_name, f_mail, f_subject, f_content, f_day) VALUES (#{seq}, #{f_id}, #{f_name}, #{f_mail}, #{f_subject}, #{f_content}, CURDATE());")
+    //피드백 다이얼로그 insert | main에서
+    @Insert("INSERT INTO feedback (m_seq, f_id, f_name, f_mail, f_subject, f_content, f_day) VALUES (#{seq}, #{f_id}, #{f_name}, #{f_mail}, #{f_subject}, #{f_content}, now() );")
     public int FeedbackReceived(@Param("seq") int seq, @Param("f_id") String f_id, @Param("f_name") String f_name, @Param("f_mail") String f_mail, @Param("f_subject") String f_subject, @Param("f_content") String f_content);
-    
-    //피드백 게시판 list
-    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback order by f_seq desc")
-    public List<MainTO> FeedbackList();
 
+   //---feedback.do----------------------
+    //피드백 게시판 list
+    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback order by f_seq desc LIMIT #{pageSize} OFFSET #{offset};")
+    public List<MainTO> FeedbackList(@Param("pageSize") int pageSize, @Param("offset") int offset);
+  
+//    //아이디 검색
+//    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback where f_id like '%' || #{searchWord} || '%' order by f_day desc;")
+//    public List<MainTO> FidList(@Param("searchWord") String searchWord);
     
-    
+    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback where f_id like #{searchWord} order by f_day desc;")
+    public List<MainTO> FidList(@Param("searchWord") String searchWord);
+
+    //이름 검색
+    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback where f_name like #{searchWord} order by f_day desc;")
+    public List<MainTO> FnameList(@Param("searchWord") String searchWord);
+
+    //제목 검색
+    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback where f_subject like #{searchWord} order by f_day desc;")
+    public List<MainTO> FsubjectList(@Param("searchWord") String searchWord);
+
 }
 
