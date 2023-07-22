@@ -113,4 +113,37 @@ public class MemberDAO {
 		
 		return sList;
 	};
+	
+	// 신규 유저 수
+	public int newMember(String nDay) {
+		int newMember = mapper.newMember(nDay);
+		
+		return newMember;
+	}
+	
+	// 탈퇴 회원 수
+	public int deletedMember(String dDay) {
+		int deletedMember = mapper.deletedMember(dDay);
+		
+		return deletedMember;
+	}
+	
+	public int MandIweightsynced(String m_seq) {
+        
+        int syncFlag = 1;
+        
+        int result = mapper.MandIweightsynced(m_seq);
+        System.out.println("result:"+result);
+        System.out.println("다오에스이큐: "+m_seq);
+        if(result == 1 ) {
+           syncFlag = 0;
+           System.out.println( " synced 정상-> , " + syncFlag);
+        }else if(result == 0) {
+           syncFlag = 1;
+           System.out.println( " synced 비정상-> , " + syncFlag);
+        }
+        return syncFlag;
+
+	}
+
 }

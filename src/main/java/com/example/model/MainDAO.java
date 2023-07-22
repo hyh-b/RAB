@@ -95,11 +95,11 @@ public class MainDAO {
 		
 	//---아이디당 1개의 레코드 중복없이 생성-------------------------------------------------------------------------
 		
-		public int InsertData(String mId) {
+		public int CreateRecord(String seq) {
 			
 			int flag = 1;
 			
-			int result = mapper.InsertDataForMain(mId);
+			int result = mapper.CreateThreeMonthRecord(seq);
 			
 			if(result == 1 ) {
 				flag = 0;
@@ -109,6 +109,18 @@ public class MainDAO {
 		
 			return flag;
 					
+		}
+		
+  //---정보입력 하루치 IntakeData 레코드 생성
+		
+		public int InsertDataForMain(String mId) {
+			
+			int irecord_flag = 1;
+			
+			int result = mapper.InsertDataForMain(mId);
+			
+			return result;
+			
 		}
 	
 		//---아 점 저 합연산--------------------------
@@ -214,6 +226,28 @@ public class MainDAO {
 
 			return TargetWeightUpdateFlag;
 		}
+		
+		//---m_weight and i_weight 동기화
+//		
+//		public int MandIweightsynced(String str_seq) {
+//					
+//			int syncFlag = 1;
+//			
+//			int result = mapper.MandIweightsynced(str_seq);
+//			
+//			if(result == 1 ) {
+//				syncFlag = 0;
+//				System.out.println( " synced 정상-> , " + syncFlag);
+//			}else if(result == 0) {
+//				syncFlag = 1;
+//				System.out.println( " synced 비정상-> , " + syncFlag);
+//			}
+//
+//			
+//			return syncFlag;
+//
+//		}
+		
 		
 		//---피드백---------------------
 		

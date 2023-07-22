@@ -70,13 +70,19 @@ public class MainController {
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		
 		String m_profilename =  customUserDetails.getM_profilename();
-
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+        
+        //유저마다 총 세달의 참조 레코드 생성
+        String seq = member.getM_seq();
+        System.out.println(" test.do에서 파라미터로 넘기는 seq -> " + seq);
+        int flag = dao.CreateRecord(seq);
+        
+        //몸무게들 동기화
+        //int sync_flag = dao.MandIweightsynced(seq);
+        //System.out.println(" main.do에서 synced seq -> " + seq);
 
-        //유저마다 한개의 참조 레코드 생성
-        int flag = dao.InsertData(mId);
         
         System.out.println("     dao.InsertData(mId); " + flag);
         
@@ -129,12 +135,17 @@ public class MainController {
         	return modelAndView;
         }
         
-        //유저마다 한개의 참조 레코드 생성
-        int flag = dao.InsertData(mId);
+        //유저마다 총 세달의 참조 레코드 생성
+        String seq = member.getM_seq();
+        System.out.println(" main.do에서 파라미터로 넘기는 seq -> " + seq);
+        int flag = dao.CreateRecord(seq);
         
-        System.out.println("     dao.InsertData(mId); " + flag);
+        //몸무게들 동기화
+        //int sync_flag = dao.MandIweightsynced(seq);
+        //System.out.println(" main.do에서 synced seq -> " + seq);
         
-    
+        /////
+        
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
   
@@ -155,9 +166,7 @@ public class MainController {
 		modelAndView.addObject("zzinname", member.getM_real_name());
 		modelAndView.addObject("zzinmail", member.getM_mail());
 		modelAndView.addObject("zzingender", member.getM_gender());
-		
-		
-		
+
 		System.out.println(" test.do m_id " + member.getM_id());
 		
 		modelAndView.setViewName("main");
@@ -174,6 +183,7 @@ public class MainController {
 	    
 	    System.out.println(" selected_data i_day Controller -> " + day);
 	    System.out.println(" selected_data seq Controller -> " + seq );
+
 
 	    JsonObject mainDatas = new JsonObject();
 
@@ -237,7 +247,9 @@ public class MainController {
 	        pieDatas.add(pieData); 
 	    }	   	
 	    
-	    ///탄단지 콜나당 ------------------------------
+	    System.out.println( "\n 콜나당이 왜이래 이거-> " + pieDatas + "\n");
+	    
+	    ///탄단지 콜나당 합연산 ------------------------------
 	    
 	    int flag_uan = dao.UnionAllNutritions(seq, day);
 
@@ -328,37 +340,36 @@ public class MainController {
 		
 		@RequestMapping("line_chart_data")
 		public ResponseEntity<String> LineChartData(
-		@RequestParam("seq") int seq, @RequestParam("year") String year) {
+		    @RequestParam("seq") int seq, @RequestParam("year") String year) {
 
 		    ArrayList<MainTO> lines = dao.LineChartData(seq, year);
-		    
-		    //System.out.println(" controller에서 year 받냐? " + year);
-		    
 		    JsonArray LineDatas = new JsonArray(); 
-		    
-		    // Set up an array to represent each month's average weight
-	        double[] monthlyWeights = new double[12];
-	        Arrays.fill(monthlyWeights, 0.0);
+		    double[] monthlyWeights = new double[12];
+		    Arrays.fill(monthlyWeights, 0.0);
 
-	        // Populate the array with actual data from the database
-	        for (MainTO to : lines) {
-	            int monthIndex = Integer.parseInt(to.getMonth().split("-")[1]) - 1;
-	            monthlyWeights[monthIndex] = to.getAvg_weight();
-	        }
+		    for (MainTO to : lines) {
+		        int monthIndex = Integer.parseInt(to.getMonth().split("-")[1]) - 1;
+		        //System.out.println("\n 한 달 총합 무게 (0/undefined 제외) -> " + (monthIndex + 1) + " : " + to.getTotal_weight());
+		        //System.out.println(" (0/undefined 제외)제외하고 데이터가 입력된 날의 수 -> " + (monthIndex + 1) + " : " + to.getDayCount());
 
-	        // Now create JSON objects for each month, even if some months have no data
-	        for(int i = 0; i < 12; i++) {
-	            JsonObject LineData = new JsonObject();
-	            LineData.addProperty("avg_weight", monthlyWeights[i]);
-	            LineData.addProperty("month", String.format("%02d", i + 1));
+		        if (to.getDayCount() > 0) {  // 이 부분을 추가했습니다.
+		            monthlyWeights[monthIndex] = to.getTotal_weight() / to.getDayCount();
+		        } else {
+		            monthlyWeights[monthIndex] = 0.0;
+		        }
+		        
+		        //System.out.println( " 한달 평균 무게 -> " + monthIndex + " : " + monthlyWeights[monthIndex] + "\n");
+		    }
 
-	            LineDatas.add(LineData);
-	        }
-		    
-		    //System.out.println("  LineDatas 데이터들 Controller에서-> " +  LineDatas);
-	
-		   	return new ResponseEntity<String>( LineDatas.toString(), HttpStatus.OK);
-		  
+		    for(int i = 0; i < 12; i++) {
+		        JsonObject LineData = new JsonObject();
+		        LineData.addProperty("avg_weight", monthlyWeights[i]);
+		        LineData.addProperty("month", String.format("%02d", i + 1));
+		        LineDatas.add(LineData);
+		    }
+
+		    System.out.println( " LineDatas -> " + LineDatas);
+		    return new ResponseEntity<String>( LineDatas.toString(), HttpStatus.OK);
 		}
 		//----몸무게들-----------------------------------
 		
@@ -394,6 +405,7 @@ public class MainController {
 			//int targetw_update = dao.TargetWeightUpdate(target_weight, seq);
 		    //result_for_both = weight_update + targetw_update;
 		    //return result_for_both;
+
 		}
 		
 //	  //해당 날짜 몸무게 업데이트----------

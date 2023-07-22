@@ -56,9 +56,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>관리자 페이지</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+	
+	// 날짜 선택 시 해당 날짜 신규, 탈퇴 유저 출력
+	function clickDate(date){
+		$.ajax({
+	        url: 'memberState',
+	        type: 'POST',
+	        data: { date: date },
+	        success: function(response) {
+	            console.log('신규 가입자 수: ' + response.newMember);
+	            console.log('탈퇴한 회원 수: ' + response.deletedMember);
+	            let nMember = response.newMember;
+	            let dMember = response.deletedMember;
+	            let mHtml = "";
+	            mHtml += "<p>신규 회원 수: "+nMember+"명 | 탈퇴 회원 수: "+dMember+"명</p>"
+	            $('#memberState').html(mHtml);
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            console.error('Fetch error:', errorThrown);
+	        }
+	    });
+	} 
+
 	$(document).ready(function () {
+		
+		// 달력 
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        let currentDate = yyyy + '-' + mm + '-' + dd;
+        
+        $("#datepicker").datepicker({ 
+            dateFormat: 'yy-mm-dd',
+            onSelect: function(dateText) {
+                clickDate(dateText);
+            }
+        }).datepicker("setDate", today); // 기본값으로 당일 날짜 출력
+
+        clickDate(currentDate);
+		
 	  // 검색 버튼 클릭 이벤트 처리
 	  $("#sbtn").click(function () {
 	    var searchId = $("#searchId").val();
@@ -93,9 +138,7 @@
 	        }
 	    }); 
 	  }); 
-		/* $("#sbtn").click(function () {
-		    alert("안녕");
-		  }); */
+		
 	});
 </script>
 </head>
@@ -332,10 +375,14 @@
                 <div
                   class="flex flex-col-reverse justify-between gap-6 py-4.5 pl-4 pr-4 sm:flex-row lg:pl-10 lg:pr-7.5">
                   <div class="flex items-center gap-4">
-                    
 					총 회원 수 : <%= totalRecord %>명
                   </div>
-
+				  <div>
+				  	<input type="text" id="datepicker" placeholder="날짜 선택" class="rounded-sm border border-stroke bg-white shadow-default">
+				  </div>
+				  
+				  <div id="memberState"></div>
+				  
                   <div class="relative">
                     <input type="text" id="searchId" placeholder="Search id"
                       class="block w-full bg-transparent pl-7 pr-25 font-medium outline-none" />

@@ -121,22 +121,16 @@
 	}
 	
 	window.onload = function(){
+		var inputs = document.querySelectorAll('#sfrm input[type=text], #sfrm input[type=number], #sfrm select');
 		
 		document.getElementById('sbtn').onclick = function(){
-			var inputs = document.getElementsByTagName("input");
-	        for (var i = 0; i < inputs.length; i++) {
-	            if (inputs[i].value === "") {
-	                inputs[i].value = null;
-	            }
-	        }
-	        var weightInput = document.getElementById('weight');
-            var heightInput = document.getElementById('height');
-            if (weightInput.value === "") {
-                weightInput.value = null; 
+			var allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+	        // 모든 정보를 입력해야 제출가능
+			if (!allFilled) {
+                alert("모든 정보를 입력하셔야 합니다.");
+                return false;
             }
-            if (heightInput.value === "") {
-                heightInput.value = null; 
-            }
+	        
             //닉네임이 중복 아닌경우에만 제출
             if (window.getComputedStyle(nameNo).display == 'none'){
             	document.sfrm.submit();

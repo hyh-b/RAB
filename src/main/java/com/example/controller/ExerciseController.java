@@ -56,9 +56,6 @@ public class ExerciseController {
 	@Autowired
 	private ExerciseDAO eDao;
 	
-	@Autowired
-    private CustomUserDetailsService customUserDetailsService;
-	
 	// S3에서 이미지 불러오는 url = https://rabfile.s3.ap-northeast-2.amazonaws.com/파일명
 	
 	private final S3FileUploadService s3FileUploadService;
@@ -70,17 +67,18 @@ public class ExerciseController {
         this.s3FileUploadService = s3FileUploadService;
     }
 	
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
+	
 	@RequestMapping("/exercise.do")
-	public ModelAndView tables(Authentication authentication) {
+	public ModelAndView tables() {
 		customUserDetailsService.updateUserDetails();
-		
-		authentication = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = authentication.getPrincipal();
-		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		CustomUserDetails customUserDetails = customUserDetailsService.getCurrentUserDetails();
 		
 		String m_seq =  customUserDetails.getM_seq();
 		String m_name = customUserDetails.getM_name();
 		String m_gender = customUserDetails.getM_gender();
+		
 		System.out.println("닉네임"+m_name);
 		System.out.println("성별"+m_gender);
 		System.out.println("애스이큐"+m_seq);
