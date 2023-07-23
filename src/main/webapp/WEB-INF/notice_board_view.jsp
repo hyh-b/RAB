@@ -581,16 +581,18 @@ pageEncoding="UTF-8"%>
   </tr>
   <!-- 이미지 행 -->
   <tr>
-    <td class="p-3 border-t border-b">
-      <!--===================================== 이미지 보여주는 부분 =======================================  -->
-      <c:if test="${not empty nf_filename}">
+  <td class="p-3 border-t border-b">
+    <!--===================================== 이미지 보여주는 부분 =======================================  -->
+    <c:forEach items="${atos}" var="ato">
+      <c:if test="${not empty ato.nf_filename}">
         <a class="block px-4">
-          <img src="${nf_filename}" alt="Cards" />
+          <img src="${ato.nf_filename}" alt="Cards" />
         </a>
       </c:if>
-      <!--===================================== 이미지 보여주는 부분 =======================================  -->
-    </td>
-  </tr>
+    </c:forEach>
+    <!--===================================== 이미지 보여주는 부분 =======================================  -->
+  </td>
+</tr>
   <!-- 내용 행 -->
   <tr>
     <td class="p-3 border-t border-b">

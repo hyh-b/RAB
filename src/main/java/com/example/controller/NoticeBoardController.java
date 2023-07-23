@@ -121,27 +121,22 @@ public class NoticeBoardController {
 	@RequestMapping("/notice_board_view.do")
 	public ModelAndView notice_board_view(HttpServletRequest request) {
 	    NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
-	    NoticeAlbumTO ato = new NoticeAlbumTO();
-	    
+
 	    //cpage
 	    String cpageParam = request.getParameter("cpage");
 	    int cpage = cpageParam != null ? Integer.parseInt(cpageParam) : 1;
 
 	    NoticeListTO noticeListTO = new NoticeListTO();
 	    noticeListTO.setCpage(cpage);
-	    
-	    
+
 	    //NoticeFile과 NoticeBoard를 같은 n_seq로 지정하는 부분
 	    bto.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
-	    System.out.println(request.getParameter("n_seq"));
-	    ato.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
 
-	    System.out.println(bto.getN_seq());
-	    //각각 insert
+	    // 각각 insert
 	    bto = dao.noticeBoardView(bto);
-	    ato = dao.noticeFileView(ato);
-	    
-	   
+	    NoticeAlbumTO ato = new NoticeAlbumTO();
+	    ato.setN_seq(bto.getN_seq());
+	    List<NoticeAlbumTO> atos = abdao.noticeFilelistView(ato);
 
 	    // 조회수 증가 처리
 	    int result = dao.updateHitOK(bto); // Pass the entire NoticeBoardTO object
@@ -152,21 +147,24 @@ public class NoticeBoardController {
 	    } else {
 	        System.out.println("조회수 증가 실패");
 	    }
-	   
-
 
 	    System.out.println("제목 -------" + bto.getN_subject());
 	    System.out.println("내용 -------" + bto.getN_content());
-	    System.out.println("파일이름 -------" + ato.getNf_filename());
-	    System.out.println("파일사이즈 -------" + ato.getNf_filesize());
+	    for (NoticeAlbumTO to : atos) {
+	        System.out.println("파일이름 -------" + to.getNf_filename());
+	        System.out.println("파일사이즈 -------" + to.getNf_filesize());
+	    }
 
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.setViewName("notice_board_view");
 	    modelAndView.addObject("bto", bto); // 게시물 정보를 ModelAndView에 추가
-	    modelAndView.addObject("ato", ato);
+	    modelAndView.addObject("atos", atos);
 	    modelAndView.addObject("noticeListTO", noticeListTO);
 	    return modelAndView;
 	}
+
+
+
 	@RequestMapping("/user_notice_board_view.do")
 	public ModelAndView user_notice_board_view(HttpServletRequest request) {
 		NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
@@ -188,7 +186,7 @@ public class NoticeBoardController {
 		System.out.println(bto.getN_seq());
 		//각각 insert
 		bto = dao.noticeBoardView(bto);
-		ato = dao.noticeFileView(ato);
+		ato = abdao.noticeFileView(ato);
 		
 		
 		
@@ -236,58 +234,70 @@ public class NoticeBoardController {
 	
 
 	@RequestMapping("/notice_board_write_ok.do")
-	public  ModelAndView notice_board_write_ok(HttpServletRequest request, Authentication authentication, MultipartFile upload) {
-		authentication = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = authentication.getPrincipal();
-		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		
-		String m_seq = customUserDetails.getM_seq();
-		int jjinSeq = Integer.parseInt(m_seq);
-		NoticeBoardTO bto = new NoticeBoardTO();
-		NoticeAlbumTO ato = new NoticeAlbumTO();
-		int flag = 2;
-		bto.setM_seq(jjinSeq);
-		String subject = request.getParameter("n_subject");
-		bto.setN_subject(subject);
-		String content =request.getParameter("n_content");
-		bto.setN_content(content);
-		int flagAB = dao.writeOK(bto);
-		System.out.println("flagAB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+flagAB);
-		
-		//flagAB가 들어가야 이것도 넣는다
-		if (flagAB == 1  ) {
-		
-			System.out.println("flag 넣는중 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			try {
-	            // S3에 파일 업로드 
-	            String fileUrl = s3FileUploadService.upload(upload);
-	            
-	            // 파일이 성공적으로 업로드 시 db에 데이터 저장
-	            if (fileUrl != null) {    
-	            	ato.setN_seq(bto.getN_seq());//지렸다
-	                ato.setNf_filename(fileUrl);
-	                ato.setNf_filesize(upload.getSize());            
-	                flag = abdao.noticeAlbum_ok(ato);
+	public ModelAndView notice_board_write_ok(HttpServletRequest request, Authentication authentication, List<MultipartFile> uploads) {
+	    authentication = SecurityContextHolder.getContext().getAuthentication();
+	    Object principal = authentication.getPrincipal();
+	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+	    
+	    String m_seq = customUserDetails.getM_seq();
+	    int jjinSeq = Integer.parseInt(m_seq);
+	    NoticeBoardTO bto = new NoticeBoardTO();
+	    NoticeAlbumTO ato = new NoticeAlbumTO();
+
+	    String subject = request.getParameter("n_subject");
+	    bto.setN_subject(subject);
+	    String content = request.getParameter("n_content");
+	    bto.setN_content(content);
+	    bto.setM_seq(jjinSeq);
+
+	    NoticeBoardTO existingBoard = dao.noticeBoardView(bto);
+
+	    // If a NoticeBoard with the provided n_seq already exists, use it. Otherwise, create a new one.
+	    int flagAB;
+	    int flag = 0; 
+	    if (existingBoard != null) {
+	        flagAB = 1;  // NoticeBoard already exists
+	    } else {
+	        flagAB = dao.writeOK(bto);  // Create a new NoticeBoard
+	    }
+
+	    System.out.println("flagAB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+flagAB);
+
+	    // If a NoticeBoard exists or has been created, add the files to it
+	    if (flagAB == 1) {
+	        System.out.println("flag 넣는중 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+	        try {
+	            for (MultipartFile uploadfile : uploads) {
+	                // Upload file to S3
+	                String fileUrl = s3FileUploadService.upload(uploadfile);
 	                
-	            }else {
-	            	ato.setN_seq(bto.getN_seq());
-	            	System.out.println("n_seq>>>>>>>>>>>>>>>>>>>>>>>>>"+bto.getN_seq());
-	            	flag = abdao.noticeAlbum_ok(ato);
+	                // If the file was uploaded successfully, save its data to the database
+	                if (fileUrl != null) {    
+	                    ato.setN_seq(bto.getN_seq());
+	                    ato.setNf_filename(fileUrl);
+	                    ato.setNf_filesize(uploadfile.getSize());            
+	                    flag = abdao.noticeAlbum_ok(ato);
+	                } else {
+	                    System.out.println("File upload failed for n_seq: " + bto.getN_seq());
+	                }
 	            }
 	        } catch (Exception e) {
-	            
 	            e.printStackTrace();
 	        }
-		}
-		System.out.println("flag  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+flag);
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("noticeboardAlbum_ok");
-		modelAndView.addObject("flagAB",flagAB);
-		modelAndView.addObject("flag",flag);
-		return modelAndView; 
+	    }
+
+	    ModelAndView modelAndView = new ModelAndView();
+	    modelAndView.setViewName("noticeboardAlbum_ok");
+	    modelAndView.addObject("flagAB",flagAB);
+	    modelAndView.addObject("flag",flag);
+	    return modelAndView; 
 	}
+
+
+	
+	
 	@RequestMapping("/notice_board_modify_ok.do")
-	public ModelAndView notice_board_modify_ok(HttpServletRequest request, Authentication authentication, @RequestParam("upload") MultipartFile upload) {
+	public ModelAndView notice_board_modify_ok(HttpServletRequest request, Authentication authentication, @RequestParam("upload") MultipartFile[] upload) {
 	    authentication = SecurityContextHolder.getContext().getAuthentication();
 	    NoticeBoardTO bto = new NoticeBoardTO();
 	    NoticeAlbumTO ato = new NoticeAlbumTO();
@@ -303,49 +313,53 @@ public class NoticeBoardController {
 	    String content = request.getParameter("n_content");
 	    bto.setN_content(content);
 
+	    // Update the NoticeBoard data and delete all NoticeFile data with the same n_seq
 	    int flagAB = dao.updateBoard(bto);
+	    abdao.noticeFileDelete_ok(ato); // pass the ato object
+
 	    System.out.println("flagAB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flagAB);
 
 	    // flagAB가 1일 때만 파일 처리를 진행합니다.
-	    if (flagAB == 1 && !upload.isEmpty()) {
+	    if (flagAB == 1 && upload.length > 0) {
 	        System.out.println("flag 넣는중 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-	        try {
-	            // S3에 파일 업로드 
-	            String fileUrl = s3FileUploadService.upload(upload);
+	        for (MultipartFile file : upload) {
+	            try {
+	                // Upload new file and insert new entry to NoticeFile
+	                // Upload file to S3
+	                String fileUrl = s3FileUploadService.upload(file);
 
-	            // 파일이 성공적으로 업로드 시 db에 데이터 저장
-	            if (fileUrl != null) {
-	                ato.setN_seq(bto.getN_seq());
-	                ato.setNf_filename(fileUrl);
-	                ato.setNf_filesize(upload.getSize());
-	                flag = abdao.updateNoticeAlbum(ato);
-
-	            } else {
-	                // 파일 업로드 실패 시 예외처리 또는 기본값으로 설정합니다.
-	                // 예시로 null을 넣어줍니다.
+	                // If the file was successfully uploaded, save data to db
+	                if (fileUrl != null) {
+	                    ato.setN_seq(bto.getN_seq());
+	                    ato.setNf_filename(fileUrl);
+	                    ato.setNf_filesize(file.getSize());
+	                    flag = abdao.noticeAlbum_ok(ato);
+	                } else {
+	                    // If the file upload failed, set default values
+	                    ato.setN_seq(bto.getN_seq());
+	                    ato.setNf_filename(null);
+	                    ato.setNf_filesize(0L); // or set to 0
+	                    flag = abdao.noticeAlbum_ok(ato);
+	                }
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	                // If the file upload failed, log the error and set default values
 	                ato.setN_seq(bto.getN_seq());
 	                ato.setNf_filename(null);
-	                ato.setNf_filesize(0L); // 또는 0으로 설정
-	                flag = abdao.updateNoticeAlbum(ato);
+	                ato.setNf_filesize(0L); // or set to 0
+	                flag = abdao.noticeAlbum_ok(ato);
 	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            // 파일 업로드 실패 시 로그를 출력하고 예외 처리 또는 기본값으로 설정합니다.
-	            // 예시로 null을 넣어줍니다.
-	            ato.setN_seq(bto.getN_seq());
-	            ato.setNf_filename(null);
-	            ato.setNf_filesize(0L); // 또는 0으로 설정
-	            flag = abdao.updateNoticeAlbum(ato);
 	        }
 	    }
 
 	    System.out.println("flag  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flag);
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.setViewName("noticeboardAlbum_ok");
-	    modelAndView.addObject("flagAB", flagAB);
-	    modelAndView.addObject("flag", flag);
+	    modelAndView.addObject("flagAB", flagAB);     
+	    modelAndView.addObject("flag", flag);     
 	    return modelAndView;
 	}
+
 
 
 
