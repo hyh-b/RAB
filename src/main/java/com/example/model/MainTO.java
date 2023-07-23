@@ -140,6 +140,9 @@ public class MainTO {
    private String f_ex;
    private Timestamp f_day;
    
+   //feedback 파일 테이블
+   private int ff_seq;
+   private int f_filesize;
+   private String f_filename;
    
-
 }

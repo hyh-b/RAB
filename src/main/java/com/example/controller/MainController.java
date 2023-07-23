@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.awt.PageAttributes.MediaType;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.model.BreakfastTO;
@@ -158,6 +160,7 @@ public class MainController {
         
         System.out.println("     m_id: " + member.getM_id());
         System.out.println("     m_mail: " + member.getM_mail());
+        System.out.println("     m_seq: " + member.getM_seq());
   
         map.addAttribute("user", member);
         
@@ -379,7 +382,7 @@ public class MainController {
 		        LineDatas.add(LineData);
 		    }
 
-		    System.out.println( " LineDatas -> " + LineDatas);
+		    //System.out.println( " LineDatas -> " + LineDatas);
 		    return new ResponseEntity<String>( LineDatas.toString(), HttpStatus.OK);
 		}
 		//----몸무게들-----------------------------------
@@ -439,8 +442,31 @@ public class MainController {
 //			return target_weight_flag;
 //		}
 		
-//------피드백------------------------
+
 		
+  //--------피드백----------------------------
+		
+		
+				@RequestMapping("/feedback.do")
+				public ModelAndView feedback() {
+					
+					ModelAndView modelAndView = new ModelAndView();
+				
+					
+					modelAndView.setViewName("feedback");
+					return modelAndView;
+				}
+				
+
+				@RequestMapping("/feedback_view.do")
+				public ModelAndView feedback_test() {
+					
+					ModelAndView modelAndView = new ModelAndView();
+				
+					modelAndView.setViewName("feedback_view");
+					return modelAndView;
+				}
+	//////////////////////////////////////////////////////////////////	
 		//데이터 형식
 		@RequestMapping("feedback_list")
 		public ResponseEntity<String> FeedbackList(@RequestParam Integer page) {
@@ -493,31 +519,43 @@ public class MainController {
 		    return new ResponseEntity<String>( feedback_datas.toString(), HttpStatus.OK);
 		}
 		
-	  //--------피드백----------------------------
+		//----------------------------------------------
 		
-		
-		@RequestMapping("/feedback.do")
-		public ModelAndView feedback() {
-			
-			ModelAndView modelAndView = new ModelAndView();
-		
-			
-			modelAndView.setViewName("feedback");
-			return modelAndView;
-		}
-		
+		@RequestMapping("feedback_view")
+		public ResponseEntity<String> FeedbackView(@RequestParam("f_seq") int f_seq, @RequestParam("m_seq") int m_seq) {
 
-		@RequestMapping("/feedback_view.do")
-		public ModelAndView feedback_test() {
+		    JsonArray feedback_datas = new JsonArray(); 
+		    
+		    ArrayList<MainTO> lists = dao.ViewOfFeedback(f_seq, m_seq);
+		    
 			
-			ModelAndView modelAndView = new ModelAndView();
-		
-			
-			modelAndView.setViewName("feedback_view");
-			return modelAndView;
+		    for (MainTO to : lists) {
+		    	
+	    	 JsonObject feedback_data = new JsonObject();
+		        
+	    	//
+	    	 feedback_data.addProperty("f_seq", to.getF_seq());
+	    	 feedback_data.addProperty("f_id", to.getF_id());
+	    	 feedback_data.addProperty("f_name", to.getF_name());
+	    	 feedback_data.addProperty("f_mail", to.getF_mail() );
+	    	 feedback_data.addProperty("f_subject", to.getF_subject());
+	    	 feedback_data.addProperty("f_content",  to.getF_content());
+ 
+	    	 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    	 feedback_data.addProperty("f_day", sdf.format(to.getF_day()));
+	    	 
+	    	 feedback_data.addProperty("m_seq", to.getM_seq());
+ 
+	    	 feedback_datas.add(feedback_data); 
+		    }	   	
+		    
+		    System.out.println( "\n 피드백 view 시작-> " + feedback_datas + "\n");
+
+		    return new ResponseEntity<String>( feedback_datas.toString(), HttpStatus.OK);
 		}
+	
 				
-			 //--------feedback_board.do 끝----------------------------
+	 //------------------------------------
 				
 			@ResponseBody
 			@RequestMapping(value = "/feedback_ok", method = RequestMethod.POST)
@@ -530,6 +568,7 @@ public class MainController {
 				System.out.println( " feedback controller-> " + seq + " " +f_id + " " + f_name + " " + f_mail + " " + f_subject + " " + f_content);
 				return feedback_flag;
 			}
+	
 			
 	 //---feedback.do 검색
 			@RequestMapping("feedback_search")
@@ -585,6 +624,31 @@ public class MainController {
 			}
 			
 	//------
+			//---사진삽입---------------------
+			@ResponseBody
+			@RequestMapping(value = "/image_feedback", method = RequestMethod.POST)
+			public int ImageFromFeedback(@RequestParam("upload") MultipartFile file){
+				
+				int sizeFile;
+				String nameFile;
+				int img_feedback = 0;  
+				
+				try {
+					sizeFile = file.getBytes().length;
+					nameFile = file.getOriginalFilename();
+					
+					img_feedback = dao.ImageForFeedback(nameFile, sizeFile);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				
+				System.out.println( " 이미지 피드백 컨트롤러 -> " + img_feedback );
+				return img_feedback;
+			}
 	
 			
 	 //--------피드백 끝 ----------------------------

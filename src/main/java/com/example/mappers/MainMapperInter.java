@@ -94,9 +94,9 @@ public interface MainMapperInter {
     @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback order by f_seq desc LIMIT #{pageSize} OFFSET #{offset};")
     public List<MainTO> FeedbackList(@Param("pageSize") int pageSize, @Param("offset") int offset);
   
-//    //아이디 검색
-//    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback where f_id like '%' || #{searchWord} || '%' order by f_day desc;")
-//    public List<MainTO> FidList(@Param("searchWord") String searchWord);
+    //피드백 view
+    @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day from feedback where f_seq=#{f_seq} and m_seq=#{m_seq}; ")
+    public List<MainTO> ViewFeedback(@Param("f_seq") int f_seq, @Param("m_seq") int m_seq);  //
     
     @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback where f_id like #{searchWord} order by f_day desc;")
     public List<MainTO> FidList(@Param("searchWord") String searchWord);
@@ -109,5 +109,8 @@ public interface MainMapperInter {
     @Select("select f_seq, f_id, f_name, f_mail, f_subject, f_content, f_day, m_seq from feedback where f_subject like #{searchWord} order by f_day desc;")
     public List<MainTO> FsubjectList(@Param("searchWord") String searchWord);
 
+    //이미지 삽입
+    @Insert("INSERT INTO feedbackFile (f_filename, f_filesize) VALUES (#{nameFile}, #{sizeFile});")
+    public int ImageFeedbackInserted(@Param("nameFile") String nameFile, @Param("sizeFile") int sizeFile);
 }
 

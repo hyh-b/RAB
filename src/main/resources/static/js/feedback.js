@@ -18,6 +18,11 @@ $(document).ready(function() {
         var f_subject = document.querySelector('#f_subject').value;
         var f_content = document.querySelector('#f_content').value;
         
+         
+         //const editorData = editor.getData();
+         
+        //console.log(' editorData? ->', editor.getData());
+        
         // feedback ajax요청
         if (f_subject.trim() === "" || f_content.trim() === "") {
             alert("제목과 내용을 입력해주세요.");
@@ -69,4 +74,10 @@ $(document).ready(function() {
         document.querySelector("#f_subject").value = "";
         document.querySelector("#f_content").value = "";
     }
+    //ckeditor 설정
+    //------------------------------------------------------------------------------
+
+
+
+   	//// 
 });

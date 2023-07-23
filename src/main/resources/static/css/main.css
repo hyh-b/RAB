@@ -54,6 +54,8 @@
 	
 	.dialog-body {
 	    padding: 10px;
+	    max-height: 300px; /* 높이를 제한합니다. 원하는 높이로 설정하세요. */
+    	overflow-y: auto; 
 	}
 	
 	.form-row {
@@ -101,5 +103,13 @@
         color: black;
         font-weight: bold;
     }
+	
+	.ck-content img {
+    max-width: 100%;
+    height: auto;
+	}
 
+	.ck-editor__editable_inline {
+    min-height: 150px; /* 원하는 높이로 조절하세요 */
+	}
  

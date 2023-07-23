@@ -331,6 +331,19 @@ public class MainDAO {
 	    	return feedback_lists;
 		}
 		
+	//----피드백 view
+		public ArrayList<MainTO> ViewOfFeedback(int f_seq, int m_seq){
+			
+			List<MainTO> feedback_view  = (List<MainTO>)mapper.ViewFeedback(f_seq, m_seq);
+			
+			ArrayList<MainTO> feedback_views  = new ArrayList<>(feedback_view);
+			
+			System.out.println(" views 피드백 dao 에서 -> " + feedback_views );
+	    
+	    	return feedback_views ;
+		}
+		
+		
 	//----피드백 검색기능
 		
 		public ArrayList<MainTO> SearchingFeedback(String searchKey, String searchWord){
@@ -360,6 +373,16 @@ public class MainDAO {
 		    }
 		}
 		
+		//----피드백 이미지.
+		
+		public int ImageForFeedback(String nameFile, int sizeFile) {
+			
+			int img_feedback = mapper.ImageFeedbackInserted(nameFile, sizeFile);
+					
+			System.out.println(" dao에서 이미지 처리 결과? -> "+ img_feedback);
+			
+			return img_feedback;
+		}
 		
 }
 

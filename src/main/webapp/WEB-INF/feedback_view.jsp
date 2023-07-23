@@ -16,79 +16,59 @@
   
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
    <style>
-        .feedback-table {
-            color: grey;
-        }
-        .container {
+ 
+    .container {
     max-width: 1400px;
-     max-height: 500px;  /* Adjust as needed */
+     max-height: 500px; 
     overflow-y: auto;
 	}
     </style>
 
-<!--           
-
-//////////////////////////////////////////////////////////////
-
- -->
-  
 <script>
 
 //함수
 
     
 
-
-	window.onload = function() {
+window.onload = function() {
 	
-		$.ajax({
-	        url: '/feedback_list',
-	        type: 'GET',
-	        data: { 
-	        	page: page 
-	        	},  // 페이지 번호를 요청과 함께 전달
-	        dataType: 'json',
-	        success: function(data) {
-	            if (data.length == 0) {  // 받아온 데이터가 없으면 더 이상 데이터가 없다는 것을 의미
-	                alert("더 이상 데이터가 없습니다.");
-	                return;
-	            }
+	var urlParams = new URLSearchParams(window.location.search);
+    var f_seq = urlParams.get('f_seq');
+    var m_seq = urlParams.get('m_seq');
+    
+    console.log( ' f_seq -> ', f_seq );
+    console.log( ' m_seq -> ', m_seq );
+    
+    $.ajax({
+        url: '/feedback_view',
+        type: 'GET',
+        data: { 
+            f_seq: f_seq,
+            m_seq: m_seq
+        },
+        dataType: 'json',
+        success: function(data) {
+            if (data.length == 0) {  // 받아온 데이터가 없으면 더 이상 데이터가 없다는 것을 의미
+                alert("더 이상 데이터가 없습니다.");
+                return;
+            }
 
-	            var tbody = $('#feedbackTableBody');
-	            console.log('Data received: ', data);
+            console.log('Data received: ', data);
 
-	            $.each(data, function(i, feedback) {
-	                var row = $('<tr>');
-	                row.append($('<td>').text(feedback.f_seq));
-	                row.append($('<td>').text(feedback.f_id));
-	                row.append($('<td>').text(feedback.f_name));
-	                row.append($('<td>').text(feedback.f_mail));
-	                row.append($('<td>').text(feedback.f_subject));
-	                row.append($('<td>').text(feedback.f_content));
-	                row.append($('<td>').text(feedback.m_seq));
-	                row.append($('<td>').text(feedback.f_day));
-	                tbody.append(row);
-	            });
-
-	            page++;  // 다음 페이지 번호를 증가시킴
-	        },
-	        error: function(xhr, status, error) {
-	            console.log('Error: ' + error);
-	        }
-	    });
-		
-	
-	};
-
-		    
-    $('#searchWord').on('keypress', function(e) {
-        if(e.which == 13) {  // Enter key pressed
-            var searchKey = $('#searchKey').val();
-            alert(searchKey);
+            $.each(data, function(i, feedback) {
+                $("#f_subject").append(feedback.f_subject);
+                $("#f_day").append(feedback.f_day);
+                $("#f_id").append(feedback.f_id);
+                $("#f_name").append(feedback.f_name);
+                $("#f_mail").append(feedback.f_mail);
+                $("#f_content").append(feedback.f_content);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.log('Error: ' + error);
         }
     });
-	});
-
+};
 
 </script>
 
@@ -298,38 +278,22 @@
 </aside>
 
 <div class="container mt-5">
-
-    <div id="searchSection" style="margin-bottom: 20px;">
-        <select id="searchKey">
-            <option value="아이디">아이디</option>
-            <option value="이름">이름</option>
-            <option value="제목">제목</option>
-        </select>
-        
-        <input type="text" id="searchWord" name="" value="" placeholder="검색" style="width: 300px;">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" id="f_subject"> 제목 : </h5>  <hr>
+            <h6 class="card-subtitle mb-2 text-muted" id="f_day"> 작성 날짜 : </h6> <hr>
+            <p class="card-text" id="f_id"> 아이디 : </p> <hr>
+            <p class="card-text" id="f_name"> 이름 : </p> <hr>
+            <p class="card-text" id="f_mail"> 메일 : </p> <hr>
+        </div> 
     </div>
-
-    <table class="table table-striped feedback-table">
-        <thead>
-            <tr>
-                <th scope="col">번호</th>
-                <th scope="col">아이디</th>
-                <th scope="col">이름</th>
-                <th scope="col">이메일</th>
-                <th scope="col">제목</th>
-                <th scope="col">내용</th>
-                <th scope="col">회원고유번호</th>
-                <th scope="col">작성날짜</th>
-            </tr>
-        </thead>
-        <tbody id="feedbackTableBody">
-            
-        </tbody>
-    </table>
+    <div class="card mt-5">
+        <div class="card-body">
+            <h4 class="card-title">내용:</h4>
+            <p class="card-text" id="f_content" style="font-size: 1.25rem;"></p>
+        </div>
+    </div>
 </div>
-  
-    </div>
-
 
 <script defer src="bundle.js"></script></body>
 

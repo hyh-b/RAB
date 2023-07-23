@@ -48,12 +48,12 @@
 		    	
 		//데이터 넘어오는거 검사 섹션
    	   
-       		console.log(" 메인칸 zzinseq ->", zzinseq);
+       		//console.log(" 메인칸 zzinseq ->", zzinseq);
    	   		//console.log(" m_id ->", elements.m_id);
        
    	   		//console.log("i_day ->", elements.i_day);
-       		console.log(" 메인칸 i_kcal ->", elements.i_kcal);
-       		console.log(" 메인칸 i_used_kcal ->", elements.i_used_kcal);
+       		//console.log(" 메인칸 i_kcal ->", elements.i_kcal);
+       		//console.log(" 메인칸 i_used_kcal ->", elements.i_used_kcal);
        		//console.log("m_weight ->", elements.m_weight);
        		//console.log("m_target_weight ->", elements.m_target_weight);
 
@@ -503,8 +503,8 @@
 	                weights[monthIndex] = line[i].avg_weight; 
 	            
 
-	                console.log(" line[i].month => ", line[i].month);
-	                console.log(" line[i].avg_weight => ", line[i].avg_weight);
+	                //console.log(" line[i].month => ", line[i].month);
+	                //console.log(" line[i].avg_weight => ", line[i].avg_weight);
 	            }
 
 	            //console.log(" line weights => ", weights);

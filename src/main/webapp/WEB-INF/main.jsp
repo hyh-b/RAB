@@ -32,6 +32,9 @@
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   
+  <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+  
+  
   <!--  js파일 외부화 -->
   <script src="/js/feedback.js"></script>
   <script src="/js/default_document.js"></script>
@@ -285,6 +288,7 @@
   	};//window.onload끝 
 //////
 
+	
 </script>
 
 
