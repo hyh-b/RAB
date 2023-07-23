@@ -580,23 +580,37 @@ $(document).ready(function() {
       <main>
   			<!-- ============  write 여기부터 시작	=================================== -->
 
-	<form action="notice_board_write_ok.do" method="post" name="ufrm" enctype="multipart/form-data">
+	<form id="myForm" action="notice_board_write_ok.do" method="post" name="ufrm" enctype="multipart/form-data">
   <div class="button-container">
     <div class="upload-container">
       <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div class="board_write">
           <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <table>
-              <tr>
-                <th>제목</th>
-                <td colspan="3"><input type="text" name="n_subject" value="" id="n_subject" class="board_view_input" /></td>
-              </tr>
-              <tr>
-                <th>내용</th>
-                <td colspan="3">
-                  <textarea name="n_content" id="n_content" class="board_editor_area"></textarea>
-                </td>
-              </tr>
+              <tr>				 
+				  <td colspan="3">
+				    <div>
+				      <label class="mb-3 block font-medium text-sm text-black dark:text-white">
+				        제목
+				      </label>
+				      <input type="text" name="n_subject" value="" id="n_subject" placeholder="제목을 입력하세요"
+				        class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
+				    </div>
+				  </td>
+				</tr>
+
+              <tr>				 
+				  <td colspan="3">
+				    <div>
+				      <label class="mb-3 block font-medium text-sm text-black dark:text-white">
+				        내용
+				      </label>
+				      <textarea name="n_content" id="n_content" rows="6" placeholder="내용을 입력하세요"
+				        class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"></textarea>
+				    </div>
+				  </td>
+				</tr>
+
               <tr>
                 <th>사진 등록</th>
                 <td colspan="3">
@@ -613,11 +627,21 @@ $(document).ready(function() {
   </div>
   <div class="btn_area">
     <div class="align_left">
-      <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board.do?cpage=${noticeListTO.cpage}'" />
+     	<a href="notice_board.do?cpage=${noticeListTO.cpage}"
+			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+			   style="float: right;">
+			   목록
+			</a>
     </div>
     <div class="align_right">
-      <input type="submit" id="ubtn" value="upload1" class="btn_list btn_txt02" style="cursor: pointer;" />
-    </div>
+	  <div style="display: flex; justify-content: flex-end;">	   
+	    <a onclick="document.getElementById('myForm').submit();"
+	       class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"style="cursor: pointer;">
+	       등록
+	    </a>
+	  </div>
+	</div>
+
   </div>
 </form>
 

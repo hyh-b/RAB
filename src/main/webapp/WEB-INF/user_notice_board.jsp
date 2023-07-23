@@ -43,9 +43,6 @@ pageEncoding="UTF-8"%>
 </style>
 
 
-
-
-
 </head>
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -574,96 +571,94 @@ pageEncoding="UTF-8"%>
        <h2 class="mt-10 mb-7.5 text-title-md2 font-bold text-black dark:text-white">
             공지사항
           </h2>     
-		<div class="grid grid-cols-1 gap-7.5 sm:grid-cols-1 xl:grid-cols-1">
-		    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-		        <table style="width: 100%;" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-		            <thead>
-		                <tr>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 10%;">번호</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 60%;">제목</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">작성일</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">조회수</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <c:forEach var="noticeBoard" items="${noticeBoardList}">
-		                    <tr>
-		                        <td style="text-align: center;">${noticeBoard.n_seq}</td>
-		                       <td><a href="/notice_board_view.do?cpage=${cpage}&n_seq=${noticeBoard.n_seq}">${noticeBoard.n_subject}</a></td>
-		                        <td style="text-align: center;">${noticeBoard.n_wdate}</td>
-		                        <td style="text-align: center;">${noticeBoard.n_hit}</td>
-		                    </tr>
-		                </c:forEach>
-		            </tbody>		            
-  			</table>		
-			<a href="notice_board_write.do?cpage=${cpage}"
-			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
-			   style="float: right;">
-			   쓰기
-			</a>
-
+<div class="grid grid-cols-1 gap-7.5 sm:grid-cols-1 xl:grid-cols-1">
+    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <table style="width: 100%;" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <thead>
+                <tr>
+                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 10%;">번호</th>
+                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 60%;">제목</th>
+                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">작성일</th>
+                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="noticeBoard" items="${noticeBoardList}">
+                    <tr>
+                        <td style="text-align: center;">${noticeBoard.n_seq}</td>
+                       <td><a href="/notice_board_view.do?cpage=${cpage}&n_seq=${noticeBoard.n_seq}">${noticeBoard.n_subject}</a></td>
+                        <td style="text-align: center;">${noticeBoard.n_wdate}</td>
+                        <td style="text-align: center;">${noticeBoard.n_hit}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+            
+        </table>
+        <div class="btn_area">
+			<div class="align_right">		
+				<input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="location.href='notice_board_write.do?cpage=${cpage}'" />
+			</div>
 		
         <!--=======  페이징 시작 =========================================-->
-		<div style="display: flex; justify-content: center;">
-				<div class="paginate_regular">
-					<div class="board_pagetab">				
-					<c:set var="startBlock" value="${cpage - ((cpage-1) mod blockPerPage)}" />
-					<c:if test="${endBlock >= totalPage}">
-					  <c:set var="endBlock" value="${totalPage}" />
-					</c:if>
-					
-					<c:choose>
-					  <c:when test="${startBlock == 1}">
-					    <span><a>&lt;&lt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
-					  </c:otherwise>
-					</c:choose>
-					&nbsp;
-					<c:choose>
-					  <c:when test="${cpage == 1}">
-					    <span><a>&lt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
-					  </c:otherwise>
-					</c:choose>
-					&nbsp;
-					<c:forEach begin="${startBlock}" end="${endBlock}" var="i">
-					  <c:choose>
-					    <c:when test="${i eq cpage}">
-					      <span><a>[${i}]</a></span>
-					    </c:when>
-					    <c:otherwise>
-					      <span><a href="/notice_board.do?cpage=${i}">${i}</a></span>
-					    </c:otherwise>
-					  </c:choose>
-					</c:forEach>
-					&nbsp;
-					<c:choose>
-					  <c:when test="${cpage == totalPage}">
-					    <span><a>&gt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
-					  </c:otherwise>
-					</c:choose>	
-					&nbsp;
-					
-					<c:choose>
-					  <c:when test="${endBlock == totalPage}">
-					    <span><a>&gt;&gt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
-					  </c:otherwise>
-					</c:choose>		
-					</div>
+			
+			<div class="paginate_regular">
+				<div class="board_pagetab">				
+				<c:set var="startBlock" value="${cpage - ((cpage-1) mod blockPerPage)}" />
+				<c:if test="${endBlock >= totalPage}">
+				  <c:set var="endBlock" value="${totalPage}" />
+				</c:if>
+				
+				<c:choose>
+				  <c:when test="${startBlock == 1}">
+				    <span><a>&lt;&lt;</a></span>
+				  </c:when>
+				  <c:otherwise>
+				    <span><a href="/notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
+				  </c:otherwise>
+				</c:choose>
+				&nbsp;
+				<c:choose>	
+				  <c:when test="${cpage == 1}">
+				    <span><a>&lt;</a></span>
+				  </c:when>
+				  <c:otherwise>
+				    <span><a href="/notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
+				  </c:otherwise>
+				</c:choose>
+				&nbsp;
+				<c:forEach begin="${startBlock}" end="${endBlock}" var="i">
+				  <c:choose>
+				    <c:when test="${i eq cpage}">
+				      <span><a>[${i}]</a></span>
+				    </c:when>
+				    <c:otherwise>
+				      <span><a href="/notice_board.do?cpage=${i}">${i}</a></span>
+				    </c:otherwise>
+				  </c:choose>
+				</c:forEach>
+				&nbsp;
+				<c:choose>
+				  <c:when test="${cpage == totalPage}">
+				    <span><a>&gt;</a></span>
+				  </c:when>
+				  <c:otherwise>
+				    <span><a href="/notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
+				  </c:otherwise>
+				</c:choose>	
+				&nbsp;
+				
+				<c:choose>
+				  <c:when test="${endBlock == totalPage}">
+				    <span><a>&gt;&gt;</a></span>
+				  </c:when>
+				  <c:otherwise>
+				    <span><a href="/notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
+				  </c:otherwise>
+				</c:choose>		
 				</div>
 			</div>
-		</table>
-	</main>
+			</table>
+			</main>
 
 	   <!--=======  페이징 끝 =========================================-->
 	    <!-- ============  게시판 여기서 끝=================================== -->

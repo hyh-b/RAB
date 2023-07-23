@@ -570,78 +570,64 @@ pageEncoding="UTF-8"%>
       
 <!-- ============  view 보여지는부분	=================================== -->
 <main>
-  <!-- <table>
-    <tbody>
-      <tr>
-        <td>
-          <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark flex flex-col justify-between ">
-              <c:set var="noticeBoard" value="${n_seq}"/>
-              ${n_seq} 
-              <h4 class="text-xl font-semibold text-black dark:text-white">
-                <a href="/notice_board_view.do" class="flex-grow">${n_seq} ${n_subject}</a>
-                <p class="font-medium flex-grow">${n_content}</p>
-              </h4>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>-->
-
-    <table border="1" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 100%; height: 100%;">
+<table border="1" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 100%; height: 100%;">
+  <!-- 제목 행 -->
   <tr>
-    <td>
-      <div class="flex items-center gap-3 py-5 px-6">
-        <!-- 유저 아이콘 & 닉네임 -->
-        <div class="h-10 w-10 rounded-full">
-          <img src="src/images/user/user-11.png" alt="User" />
-        </div>
-        <div>
-          <h4 class="font-medium text-black dark:text-white">
-            닉네임
-          </h4>
-          <p class="font-medium text-xs">직업</p>
-        </div>
-      </div>
-    </td>
- <tr>
-     <td><h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
-          <a>${n_subject}</a>
-        </h4>
-        </tr>
-        </td>
-  </tr>
-  <tr>
-    <td>
-    <!--===================================== 이미지 보여주는 부분 =======================================  -->
-		<c:if test="${not empty nf_filename}">
-			  <a class="block px-4">
-			    <img src="${nf_filename}" alt="Cards" />
-			  </a>
-		</c:if>
-	<!--===================================== 이미지 보여주는 부분 =======================================  -->
+    <td class="p-3 border-t border-b">
+      <h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
+        <a>${n_subject}</a>
+      </h4>
     </td>
   </tr>
+  <!-- 이미지 행 -->
   <tr>
-    <td> 
+    <td class="p-3 border-t border-b">
+      <!--===================================== 이미지 보여주는 부분 =======================================  -->
+      <c:if test="${not empty nf_filename}">
+        <a class="block px-4">
+          <img src="${nf_filename}" alt="Cards" />
+        </a>
+      </c:if>
+      <!--===================================== 이미지 보여주는 부분 =======================================  -->
+    </td>
+  </tr>
+  <!-- 내용 행 -->
+  <tr>
+    <td class="p-3 border-t border-b">
       <div class="p-6">
         <p class="font-medium">
-         <c:out value="${n_content}"/>
+          <c:out value="${n_content}"/>
         </p>
       </div>
     </td>
   </tr>
 </table>
-	<div class="align_left">
-      <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board.do?cpage=${noticeListTO.cpage}'" />
-    </div>
-	<div class="align_left">
-      <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board_modify.do?n_seq=${n_seq}'" />
-    </div>
-	<input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board_delete_ok.do?n_seq=${n_seq}'" />
 
 
+
+	<div class="align_left">
+    	<a href="notice_board.do?cpage=${noticeListTO.cpage}"
+			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+			   style="float: right;">
+			   목록
+			</a>
+    </div>
+	<div class="align_left">
+          <a href="notice_board_modify.do?n_seq=${n_seq}"
+			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+			   style="float: right;">
+			   수정
+			</a>
+    </div>
+    <div>
+			<a href="notice_board_delete_ok.do?n_seq=${n_seq}"
+			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+			   style="float: right;">
+			   삭제
+			</a>
+	</div>
+	
+	
 </main>
 
 

@@ -88,6 +88,34 @@ public class NoticeBoardController {
 	    modelAndView.setViewName("notice_board");
 	    return modelAndView;
 	}
+	@RequestMapping("/user_notice_board.do")
+	public ModelAndView user_notice_board(HttpServletRequest request, Authentication authentication) {
+		int cpage = 1;
+		if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
+			cpage = Integer.parseInt(request.getParameter("cpage"));
+		}
+		
+		NoticeListTO listTO = new NoticeListTO();
+		listTO.setCpage(cpage);
+		
+		listTO = dao.listTO(listTO);
+		
+		List<NoticeBoardTO> data = dao.totalRecord();
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		List<NoticeBoardTO> noticeBoardList = dao.getAllNoticeBoard();
+		int startIndex = (cpage - 1) * listTO.getRecordPerPage();
+		int endIndex = Math.min(startIndex + listTO.getRecordPerPage(), noticeBoardList.size());
+		List<NoticeBoardTO> paginatedList = noticeBoardList.subList(startIndex, endIndex);
+		
+		modelAndView.addObject("noticeBoardList", paginatedList);
+		modelAndView.addObject("listTO", listTO);
+		modelAndView.addObject("cpage", cpage);
+		modelAndView.addObject("data", data);
+		modelAndView.setViewName("user_notice_board");
+		return modelAndView;
+	}
 
 	
 	@RequestMapping("/notice_board_view.do")
@@ -138,6 +166,55 @@ public class NoticeBoardController {
 	    modelAndView.addObject("ato", ato);
 	    modelAndView.addObject("noticeListTO", noticeListTO);
 	    return modelAndView;
+	}
+	@RequestMapping("/user_notice_board_view.do")
+	public ModelAndView user_notice_board_view(HttpServletRequest request) {
+		NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
+		NoticeAlbumTO ato = new NoticeAlbumTO();
+		
+		//cpage
+		String cpageParam = request.getParameter("cpage");
+		int cpage = cpageParam != null ? Integer.parseInt(cpageParam) : 1;
+		
+		NoticeListTO noticeListTO = new NoticeListTO();
+		noticeListTO.setCpage(cpage);
+		
+		
+		//NoticeFile과 NoticeBoard를 같은 n_seq로 지정하는 부분
+		bto.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
+		System.out.println(request.getParameter("n_seq"));
+		ato.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
+		
+		System.out.println(bto.getN_seq());
+		//각각 insert
+		bto = dao.noticeBoardView(bto);
+		ato = dao.noticeFileView(ato);
+		
+		
+		
+		// 조회수 증가 처리
+		int result = dao.updateHitOK(bto); // Pass the entire NoticeBoardTO object
+		
+		// result 값으로 성공 여부를 확인할 수 있음
+		if (result == 1) {
+			System.out.println("조회수 증가 성공");
+		} else {
+			System.out.println("조회수 증가 실패");
+		}
+		
+		
+		
+		System.out.println("제목 -------" + bto.getN_subject());
+		System.out.println("내용 -------" + bto.getN_content());
+		System.out.println("파일이름 -------" + ato.getNf_filename());
+		System.out.println("파일사이즈 -------" + ato.getNf_filesize());
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("notice_board_view");
+		modelAndView.addObject("bto", bto); // 게시물 정보를 ModelAndView에 추가
+		modelAndView.addObject("ato", ato);
+		modelAndView.addObject("noticeListTO", noticeListTO);
+		return modelAndView;
 	}
 
 

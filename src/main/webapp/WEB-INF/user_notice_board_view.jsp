@@ -4,18 +4,29 @@ pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="listTO" value="${requestScope.listTO}"/>
-<c:set var="cpage" value="${requestScope.cpage}"/>
+<c:set var="noticeListTO" value="${requestScope.noticeListTO}"/>
+<c:set var="bto" value="${requestScope.bto}"/>
+<c:set var="n_seq" value="${bto.n_seq}" />
+<c:set var="n_subject" value="${bto.n_subject}" />
+<c:set var="n_content" value="${bto.n_content}" />
+<c:set var="ato" value="${requestScope.ato}"/>
+<c:set var="nf_filename" value="${ato.nf_filename}" />
+<c:set var="nf_filesize" value="${ato.nf_filesize}" />
+
+
+
+
 <c:set var="data" value="${requestScope.data}"/>
 <c:set var="filename" value="${requestScope.filename}"/>
+<!-- jstl 로 lists 받아옴 -->
+<%--  <c:forEach var="noticBoardList" items="${noticeBoardList}"> --%>
+<%--    <c:set var="n_seq" value="${noticBoardList.n_seq}" /> --%>
+<%--    <c:set var="n_subject" value="${noticBoardList.n_subject}" /> --%>
+<%--    <c:set var="n_content" value="${noticBoardList.n_content}" />	    --%>
+<%-- </c:forEach> --%>
 
-<c:set var="groupSize" value="5" />
-<c:set var="groupCounter" value="0" />
-<c:set var="totalRecord" value="${listTO.totalRecord}"/>
-<c:set var="recordPerPage" value="${listTO.recordPerPage }"/>
-<c:set var="totalPage" value="${listTO.totalPage }"/>
-<c:set var="blockPerPage" value="${listTO.blockPerPage }"/>
-<c:set var="endBlock" value="${cpage - ((cpage-1) mod blockPerPage) + blockPerPage -1 }"/>		
+
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -31,18 +42,6 @@ pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-<style>
-    /* 추가한 CSS 스타일 */
-    table {
-        border-collapse: collapse;
-    }
-    table, th, td {
-        border: 2px solid black;
-    }
-</style>
-
-
 
 
 
@@ -568,107 +567,85 @@ pageEncoding="UTF-8"%>
       <!-- ===== Header End ===== -->
 
       <!-- ===== Main Content Start ===== -->
-      <main>
-   <!-- ============  게시판 여기부터 시작	=================================== -->
-  <table >
-       <h2 class="mt-10 mb-7.5 text-title-md2 font-bold text-black dark:text-white">
-            공지사항
-          </h2>     
-		<div class="grid grid-cols-1 gap-7.5 sm:grid-cols-1 xl:grid-cols-1">
-		    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-		        <table style="width: 100%;" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-		            <thead>
-		                <tr>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 10%;">번호</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 60%;">제목</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">작성일</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">조회수</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <c:forEach var="noticeBoard" items="${noticeBoardList}">
-		                    <tr>
-		                        <td style="text-align: center;">${noticeBoard.n_seq}</td>
-		                       <td><a href="/notice_board_view.do?cpage=${cpage}&n_seq=${noticeBoard.n_seq}">${noticeBoard.n_subject}</a></td>
-		                        <td style="text-align: center;">${noticeBoard.n_wdate}</td>
-		                        <td style="text-align: center;">${noticeBoard.n_hit}</td>
-		                    </tr>
-		                </c:forEach>
-		            </tbody>		            
-  			</table>		
-			<a href="notice_board_write.do?cpage=${cpage}"
-			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
-			   style="float: right;">
-			   쓰기
-			</a>
+      
+<!-- ============  view 보여지는부분	=================================== -->
+<main>
+  <!-- <table>
+    <tbody>
+      <tr>
+        <td>
+          <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark flex flex-col justify-between ">
+              <c:set var="noticeBoard" value="${n_seq}"/>
+              ${n_seq} 
+              <h4 class="text-xl font-semibold text-black dark:text-white">
+                <a href="/notice_board_view.do" class="flex-grow">${n_seq} ${n_subject}</a>
+                <p class="font-medium flex-grow">${n_content}</p>
+              </h4>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>-->
 
-		
-        <!--=======  페이징 시작 =========================================-->
-		<div style="display: flex; justify-content: center;">
-				<div class="paginate_regular">
-					<div class="board_pagetab">				
-					<c:set var="startBlock" value="${cpage - ((cpage-1) mod blockPerPage)}" />
-					<c:if test="${endBlock >= totalPage}">
-					  <c:set var="endBlock" value="${totalPage}" />
-					</c:if>
-					
-					<c:choose>
-					  <c:when test="${startBlock == 1}">
-					    <span><a>&lt;&lt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
-					  </c:otherwise>
-					</c:choose>
-					&nbsp;
-					<c:choose>
-					  <c:when test="${cpage == 1}">
-					    <span><a>&lt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
-					  </c:otherwise>
-					</c:choose>
-					&nbsp;
-					<c:forEach begin="${startBlock}" end="${endBlock}" var="i">
-					  <c:choose>
-					    <c:when test="${i eq cpage}">
-					      <span><a>[${i}]</a></span>
-					    </c:when>
-					    <c:otherwise>
-					      <span><a href="/notice_board.do?cpage=${i}">${i}</a></span>
-					    </c:otherwise>
-					  </c:choose>
-					</c:forEach>
-					&nbsp;
-					<c:choose>
-					  <c:when test="${cpage == totalPage}">
-					    <span><a>&gt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
-					  </c:otherwise>
-					</c:choose>	
-					&nbsp;
-					
-					<c:choose>
-					  <c:when test="${endBlock == totalPage}">
-					    <span><a>&gt;&gt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
-					  </c:otherwise>
-					</c:choose>		
-					</div>
-				</div>
-			</div>
-		</table>
-	</main>
+    <table border="1" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 100%; height: 100%;">
+  <tr>
+    <td>
+      <div class="flex items-center gap-3 py-5 px-6">
+        <!-- 유저 아이콘 & 닉네임 -->
+        <div class="h-10 w-10 rounded-full">
+          <img src="src/images/user/user-11.png" alt="User" />
+        </div>
+        <div>
+          <h4 class="font-medium text-black dark:text-white">
+            닉네임
+          </h4>
+          <p class="font-medium text-xs">직업</p>
+        </div>
+      </div>
+    </td>
+ <tr>
+     <td><h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
+          <a>${n_subject}</a>
+        </h4>
+        </tr>
+        </td>
+  </tr>
+  <tr>
+    <td>
+    <!--===================================== 이미지 보여주는 부분 =======================================  -->
+		<c:if test="${not empty nf_filename}">
+			  <a class="block px-4">
+			    <img src="${nf_filename}" alt="Cards" />
+			  </a>
+		</c:if>
+	<!--===================================== 이미지 보여주는 부분 =======================================  -->
+    </td>
+  </tr>
+  <tr>
+    <td> 
+      <div class="p-6">
+        <p class="font-medium">
+         <c:out value="${n_content}"/>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+	<div class="align_left">
+      <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board.do?cpage=${noticeListTO.cpage}'" />
+    </div>
+	<div class="align_left">
+      <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board_modify.do?n_seq=${n_seq}'" />
+    </div>
+	<input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board_delete_ok.do?n_seq=${n_seq}'" />
 
-	   <!--=======  페이징 끝 =========================================-->
-	    <!-- ============  게시판 여기서 끝=================================== -->
-		
-				
+
+</main>
+
+
+<!-- ============  view 보여지는부분	=================================== -->
       <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Content Area End ===== -->
