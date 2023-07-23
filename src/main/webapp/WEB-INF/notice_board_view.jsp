@@ -572,27 +572,28 @@ pageEncoding="UTF-8"%>
 <main>
 <table border="1" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 100%; height: 100%;">
   <!-- 제목 행 -->
-  <tr>
-    <td class="p-3 border-t border-b">
-      <h4 class="mb-3 text-xl font-semibold text-black dark:text-white">
-        <a>${n_subject}</a>
-      </h4>
-    </td>
-  </tr>
+	 <tr>
+	  <td class="p-3 border-t border-b text-center">
+	    <h class="mb-3 text-xl font-semibold text-black dark:text-white" style="font-weight: bold;">
+	      <a>${n_subject}</a>
+	    </h>
+	  </td>
+	</tr>
   <!-- 이미지 행 -->
-  <tr>
-  <td class="p-3 border-t border-b">
+  
     <!--===================================== 이미지 보여주는 부분 =======================================  -->
     <c:forEach items="${atos}" var="ato">
       <c:if test="${not empty ato.nf_filename}">
-        <a class="block px-4">
-          <img src="${ato.nf_filename}" alt="Cards" />
-        </a>
+      <tr>
+  		<td class="p-3 border-t border-b">
+	        <a class="block px-4">
+	          <img src="${ato.nf_filename}" alt="Cards" />
+	        </a></td>
+		</tr>
       </c:if>
     </c:forEach>
     <!--===================================== 이미지 보여주는 부분 =======================================  -->
-  </td>
-</tr>
+  
   <!-- 내용 행 -->
   <tr>
     <td class="p-3 border-t border-b">

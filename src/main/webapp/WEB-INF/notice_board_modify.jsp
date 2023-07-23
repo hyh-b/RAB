@@ -613,11 +613,11 @@ $(document).ready(function() {
   </div>
   <div class="btn_area">
     <div class="align_left">
-      <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='notice_board.do?cpage=${noticeListTO.cpage}'" />
-    </div>
+	    <input type="button" value="목록" class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer; float: right;" onclick="location.href='notice_board.do?cpage=${noticeListTO.cpage}'" />
+	</div>
     <div class="align_right">
-      <input type="submit" id="ubtn" value="upload1" class="btn_list btn_txt02" style="cursor: pointer;" />
-    </div>
+	    <input type="submit" id="ubtn" value="등록" class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer; float: right;" />
+	</div>
   </div>
 </form>
 
