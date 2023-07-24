@@ -27,7 +27,6 @@
   <title>Mypage</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 </head>
-
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
@@ -242,6 +241,7 @@
           </ul>
           <button
             class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+            id="logOut"
           >
             <svg
               class="fill-current"
