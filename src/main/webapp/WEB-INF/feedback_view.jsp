@@ -33,6 +33,7 @@
 window.onload = function() {
 	
 	var urlParams = new URLSearchParams(window.location.search);
+	
     var f_seq = urlParams.get('f_seq');
     var m_seq = urlParams.get('m_seq');
     
@@ -53,7 +54,7 @@ window.onload = function() {
                 return;
             }
 
-            console.log('Data received: ', data);
+            //console.log('피드백 데이터 view : ', data);
 
             $.each(data, function(i, feedback) {
                 $("#f_subject").append(feedback.f_subject);
@@ -65,7 +66,7 @@ window.onload = function() {
             });
         },
         error: function(xhr, status, error) {
-            console.log('Error: ' + error);
+            //console.log(' 에러 : ' + error);
         }
     });
 };

@@ -383,7 +383,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="/notice_board.do"
+              href="/user_notice_board.do"
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
@@ -1013,7 +1013,7 @@
               <!-- ====== Map One Start -->
               <div class="col-span-12 rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-7">
 				  <h4 class="mb-2 text-xl font-bold text-black dark:text-white">
-				    내 몸무게 변화
+				    월간 몸무게 변화
 				  </h4>
 				  <select id="yearSelectForLineChart" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 

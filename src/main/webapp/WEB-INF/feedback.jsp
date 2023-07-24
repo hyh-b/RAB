@@ -20,10 +20,10 @@
             color: grey;
         }
       .container {
-    max-width: 1400px;
-    overflow-y: scroll;
-    height: 90vh; /* 페이지가 브라우저 창에 꽉 차도록 설정 */
-  }
+		    max-width: 1400px;
+		    overflow-y: scroll;
+		    height: 90vh; /* 페이지가 브라우저 창에 꽉 차도록 설정 */
+		  }
 
     </style>
 
@@ -126,11 +126,7 @@
 		  isLoadingMoreData = false; // 추가 데이터 로딩 완료
 		  loadedDataCount++; // 현재까지 로드된 데이터 개수를 증가시킵니다.
 		}
-		
-		
-		
-		
-		
+
 		///
 		function feedbackList() {
 			 if (isLoadingData || isSearchResult) return;  // 이미 데이터를 불러오고 있는 중이면 중복 요청 방지
