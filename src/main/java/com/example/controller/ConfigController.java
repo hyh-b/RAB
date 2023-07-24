@@ -174,13 +174,7 @@ public class ConfigController {
 		modelAndView.setViewName("admin");
 		return modelAndView;
 	}*/
-	
-	@RequestMapping("/feedback.do")
-	public ModelAndView feedback() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("feedback");
-		return modelAndView;
-	}
+
 	
 	@RequestMapping("/boardManagement.do")
 	public ModelAndView boardManagerment(HttpServletRequest request , Authentication authentication) {

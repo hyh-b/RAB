@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,10 +14,261 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
   
-  <script type="text/javascript">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <style>
+        .feedback-table {
+            color: grey;
+        }
+      .container {
+		    max-width: 1400px;
+		    overflow-y: scroll;
+		    height: 90vh; /* 페이지가 브라우저 창에 꽉 차도록 설정 */
+		  }
+
+    </style>
+
+<!--           
+
+//////////////////////////////////////////////////////////////
+
+ -->
   
-  
-  </script>
+<script>
+		
+		//함수
+		var page = 0;  // 페이지 번호를 저장하는 전역 변수
+		var isLoadingData = false;  // 데이터를 불러오는 중인지 여부를 나타내는 변수
+		var isLoadingMoreData = false; // 데이터를 추가로 불러오는 중인지 여부를 나타내는 변수
+		var loadedDataCount = 0; // 현재까지 로드된 데이터 개수를 저장하는 변수
+		var isSearchResult = false;
+		
+		// 스크롤 이벤트를 사용하여 스크롤을 올릴 때 데이터를 추가로 로드하는 함수
+		function loadMoreDataOnScrollUp() {
+		  if ($(window).scrollTop() === 0) {
+		    page = Math.max(0, page - 1); // 현재 페이지의 이전 페이지를 로드합니다.
+		    feedbackList(page, 1); // 이전 페이지를 포함하여 1개의 데이터를 가져옵니다.
+		  }
+		}
+		
+		// 더 이상 데이터가 없는 경우 처리
+		function handleNoMoreData() {
+		  var tbody = $('#feedbackTableBody');
+		  if (tbody.children().length >= 10) {
+		    // 현재 표시된 데이터가 10개 이상인 경우
+		    tbody.children().slice(0, -1).remove(); // 가장 오래된 데이터를 삭제합니다.
+		  }
+		}
+		
+		// 피드백 데이터를 표시하는 함수
+		function displayFeedbackData(data) {
+		  var tbody = $('#feedbackTableBody');
+		  tbody.empty(); // 새로운 데이터를 추가하기 전에 테이블 본문을 비웁니다.
+		
+		  $.each(data, function (i, feedback) {
+		    var row = $('<tr>');
+		    row.append($('<td>').text(feedback.f_seq));
+		    row.append($('<td>').text(feedback.f_id));
+		    row.append($('<td>').text(feedback.f_name));
+		    row.append($('<td>').text(feedback.f_mail));
+		    row.append($('<td>').text(feedback.f_subject));
+		    row.append($('<td>').text(feedback.f_content));
+		    row.append($('<td>').text(feedback.m_seq));
+		    row.append($('<td>').text(feedback.f_day));
+		    tbody.append(row);
+		    
+		    var viewLink = $('<a>').text('보기').attr('href', 'feedback_view.do?f_seq=' + feedback.f_seq + '&m_seq=' + feedback.m_seq);
+		    var viewTd = $('<td>').append(viewLink);
+
+		    row.append(viewTd); // 링크를 행에 추가합니다.
+		    tbody.append(row); // 데이터를 테이블의 맨 위에 추가합니다.
+		  });
+		
+		  isLoadingData = false; // 데이터 로딩 완료
+		}
+		
+		// 로딩 메시지를 추가하여 1개씩 데이터가 추가로 로드되는 메시지를 표시
+		function displayLoadingMessageOnScroll() {
+		  var tbody = $('#feedbackTableBody');
+		  tbody.empty(); // 로딩 메시지를 추가하기 전에 테이블 본문을 비웁니다.
+		
+		  var row = $('<tr>');
+		  row.append($('<td colspan="8">').text('데이터 불러오는 중...')); // 로딩 메시지 표시
+		  tbody.append(row);
+		}
+		
+		// 피드백 데이터를 표시하는 함수
+		function displayFeedbackDataOnScroll(data) {
+		  var tbody = $('#feedbackTableBody');
+		
+		  if (loadedDataCount >= 10) {
+		    tbody.children().slice(0, -1).remove(); // 가장 오래된 데이터를 삭제합니다.
+		  }
+		
+		  $.each(data, function (i, feedback) {
+		    var row = $('<tr>');
+		    row.append($('<td>').text(feedback.f_seq));
+		    row.append($('<td>').text(feedback.f_id));
+		    row.append($('<td>').text(feedback.f_name));
+		    row.append($('<td>').text(feedback.f_mail));
+		    row.append($('<td>').text(feedback.f_subject));
+		    row.append($('<td>').text(feedback.f_content));
+		    row.append($('<td>').text(feedback.m_seq));
+		    row.append($('<td>').text(feedback.f_day));
+		    
+		    var viewLink = $('<a>').text('보기').attr('href', 'feedback_view.do?f_seq=' + feedback.f_seq + '&m_seq=' + feedback.m_seq);
+		    var viewTd = $('<td>').append(viewLink);
+
+		    row.append(viewTd); // 링크를 행에 추가합니다.
+		    //tbody.prepend(row); // 데이터를 테이블의 맨 위에 추가합니다.
+		    tbody.append(row); // 데이터를 테이블의 맨 위에 추가합니다.
+		  });
+		
+		  isLoadingMoreData = false; // 추가 데이터 로딩 완료
+		  loadedDataCount++; // 현재까지 로드된 데이터 개수를 증가시킵니다.
+		}
+
+		///
+		function feedbackList() {
+			 if (isLoadingData || isSearchResult) return;  // 이미 데이터를 불러오고 있는 중이면 중복 요청 방지
+		
+		    isLoadingData = true;  // 데이터를 불러오는 중으로 설정
+		
+		    $.ajax({
+		        url: '/feedback_list',
+		        type: 'GET',
+		        data: { 
+		            page: page 
+		        },  // 페이지 번호를 요청과 함께 전달
+		        dataType: 'json',
+		        success: function(data) {
+		            if (data.length == 0) {  // 받아온 데이터가 없으면 더 이상 데이터가 없다는 것을 의미
+		                console.log("더 이상 데이터가 없습니다.");
+		                isLoadingData = false;
+		                return;
+		            }
+		
+		
+		            var tbody = $('#feedbackTableBody');
+		            if (page === 0) {
+		                tbody.empty();  // 처음 페이지를 불러올 때만 이전 데이터를 삭제합니다.
+		            }
+		
+		            $.each(data, function(i, feedback) {
+		                var row = $('<tr>');
+		                row.append($('<td>').text(feedback.f_seq));
+		                row.append($('<td>').text(feedback.f_id));
+		                row.append($('<td>').text(feedback.f_name));
+		                row.append($('<td>').text(feedback.f_mail));
+		                row.append($('<td>').text(feedback.f_subject));
+		                row.append($('<td>').text(feedback.f_content));
+		                row.append($('<td>').text(feedback.m_seq));
+		                row.append($('<td>').text(feedback.f_day));
+		                
+		    		    var viewLink = $('<a>').text('보기').attr('href', 'feedback_view.do?f_seq=' + feedback.f_seq + '&m_seq=' + feedback.m_seq);
+		    		    var viewTd = $('<td>').append(viewLink);
+
+		    		    row.append(viewTd); // 링크를 행에 추가합니다.
+		    		    //tbody.prepend(row); // 데이터를 테이블의 맨 위에 추가합니다.
+		                tbody.append(row);
+		            });
+		
+		            
+		           // displayFeedbackData(data); // 가져온 데이터를 표시합니다.
+		           displayFeedbackDataOnScroll(data)
+		            page++; // 다음 페이지 번호를 증가시킵니다.
+		            isLoadingData = false; // 데이터 불러오기 완료
+		        },
+		        error: function(xhr, status, error) {
+		            console.log('Error: ' + error);
+		            isLoadingData = false;  // 데이터 불러오기 실패 시 중복 요청 방지를 위해 초기화
+		        }
+		    });
+		}
+		
+		////
+		
+		$(document).ready(function(){
+		    // 페이지가 처음에 로드될 때 초기 데이터를 불러옵니다.
+		    feedbackList(); // 처음에 0번 페이지에서 10개의 데이터를 가져옵니다.
+		    
+		    var observer = new IntersectionObserver(function(entries) {
+		        if (entries[0].isIntersecting === true) {
+		            loadMoreData();
+		        }
+		    }, { threshold: [0.2] });
+		
+		    function loadMoreData() {
+		        console.log("데이터 불러오는중..");
+		        feedbackList();
+		
+		        // 데이터 로드 후 마지막 행을 관찰 대상으로 설정
+		        var lastRow = $("table.feedback-table tr:last");
+		        observer.observe(lastRow[0]);
+		    }
+		
+		    // 초기에는 테이블의 마지막 행을 관찰 대상으로 설정
+		    var initialLastRow = $("table.feedback-table tr:last");
+		    observer.observe(initialLastRow[0]);
+		
+		    // 스크롤 이벤트를 사용하여 스크롤을 올릴 때도 데이터를 추가로 로드
+		    $(window).on('scroll', function () {
+		        if ($(window).scrollTop() === 0 && !isLoadingMoreData) {
+		          // 스크롤이 맨 위에 도달하고 현재 데이터 로딩 중이 아닌 경우에만 실행
+		          isLoadingMoreData = true; // 추가 데이터 로딩 중으로 설정
+		          displayLoadingMessageOnScroll(); // 로딩 메시지 표시
+		          loadMoreDataOnScrollUp(); // 이전 페이지 데이터를 로드
+		        }
+		      });
+		   //
+		   
+		   $('#searchWord').on('change', function() {
+			  if ($(this).val().trim() === '') {
+			    isSearchResult = false;  // 검색 결과를 보여주고 있지 않음을 설정
+			    feedbackList();  // 원래의 데이터를 다시 불러옴
+			  }
+			});
+		  ///검색기능
+	      $('#searchWord').on('keypress', function(e) {
+				    if(e.which == 13) {  // Enter key pressed
+				        var searchKey = $('#searchKey').val();
+				        var searchWord = $('#searchWord').val().trim();
+				        
+				        console.log(' searchKey ', searchKey);
+				        console.log(' searchWord ', searchWord);
+				
+				        if (!searchWord) {
+				            alert('검색어를 입력하세요!');
+				            return;
+				        }
+				
+				        $.ajax({
+				            url: 'feedback_search',
+				            type: 'GET', 
+				            data: {
+				                searchKey: searchKey,
+				                searchWord: searchWord
+				            },
+				            success: function(response) {
+				            	var searching = JSON.parse(response);
+				            	$('#feedbackTableBody').empty();
+				            	
+				            	console.log(' searching -> ', searching );
+				                displayFeedbackData(searching);
+				                isSearchResult = true;
+				            },
+				            error: function(jqXHR, textStatus, errorThrown) {
+				                console.log(textStatus, errorThrown);
+				            }
+				        });
+				
+				        $('#searchWord').val('');
+				    }
+			});
+		    
+		    ///
+		});
+
+</script>
 
 <body
   x-data="{ page: 'buttons', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -222,14 +475,40 @@
   </div>
 </aside>
 
-    <!-- ===== Sidebar End ===== -->
+<div class="container mt-5">
 
-    
-      <!-- ===== Main Content End ===== -->
+    <div id="searchSection" style="margin-bottom: 20px;">
+        <select id="searchKey">
+            <option value="아이디">아이디</option>
+            <option value="이름">이름</option>
+            <option value="제목">제목</option>
+        </select>
+        
+        <input type="text" id="searchWord" name="" value="" placeholder="검색" style="width: 300px;">
     </div>
-    <!-- ===== Content Area End ===== -->
-  </div>
-  <!-- ===== Page Wrapper End ===== -->
+
+    <table class="table table-striped feedback-table">
+        <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">아이디</th>
+                <th scope="col">이름</th>
+                <th scope="col">이메일</th>
+                <th scope="col">제목</th>
+                <th scope="col">내용</th>
+                <th scope="col">회원고유번호</th>
+                <th scope="col">작성날짜</th>
+            </tr>
+        </thead>
+        <tbody id="feedbackTableBody">
+            
+        </tbody>
+    </table>
+</div>
+  
+    </div>
+
+
 <script defer src="bundle.js"></script></body>
 
 </html>

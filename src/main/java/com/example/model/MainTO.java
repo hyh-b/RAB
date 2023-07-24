@@ -3,6 +3,7 @@ package com.example.model;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -129,5 +130,19 @@ public class MainTO {
    
    private String week;
    
-
+   //feedback 테이블
+   private int f_seq;
+   private String f_id;
+   private String f_name;
+   private String f_mail;
+   private String f_subject;
+   private String f_content;
+   private String f_ex;
+   private Timestamp f_day;
+   
+   //feedback 파일 테이블
+   private int ff_seq;
+   private int f_filesize;
+   private String f_filename;
+   
 }

@@ -88,6 +88,7 @@
 <!-- id,pw 불일치로 로그인 실패시 signin.do?error페이지로 전송 후 메세지 출력 -->
 <% if (request.getParameter("error") != null) { %>
     <script>
+    	
          alert("아이디 혹은 비밀번호가 맞지 않습니다");
     </script>
 <% }
@@ -315,9 +316,11 @@
 	                            </g>
 	                          </svg>
 	                        </span>
+	               <!---------------- 로그인 상태 유지 체크박스 ------------>
+	                        <input type="checkbox" id="remember-me" name="remember-me">&nbsp;로그인 상태 유지
                       </div>
                     </div>
-
+					
                     <div class="mb-5">
                       <input id="login" type="submit" value="로그인" 
                         class="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 font-medium text-white transition hover:bg-opacity-90" />

@@ -111,7 +111,7 @@ public class MainDAO {
 					
 		}
 		
-  //---정보입력 하루치 IntakeData 레코드 생성
+  //---정보입력창에서 하루치 IntakeData 레코드 생성
 		
 		public int InsertDataForMain(String mId) {
 			
@@ -123,7 +123,7 @@ public class MainDAO {
 			
 		}
 	
-		//---아 점 저 합연산--------------------------
+  //---아 점 저 합연산--------------------------
 		
 		public int UnionPerDay(int seq, String day) {
 			
@@ -226,29 +226,79 @@ public class MainDAO {
 
 			return TargetWeightUpdateFlag;
 		}
-		
-		//---m_weight and i_weight 동기화
-//		
-//		public int MandIweightsynced(String str_seq) {
-//					
-//			int syncFlag = 1;
-//			
-//			int result = mapper.MandIweightsynced(str_seq);
-//			
-//			if(result == 1 ) {
-//				syncFlag = 0;
-//				System.out.println( " synced 정상-> , " + syncFlag);
-//			}else if(result == 0) {
-//				syncFlag = 1;
-//				System.out.println( " synced 비정상-> , " + syncFlag);
-//			}
-//
-//			
-//			return syncFlag;
-//
-//		}
-		
-		
+	//---main에서 합연산 쿼리들 실행 테스트--------------------
+
+				public int MainUnionPerDay(String seq) {
+					
+					int mainflag_a = 1;
+					
+					int result = mapper.MainUnionBLDperDay(seq);
+					
+					System.out.println(" \n mainflag_a  에서 seq -> " + seq );
+					
+					if(result == 1 ) {
+						
+						mainflag_a = 0;
+						
+					}else if(result == 0) {
+						
+						mainflag_a = 1;
+					}
+				
+					System.out.println( " MainUnionPerDay ->" + mainflag_a );
+					
+					return mainflag_a ;
+							
+				}
+				
+				//---아 점 저 합연산 3개를 1개의 i_kcal로 총합연산--------------------------
+				
+				public int MainUnionAllCalories(String seq) {
+					
+					int mainflag_c = 1;
+					
+					int result = mapper.MainUnionAllCalories(seq);
+					
+					System.out.println("  String화 된 seq ->  " + seq );
+					
+					if(result == 1 ) {
+						mainflag_c = 0;
+					}else if(result == 0) {
+						mainflag_c = 1;
+					}
+					
+					System.out.println( " MainUnionAllCalories ->" + mainflag_c);
+				
+					return mainflag_c;
+							
+				}
+				
+				//---탄단지 콜나당 하루치 총합--------------------------
+				
+				public int 	MainUnionAllNutritions(String seq) {
+					
+					int mainflag_c= 1;
+					
+					int result = mapper.MainUnionAllNutritions(seq);
+					
+					if(result == 1 ) {
+						mainflag_c = 0;
+					}else if(result == 0) {
+						mainflag_c = 1;
+					}
+					
+					System.out.println( " MainUnionAllNutritions = " + mainflag_c + "\n");
+				
+					return mainflag_c;
+							
+				}
+
+				
+	//---main에서 합연산 쿼리들 실행 테스트 끝 --------------------
+				
+				
+				
+	
 		//---피드백---------------------
 		
 		//피드백 입력
@@ -268,6 +318,71 @@ public class MainDAO {
 			return feedbackFlag;
 		}
 		
+	 //---피드백 게시판
+		
+		public ArrayList<MainTO> ListOfFeedback(int pageSize, int offset){
+			
+			List<MainTO> feedback_list  = (List<MainTO>)mapper.FeedbackList(pageSize, offset);
+			
+			ArrayList<MainTO> feedback_lists  = new ArrayList<>(feedback_list);
+			
+			System.out.println(" feedback_lists dao 에서 -> " + feedback_lists);
+	    
+	    	return feedback_lists;
+		}
+		
+	//----피드백 view
+		public ArrayList<MainTO> ViewOfFeedback(int f_seq, int m_seq){
+			
+			List<MainTO> feedback_view  = (List<MainTO>)mapper.ViewFeedback(f_seq, m_seq);
+			
+			ArrayList<MainTO> feedback_views  = new ArrayList<>(feedback_view);
+			
+			System.out.println(" views 피드백 dao 에서 -> " + feedback_views );
+	    
+	    	return feedback_views ;
+		}
+		
+		
+	//----피드백 검색기능
+		
+		public ArrayList<MainTO> SearchingFeedback(String searchKey, String searchWord){
+			
+			
+			searchWord = "%" + searchWord + "%";
+			
+			System.out.println( "dao 에서 키-> " + searchKey);
+			System.out.println( "dao 에서 word-> " + searchWord);
+			
+			
+			
+			 switch (searchKey) {
+		        case "아이디":
+		            List<MainTO> idSearchResult = (List<MainTO>) mapper.FidList(searchWord);
+		            return new ArrayList<>(idSearchResult);
+		        case "이름":
+		            List<MainTO> nameSearchResult = (List<MainTO>) mapper.FnameList(searchWord);
+		            return new ArrayList<>(nameSearchResult);
+		        case "제목":
+		            List<MainTO> subjectSearchResult = (List<MainTO>) mapper.FsubjectList(searchWord);
+		            return new ArrayList<>(subjectSearchResult);
+		        default:
+		            // 검색 키가 잘못된 경우, 빈 리스트를 반환하거나 원하는 에러 처리를 수행합니다.
+		        	System.out.println(" 명단에 없습니다");
+		            return new ArrayList<>();
+		    }
+		}
+		
+		//----피드백 이미지.
+		
+		public int ImageForFeedback(String nameFile, int sizeFile) {
+			
+			int img_feedback = mapper.ImageFeedbackInserted(nameFile, sizeFile);
+					
+			System.out.println(" dao에서 이미지 처리 결과? -> "+ img_feedback);
+			
+			return img_feedback;
+		}
 		
 }
 
