@@ -190,7 +190,12 @@ pageEncoding="UTF-8"%>
 			let selectedMeal = $('#mealSelect').val();
 
 			if (selectedMeal === "") {
-				swal("아침 , 점심 , 저녁 중 선택을 하여 등록해야합니다.");
+				swal({
+		    		  title: "실패!",
+		    		  text: "아침 , 점심 , 저녁 중 선택을 하여 등록해야합니다.",
+		    		  icon: "error",
+		    		  button: "확인",
+		    	});
 				return;
 			}
 
@@ -285,396 +290,394 @@ pageEncoding="UTF-8"%>
 		
 	//==================================================== 식단 메모 =================================================================
 		
-	$('#foodName1').on('keypress', function(e) {
-        if (e.which == 13) {
-            e.preventDefault();  
-        	$('#searchButton1').click(); 
-        }
-    });
-	$('#searchButton1').click(function() {
-	    const data = $('#foodName1').val();
-	    console.log(data);
-	
-	    if (data === '') {
-	        swal({
-	    		  title: "실패!",
-	    		  text: "검색어를 입력해주세요!",
-	    		  icon: "error",
-	    		  button: "확인",
-	    	});
-	        return;
-	    }
-	    
-	    $.ajax({
-	        url: "/foodData",
-	        method: "post",
-	        data: {
-	            data: data
-	        },
-	        dataType: "json",
-	        success: function(json) {
-	            console.log(json);
-	            if (json.length > 0) {
-	                let result = "<table>";
-	                $(json).each(function(index, item) {
-	                    result += "<tr class='selectable-row'>";
-	                    result += "<td><input type='checkbox' class='select-checkbox'></td>";
-	                    result += "<td>" + item.f_name + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_carbohydrate_g + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_protein_g + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_fat_g + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_cholesterol_mg + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_sodium_mg + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_sugar_g + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_kcal + "</td>";
-	                    result += "</tr>";
-	                });
-	                result += "</table>";
-	                $('#foodComent1').html(result);
-	                $('#foodName1').val('');
-	                // 선택 가능한 행에 클릭 이벤트 추가
-	                $('.selectable-row').click(function() {
-	                    $(this).toggleClass('selected');
-	                });
-	            } else {
-	                alert("데이터가 없습니다. 다시 입력해주세요!");
-	            }
-	        },
-	        error: function(e) {
-	            alert("에러 발생: " + e.status);
+		$('#foodName1').on('keypress', function(e) {
+	        if (e.which == 13) {
+	            e.preventDefault();  
+	        	$('#searchButton1').click(); 
 	        }
 	    });
-	});
+		$('#searchButton1').click(function() {
+		    const data = $('#foodName1').val();
+		    console.log(data);
 		
-	$("#dialogContainer1").dialog({
-	    autoOpen: false,
-	    modal: true,
-	    width: 350,
-	    height: 400,
-	    buttons: {
-	        '취소': function() {
-	        	$('#foodComent1').empty();
-	            $(this).dialog('close');
-	        },
-			"확인": function() {
-				
-				if ($('.select-checkbox:checked').length == 0) {
-	                swal({
-			    		  title: "실패!",
-			    		  text: "해당 음식을 체크 누른 후 확인을 눌러주세요!",
-			    		  icon: "error",
-			    		  button: "확인",
-			    	});
-	                return false;
-	            }
-				
-			    let selectedData = [];
-			    $('.select-checkbox:checked').each(function() {
-			        let rowData = [];
-			        $(this).closest('tr').find('td').each(function() {
-			            rowData.push($(this).text());
-			        });
-			        selectedData.push(rowData);
-			    });
-			
-			    if (selectedData.length > 0) {
-			        selectedData.forEach(function(dataRow) {
-			            let rowId = "generated-div-" + divId;
-			            let result = '<div id="' + rowId + '" class="row-div">';
-			            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-			            result += '<div>';
-			            result += '<table>';
-			            result += '<thead>';
-			            result += '<tr>';
-			            result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
-			            result += '</tr>';
-			            result += '</thead>';
-			            result += '</table>';
-			            result += '</div>';
-			            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-			            result += '<thead></thead>';
-			            result += '<tbody>';
-			            result += '<tr>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
-	                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
-	                    result += '</tr>';
-	                    result += '</tbody>';
-	                    result += '</table>';
-	                    result += '</div>';
-	                    result += '</div>';
-	                    $('#resultFood1').append(result);
-	                    divId++;
-	                });
-			        $('#foodComent1').empty();
-			        $('.select-checkbox').prop('checked', false);
-	                $(this).dialog("close");
-	            }
-	        }
-	    }
-	});
+		    if (data === '') {
+		        swal({
+		    		  title: "주의!",
+		    		  text: "검색어를 입력해주세요!",
+		    		  icon: "warning",
+		    		  button: "확인",
+		    	});
+		        return;
+		    }
+		    
+		    $.ajax({
+		        url: "/foodData",
+		        method: "post",
+		        data: {
+		            data: data
+		        },
+		        dataType: "json",
+		        success: function(json) {
+		            console.log(json);
+		            if (json.length > 0) {
+		                let result = "<table>";
+		                $(json).each(function(index, item) {
+		                    result += "<tr class='selectable-row'>";
+		                    result += "<td><input type='checkbox' class='select-checkbox'></td>";
+		                    result += "<td>" + item.f_name + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_carbohydrate_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_protein_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_fat_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_cholesterol_mg + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_sodium_mg + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_sugar_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_kcal + "</td>";
+		                    result += "</tr>";
+		                });
+		                result += "</table>";
+		                $('#foodComent1').html(result);
+		                $('#foodName1').val('');
+		                // 선택 가능한 행에 클릭 이벤트 추가
+		                $('.selectable-row').click(function() {
+		                    $(this).toggleClass('selected');
+		                });
+		            } else {
+		                alert("데이터가 없습니다. 다시 입력해주세요!");
+		            }
+		        },
+		        error: function(e) {
+		            alert("에러 발생: " + e.status);
+		        }
+		    });
+		});
 		
-	$("#dialogContainer2").dialog({
-	    autoOpen: false,
-	    modal: true,
-	    width: 600,
-	    height: 874,
-	    buttons: {
-	        '취소': function () {
-	        	imageUpload.file = null;
-                imageUpload.imagePreviewUrl = '';
-                imageUpload.render();
-                $('#foodTable').empty();
-	            $(this).dialog('close');
-	        },
-	        "확인": function () {
-	            if ($('.select-checkbox:checked').length === 0) {
-	                swal({
-			    		  title: "실패!",
-			    		  text: "해당 음식을 체크한 후 확인을 눌러주세요!",
-			    		  icon: "error",
-			    		  button: "확인",
-			    	});
-	                return false;
-	            }
-
-	            let selectedData = [];
-	            $('.select-checkbox:checked').each(function () {
-	                let rowData = [];
-	                $(this).closest('tr').find('td').each(function () {
-	                    rowData.push($(this).text());
-	                });
-	                selectedData.push(rowData);
-	            });
-
-	            if (selectedData.length > 0) {
-	                selectedData.forEach(function (dataRow) {
-	                    let rowId = "generated-div-" + divId;
-	                    let result = '<div id="' + rowId + '" class="row-div">';
-	                    result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-	                    result += '<div>';
-	                    result += '<table>';
-	                    result += '<thead>';
-	                    result += '<tr>';
-	                    result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
-	                    result += '</tr>';
-	                    result += '</thead>';
-	                    result += '</table>';
-	                    result += '</div>';
-	                    result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-	                    result += '<thead></thead>';
-	                    result += '<tbody>';
-	                    result += '<tr>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
-	                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
-	                    result += '</tr>';
-	                    result += '</tbody>';
-	                    result += '</table>';
-	                    result += '</div>';
-	                    result += '</div>';
-	                    $('#resultFood1').append(result);
-	                    divId++;
-	                });
-	                imageUpload.file = null;
+		$("#dialogContainer1").dialog({
+		    autoOpen: false,
+		    modal: true,
+		    width: 350,
+		    height: 400,
+		    buttons: {
+		        '취소': function() {
+		        	$('#foodComent1').empty();
+		            $(this).dialog('close');
+		        },
+				"확인": function() {
+					
+					if ($('.select-checkbox:checked').length == 0) {
+		                swal({
+				    		  title: "실패!",
+				    		  text: "해당 음식을 체크 누른 후 확인을 눌러주세요!",
+				    		  icon: "error",
+				    		  button: "확인",
+				    	});
+		                return false;
+		            }
+					
+				    let selectedData = [];
+				    $('.select-checkbox:checked').each(function() {
+				        let rowData = [];
+				        $(this).closest('tr').find('td').each(function() {
+				            rowData.push($(this).text());
+				        });
+				        selectedData.push(rowData);
+				    });
+				
+				    if (selectedData.length > 0) {
+				        selectedData.forEach(function(dataRow) {
+				            let rowId = "generated-div-" + divId;
+				            let result = '<div id="' + rowId + '" class="row-div">';
+				            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+				            result += '<div>';
+				            result += '<table>';
+				            result += '<thead>';
+				            result += '<tr>';
+				            result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
+				            result += '</tr>';
+				            result += '</thead>';
+				            result += '</table>';
+				            result += '</div>';
+				            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
+				            result += '<thead></thead>';
+				            result += '<tbody>';
+				            result += '<tr>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
+		                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
+		                    result += '</tr>';
+		                    result += '</tbody>';
+		                    result += '</table>';
+		                    result += '</div>';
+		                    result += '</div>';
+		                    $('#resultFood1').append(result);
+		                    divId++;
+		                });
+				        $('#foodComent1').empty();
+				        $('.select-checkbox').prop('checked', false);
+		                $(this).dialog("close");
+		            }
+		        }
+		    }
+		});
+		
+		$("#dialogContainer2").dialog({
+		    autoOpen: false,
+		    modal: true,
+		    width: 600,
+		    height: 874,
+		    buttons: {
+		        '취소': function () {
+		        	imageUpload.file = null;
 	                imageUpload.imagePreviewUrl = '';
 	                imageUpload.render();
 	                $('#foodTable').empty();
-	                $('.select-checkbox').prop('checked', false);
-	                $(this).dialog("close");
-	            }
-	        }
-	    }
-	});
+		            $(this).dialog('close');
+		        },
+		        "확인": function () {
+		            if ($('.select-checkbox:checked').length === 0) {
+		                swal({
+				    		  title: "실패!",
+				    		  text: "해당 음식을 체크한 후 확인을 눌러주세요!",
+				    		  icon: "error",
+				    		  button: "확인",
+				    	});
+		                return false;
+		            }
+	
+		            let selectedData = [];
+		            $('.select-checkbox:checked').each(function () {
+		                let rowData = [];
+		                $(this).closest('tr').find('td').each(function () {
+		                    rowData.push($(this).text());
+		                });
+		                selectedData.push(rowData);
+		            });
+	
+		            if (selectedData.length > 0) {
+		                selectedData.forEach(function (dataRow) {
+		                    let rowId = "generated-div-" + divId;
+		                    let result = '<div id="' + rowId + '" class="row-div">';
+		                    result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+		                    result += '<div>';
+		                    result += '<table>';
+		                    result += '<thead>';
+		                    result += '<tr>';
+		                    result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
+		                    result += '</tr>';
+		                    result += '</thead>';
+		                    result += '</table>';
+		                    result += '</div>';
+		                    result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
+		                    result += '<thead></thead>';
+		                    result += '<tbody>';
+		                    result += '<tr>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
+		                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
+		                    result += '</tr>';
+		                    result += '</tbody>';
+		                    result += '</table>';
+		                    result += '</div>';
+		                    result += '</div>';
+		                    $('#resultFood1').append(result);
+		                    divId++;
+		                });
+		                imageUpload.file = null;
+		                imageUpload.imagePreviewUrl = '';
+		                imageUpload.render();
+		                $('#foodTable').empty();
+		                $('.select-checkbox').prop('checked', false);
+		                $(this).dialog("close");
+		            }
+		        }
+		    }
+		});
 	//=================================================== 식단 메모 끝 =================================================================
 	
 	//================================================ 이미지 업로드 부분 시작 ==============================================================
-	class ImageUpload {
-	  constructor() {
-	    this.file = null;
-	    this.imagePreviewUrl = '';
-	    this.responseData = null;
-	  }
-	  
-	  // form이 submit 되었을떄 호출되며 선택된 이미지를 서버(Controller)에 업로드 하는 작업!!
-	  _handleSubmit() {
+		class ImageUpload {
+		  constructor() {
+		    this.file = null;
+		    this.imagePreviewUrl = '';
+		    this.responseData = null;
+		  }
 		  
-	  	if (!this.file) {
-		    swal({
-		    	  title: "주의!",
-		    	  text: "사진을 선택 후 업로드 해주세요!",
+		  // form이 submit 되었을떄 호출되며 선택된 이미지를 서버(Controller)에 업로드 하는 작업!!
+		  _handleSubmit() {
+			  
+		  	if (!this.file) {
+			    swal({
+			    	  title: "주의!",
+			    	  text: "사진을 선택 후 업로드 해주세요!",
+			    	  icon: "warning",
+			    	  button: "확인",
+			    });
+				return;
+			}  
+		  	const formData = new FormData();
+		    formData.append('image', this.file);
+	
+		    $.ajax({
+	   	        url: '/api/upload',
+	   	        type: 'POST',
+	   	        data: formData,
+	   	        cache: false,
+	   	        contentType: false,
+	   	        processData: false,
+	   	        dataType : 'json',
+	   	        success: (json) => {
+	   	        	console.log(json)
+	   	        	this.responseData = json;
+	   	            this.render();
+	   	        },
+	   	        error: function(e) {
+	   	            alert('[에러]]'+e.status)
+	   	        }
+	   	    });
+		  }
+		
+		  
+		  _handleImageChange(e) {
+		    e.preventDefault();
+		
+		    let reader = new FileReader();
+		    let file = e.target.files[0];
+		
+		    if (!file.type.startsWith('image/')) {
+		      swal({
+		    	  title: "실패!",
+		    	  text: "이미지 파일만 업로드할 수 있습니다.",
 		    	  icon: "warning",
 		    	  button: "확인",
-		    	});
-			return;
-		}  
-	  	const formData = new FormData();
-	    formData.append('image', this.file);
-
-	    $.ajax({
-   	        url: '/api/upload',
-   	        type: 'POST',
-   	        data: formData,
-   	        cache: false,
-   	        contentType: false,
-   	        processData: false,
-   	        dataType : 'json',
-   	        success: (json) => {
-   	        	console.log(json)
-   	        	this.responseData = json;
-   	            this.render();
-   	        },
-   	        error: function(e) {
-   	            alert('[에러]]'+e.status)
-   	        }
-   	    });
-	  }
+		      });
 	
-	  
-	  _handleImageChange(e) {
-	    e.preventDefault();
-	
-	    let reader = new FileReader();
-	    let file = e.target.files[0];
-	
-	    if (!file.type.startsWith('image/')) {
-	      swal({
-	    	  title: "실패!",
-	    	  text: "이미지 파일만 업로드할 수 있습니다.",
-	    	  icon: "warning",
-	    	  button: "확인",
-	      });
-
-	      this.file = null;
-	      this.imagePreviewUrl = '';
-	      this.render();
-	      return;
-	    }
-	
-	    reader.onloadend = () => {
-	      this.file = file;
-	      this.imagePreviewUrl = reader.result;
-	      this.render();
-	    }
-	
-	    reader.readAsDataURL(file);
-	  }
-	
-     	  //========================================= UI 에서 이미지 미리보기 기능 시작 ====================================================
-	  render() {
-	    let $imagePreview = null;
-	    let fileName = '';
-	    if (this.imagePreviewUrl && this.file && this.file.type.startsWith('image/')) {
-	      $imagePreview = $('<img>').attr('src', this.imagePreviewUrl);
-	      fileName = this.file.name;
-	    } else {
-	      $imagePreview = $('<div>').addClass('previewText').text('미리 보기할 이미지를 선택해주세요');
-	    }
-	
-	    const $previewComponent = $('<div>').addClass('previewComponent').append(
-	      $('<form>').on('submit', (e) => {
-	        e.preventDefault();
-	        this._handleSubmit();
-	      }).append(
-	        $('<input>').addClass('fileInput').attr('type', 'file').on('change', (e) => this._handleImageChange(e)),
-	        $('<button>').addClass('submitButton').attr('type', 'submit').text('이미지 업로드').on('click', (e) => {
-	          e.preventDefault();
-	          this._handleSubmit();
-	        })
-	      ),
-	      $('<div>').addClass('imgPreview').css('height', '310px').append($imagePreview)
-	    );
-	    
-	    //========================================== Ajax에서 responseData에 데이터를 넘겨서 뿌려주기 시작 ===============================
-	    
-	    if (this.responseData) {
-		    const table = $('<table>').attr('id', 'foodTable').css({
-		        'border-collapse': 'collapse', 
-		        'width': '100%'
-		    });
+		      this.file = null;
+		      this.imagePreviewUrl = '';
+		      this.render();
+		      return;
+		    }
 		
-		    const message = $('<h3>').text('사진에 해당하는 메뉴를 체크해주세요.').css({
-		        'text-align': 'center',
-		        'margin-top': '20px'
-		    });
+		    reader.onloadend = () => {
+		      this.file = file;
+		      this.imagePreviewUrl = reader.result;
+		      this.render();
+		    }
 		
-		    this.responseData.forEach((foodInfo) => {
-		        const row = $('<tr>').addClass('selectable-row');
-		        row.append($('<td>').css({
-		            'border': '1px solid black',
-		            'text-align': 'center'
-		        }).html('<input type="checkbox" class="select-checkbox">'));
-		        row.append($('<td>').text(foodInfo.foodName).css({
-		            'border': '1px solid black',
-		            'text-align': 'center'
-		        }));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.carbohydrates).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.protein).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.fat).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.cholesterol).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.sodium).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.sugar).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.kcal).css('border', '1px solid black'));
-		        table.append(row);
-		    });
+		    reader.readAsDataURL(file);
+		  }
 		
-		    $previewComponent.append(message);
-		    $previewComponent.append(table);
+	     	  //========================================= UI 에서 이미지 미리보기 기능 시작 ====================================================
+		  render() {
+		    let $imagePreview = null;
+		    let fileName = '';
+		    if (this.imagePreviewUrl && this.file && this.file.type.startsWith('image/')) {
+		      $imagePreview = $('<img>').attr('src', this.imagePreviewUrl);
+		      fileName = this.file.name;
+		    } else {
+		      $imagePreview = $('<div>').addClass('previewText').text('미리 보기할 이미지를 선택해주세요');
+		    }
+		
+		    const $previewComponent = $('<div>').addClass('previewComponent').append(
+		      $('<form>').on('submit', (e) => {
+		        e.preventDefault();
+		        this._handleSubmit();
+		      }).append(
+		        $('<input>').addClass('fileInput').attr('type', 'file').on('change', (e) => this._handleImageChange(e)),
+		        $('<button>').addClass('submitButton').attr('type', 'submit').text('이미지 업로드').on('click', (e) => {
+		          e.preventDefault();
+		          this._handleSubmit();
+		        })
+		      ),
+		      $('<div>').addClass('imgPreview').css('height', '310px').append($imagePreview)
+		    );
+		    
+		    //========================================== Ajax에서 responseData에 데이터를 넘겨서 뿌려주기 시작 ===============================
+		    
+		    if (this.responseData) {
+			    const table = $('<table>').attr('id', 'foodTable').css({
+			        'border-collapse': 'collapse', 
+			        'width': '100%'
+			    });
+			
+			    const message = $('<h3>').text('사진에 해당하는 메뉴를 체크해주세요.').css({
+			        'text-align': 'center',
+			        'margin-top': '20px'
+			    });
+			
+			    this.responseData.forEach((foodInfo) => {
+			        const row = $('<tr>').addClass('selectable-row');
+			        row.append($('<td>').css({
+			            'border': '1px solid black',
+			            'text-align': 'center'
+			        }).html('<input type="checkbox" class="select-checkbox">'));
+			        row.append($('<td>').text(foodInfo.foodName).css({
+			            'border': '1px solid black',
+			            'text-align': 'center'
+			        }));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.carbohydrates).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.protein).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.fat).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.cholesterol).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.sodium).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.sugar).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.kcal).css('border', '1px solid black'));
+			        table.append(row);
+			    });
+			
+			    $previewComponent.append(message);
+			    $previewComponent.append(table);
+			}
+		    //========================================== Ajax에서 responseData에 데이터를 넘겨서 뿌려주기 끝 =================================
+	
+		    	
+		    //========================================= UI 에서 이미지 미리보기 기능 끝 ====================================================
+		    
+		    $('#mainApp').empty().append($previewComponent);
+		  }
 		}
-	    //========================================== Ajax에서 responseData에 데이터를 넘겨서 뿌려주기 끝 =================================
-
-	    	
-	    //========================================= UI 에서 이미지 미리보기 기능 끝 ====================================================
-	    
-	    $('#mainApp').empty().append($previewComponent);
-	  }
-	}
 		
-	const imageUpload = new ImageUpload();
-	imageUpload.render();
+		const imageUpload = new ImageUpload();
+		imageUpload.render();
     
-	//=================================================== 이미지 업로드 부분 끝 ==============================================================
+		//=================================================== 이미지 업로드 부분 끝 ==============================================================
 	
 	
-	//=================================================== 다이어로그 업로드 부분 시작 ==============================================================
-	$( '#btn1' ).button().on( 'click', function() {
-		$( '#dialogContainer1' ).dialog( 'open' ); 
-	});
-	
-	$( '#btn2' ).button().on( 'click', function() {
-		$( '#dialogContainer2' ).dialog( 'open' ); 
-	});
-	
-	//=================================================== 다이어로그 업로드 부분 끝 ================================================================
+		//=================================================== 다이어로그 업로드 부분 시작 ==============================================================
+		$( '#btn1' ).button().on( 'click', function() {
+			$( '#dialogContainer1' ).dialog( 'open' ); 
+		});
 		
-	// ========================================= 다이어로그 제어 부분 =========================================
-	$(window).resize(function() {
-	    let wWidth = $(window).width();
-	    let dWidth = wWidth * 0.8;
-	    let wHeight = $(window).height();
-	    let dHeight = wHeight * 0.8;
-
-	    $("#dialogContainer1").dialog("option", "width", dWidth);
-	    $("#dialogContainer1").dialog("option", "height", dHeight);
-
-	    $("#dialogContainer2").dialog("option", "width", dWidth);
-	    $("#dialogContainer2").dialog("option", "height", dHeight);
-	});
+		$( '#btn2' ).button().on( 'click', function() {
+			$( '#dialogContainer2' ).dialog( 'open' ); 
+		});
 	
+		//=================================================== 다이어로그 업로드 부분 끝 ================================================================
+			
+		// ========================================= 다이어로그 제어 부분 =========================================
+		$(window).resize(function() {
+		    let wWidth = $(window).width();
+		    let dWidth = wWidth * 0.8;
+		    let wHeight = $(window).height();
+		    let dHeight = wHeight * 0.8;
 	
-	let initialWidth = $(window).width() * 0.8;
-	let initialHeight = $(window).height() * 0.8;
-	// =================================================================================================	
+		    $("#dialogContainer1").dialog("option", "width", dWidth);
+		    $("#dialogContainer1").dialog("option", "height", dHeight);
+	
+		    $("#dialogContainer2").dialog("option", "width", dWidth);
+		    $("#dialogContainer2").dialog("option", "height", dHeight);
+		});
 		
 		
+		let initialWidth = $(window).width() * 0.8;
+		let initialHeight = $(window).height() * 0.8;
+		// =================================================================================================	
 });
 </script>
 
