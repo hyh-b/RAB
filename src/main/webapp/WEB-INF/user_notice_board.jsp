@@ -3,7 +3,19 @@
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="n_seq" value="${requestScope.n_seq}" />
+
+<c:set var="listTO" value="${requestScope.listTO}"/>
+<c:set var="cpage" value="${requestScope.cpage}"/>
+<c:set var="data" value="${requestScope.data}"/>
+<c:set var="filename" value="${requestScope.filename}"/>
+
+<c:set var="groupSize" value="5" />
+<c:set var="groupCounter" value="0" />
+<c:set var="totalRecord" value="${listTO.totalRecord}"/>
+<c:set var="recordPerPage" value="${listTO.recordPerPage }"/>
+<c:set var="totalPage" value="${listTO.totalPage }"/>
+<c:set var="blockPerPage" value="${listTO.blockPerPage }"/>
+<c:set var="endBlock" value="${cpage - ((cpage-1) mod blockPerPage) + blockPerPage -1 }"/>		
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -20,44 +32,23 @@ pageEncoding="UTF-8"%>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-<script>
-$(document).ready(function() {
-	  $('#wbtn').click(function() {
-	    if ($('#u_subject').val().trim() == '') {
-	      alert('제목을 입력하시오.');
-	      return false;
-	    }
-	    
-	    let formData = new FormData($('form')[0]);	   
+<style>
+    /* 추가한 CSS 스타일 */
+    table {
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border: 2px solid black;
+    }
+</style>
 
-	    $.ajax({
-	      url: 'notice_board_write_ok.do',
-	      data: formData,
-	      dataType: 'json',
-	      type: 'post',
-	      contentType: false,
-	      processData: false,
-	      success: function(json) {
-// 	        if (json.flagAB == '0' && json.flagCF == '0') {
-// 	          alert('쓰기 성공');
-// 	          location.href = '/';
-// 	        } else {
-// 	          alert('쓰기 실패');
-// 	        }
-			console.log(json);
-	      },
-	      error: function(e) {
-	        alert('[에러]' + e.status);
-	      }
-	    });
-	  });
-	});
-</script>
+
+
 
 
 </head>
 <body
-   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+  x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
           darkMode = JSON.parse(localStorage.getItem('darkMode'));
           $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -462,56 +453,106 @@ $(document).ready(function() {
   </div>
 </header>
 
-
       <!-- ===== Header End ===== -->
 
       <!-- ===== Main Content Start ===== -->
       <main>
-  			<!-- ============  write 여기부터 시작	=================================== -->
+   <!-- ============  게시판 여기부터 시작	=================================== -->
+  <table >
+       <h2 class="mt-10 mb-7.5 text-title-md2 font-bold text-black dark:text-white">
+            공지사항
+          </h2>     
+		<div class="grid grid-cols-1 gap-7.5 sm:grid-cols-1 xl:grid-cols-1">
+		    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+		        <table style="width: 100%;" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+		            <thead>
+		                <tr>
+		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 10%;">번호</th>
+		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 60%;">제목</th>
+		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">작성일</th>
+		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">조회수</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <c:forEach var="noticeBoard" items="${noticeBoardList}">
+		                    <tr>
+		                        <td style="text-align: center;">${noticeBoard.n_seq}</td>
+		                       <td><a href="/user_notice_board_view.do?cpage=${cpage}&n_seq=${noticeBoard.n_seq}">${noticeBoard.n_subject}</a></td>
+		                        <td style="text-align: center;">${noticeBoard.n_wdate}</td>
+		                        <td style="text-align: center;">${noticeBoard.n_hit}</td>
+		                    </tr>
+		                </c:forEach>
+		            </tbody>		            
+  			</table>		
+			
 
-	<form action="notice_board_modify_ok.do?n_seq=${n_seq}" method="post" name="ufrm" enctype="multipart/form-data">
-  <div class="button-container">
-    <div class="upload-container">
-      <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div class="board_write">
-          <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-            <table>
-              <tr>
-                <th>제목</th>
-                <td colspan="3"><input type="text" name="n_subject" value="" id="n_subject" class="board_view_input" /></td>
-              </tr>
-              <tr>
-                <th>내용</th>
-                <td colspan="3">
-                  <textarea name="n_content" id="n_content" class="board_editor_area"></textarea>
-                </td>
-              </tr>
-             <tr>
-				    <th>사진 등록</th>
-					    <td colspan="3">
-					        <div class="flex">
-					            <input type="file" name="upload" multiple class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" />
-					        </div>
-					   </td>
-				</tr>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="btn_area">
-    <div class="align_left">
-	    <input type="button" value="목록" class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer; float: right;" onclick="location.href='notice_board.do?cpage=${noticeListTO.cpage}'" />
-	</div>
-    <div class="align_right">
-	    <input type="submit" id="ubtn" value="등록" class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer; float: right;" />
-	</div>
-  </div>
-</form>
+		
+        <!--=======  페이징 시작 =========================================-->
+		<div style="display: flex; justify-content: center;">
+				<div class="paginate_regular">
+					<div class="board_pagetab">				
+					<c:set var="startBlock" value="${cpage - ((cpage-1) mod blockPerPage)}" />
+					<c:if test="${endBlock >= totalPage}">
+					  <c:set var="endBlock" value="${totalPage}" />
+					</c:if>
+					
+					<c:choose>
+					  <c:when test="${startBlock == 1}">
+					    <span><a>&lt;&lt;</a></span>
+					  </c:when>
+					  <c:otherwise>
+					    <span><a href="/notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
+					  </c:otherwise>
+					</c:choose>
+					&nbsp;
+					<c:choose>
+					  <c:when test="${cpage == 1}">
+					    <span><a>&lt;</a></span>
+					  </c:when>
+					  <c:otherwise>
+					    <span><a href="/notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
+					  </c:otherwise>
+					</c:choose>
+					&nbsp;
+					<c:forEach begin="${startBlock}" end="${endBlock}" var="i">
+					  <c:choose>
+					    <c:when test="${i eq cpage}">
+					      <span><a>[${i}]</a></span>
+					    </c:when>
+					    <c:otherwise>
+					      <span><a href="/notice_board.do?cpage=${i}">${i}</a></span>
+					    </c:otherwise>
+					  </c:choose>
+					</c:forEach>
+					&nbsp;
+					<c:choose>
+					  <c:when test="${cpage == totalPage}">
+					    <span><a>&gt;</a></span>
+					  </c:when>
+					  <c:otherwise>
+					    <span><a href="/notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
+					  </c:otherwise>
+					</c:choose>	
+					&nbsp;
+					
+					<c:choose>
+					  <c:when test="${endBlock == totalPage}">
+					    <span><a>&gt;&gt;</a></span>
+					  </c:when>
+					  <c:otherwise>
+					    <span><a href="/notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
+					  </c:otherwise>
+					</c:choose>		
+					</div>
+				</div>
+			</div>
+				</div>
+			</div>
+		</table>
+	</main>
 
-
-	    <!-- ============  Write 여기서 끝=================================== -->
+	   <!--=======  페이징 끝 =========================================-->
+	    <!-- ============  게시판 여기서 끝=================================== -->
 		
 				
       <!-- ===== Main Content End ===== -->

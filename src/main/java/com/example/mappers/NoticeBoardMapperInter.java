@@ -19,9 +19,13 @@ public interface NoticeBoardMapperInter {
 	
 	@Select("SELECT * FROM NoticeBoard WHERE n_seq = #{n_seq}")
 	public  NoticeBoardTO noticeBoardView(NoticeBoardTO to);
-
+	//하나만 쓰는경우
+	@Select("SELECT * FROM  NoticeFile WHERE n_seq = #{n_seq}")
+	public List<NoticeAlbumTO> noticeFilelistView(NoticeAlbumTO to);
+	//여러개 쓰는경우
 	@Select("SELECT * FROM  NoticeFile   WHERE n_seq = #{n_seq}")
 	public NoticeAlbumTO noticeFileView(NoticeAlbumTO to);
+	
 	
 	@Select("select * from NoticeBoard")
 	List<NoticeBoardTO> getAllNoticeBoard(); 
@@ -44,6 +48,9 @@ public interface NoticeBoardMapperInter {
 	//삭제
 	@Delete("delete from NoticeBoard where n_seq=#{n_seq}")
 	public int noticeDelete_ok(NoticeBoardTO to);
+	
+	@Delete("delete from NoticeFile where n_seq=#{n_seq}")
+	public int noticeFileDelete_ok(NoticeAlbumTO to);
 	// 이미지 url알아내기
 	@Select("select nf_filename from NoticeFile where n_seq=#{n_seq}")
 	public String noticeAlbumName(String n_seq);
@@ -56,6 +63,7 @@ public interface NoticeBoardMapperInter {
 	
 	@Update("UPDATE NoticeFile SET nf_filename = #{nf_filename}, nf_filesize = #{nf_filesize} WHERE n_seq = #{n_seq}")
 	public int updateNoticeAlbum(NoticeAlbumTO to);
+
 
 	}
 

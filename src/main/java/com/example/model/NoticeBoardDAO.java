@@ -20,9 +20,6 @@ public class NoticeBoardDAO {
 	public NoticeBoardTO noticeBoardView(NoticeBoardTO to) {
 	    return mapper.noticeBoardView(to);
 	}
-	public NoticeAlbumTO noticeFileView(NoticeAlbumTO to) {
-		return mapper.noticeFileView(to);
-	}
 	
 	public List<NoticeBoardTO> getAllNoticeBoard() {
 	    return mapper.getAllNoticeBoard();

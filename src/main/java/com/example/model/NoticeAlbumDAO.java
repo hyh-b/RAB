@@ -1,6 +1,7 @@
 package com.example.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,26 @@ public class NoticeAlbumDAO {
 		return noticeAlbumLists;
 	}
 	
+	public NoticeAlbumTO noticeFileView(NoticeAlbumTO to) {
+		return mapper.noticeFileView(to);
+	}
+	public int noticeFileDelete_ok(NoticeAlbumTO to) {
+	    int flag = 2;
 
+	    int result = mapper.noticeFileDelete_ok(to);
+
+	    if(result == 1) {
+	        flag = 0;
+	    } else if(result == 0) {
+	        flag = 1;
+	    }
+	    return flag;
+	}
+
+
+	public List<NoticeAlbumTO> noticeFilelistView(NoticeAlbumTO to) {
+	    return mapper.noticeFilelistView(to);
+	}
 	
 	
 	// db에 저장된 album_name 가져오기
@@ -53,4 +73,5 @@ public class NoticeAlbumDAO {
 		
 		return name;
 	}
+	
 }

@@ -6,9 +6,12 @@
 	
 	out.println( "<script type='text/javascript'>" );
 	if( flag == 1 && flagAB == 1 ) {
-		out.println( "alert('업로드에 성공');" );
+		out.println( "alert('이미지 업로드에 성공');" );
 		out.println( "location.href='notice_board.do';" );
-	}  else {
+	}  else if(flag==0 && flagAB==1){
+		out.println( "alert('텍스트 업로드에 성공');" );
+		out.println( "location.href='notice_board.do';" );
+	}else{
 		out.println( "alert('업로드에 실패');" );
 		out.println( "history.back();" );
 	}
