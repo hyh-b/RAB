@@ -1,41 +1,55 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="seq" value="${requestScope.seq}" />
-<c:set var="myto" value="${requestScope.myto}" />
-
-<c:set var="name" value="${myto.m_name}" />
-<c:set var="role" value="${myto.m_role}" />
-<c:set var="profilename" value="${myto.m_profilename}" />
-<c:set var="backgroundfilename" value="${myto.m_backgroundfilename}" />
-<c:set var="joinDate" value="${myto.m_join_date}" />
-<c:set var="tel" value="${myto.m_tel}" />
-<c:set var="height" value="${myto.m_height}" />
-<c:set var="weight" value="${myto.m_weight}" />
-<c:set var="targetCalorie" value="${myto.m_target_calorie}" />
-<c:set var="targetWeight" value="${myto.m_target_weight}" />
-<c:set var="birthday" value="${myto.m_birthday}" />
-<c:set var="id" value="${myto.m_id}" />
-<c:set var="mail" value="${myto.m_mail}" />
-
- 
+<c:set var="name" value="${requestScope.name}" />
+<c:set var="profilename" value="${requestScope.profilename}" />
+	<%
+	request.setCharacterEncoding("utf-8");
+	String cpage = request.getParameter("cpage");
+	%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mypage</title>
-<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+ <title>BoardWrite</title>
+ <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="./css/board_write.css">
 </head>
-
 <script type="text/javascript">
-function confirmDelete() {
-	  if ( confirm(" 탈퇴 후 복구가 불가능 합니다 정말 삭제하시겠습니까?") ) {
-	    location.href = "mypageDeleteOK.do";
-	  }
-	}
+window.onload = function () {
+    document.getElementById('wbtn').onclick = function () {
+		// 필수 입력값 검사
+		if( document.wfrm.info.checked == false ) {
+			alert('동의 하셔야 합니다'); 
+		}
+		if(document.wfrm.writer.value.trim() == '' ){
+			alert('글쓴이를 입력 하셔야 합니다');
+			return false;
+		}
+		if(document.wfrm.subject.value.trim() == '' ){
+			alert('제목을 입력 하셔야 합니다');
+			return false;
+		}
+		if(document.wfrm.upload.value.trim() == '' ){
+			alert('파일을 업로드 하셔야 합니다');
+			return false;
+		} else {
+				// 파일명에서 확장자를 분리해서 출력
+				const ext = document.wfrm.upload.value.trim().split('.');
+				// alert( ext[ext.length -1] );
+				if( ext[ext.length -1] != 'jpg' && ext[ext.length -1] != 'png'
+						&& ext[ext.length -1] != 'gif' ) {
+					alert('이미지 파일을 업로드 하셔야 합니다')
+					return false;
+				}
+		}
+		document.wfrm.submit();
+    };
+};
 </script>
+
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
@@ -66,19 +80,10 @@ function confirmDelete() {
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-<<<<<<< HEAD
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
 		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
-=======
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-    <a href="/main.do">
-   <!--  사이트 로고  -->
-
-
-     <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
->>>>>>> c7deb6fc10c6334ba12460a7fda82437520168e3
     </a>
 
     <button
@@ -345,7 +350,6 @@ function confirmDelete() {
             <span class="block text-sm font-medium text-black dark:text-white">
             ${name}
             </span>
-            <span class="block text-xs font-medium">${role}</span>
             
           </span>
 
@@ -381,7 +385,7 @@ function confirmDelete() {
           >
             <li>
               <a
-                href="profile.do"
+                href="profile.html"
                 class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
               >
                 <svg
@@ -425,7 +429,7 @@ function confirmDelete() {
                 fill=""
               />
             </svg>
-            <a href="/klogout.do">Log Out</a>
+            Log Out
           </button>
         </div>
         <!-- Dropdown End -->
@@ -439,238 +443,95 @@ function confirmDelete() {
 
       <!-- ===== Main Content Start ===== -->
       <main>
-        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-          <div class="mx-auto max-w-242.5">
-            <!-- Breadcrumb Start -->
-            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <h2 class="text-title-md2 font-bold text-black dark:text-white">
-                Mypage
-              </h2>
+  <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+    <div class="mx-auto max-w-242.5">
+      <!-- Breadcrumb Start -->
+      <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-bold text-black dark:text-white">
+        </h2>
+        <nav>
+          <ol class="flex items-center gap-2">
+            <li><a class="font-medium" href="main.do">main /</a></li>
+            <li><a class="font-medium" href="board_list1.do">Board /</a></li>
+            <li class="text-primary">BoardWrite</li>
+          </ol>
+        </nav>
+        	</div>
+        		</div>
+        
+      <!-- Breadcrumb End -->
 
-              <nav>
-                <ol class="flex items-center gap-2">
-                  <li><a class="font-medium" href="main.do">main /</a></li>
-                  <li class="text-primary">Profile</li>
-                </ol>
-              </nav>
-            </div>
-            <!-- Breadcrumb End -->
+      <!-- ====== Profile Section Start -->
 
-            <!-- ====== Profile Section Start -->
-            <div
-              class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div class="relative z-20 h-35 md:h-65">
-<!--  배사 파일명 -->
-                <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${backgroundfilename}" alt="profile cover"
-                  class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
-               
-                </div>
-              </div>
-              <div class="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
-                <div
-                  class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
-                  <div class="relative drop-shadow-2">
-<!--  프사  -->
-                    <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="profile" />
-                  </div>
-                </div>
-<!--  마이페이지  -->                
-                <div class="mt-4">
-                  <h3 class="mb-1.5 text-2xl font-medium text-black dark:text-white">
-                    ${name}
-                  </h3>
-                  <p class="font-medium">${joinDate} 가입</p>
-                  <div class="mx-auto max-w-180">
-                  
-             <form action="./mypage.do" method="post" name="wfrm" >
-              <div class="p-7">
-                      <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div class="w-full sm:w-1/2">
-                          <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="fullName">
-                            이름</label>
-                          <div class="relative">
-                            <span class="absolute left-4.5 top-4">
-                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g opacity="0.8">
-                                  <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                    fill="" />
-                                  <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                    fill="" />
-                                </g>
-                              </svg>
-                            </span>
-							<input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-							       type="text" name="name" id="name" value="${name}" readonly />
-                          </div>
-                        </div>
-                        
-<!--  전화번호  -->
-						 <div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  전화번호
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="phoneNumber" id="phoneNumber"
-						    value="${tel}" readonly />
-						    <img src="src/images/logo/call.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
+    <form action="./board_write_ok1.do" method="post" name="wfrm" enctype="multipart/form-data">
+		<div class="contents_sub">
+		<!--게시판-->
+			<div class="board_write">
+				<table>
+				<tr>
+					<th class="top">글쓴이</th>
+					<td class="top" colspan="3"><input type="text" name="writer" value="${name}" class="board_view_input_mail" maxlength="5" readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td colspan="3"><input type="text" name="subject" value="" class="board_view_input" /></td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td colspan="3">
+						<textarea name="content" class="board_editor_area"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>이미지</th>
+					<td colspan="3">
+						<input type="file" name="upload" value="" class="board_view_input" /><br /><br />
+					</td>
+				</tr>
+				</table>
+				
+				<table>	
+				<tr>
+					<br />
+					<td style="text-align:left;border:1px solid #e0e0e0;background-color:f9f9f9;padding:5px">
+						<div style="padding-top:7px;padding-bottom:5px;font-weight:bold;padding-left:7px;font-family: Gulim,Tahoma,verdana;">※ 개인정보 수집 및 이용에 관한 안내</div>
+						<div style="padding-left:10px;">
+							<div style="width:97%;height:95px;font-size:11px;letter-spacing: -0.1em;border:1px solid #c5c5c5;background-color:#fff;padding-left:14px;padding-top:7px;"> 
+								 1. 수집 개인정보 항목 : 회사명, 담당자명, 메일 주소, 전화번호, 홈페이지 주소, 팩스번호, 주소 <br />
+								 2. 개인정보의 수집 및 이용목적 : 제휴신청에 따른 본인확인 및 원활한 의사소통 경로 확보 <br />
+								 3. 개인정보의 이용기간 : 모든 검토가 완료된 후 3개월간 이용자의 조회를 위하여 보관하며, 이후 해당정보를 지체 없이 파기합니다. <br />
+								 4. 그 밖의 사항은 개인정보취급방침을 준수합니다.
+							</div>
 						</div>
-                       </div>
-<!--  현재 신장 -->                      
-                         <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  현재 신장 ( cm )
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="takeKcal" id="takeKcal" 
-						   value="${height}" readonly />
-						    <img src="src/images/logo/cm.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-                       </div>
-
-<!--  현재 몸무게 -->
-                       	<div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  현재 몸무게 ( Kg )
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="targetScale" id="targetScale"
-						    value="${weight}" readonly />
-						    <img src="src/images/logo/body.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
+						<div style="padding-top:7px;padding-left:5px;padding-bottom:7px;font-family: Gulim,Tahoma,verdana;">
+							<input type="checkbox" name="info" value="1" class="input_radio"> 개인정보 수집 및 이용에 대해 동의합니다.
 						</div>
-                       </div>
+					</td>
+				</tr>
+				</table>
+			</div>
 
-<!--  하루 목표 칼로리  -->
-                      <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  하루 목표 섭취 칼로리 ( Kcal )
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="takeKcal" id="takeKcal" 
-						    value="${targetCalorie}" readonly />
-						    <img src="src/images/logo/mypageFood.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-                       </div>
+			<div class="btn_area">
+				<div class="align_left">			
+					<input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='board_list1.do?'" />
+				</div>
+				<div class="align_right">			
+					<input type="button" id ="wbtn" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" />					
+				</div>	
+			</div>	
+			<!--//게시판-->
+		</div>
+	</form>
+</div>
 
-<!--  목표 몸무게 -->
-                       	<div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  목표 몸무게 ( Kg )
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="targetScale" id="targetScale"
-						    value="${targetWeight}" readonly />
-						    <img src="src/images/logo/work3.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-						</div>
-                       </div>
-                      
-<!--  생년월일  --> 
-                      <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  생년월일
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="birthday" id="birthday" 
-						    value="${birthday}" readonly />
-						    <img src="src/images/logo/birthday.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-                       </div>
-
-<!--  회원 ID -->
-                        <div class="w-full sm:w-1/2">
-                          <label class="mb-3 block text-sm font-medium text-black dark:text-white"
-                            for="phoneNumber">ID</label>
-                            <div class="relative">
-                            <span class="absolute left-4.5 top-4">
-                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g opacity="0.8">
-                                  <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                    fill="" />
-                                  <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                    fill="" />
-                                </g>
-                              </svg>
-                            </span>
-						<input 
-							class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                             type="text" name="memberid" id="memberid"
-                             value="${id}" readonly/>
-                        </div>
-                      </div>
-                     </div>
-
-<!--  이메일 -->                      
-                       <div class="mb-5.5">
-                        <label class="mb-3 block text-sm font-medium text-black dark:text-white"
-                          for="emailAddress">이메일</label>
-                        <div class="relative">
-                          <span class="absolute left-4.5 top-4">
-                            <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <g opacity="0.8">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M3.33301 4.16667C2.87658 4.16667 2.49967 4.54357 2.49967 5V15C2.49967 15.4564 2.87658 15.8333 3.33301 15.8333H16.6663C17.1228 15.8333 17.4997 15.4564 17.4997 15V5C17.4997 4.54357 17.1228 4.16667 16.6663 4.16667H3.33301ZM0.833008 5C0.833008 3.6231 1.9561 2.5 3.33301 2.5H16.6663C18.0432 2.5 19.1663 3.6231 19.1663 5V15C19.1663 16.3769 18.0432 17.5 16.6663 17.5H3.33301C1.9561 17.5 0.833008 16.3769 0.833008 15V5Z"
-                                  fill="" />
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M0.983719 4.52215C1.24765 4.1451 1.76726 4.05341 2.1443 4.31734L9.99975 9.81615L17.8552 4.31734C18.2322 4.05341 18.7518 4.1451 19.0158 4.52215C19.2797 4.89919 19.188 5.4188 18.811 5.68272L10.4776 11.5161C10.1907 11.7169 9.80879 11.7169 9.52186 11.5161L1.18853 5.68272C0.811486 5.4188 0.719791 4.89919 0.983719 4.52215Z"
-                                  fill="" />
-                              </g>
-                            </svg>
-                          </span>
-                          <input
-                            class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                            type="email" name="email" id="email" 
-                            value="${mail}" readonly/>
-                        </div>
-                      </div>
-
-<!-- 마이페이지 구성 끝 -->
-                  </div>
-                  <div class="mt-6.5">
-                </div>
-                </form>
-                
- <!--  버튼  -->
-		  <!-- 정보 수정 버튼 -->
-		  <button id="editButton"
-		    class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-		    onclick="location.href='mypageModify.do'">
-		    정보 수정
-		  </button>
-		  
-		  <!--  탈퇴 -->
-			<button id="delete"
-			  class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-			  onclick="confirmDelete()">
-			  회원 탈퇴
-			</button>
-            
-            <!-- ====== Profile Section End -->
-          </div>
-        </div>
-      </main>
-      <!-- ===== Main Content End ===== -->
-    </div>
-    <!-- ===== Content Area End ===== -->
+    <!-- ====== Profile Section End -->
   </div>
-  <!-- ===== Page Wrapper End ===== -->
-<script defer src="bundle.js"></script></body>
-
+</main>
+<!-- ===== Main Content End ===== -->
+</div>
+<!-- ===== Content Area End ===== -->
+</div>
+<!-- ===== Page Wrapper End ===== -->
+<script defer src="bundle.js"></script>
+</body>
 </html>
