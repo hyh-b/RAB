@@ -72,7 +72,7 @@ public class ExerciseController {
 	
 	@RequestMapping("/exercise.do")
 	public ModelAndView tables() {
-		customUserDetailsService.updateUserDetails();
+		//customUserDetailsService.updateUserDetails();
 		CustomUserDetails customUserDetails = customUserDetailsService.getCurrentUserDetails();
 		
 		String m_seq =  customUserDetails.getM_seq();

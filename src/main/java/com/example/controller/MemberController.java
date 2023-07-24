@@ -71,7 +71,17 @@ public class MemberController {
 	
 	@RequestMapping("/signin.do")
 	public ModelAndView signin(Principal principal, HttpServletRequest request) {
-		    
+		String error = (String) request.getSession().getAttribute("error");
+		String error2 = (String)request.getAttribute("error");
+		System.out.println("djxm어트리부트에러"+error2);
+	    if (error != null) {
+	        System.out.println("Received error parameter: " + error);
+	        request.getSession().removeAttribute("error");
+	        //...
+	    } else {
+	        System.out.println("Did not receive error parameter");
+	        //...
+	    }
 		ModelAndView modelAndView = new ModelAndView();
 		// 로그인 되어있는 사용자가 로그인페이지에 접근하면  main페이지로 돌려보냄
 		if (principal != null && principal.getName() != null) {
@@ -422,6 +432,13 @@ public class MemberController {
 		modelAndView.setViewName("signup3");
 		System.out.println("적용몸무게2:"+m_weight);
 		mDao.MandIweightsynced(m_seq);
+		return modelAndView; 
+	}
+	
+	@RequestMapping("/overlappingLogin.do")
+	public ModelAndView overlappingLogin() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("overlappingLogin");
 		return modelAndView; 
 	}
 	
