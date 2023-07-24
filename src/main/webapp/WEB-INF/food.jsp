@@ -13,7 +13,39 @@ pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 <style type="text/css">
+	/*========================================================== 로켓 이미지 바운스 조절====================================================*/	
+	@keyframes bounce {
+	    0%, 20%, 50%, 80%, 100% {
+	        transform: translateY(0);
+	    }
+	    40% {
+	        transform: translateY(-20px);
+	    }
+	    60% {
+	        transform: translateY(-10px);
+	    }
+	}
 	
+	.bounce:hover {
+	    animation: bounce 1s infinite;
+	}
+	/*================================================================================================================================*/	
+	
+	/*=========================================================== 다이어로그 크기 조절 css ==================================================*/
+ 	.ui-dialog {
+	    max-width: 90%; 
+	    min-width: 300px; 
+	    width: auto !important; 
+	}
+	
+	.ui-dialog-content {
+	    overflow-y: auto;
+	    max-height: 70vh; 
+	}
+		
+	/*================================================================================================================================*/
+	
+	/*========================================================= 사진 이미지 크기 , 버튼 css =================================================*/
 	.fileInput {
 	  border-bottom: 4px solid lightgray;
 	  border-right: 4px solid lightgray;
@@ -64,16 +96,17 @@ pageEncoding="UTF-8"%>
 	  text-align: center;
 	  width: 500px;
 	}
+	/*================================================================================================================================*/
 	
 </style>
 <style type="text/css">
 
 	.radio-buttons {
-    	display: flex; /* 가로 배치를 위해 flexbox 사용 */
+    	display: flex; 
   	}
   	
   	.btn {
-    	margin-right: 10px; /* 버튼 사이의 간격 조정 */
+    	margin-right: 10px; 
   	}
   	
   	.nutrient-table {
@@ -88,20 +121,6 @@ pageEncoding="UTF-8"%>
 	  	height: 10px;
 	  	padding: 0;
 	  	border: none;
-	}
-	
-    .accordion {
-	    margin-bottom: 10px;
-	}
-	
-	.accordion-title {
-	    cursor: pointer;
-	    padding: 5px;
-	}
-	
-	.accordion-content {
-	    display: none;
-	    margin-top: 10px;
 	}
 	
 </style>
@@ -391,70 +410,6 @@ pageEncoding="UTF-8"%>
 		            }
 		        }
 		    }
-		});$("#dialogContainer1").dialog({
-		    autoOpen: false,
-		    modal: true,
-		    width: 350,
-		    height: 400,
-		    buttons: {
-		        '취소': function() {
-		            $(this).dialog('close');
-		        },
-				"확인": function() {
-					
-					if ($('.select-checkbox:checked').length == 0) {
-		                alert('해당 음식을 체크 누른 후 확인을 눌러주세요!');
-		                return false;
-		            }
-					
-				    let selectedData = [];
-				    $('.select-checkbox:checked').each(function() {
-				        let rowData = [];
-				        $(this).closest('tr').find('td').each(function() {
-				            rowData.push($(this).text());
-				        });
-				        selectedData.push(rowData);
-				    });
-				
-				    if (selectedData.length > 0) {
-				        selectedData.forEach(function(dataRow) {
-				            let rowId = "generated-div-" + divId;
-				            let result = '<div id="' + rowId + '" class="row-div">';
-				            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-				            result += '<div>';
-				            result += '<table>';
-				            result += '<thead>';
-				            result += '<tr>';
-				            result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
-				            result += '</tr>';
-				            result += '</thead>';
-				            result += '</table>';
-				            result += '</div>';
-				            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-				            result += '<thead></thead>';
-				            result += '<tbody>';
-				            result += '<tr>';
-				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
-				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
-				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
-				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
-				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
-				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
-		                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
-		                    result += '</tr>';
-		                    result += '</tbody>';
-		                    result += '</table>';
-		                    result += '</div>';
-		                    result += '</div>';
-		                    $('#resultFood1').append(result);
-		                    divId++;
-		                });
-				        $('#foodComent1').empty();
-				        $('.select-checkbox').prop('checked', false);
-		                $(this).dialog("close");
-		            }
-		        }
-		    }
 		});
 		
 		$("#dialogContainer2").dialog({
@@ -677,6 +632,27 @@ pageEncoding="UTF-8"%>
 		});
 		
 		//=================================================== 다이어로그 업로드 부분 끝 ================================================================
+			
+		// ========================================= 다이어로그 제어 부분 =========================================
+		$(window).resize(function() {
+		    let wWidth = $(window).width();
+		    let dWidth = wWidth * 0.8;
+		    let wHeight = $(window).height();
+		    let dHeight = wHeight * 0.8;
+
+		    $("#dialogContainer1").dialog("option", "width", dWidth);
+		    $("#dialogContainer1").dialog("option", "height", dHeight);
+
+		    $("#dialogContainer2").dialog("option", "width", dWidth);
+		    $("#dialogContainer2").dialog("option", "height", dHeight);
+		});
+		
+		
+		let initialWidth = $(window).width() * 0.8;
+		let initialHeight = $(window).height() * 0.8;
+		// =================================================================================================	
+			
+			
 	});
 </script>
 
@@ -712,7 +688,7 @@ pageEncoding="UTF-8"%>
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+		<i class="fa-solid fa-rocket bounce fa-10x"></i>
     </a>
 
     <button
