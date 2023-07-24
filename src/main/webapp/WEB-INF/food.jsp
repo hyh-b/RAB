@@ -22,6 +22,7 @@ pageEncoding="UTF-8"%>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lugrasimo&display=swap" rel="stylesheet">
 
+
 <!-- 이미지 아이콘 cdn -->
 <script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 
