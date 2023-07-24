@@ -4,15 +4,49 @@ pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>음식 다이어리</title>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>음식 다이어리</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+<!-- 구글 사이드 상단 Menu 글씨체-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+
+<!-- 구글 사이드 글씨체-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lugrasimo&display=swap" rel="stylesheet">
+
+
+<!-- 이미지 아이콘 cdn -->
 <script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
+
+<!-- alert css -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <style type="text/css">
+	
+	.theme1 {margin-bottom:30px; border:0px; height:5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.5), transparent);}
+	
+	/*============ 사이드 로고 메뉴 폰트 ==========*/
+	h3.mb-4.ml-4.text-sm.font-medium.text-bodydark2 {
+        font-size: 30px;
+		font-family: 'Cuprum', sans-serif;
+    }
+	/*=====================================*/
+    
+	/*============ 사이드 (공지사항 , 게시판 , 식단 , 운동 , 내정보 , 로그아웃) ==========*/
+    h1 {
+	    font-size: 25px;
+     	font-family: 'Josefin Sans', sans-serif;
+	}
+	/*===================================================================*/
+	
 	/*========================================================== 로켓 이미지 바운스 조절====================================================*/	
 	@keyframes bounce {
 	    0%, 20%, 50%, 80%, 100% {
@@ -97,7 +131,7 @@ pageEncoding="UTF-8"%>
 	  width: 500px;
 	}
 	/*================================================================================================================================*/
-	
+
 </style>
 <style type="text/css">
 
@@ -133,13 +167,12 @@ pageEncoding="UTF-8"%>
 <!-- 이미지 업로드를 위해 필요한 API -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.14.0/umd/react.development.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.14.0/umd/react-dom.development.js"></script>
-
 <script>
 	$(document).ready(function() {
 		
 		$( function() {
 			$( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		} );
+		});
 		
 	//==================================================== 식단 등록 =================================================================
 		// 아침 , 점심 ,저녁 의 div 삭제 이벤트 전역변수
@@ -157,7 +190,12 @@ pageEncoding="UTF-8"%>
 			let selectedMeal = $('#mealSelect').val();
 
 			if (selectedMeal === "") {
-				alert('아침 , 점심 , 저녁 중 선택을 하여 등록해야합니다.');
+				swal({
+		    		  title: "실패!",
+		    		  text: "아침 , 점심 , 저녁 중 선택을 하여 등록해야합니다.",
+		    		  icon: "error",
+		    		  button: "확인",
+		    	});
 				return;
 			}
 
@@ -179,12 +217,22 @@ pageEncoding="UTF-8"%>
 		    let formattedDate = $.datepicker.formatDate('yy-mm-dd', selectedDate);
 		    
 		    if (!selectedDate) {
-		        alert('날짜를 선택해주세요!');
+		    	swal({
+		    		  title: "실패!",
+		    		  text: "날짜를 선택해주세요!",
+		    		  icon: "error",
+		    		  button: "확인",
+		    	});
 		        return;
 		    }
 		    
 		    if ($('#' + resultFood).children().length === 0) {
-		        alert('음식을 조회 후 등록 버튼을 눌러주세요!');
+		        swal({
+		    		  title: "실패!",
+		    		  text: "음식을 조회 후 등록 버튼을 눌러주세요!",
+		    		  icon: "error",
+		    		  button: "확인",
+		    	});
 		        return; // 함수 실행 종료
 		    }
 
@@ -222,7 +270,12 @@ pageEncoding="UTF-8"%>
 		        success : function(json){
 		            console.log('아침 클릭 '+json);
 		            if(json.flag == '1'){
-		                alert('등록 성공입니다.');
+		                swal({
+				    		  title: "성공!",
+				    		  text: "등록 성공입니다.",
+				    		  icon: "success",
+				    		  button: "확인",
+				    	});
 		                // 등록 성공 후 div 제거
 		                $('#' + resultFood).empty(); 
 		            } else {
@@ -237,369 +290,394 @@ pageEncoding="UTF-8"%>
 		
 	//==================================================== 식단 메모 =================================================================
 		
-	$('#foodName1').on('keypress', function(e) {
-        if (e.which == 13) {
-            e.preventDefault();  
-        	$('#searchButton1').click(); 
-        }
-    });
-	$('#searchButton1').click(function() {
-	    const data = $('#foodName1').val();
-	    console.log(data);
-	
-	    if (data === '') {
-	        alert('검색어를 입력해주세요!');
-	        return;
-	    }
-	    
-	    $.ajax({
-	        url: "/foodData",
-	        method: "post",
-	        data: {
-	            data: data
-	        },
-	        dataType: "json",
-	        success: function(json) {
-	            console.log(json);
-	            if (json.length > 0) {
-	                let result = "<table>";
-	                $(json).each(function(index, item) {
-	                    result += "<tr class='selectable-row'>";
-	                    result += "<td><input type='checkbox' class='select-checkbox'></td>";
-	                    result += "<td>" + item.f_name + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_carbohydrate_g + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_protein_g + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_fat_g + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_cholesterol_mg + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_sodium_mg + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_sugar_g + "</td>";
-	                    result += "<td style='display: none;'>" + item.f_kcal + "</td>";
-	                    result += "</tr>";
-	                });
-	                result += "</table>";
-	                $('#foodComent1').html(result);
-	                $('#foodName1').val('');
-	                // 선택 가능한 행에 클릭 이벤트 추가
-	                $('.selectable-row').click(function() {
-	                    $(this).toggleClass('selected');
-	                });
-	            } else {
-	                alert("데이터가 없습니다. 다시 입력해주세요!");
-	            }
-	        },
-	        error: function(e) {
-	            alert("에러 발생: " + e.status);
+		$('#foodName1').on('keypress', function(e) {
+	        if (e.which == 13) {
+	            e.preventDefault();  
+	        	$('#searchButton1').click(); 
 	        }
 	    });
-	});
+		$('#searchButton1').click(function() {
+		    const data = $('#foodName1').val();
+		    console.log(data);
 		
-	$("#dialogContainer1").dialog({
-	    autoOpen: false,
-	    modal: true,
-	    width: 350,
-	    height: 400,
-	    buttons: {
-	        '취소': function() {
-	        	$('#foodComent1').empty();
-	            $(this).dialog('close');
-	        },
-			"확인": function() {
-				
-				if ($('.select-checkbox:checked').length == 0) {
-	                alert('해당 음식을 체크 누른 후 확인을 눌러주세요!');
-	                return false;
-	            }
-				
-			    let selectedData = [];
-			    $('.select-checkbox:checked').each(function() {
-			        let rowData = [];
-			        $(this).closest('tr').find('td').each(function() {
-			            rowData.push($(this).text());
-			        });
-			        selectedData.push(rowData);
-			    });
-			
-			    if (selectedData.length > 0) {
-			        selectedData.forEach(function(dataRow) {
-			            let rowId = "generated-div-" + divId;
-			            let result = '<div id="' + rowId + '" class="row-div">';
-			            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-			            result += '<div>';
-			            result += '<table>';
-			            result += '<thead>';
-			            result += '<tr>';
-			            result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
-			            result += '</tr>';
-			            result += '</thead>';
-			            result += '</table>';
-			            result += '</div>';
-			            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-			            result += '<thead></thead>';
-			            result += '<tbody>';
-			            result += '<tr>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
-			            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
-	                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
-	                    result += '</tr>';
-	                    result += '</tbody>';
-	                    result += '</table>';
-	                    result += '</div>';
-	                    result += '</div>';
-	                    $('#resultFood1').append(result);
-	                    divId++;
-	                });
-			        $('#foodComent1').empty();
-			        $('.select-checkbox').prop('checked', false);
-	                $(this).dialog("close");
-	            }
-	        }
-	    }
-	});
+		    if (data === '') {
+		        swal({
+		    		  title: "주의!",
+		    		  text: "검색어를 입력해주세요!",
+		    		  icon: "warning",
+		    		  button: "확인",
+		    	});
+		        return;
+		    }
+		    
+		    $.ajax({
+		        url: "/foodData",
+		        method: "post",
+		        data: {
+		            data: data
+		        },
+		        dataType: "json",
+		        success: function(json) {
+		            console.log(json);
+		            if (json.length > 0) {
+		                let result = "<table>";
+		                $(json).each(function(index, item) {
+		                    result += "<tr class='selectable-row'>";
+		                    result += "<td><input type='checkbox' class='select-checkbox'></td>";
+		                    result += "<td>" + item.f_name + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_carbohydrate_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_protein_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_fat_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_cholesterol_mg + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_sodium_mg + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_sugar_g + "</td>";
+		                    result += "<td style='display: none;'>" + item.f_kcal + "</td>";
+		                    result += "</tr>";
+		                });
+		                result += "</table>";
+		                $('#foodComent1').html(result);
+		                $('#foodName1').val('');
+		                // 선택 가능한 행에 클릭 이벤트 추가
+		                $('.selectable-row').click(function() {
+		                    $(this).toggleClass('selected');
+		                });
+		            } else {
+		                alert("데이터가 없습니다. 다시 입력해주세요!");
+		            }
+		        },
+		        error: function(e) {
+		            alert("에러 발생: " + e.status);
+		        }
+		    });
+		});
 		
-	$("#dialogContainer2").dialog({
-	    autoOpen: false,
-	    modal: true,
-	    width: 600,
-	    height: 874,
-	    buttons: {
-	        '취소': function () {
-	        	imageUpload.file = null;
-                imageUpload.imagePreviewUrl = '';
-                imageUpload.render();
-                $('#foodTable').empty();
-	            $(this).dialog('close');
-	        },
-	        "확인": function () {
-	            if ($('.select-checkbox:checked').length === 0) {
-	                alert('해당 음식을 체크한 후 확인을 눌러주세요!');
-	                return false;
-	            }
-
-	            let selectedData = [];
-	            $('.select-checkbox:checked').each(function () {
-	                let rowData = [];
-	                $(this).closest('tr').find('td').each(function () {
-	                    rowData.push($(this).text());
-	                });
-	                selectedData.push(rowData);
-	            });
-
-	            if (selectedData.length > 0) {
-	                selectedData.forEach(function (dataRow) {
-	                    let rowId = "generated-div-" + divId;
-	                    let result = '<div id="' + rowId + '" class="row-div">';
-	                    result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
-	                    result += '<div>';
-	                    result += '<table>';
-	                    result += '<thead>';
-	                    result += '<tr>';
-	                    result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
-	                    result += '</tr>';
-	                    result += '</thead>';
-	                    result += '</table>';
-	                    result += '</div>';
-	                    result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
-	                    result += '<thead></thead>';
-	                    result += '<tbody>';
-	                    result += '<tr>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
-	                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
-	                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
-	                    result += '</tr>';
-	                    result += '</tbody>';
-	                    result += '</table>';
-	                    result += '</div>';
-	                    result += '</div>';
-	                    $('#resultFood1').append(result);
-	                    divId++;
-	                });
-	                imageUpload.file = null;
+		$("#dialogContainer1").dialog({
+		    autoOpen: false,
+		    modal: true,
+		    width: 350,
+		    height: 400,
+		    buttons: {
+		        '취소': function() {
+		        	$('#foodComent1').empty();
+		            $(this).dialog('close');
+		        },
+				"확인": function() {
+					
+					if ($('.select-checkbox:checked').length == 0) {
+		                swal({
+				    		  title: "실패!",
+				    		  text: "해당 음식을 체크 누른 후 확인을 눌러주세요!",
+				    		  icon: "error",
+				    		  button: "확인",
+				    	});
+		                return false;
+		            }
+					
+				    let selectedData = [];
+				    $('.select-checkbox:checked').each(function() {
+				        let rowData = [];
+				        $(this).closest('tr').find('td').each(function() {
+				            rowData.push($(this).text());
+				        });
+				        selectedData.push(rowData);
+				    });
+				
+				    if (selectedData.length > 0) {
+				        selectedData.forEach(function(dataRow) {
+				            let rowId = "generated-div-" + divId;
+				            let result = '<div id="' + rowId + '" class="row-div">';
+				            result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+				            result += '<div>';
+				            result += '<table>';
+				            result += '<thead>';
+				            result += '<tr>';
+				            result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
+				            result += '</tr>';
+				            result += '</thead>';
+				            result += '</table>';
+				            result += '</div>';
+				            result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
+				            result += '<thead></thead>';
+				            result += '<tbody>';
+				            result += '<tr>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
+				            result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
+		                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
+		                    result += '</tr>';
+		                    result += '</tbody>';
+		                    result += '</table>';
+		                    result += '</div>';
+		                    result += '</div>';
+		                    $('#resultFood1').append(result);
+		                    divId++;
+		                });
+				        $('#foodComent1').empty();
+				        $('.select-checkbox').prop('checked', false);
+		                $(this).dialog("close");
+		            }
+		        }
+		    }
+		});
+		
+		$("#dialogContainer2").dialog({
+		    autoOpen: false,
+		    modal: true,
+		    width: 600,
+		    height: 874,
+		    buttons: {
+		        '취소': function () {
+		        	imageUpload.file = null;
 	                imageUpload.imagePreviewUrl = '';
 	                imageUpload.render();
 	                $('#foodTable').empty();
-	                $('.select-checkbox').prop('checked', false);
-	                $(this).dialog("close");
-	            }
-	        }
-	    }
-	});
+		            $(this).dialog('close');
+		        },
+		        "확인": function () {
+		            if ($('.select-checkbox:checked').length === 0) {
+		                swal({
+				    		  title: "실패!",
+				    		  text: "해당 음식을 체크한 후 확인을 눌러주세요!",
+				    		  icon: "error",
+				    		  button: "확인",
+				    	});
+		                return false;
+		            }
+	
+		            let selectedData = [];
+		            $('.select-checkbox:checked').each(function () {
+		                let rowData = [];
+		                $(this).closest('tr').find('td').each(function () {
+		                    rowData.push($(this).text());
+		                });
+		                selectedData.push(rowData);
+		            });
+	
+		            if (selectedData.length > 0) {
+		                selectedData.forEach(function (dataRow) {
+		                    let rowId = "generated-div-" + divId;
+		                    let result = '<div id="' + rowId + '" class="row-div">';
+		                    result += '<div class="tt" style="display: flex; justify-content: space-between;padding-bottom: 20px;">';
+		                    result += '<div>';
+		                    result += '<table>';
+		                    result += '<thead>';
+		                    result += '<tr>';
+		                    result += '<td><input type="text" name="f_name" placeholder="Default Input" style="width: 142px" readonly="readonly" class="w-1/4 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[1] + '"/><button class="delete-btn" data-target="' + rowId + '" style="margin-left: 10px;"><i class="fas fa-times"></i></button></td>';
+		                    result += '</tr>';
+		                    result += '</thead>';
+		                    result += '</table>';
+		                    result += '</div>';
+		                    result += '<table cellpadding="0" cellspacing="0" style="position:relative;left:-2px;">';
+		                    result += '<thead></thead>';
+		                    result += '<tbody>';
+		                    result += '<tr>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_carbohydrate_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[2] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_protein_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[3] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_fat_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[4] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_cholesterol_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[5] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sodium_mg" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[6] + '"/></td>';
+		                    result += '<td class="main" style="padding-right: 17px;"><input style="width:92px;" type="text" name="f_sugar_g" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[7] + '"/></td>';
+		                    result += '<td class="main" style="color: #000; font-weight: bold;"><input type="text" style="width:92px;" name="f_kcal" readonly="readonly" placeholder="Default Input" class="w-1/4 md:w-1/2 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" value="' + dataRow[8] + '"/></td>';
+		                    result += '</tr>';
+		                    result += '</tbody>';
+		                    result += '</table>';
+		                    result += '</div>';
+		                    result += '</div>';
+		                    $('#resultFood1').append(result);
+		                    divId++;
+		                });
+		                imageUpload.file = null;
+		                imageUpload.imagePreviewUrl = '';
+		                imageUpload.render();
+		                $('#foodTable').empty();
+		                $('.select-checkbox').prop('checked', false);
+		                $(this).dialog("close");
+		            }
+		        }
+		    }
+		});
 	//=================================================== 식단 메모 끝 =================================================================
 	
 	//================================================ 이미지 업로드 부분 시작 ==============================================================
-	class ImageUpload {
-	  constructor() {
-	    this.file = null;
-	    this.imagePreviewUrl = '';
-	    this.responseData = null;
-	  }
-	  
-	  // form이 submit 되었을떄 호출되며 선택된 이미지를 서버(Controller)에 업로드 하는 작업!!
-	  _handleSubmit() {
+		class ImageUpload {
+		  constructor() {
+		    this.file = null;
+		    this.imagePreviewUrl = '';
+		    this.responseData = null;
+		  }
 		  
-	  	if (!this.file) {
-		    alert('사진을 선택 후 업로드 해주세요!');
-			return;
-		}  
-	  	const formData = new FormData();
-	    formData.append('image', this.file);
-
-	    $.ajax({
-   	        url: '/api/upload',
-   	        type: 'POST',
-   	        data: formData,
-   	        cache: false,
-   	        contentType: false,
-   	        processData: false,
-   	        dataType : 'json',
-   	        success: (json) => {
-   	        	console.log(json)
-   	        	this.responseData = json;
-   	            this.render();
-   	        },
-   	        error: function(e) {
-   	            alert('[에러]]'+e.status)
-   	        }
-   	    });
-	  }
+		  // form이 submit 되었을떄 호출되며 선택된 이미지를 서버(Controller)에 업로드 하는 작업!!
+		  _handleSubmit() {
+			  
+		  	if (!this.file) {
+			    swal({
+			    	  title: "주의!",
+			    	  text: "사진을 선택 후 업로드 해주세요!",
+			    	  icon: "warning",
+			    	  button: "확인",
+			    });
+				return;
+			}  
+		  	const formData = new FormData();
+		    formData.append('image', this.file);
 	
-	  
-	  _handleImageChange(e) {
-	    e.preventDefault();
-	
-	    let reader = new FileReader();
-	    let file = e.target.files[0];
-	
-	    if (!file.type.startsWith('image/')) {
-	      alert('이미지 파일만 업로드할 수 있습니다.');
-	      this.file = null;
-	      this.imagePreviewUrl = '';
-	      this.render();
-	      return;
-	    }
-	
-	    reader.onloadend = () => {
-	      this.file = file;
-	      this.imagePreviewUrl = reader.result;
-	      this.render();
-	    }
-	
-	    reader.readAsDataURL(file);
-	  }
-	
-     	  //========================================= UI 에서 이미지 미리보기 기능 시작 ====================================================
-	  render() {
-	    let $imagePreview = null;
-	    let fileName = '';
-	    if (this.imagePreviewUrl && this.file && this.file.type.startsWith('image/')) {
-	      $imagePreview = $('<img>').attr('src', this.imagePreviewUrl);
-	      fileName = this.file.name;
-	    } else {
-	      $imagePreview = $('<div>').addClass('previewText').text('미리 보기할 이미지를 선택해주세요');
-	    }
-	
-	    const $previewComponent = $('<div>').addClass('previewComponent').append(
-	      $('<form>').on('submit', (e) => {
-	        e.preventDefault();
-	        this._handleSubmit();
-	      }).append(
-	        $('<input>').addClass('fileInput').attr('type', 'file').on('change', (e) => this._handleImageChange(e)),
-	        $('<button>').addClass('submitButton').attr('type', 'submit').text('이미지 업로드').on('click', (e) => {
-	          e.preventDefault();
-	          this._handleSubmit();
-	        })
-	      ),
-	      $('<div>').addClass('imgPreview').css('height', '310px').append($imagePreview)
-	    );
-	    
-	    //========================================== Ajax에서 responseData에 데이터를 넘겨서 뿌려주기 시작 ===============================
-	    
-	    if (this.responseData) {
-		    const table = $('<table>').attr('id', 'foodTable').css({
-		        'border-collapse': 'collapse', 
-		        'width': '100%'
-		    });
+		    $.ajax({
+	   	        url: '/api/upload',
+	   	        type: 'POST',
+	   	        data: formData,
+	   	        cache: false,
+	   	        contentType: false,
+	   	        processData: false,
+	   	        dataType : 'json',
+	   	        success: (json) => {
+	   	        	console.log(json)
+	   	        	this.responseData = json;
+	   	            this.render();
+	   	        },
+	   	        error: function(e) {
+	   	            alert('[에러]]'+e.status)
+	   	        }
+	   	    });
+		  }
 		
-		    const message = $('<h3>').text('사진에 해당하는 메뉴를 체크해주세요.').css({
-		        'text-align': 'center',
-		        'margin-top': '20px'
-		    });
+		  
+		  _handleImageChange(e) {
+		    e.preventDefault();
 		
-		    this.responseData.forEach((foodInfo) => {
-		        const row = $('<tr>').addClass('selectable-row');
-		        row.append($('<td>').css({
-		            'border': '1px solid black',
-		            'text-align': 'center'
-		        }).html('<input type="checkbox" class="select-checkbox">'));
-		        row.append($('<td>').text(foodInfo.foodName).css({
-		            'border': '1px solid black',
-		            'text-align': 'center'
-		        }));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.carbohydrates).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.protein).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.fat).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.cholesterol).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.sodium).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.sugar).css('border', '1px solid black'));
-		        row.append($('<td>').css('display', 'none').text(foodInfo.kcal).css('border', '1px solid black'));
-		        table.append(row);
-		    });
+		    let reader = new FileReader();
+		    let file = e.target.files[0];
 		
-		    $previewComponent.append(message);
-		    $previewComponent.append(table);
+		    if (!file.type.startsWith('image/')) {
+		      swal({
+		    	  title: "실패!",
+		    	  text: "이미지 파일만 업로드할 수 있습니다.",
+		    	  icon: "warning",
+		    	  button: "확인",
+		      });
+	
+		      this.file = null;
+		      this.imagePreviewUrl = '';
+		      this.render();
+		      return;
+		    }
+		
+		    reader.onloadend = () => {
+		      this.file = file;
+		      this.imagePreviewUrl = reader.result;
+		      this.render();
+		    }
+		
+		    reader.readAsDataURL(file);
+		  }
+		
+	     	  //========================================= UI 에서 이미지 미리보기 기능 시작 ====================================================
+		  render() {
+		    let $imagePreview = null;
+		    let fileName = '';
+		    if (this.imagePreviewUrl && this.file && this.file.type.startsWith('image/')) {
+		      $imagePreview = $('<img>').attr('src', this.imagePreviewUrl);
+		      fileName = this.file.name;
+		    } else {
+		      $imagePreview = $('<div>').addClass('previewText').text('미리 보기할 이미지를 선택해주세요');
+		    }
+		
+		    const $previewComponent = $('<div>').addClass('previewComponent').append(
+		      $('<form>').on('submit', (e) => {
+		        e.preventDefault();
+		        this._handleSubmit();
+		      }).append(
+		        $('<input>').addClass('fileInput').attr('type', 'file').on('change', (e) => this._handleImageChange(e)),
+		        $('<button>').addClass('submitButton').attr('type', 'submit').text('이미지 업로드').on('click', (e) => {
+		          e.preventDefault();
+		          this._handleSubmit();
+		        })
+		      ),
+		      $('<div>').addClass('imgPreview').css('height', '310px').append($imagePreview)
+		    );
+		    
+		    //========================================== Ajax에서 responseData에 데이터를 넘겨서 뿌려주기 시작 ===============================
+		    
+		    if (this.responseData) {
+			    const table = $('<table>').attr('id', 'foodTable').css({
+			        'border-collapse': 'collapse', 
+			        'width': '100%'
+			    });
+			
+			    const message = $('<h3>').text('사진에 해당하는 메뉴를 체크해주세요.').css({
+			        'text-align': 'center',
+			        'margin-top': '20px'
+			    });
+			
+			    this.responseData.forEach((foodInfo) => {
+			        const row = $('<tr>').addClass('selectable-row');
+			        row.append($('<td>').css({
+			            'border': '1px solid black',
+			            'text-align': 'center'
+			        }).html('<input type="checkbox" class="select-checkbox">'));
+			        row.append($('<td>').text(foodInfo.foodName).css({
+			            'border': '1px solid black',
+			            'text-align': 'center'
+			        }));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.carbohydrates).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.protein).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.fat).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.cholesterol).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.sodium).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.sugar).css('border', '1px solid black'));
+			        row.append($('<td>').css('display', 'none').text(foodInfo.kcal).css('border', '1px solid black'));
+			        table.append(row);
+			    });
+			
+			    $previewComponent.append(message);
+			    $previewComponent.append(table);
+			}
+		    //========================================== Ajax에서 responseData에 데이터를 넘겨서 뿌려주기 끝 =================================
+	
+		    	
+		    //========================================= UI 에서 이미지 미리보기 기능 끝 ====================================================
+		    
+		    $('#mainApp').empty().append($previewComponent);
+		  }
 		}
-	    //========================================== Ajax에서 responseData에 데이터를 넘겨서 뿌려주기 끝 =================================
-
-	    	
-	    //========================================= UI 에서 이미지 미리보기 기능 끝 ====================================================
-	    
-	    $('#mainApp').empty().append($previewComponent);
-	  }
-	}
 		
-	const imageUpload = new ImageUpload();
-	imageUpload.render();
+		const imageUpload = new ImageUpload();
+		imageUpload.render();
     
-	//=================================================== 이미지 업로드 부분 끝 ==============================================================
+		//=================================================== 이미지 업로드 부분 끝 ==============================================================
 	
 	
-	//=================================================== 다이어로그 업로드 부분 시작 ==============================================================
-	$( '#btn1' ).button().on( 'click', function() {
-		$( '#dialogContainer1' ).dialog( 'open' ); 
-	});
-	
-	$( '#btn2' ).button().on( 'click', function() {
-		$( '#dialogContainer2' ).dialog( 'open' ); 
-	});
-	
-	//=================================================== 다이어로그 업로드 부분 끝 ================================================================
+		//=================================================== 다이어로그 업로드 부분 시작 ==============================================================
+		$( '#btn1' ).button().on( 'click', function() {
+			$( '#dialogContainer1' ).dialog( 'open' ); 
+		});
 		
-	// ========================================= 다이어로그 제어 부분 =========================================
-	$(window).resize(function() {
-	    let wWidth = $(window).width();
-	    let dWidth = wWidth * 0.8;
-	    let wHeight = $(window).height();
-	    let dHeight = wHeight * 0.8;
-
-	    $("#dialogContainer1").dialog("option", "width", dWidth);
-	    $("#dialogContainer1").dialog("option", "height", dHeight);
-
-	    $("#dialogContainer2").dialog("option", "width", dWidth);
-	    $("#dialogContainer2").dialog("option", "height", dHeight);
-	});
+		$( '#btn2' ).button().on( 'click', function() {
+			$( '#dialogContainer2' ).dialog( 'open' ); 
+		});
 	
+		//=================================================== 다이어로그 업로드 부분 끝 ================================================================
+			
+		// ========================================= 다이어로그 제어 부분 =========================================
+		$(window).resize(function() {
+		    let wWidth = $(window).width();
+		    let dWidth = wWidth * 0.8;
+		    let wHeight = $(window).height();
+		    let dHeight = wHeight * 0.8;
 	
-	let initialWidth = $(window).width() * 0.8;
-	let initialHeight = $(window).height() * 0.8;
-	// =================================================================================================	
+		    $("#dialogContainer1").dialog("option", "width", dWidth);
+		    $("#dialogContainer1").dialog("option", "height", dHeight);
+	
+		    $("#dialogContainer2").dialog("option", "width", dWidth);
+		    $("#dialogContainer2").dialog("option", "height", dHeight);
+		});
 		
+		
+		let initialWidth = $(window).width() * 0.8;
+		let initialHeight = $(window).height() * 0.8;
+		// =================================================================================================	
 });
 </script>
 
@@ -670,106 +748,142 @@ pageEncoding="UTF-8"%>
     >
       <!-- Menu Group -->
       <div>
-        <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
+	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Menu</h3>
+		  <hr class="theme1">
+	
+	      <ul class="mb-6 flex flex-col gap-1.5">
+	        <!-- Menu Item Dashboard -->
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	      <a
+	         href="board.do"
+	         class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	         style="padding-left: 30px;"
+	       >
+	       <i class="fa-solid fa-circle-info"></i>
+	       <path
+	         d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	         fill=""
+	       />
+	       <path
+	         d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	         fill=""
+	       />
+	       </svg>
+	       <h1>공지사항</h1>
+	      </a>
+	     </li>
+	     
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	       <a
+	          href="board.do"
+	          class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	          style="padding-left: 30px;"
+	        >
+	          <i class="fa-solid fa-users"></i>
+	          <path
+	            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	            fill=""
+	          />
+	          <path
+	            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	            fill=""
+	          />
+	          </svg>
+	          <h1>게시판</h1>
+	        </a>
+	      </li>
 
-
-        <ul class="mb-6 flex flex-col gap-1.5">
-          <!-- Menu Item Dashboard -->
-
-          <!-- Menu Item Calendar -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="calendar.do"
-              @click="selected = (selected === 'Calendar' ? '':'Calendar')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
-            >
-           	공지사항
-            </a>
-          </li>
-          <!-- Menu Item Calendar -->
-
-          <!-- Menu Item Profile -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="board.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-            게시판
-            </a>
-          </li>
-          <!-- Menu Item Profile -->
-
-              <!-- Menu Item Profile2 -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-           	식단
-            </a>
-          </li>
-          <!-- Menu Item Profile2 -->
-       
-
-          <!-- Menu Item Forms -->
-
-          <!-- Menu Item Tables -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="exercise.do"
-
-              @click="selected = (selected === 'Tables' ? '':'Tables')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
-            >
-              운동
-            </a>
-            
-     
-          </li>
-          
-          <!--  마이페이지 li -->
-             
-           <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="profile.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-             마이페이지
-            </a>
-          </li>
-
-          
-          <!--  -->
-          
-          <!-- Menu Item Tables -->
-		  <br/><br/>
-          <!-- Menu Item Settings -->
- 
-           
-        <li>
-			<a
-    			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-    			href="/klogout.do"
-    			@click="selected = (selected === 'Settings' ? '':'Settings')"
-    			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
-    			:class="page === 'settings' && 'bg-graydark'"
- 			>
-    			로그아웃
-  			</a>
-		</li>
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	        <a
+	           href="food.do"
+	           class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	           style="padding-left: 30px;"
+	         >
+	           <i class="fa-solid fa-bowl-food"></i>
+	           <path
+	             d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	             fill=""
+	           />
+	           <path
+	             d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	             fill=""
+	           />
+	           </svg>
+	           <h1>음식</h1>
+	         </a>
+	      </li>
+	      
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	         <a
+	            href="exercise.do"
+	            class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	            style="padding-left: 30px;"
+	          >
+	            <i class="fa-solid fa-dumbbell"></i>
+	            <path
+	              d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	              fill=""
+	            />
+	            <path
+	              d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	              fill=""
+	            />
+	            </svg>
+	            <h1>운동</h1>
+	          </a>
+	       </li>
+			<br/><br/>
+			<h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Others</h3>
+          	<hr class="theme1">
+	          <!-- Menu Item Settings -->
+	        <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	          <a
+	              href="profile.do"
+	              class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	              style="padding-left: 30px;"
+	            >
+	              <svg
+	                class="fill-current"
+	                width="22"
+	                height="22"
+	                viewBox="0 0 22 22"
+	                fill="none"
+	                xmlns="http://www.w3.org/2000/svg"
+	              >
+	                <path
+	                  d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	                  fill=""
+	                />
+	                <path
+	                  d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	                  fill=""
+	                />
+	              </svg>
+	              <h1>프로필</h1>
+	            </a>
+	        </li>
+	        <li>
+				<button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+	            <svg
+	              class="fill-current"
+	              width="22"
+	              height="22"
+	              viewBox="0 0 22 22"
+	              fill="none"
+	              xmlns="http://www.w3.org/2000/svg"
+	            >
+	              <path
+	                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
+	                fill=""
+	              />
+	              <path
+	                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+	                fill=""
+	              />
+	            </svg>
+	            <a href="/klogout.do"><h1>로그아웃</h1></a>
+	          </button>
+			</li>
           
           <!-- Menu Item Settings -->
         </ul>
@@ -783,12 +897,8 @@ pageEncoding="UTF-8"%>
     <!-- ===== Content Area Start ===== -->
     <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
       <!-- ===== Header Start ===== -->
-      <header
-  class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
->
-  <div
-    class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11"
-  >
+      <header class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
+  		<div class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
     <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
       <!-- Hamburger Toggle BTN -->
       <button
@@ -979,9 +1089,7 @@ pageEncoding="UTF-8"%>
           
           
           
-          <button
-            class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-          >
+          <button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
             <svg
               class="fill-current"
               width="22"

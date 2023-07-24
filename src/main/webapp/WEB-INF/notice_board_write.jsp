@@ -13,47 +13,135 @@ pageEncoding="UTF-8"%>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>공지사항</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <script>
-$(document).ready(function() {
-	  $('#wbtn').click(function() {
-	    if ($('#u_subject').val().trim() == '') {
-	      alert('제목을 입력하시오.');
-	      return false;
-	    }
+// $(document).ready(function() {
+// 	  $('#wbtn').click(function() {
+// 	    if ($('#u_subject').val().trim() == '') {
+// 	      alert('제목을 입력하시오.');
+// 	      return false;
+// 	    }
 	    
-	    let formData = new FormData($('form')[0]);	   
+// 	    let formData = new FormData($('form')[0]);	   
 
-	    $.ajax({
-	      url: 'notice_board_write_ok.do',
-	      data: formData,
-	      dataType: 'json',
-	      type: 'post',
-	      contentType: false,
-	      processData: false,
-	      success: function(json) {
-// 	        if (json.flagAB == '0' && json.flagCF == '0') {
-// 	          alert('쓰기 성공');
-// 	          location.href = '/';
+// 	    $.ajax({
+// 	      url: 'notice_board_write_ok.do',
+// 	      data: formData,
+// 	      dataType: 'json',
+// 	      type: 'post',
+// 	      contentType: false,
+// 	      processData: false,
+// 	      success: function(response) {
+// 	        if (response.flag == 1 && response.flagAB == 1) {
+// 	            swal('이미지 업로드 성공!', '이미지가 업로드되었습니다.', 'success').then(function() { window.location.href='notice_board.do'; });
+// 	        } else if(response.flag == 0 && response.flagAB == 1) {
+// 	            swal('텍스트 업로드 성공!', '텍스트가 업로드되었습니다.', 'success').then(function() { window.location.href='notice_board.do'; });
 // 	        } else {
-// 	          alert('쓰기 실패');
+// 	            swal('업로드 실패!', '아이디와 비밀번호를 확인해 주세요', 'warning');
 // 	        }
-			console.log(json);
-	      },
-	      error: function(e) {
-	        alert('[에러]' + e.status);
-	      }
-	    });
+// 	        console.log('글쓰기 시도함');
+// 	      },
+// 	      error: function(e) {
+// 	        alert('[에러]' + e.status);
+// 	      }
+// 	    });
+// 	  });
+// 	});
+ </script> 
+<script>
+// $(document).ready(function() {
+//   $('#upload1').click(function() {
+//     if ($('#u_subject').val().trim() == '') {
+//       alert('제목을 입력하시오.');
+//       return false;
+//     }
+//     alert('제목을 입력하시오.');
+//     let formData = new FormData($('#myForm')[0]);   
+
+//     $.ajax({
+//       url: 'notice_board_write_ok.do',
+//       data{
+//     	  formData : formData
+//       }
+//       dataType: 'json',
+//       type: 'post',
+//       contentType: false,
+//       processData: false,
+//       success: function(response) {
+//         if (response.flag == 1 && response.flagAB == 1) {
+//             swal('이미지 업로드 성공!', '이미지가 업로드되었습니다.', 'success').then(function() { window.location.href='notice_board.do'; });
+//         } else if(response.flag == 0 && response.flagAB == 1) {
+//             swal('텍스트 업로드 성공!', '텍스트가 업로드되었습니다.', 'success').then(function() { window.location.href='notice_board.do'; });
+//         } else {
+//             swal('업로드 실패!', '아이디와 비밀번호를 확인해 주세요', 'warning');
+//         }
+//         console.log('글쓰기 시도함');
+//       },
+//       error: function(e) {
+//         alert('[에러]' + e.status);
+//       }
+//     });
+//   });
+// });
+$(document).ready(function() {
+	$('#myForm').submit(function(e) {
+	    if ($('#n_subject').val().trim() == '') {
+	      alert('제목을 입력하시오.');
+	      e.preventDefault();  // 폼 제출을 방지합니다.    
+	    } else {
+	      let formData = new FormData(this);   
+
+	      $.ajax({
+	        url: 'notice_board_write_ok.do',
+	        data: formData,  // formData를 직접 할당합니다.
+	        dataType: 'json',
+	        type: 'post',
+	        contentType: false,
+	        processData: false,
+	        success: function(response) {
+        if (response.flag == 1 && response.flagAB == 1) {
+          swal('이미지 업로드 성공!', '이미지가 업로드되었습니다.', 'success').then(function() { window.location.href='notice_board.do'; });
+        } else if(response.flag == 0 && response.flagAB == 1) {
+          swal('텍스트 업로드 성공!', '텍스트가 업로드되었습니다.', 'success').then(function() { window.location.href='notice_board.do'; });
+        } else {
+          swal('업로드 실패!', '아이디와 비밀번호를 확인해 주세요', 'warning');
+        }
+        console.log('글쓰기 시도함');
+	        },
+	        error: function(e) {
+	          alert('[에러]' + e.status);
+	        }
+	      });
+	    }
+
+	    e.preventDefault();  // 폼의 기본 제출 동작을 방지합니다.
 	  });
 	});
-</script>
 
+</script>
+<style>
+    @keyframes bounce {
+	    0%, 20%, 50%, 80%, 100% {
+	        transform: translateY(0);
+	    }
+	    40% {
+	        transform: translateY(-20px);
+	    }
+	    60% {
+	        transform: translateY(-10px);
+	    }
+	}
+	
+	.bounce:hover {
+	    animation: bounce 1s infinite;
+	}
+</style>
 
 </head>
 <body
@@ -87,7 +175,7 @@ $(document).ready(function() {
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+		<i class="fa-solid fa-rocket bounce fa-10x"></i>
     </a>
 
     <button
@@ -523,14 +611,17 @@ $(document).ready(function() {
 			   목록
 			</a>
     </div>
-    <div class="align_right">
-	  <div style="display: flex; justify-content: flex-end;">	   
-	    <a onclick="document.getElementById('myForm').submit();"
-	       class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"style="cursor: pointer;">
-	       등록
-	    </a>
-	  </div>
-	</div>
+   <div class="align_right">
+  <div style="display: flex; justify-content: flex-end;">	   
+    <button type="submit" id="upload1" name="upload1"
+       class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
+       등록
+    </button>
+  </div>
+</div>
+
+
+
 
   </div>
 </form>
