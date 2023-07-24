@@ -13,13 +13,30 @@ pageEncoding="UTF-8"%>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>공지사항</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+<script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
+<style>
+    @keyframes bounce {
+	    0%, 20%, 50%, 80%, 100% {
+	        transform: translateY(0);
+	    }
+	    40% {
+	        transform: translateY(-20px);
+	    }
+	    60% {
+	        transform: translateY(-10px);
+	    }
+	}
+	
+	.bounce:hover {
+	    animation: bounce 1s infinite;
+	}
+</style>
 <script>
 $(document).ready(function() {
 	  $('#wbtn').click(function() {
@@ -87,7 +104,7 @@ $(document).ready(function() {
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+		<i class="fa-solid fa-rocket bounce fa-10x"></i>
     </a>
 
     <button
