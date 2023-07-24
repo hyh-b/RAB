@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 		CustomUserDetails details = new CustomUserDetails(to);
 		return details;
 	}
-	
+	// 업데이트한 유저 정보 조회
 	public void updateUserDetails() {
         // 현재 로그인한 사용자의 username 가져오기
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -40,5 +40,10 @@ public class CustomUserDetailsService implements UserDetailsService{
         
         // SecurityContextHolder에 새로운 Authentication 설정
         SecurityContextHolder.getContext().setAuthentication(newAuth);
+    }
+	// 유저 정보가져오기
+	public CustomUserDetails getCurrentUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (CustomUserDetails) authentication.getPrincipal();
     }
 }

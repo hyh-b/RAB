@@ -84,13 +84,13 @@
   x-init="window.addEventListener('DOMContentLoaded', () => {setTimeout(() => loaded = false, 500)})"
   class="fixed left-0 top-0 z-999999 flex h-screen w-screen items-center justify-center bg-white"
 >
+
 <!-- id,pw 불일치로 로그인 실패시 signin.do?error페이지로 전송 후 메세지 출력 -->
 <% if (request.getParameter("error") != null) { %>
     <script>
          alert("아이디 혹은 비밀번호가 맞지 않습니다");
     </script>
-<% } 
-
+<% }
 	String kId = request.getParameter("kId");
 	String kPw = request.getParameter("kPw");
 	String sId = request.getParameter("sId");

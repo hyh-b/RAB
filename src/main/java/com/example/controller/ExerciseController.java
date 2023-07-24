@@ -56,9 +56,6 @@ public class ExerciseController {
 	@Autowired
 	private ExerciseDAO eDao;
 	
-	@Autowired
-    private CustomUserDetailsService customUserDetailsService;
-	
 	// S3에서 이미지 불러오는 url = https://rabfile.s3.ap-northeast-2.amazonaws.com/파일명
 	
 	private final S3FileUploadService s3FileUploadService;
@@ -70,17 +67,18 @@ public class ExerciseController {
         this.s3FileUploadService = s3FileUploadService;
     }
 	
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
+	
 	@RequestMapping("/exercise.do")
-	public ModelAndView tables(Authentication authentication) {
+	public ModelAndView tables() {
 		customUserDetailsService.updateUserDetails();
-		
-		authentication = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = authentication.getPrincipal();
-		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		CustomUserDetails customUserDetails = customUserDetailsService.getCurrentUserDetails();
 		
 		String m_seq =  customUserDetails.getM_seq();
 		String m_name = customUserDetails.getM_name();
 		String m_gender = customUserDetails.getM_gender();
+		
 		System.out.println("닉네임"+m_name);
 		System.out.println("성별"+m_gender);
 		System.out.println("애스이큐"+m_seq);
@@ -173,14 +171,18 @@ public class ExerciseController {
 	
 	// 추가한 운동종목 db에 저장
 	@RequestMapping(value = "/exerciseAdd", method = RequestMethod.POST)
+
 	public ResponseEntity<String> addExercise(@RequestBody Map<String, Object> getEx, Authentication authentication) {
+
 		authentication = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = authentication.getPrincipal();
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		
 		String m_seq = customUserDetails.getM_seq();
 		
+
 		List<String> exercise = (List<String>)getEx.get("exercise");
+
 		String date = (String)getEx.get("date"); 
 		
 		try {
@@ -261,6 +263,7 @@ public class ExerciseController {
 			
 			responseList.add(response);
 		}
+
 		
 		to.setM_seq(m_seq);
 		to.setEx_custom(true);
@@ -287,11 +290,13 @@ public class ExerciseController {
 	// 운동시간 대비 소모 칼로리 구한 뒤 db저장
 	@RequestMapping(value = "/calculateCalories", method = RequestMethod.POST)
 	public List<ExerciseTO> updateExercise(@RequestBody Map<String, Object> payload,Authentication authentication) {
+
 	    authentication = SecurityContextHolder.getContext().getAuthentication();
 	    Object principal = authentication.getPrincipal();
 	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 	    
 	    String m_seq = customUserDetails.getM_seq();
+
 	    List<Map<String, Object>> exercisesMap = (List<Map<String, Object>>) payload.get("exerciseItems");
 	    String selectedDate = (String) payload.get("selectedDate");
 	    List<ExerciseTO> exercises = exercisesMap.stream().map(map -> {
@@ -302,12 +307,17 @@ public class ExerciseController {
 	        return exercise;
 	    }).collect(Collectors.toList());
 	    
+
 	    exercises.forEach(exercise -> {
 	    	// 소모 칼로리 계산 - 운동종목에 따른 분당 칼로리 * 운동 시간
 	        BigDecimal ex_used_kcal = mDao.getCalorise(exercise.getEx_name()).multiply(new BigDecimal(exercise.getEx_time()));
 	        exercise.setEx_used_kcal(ex_used_kcal);
 	        exercise.setM_seq(m_seq);
+
+
 	        exercise.setEx_day(selectedDate);
+
+
 	        // 소모 칼로리 계산 후 db에 업데이트
 	        eDao.updateExercise(exercise);
 	    });
@@ -335,4 +345,5 @@ public class ExerciseController {
             return new ResponseEntity<>("Failed to delete exercise", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

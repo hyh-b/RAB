@@ -36,10 +36,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.jwt.JwtTokenUtil;
 import com.example.kakao.OAuthService;
 import com.example.model.ExerciseTO;
+import com.example.model.MainDAO;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
 import com.example.model.PasswordResetTokenTO;
 import com.example.security.CustomUserDetails;
+import com.example.security.CustomUserDetailsService;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -51,10 +53,16 @@ public class MemberController {
     private String jwtSecretKey;
 	
 	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
+	
+	@Autowired
 	private JavaMailSender javaMailSender;
 	
 	@Autowired
 	private MemberDAO mDao;
+	
+	@Autowired
+	private MainDAO mainDao;
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -67,9 +75,7 @@ public class MemberController {
 		ModelAndView modelAndView = new ModelAndView();
 		// 로그인 되어있는 사용자가 로그인페이지에 접근하면  main페이지로 돌려보냄
 		if (principal != null && principal.getName() != null) {
-			
 	        modelAndView.setViewName("redirect:/main.do");
-	        
 	    }else {
 	        
 	        modelAndView.setViewName("signin");
@@ -118,6 +124,8 @@ public class MemberController {
 	//카카오 로그인
 	@RequestMapping("/kakao.do")
 	public ModelAndView kakao(@RequestParam("code") String code, HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		
 		//카카오 로그인을 처리하는 메서드가 담긴 클래스
 		OAuthService oau = new OAuthService();
 		//카카오에서 받은 코드를 다시 전달해 access_token 받음
@@ -133,7 +141,6 @@ public class MemberController {
 		session.setAttribute("userInfo", email);
 		session.setAttribute("access_token", access_token);
 		
-		ModelAndView modelAndView = new ModelAndView();
 		//가입한 회원이면 바로 로그인시키기 위해 login오브젝트 전달
 		if(mDao.confirmKakao(email) != null) { 
 			modelAndView.addObject("login", "login"); 
@@ -197,7 +204,15 @@ public class MemberController {
 	
 	//회원가입 후 추가 정보입력
 	@RequestMapping("/signup2.do")
-	public ModelAndView signup2() {
+	public ModelAndView signup2(Authentication authentication) {
+		customUserDetailsService.updateUserDetails();
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		String mId= customUserDetails.getM_id();
+
+		int flag = mainDao.InsertDataForMain(mId);
+		System.out.println("플래그:"+flag);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("signup2");
 		return modelAndView; 
@@ -205,6 +220,13 @@ public class MemberController {
 	
 	@RequestMapping("/signup2_ok.do")
 	public ModelAndView signup2_ok(HttpServletRequest request,Authentication authentication) {
+		customUserDetailsService.updateUserDetails();
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		
+		String m_seq = customUserDetails.getM_seq();
+		
 		MemberTO to = new MemberTO();
 		   
 		String id = authentication.getName();
@@ -218,38 +240,10 @@ public class MemberController {
 		String targetWeightStr = request.getParameter("target_weight");
 		String birthday = request.getParameter("birthday_year")+"-"+request.getParameter("birthday_month")+"-"+request.getParameter("birthday_day");
 		   
-		BigDecimal weight = null;
-		BigDecimal height = null;
-		Integer targetCalorie = null;
-		BigDecimal target_weight = null;
-		//정보를 입력하지 않았을 경우 null처리
-		if(name == "") {
-			name=null;
-		}	
-		if(realName == "") {
-			realName=null;
-		}
-		if(tel == "") {
-			tel=null;
-		}
-		if(gender == "") {
-			gender=null;
-		}
-		if(request.getParameter("birthday_year") ==""||request.getParameter("birthday_month")==""||request.getParameter("birthday_day")=="") {
-			birthday = null;
-		}
-		if(sWeight != "") {
-			weight = new BigDecimal(sWeight);
-		}
-		if(sHeight !="") {
-			height = new BigDecimal(sHeight);
-		}
-		if (!targetCalorieStr.isEmpty()) {
-			targetCalorie = Integer.parseInt(targetCalorieStr);
-		}
-		if(targetWeightStr !="") {
-			target_weight = new BigDecimal(targetWeightStr);
-		}
+		BigDecimal weight = new BigDecimal(sWeight);
+		BigDecimal height = new BigDecimal(sHeight);
+		Integer targetCalorie = Integer.parseInt(targetCalorieStr);
+		BigDecimal target_weight = new BigDecimal(targetWeightStr);
 		
 		to.setM_id(id);
 		to.setM_name(name);
@@ -392,6 +386,43 @@ public class MemberController {
 	    	System.out.println("에러: "+e.getMessage());
 	    }
 	    return modelAndView;
+	}
+	
+	// 신규,탈퇴 회원 수
+	@PostMapping("/memberState")
+    public Map<String, Integer> getMemberStats(@RequestParam("date") String date) {
+        int newMemberCount = mDao.newMember(date);
+        int deletedMemberCount = mDao.deletedMember(date);
+
+        Map<String, Integer> response = new HashMap<>();
+        response.put("newMember", newMemberCount);
+        response.put("deletedMember", deletedMemberCount);
+
+        return response;
+    }
+	
+	// 이미 로그인 되어있는 유저가 카카오 로그인 접속시
+	@RequestMapping("/alreadyLogin.do")
+	public ModelAndView reset_password() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("alreadyLogin");
+		return modelAndView; 
+	}
+	
+	@RequestMapping("/signup3.do")
+	public ModelAndView signup3(Authentication authentication) {
+		customUserDetailsService.updateUserDetails();
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		
+		String m_seq = customUserDetails.getM_seq();
+		BigDecimal m_weight = customUserDetails.getM_weight();
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("signup3");
+		System.out.println("적용몸무게2:"+m_weight);
+		mDao.MandIweightsynced(m_seq);
+		return modelAndView; 
 	}
 	
 }	
