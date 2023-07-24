@@ -24,7 +24,7 @@
 	    
 			$('#calendarCt').html(calendarhtml);
 		
-			console.log( " formattedDate -> " , formattedDate );
+			//console.log( " formattedDate -> " , formattedDate );
 	
 			selectedDate = formattedDate; 
 			
