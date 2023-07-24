@@ -38,7 +38,7 @@ pageEncoding="UTF-8"%>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 
 <script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
@@ -60,6 +60,41 @@ pageEncoding="UTF-8"%>
 	    animation: bounce 1s infinite;
 	}
 </style>
+
+<script type='text/javascript'>
+$(document).ready(function() {
+  $('#deleteLink').click(function(e) {  // 'deleteLink' ID를 가진 요소에 클릭 이벤트를 연결합니다.
+    e.preventDefault();  // 기본 클릭 동작(여기서는 페이지 이동)을 방지합니다.
+    
+    $.ajax({
+      url:'notice_board_delete_ok.do?n_seq=${n_seq}',  // 'deleteLink'의 'href' 속성 값을 사용하여 요청을 보냅니다.
+      type: 'GET',  // 요청 유형을 'GET'으로 설정합니다.
+      success: function(response) {
+        var flag = response.flag;  // 응답에서 플래그 값을 가져옵니다.
+        if (flag == 0) {
+          swal({
+            title: "성공!",
+            text: "삭제에 성공했습니다.",
+            icon: "success",
+            button: "확인",
+          }).then(function() { window.location.href='notice_board.do'; });
+        } else {
+          swal({
+            title: "실패",
+            text: "삭제에 실패했습니다.",
+            icon: "error",
+            button: "확인",
+          }).then(function() { history.back(); });
+        }
+      },
+      error: function(error) {
+        console.log('에러 발생: ', error);
+      }
+    });
+  });
+});
+</script>
+
 
 
 </head>
@@ -527,13 +562,13 @@ pageEncoding="UTF-8"%>
 			   수정
 			</a>
     </div>
-    <div>
-			<a href="notice_board_delete_ok.do?n_seq=${n_seq}"
-			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
-			   style="float: right;">
-			   삭제
-			</a>
-	</div>
+   <a href="notice_board_delete_ok.do?n_seq=${n_seq}"
+	   id="deleteLink"  
+	   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+	   style="float: right;">
+	   삭제
+	</a>
+
 	
 	
 </main>
