@@ -34,6 +34,8 @@ import com.example.model.FoodDAO;
 import com.example.model.FoodTO;
 import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
+import com.example.model.MemberDAO;
+import com.example.model.MemberTO;
 import com.example.security.CustomUserDetails;
 
 @RestController
@@ -51,8 +53,11 @@ public class FoodController {
 	@Autowired
 	DinnerDAO ddao;
 	
+	@Autowired
+	private MemberDAO m_dao;
+	
 	@RequestMapping("/food.do")
-	public ModelAndView food(HttpServletRequest request , Authentication authentication) {
+	public ModelAndView food(HttpServletRequest request , Authentication authentication,String mId) {
 //		MemberTO to = new MemberTO();
 //		to.setM_seq((request.getParameter("seq")));
 //		System.out.println(to.getM_seq());
@@ -67,9 +72,19 @@ public class FoodController {
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		String seq = customUserDetails.getM_seq();
 		System.out.println(seq);
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+		
+        String m_profilename =  customUserDetails.getM_profilename();
+        
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("food");
 		modelAndView.addObject("seq", seq);
+		modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("profilename", m_profilename);
+		
 		return modelAndView;
 	}
 	
@@ -103,14 +118,14 @@ public class FoodController {
 			response.put("f_cholesterol_mg", f_cholesterol_mg);
 			response.put("f_sodium_mg", f_sodium_mg);
 			
-			System.out.println("음식 이름 \t :" + f_name);
-			System.out.println("탄수화물 \t :" + f_carbohydrate_g);
-			System.out.println("단백지 \t :" + f_protein_g);
-			System.out.println("지방 \t :" + f_fat_g);
-			System.out.println("콜레스토롤 \t :" + f_cholesterol_mg);
-			System.out.println("나트륨 \t :" + f_sodium_mg);
-			System.out.println("당 \t :" + f_sugar_g);
-			System.out.println("칼로리 \t :" + f_kcal);
+//			System.out.println("음식 이름 \t :" + f_name);
+//			System.out.println("탄수화물 \t :" + f_carbohydrate_g);
+//			System.out.println("단백지 \t :" + f_protein_g);
+//			System.out.println("지방 \t :" + f_fat_g);
+//			System.out.println("콜레스토롤 \t :" + f_cholesterol_mg);
+//			System.out.println("나트륨 \t :" + f_sodium_mg);
+//			System.out.println("당 \t :" + f_sugar_g);
+//			System.out.println("칼로리 \t :" + f_kcal);
 			
 			
 			responseList.add(response);
@@ -166,7 +181,7 @@ public class FoodController {
 	                bto.setB_cholesterol_mg(f_cholesterol_mg);
 	                bto.setB_sodium_mg(f_sodium_mg);
 	                bto.setB_day(b_day);  // set the parsed date
-	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
+//	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
 	                
 	                int flag = bdao.insertBreakfast(bto);
 	                response.put("flag", flag);
@@ -185,7 +200,7 @@ public class FoodController {
 	// 점심 ajax 구문
 	@RequestMapping("/lunchFoodData")
 	public Map<String, Object> lunchFoodData(HttpServletRequest request) {
-		System.out.println(request.getParameter("seq"));
+//		System.out.println(request.getParameter("seq"));
 		
 		// 추가 데이터 처리
 		String additionalDataJson = request.getParameter("additionalData");
@@ -246,7 +261,7 @@ public class FoodController {
 	// 저녁 ajax 구문
 	@RequestMapping("/dinnerFoodData")
 	public Map<String, Object> dinnerFoodData(HttpServletRequest request) {
-		System.out.println(request.getParameter("seq"));
+//		System.out.println(request.getParameter("seq"));
 		
 		// 추가 데이터 처리
 		String additionalDataJson = request.getParameter("additionalData");
@@ -350,14 +365,14 @@ public class FoodController {
 	                String sugar = perServingNutrients.getJSONObject("탄수화물").getString("당류(g)");
 	                String kcal = perServingNutrients.getString("열량(kcal)");
 	                
-	                System.out.println("음식 이름:\t" + foodName);
-	                System.out.println("단백질:\t" + protein);
-	                System.out.println("탄수화물:\t" + carbohydrates);
-	                System.out.println("지방:\t" + fat);
-	                System.out.println("콜레스테롤:\t" + cholesterol);
-	                System.out.println("나트륨:\t" + sodium);
-	                System.out.println("당:\t" + sugar);
-	                System.out.println("칼로리:\t"+kcal);
+//	                System.out.println("음식 이름:\t" + foodName);
+//	                System.out.println("단백질:\t" + protein);
+//	                System.out.println("탄수화물:\t" + carbohydrates);
+//	                System.out.println("지방:\t" + fat);
+//	                System.out.println("콜레스테롤:\t" + cholesterol);
+//	                System.out.println("나트륨:\t" + sodium);
+//	                System.out.println("당:\t" + sugar);
+//	                System.out.println("칼로리:\t"+kcal);
 
 	                Map<String, Object> foodInfo = new HashMap<>();
 	                foodInfo.put("foodName", foodName);

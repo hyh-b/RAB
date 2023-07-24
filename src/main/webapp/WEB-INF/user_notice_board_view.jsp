@@ -1,43 +1,53 @@
+<%@page import="com.example.model.NoticeBoardTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="seq" value="${requestScope.seq}" />
-<c:set var="myto" value="${requestScope.myto}" />
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="name" value="${myto.m_name}" />
-<c:set var="role" value="${myto.m_role}" />
-<c:set var="profilename" value="${myto.m_profilename}" />
-<c:set var="backgroundfilename" value="${myto.m_backgroundfilename}" />
-<c:set var="joinDate" value="${myto.m_join_date}" />
-<c:set var="tel" value="${myto.m_tel}" />
-<c:set var="height" value="${myto.m_height}" />
-<c:set var="weight" value="${myto.m_weight}" />
-<c:set var="targetCalorie" value="${myto.m_target_calorie}" />
-<c:set var="targetWeight" value="${myto.m_target_weight}" />
-<c:set var="birthday" value="${myto.m_birthday}" />
-<c:set var="id" value="${myto.m_id}" />
-<c:set var="mail" value="${myto.m_mail}" />
+<c:set var="noticeListTO" value="${requestScope.noticeListTO}"/>
+<c:set var="bto" value="${requestScope.bto}"/>
+<c:set var="n_seq" value="${bto.n_seq}" />
+<c:set var="n_subject" value="${bto.n_subject}" />
+<c:set var="n_content" value="${bto.n_content}" />
+<c:set var="ato" value="${requestScope.ato}"/>
+<c:set var="nf_filename" value="${ato.nf_filename}" />
+<c:set var="nf_filesize" value="${ato.nf_filesize}" />
 
- 
+
+
+
+<c:set var="data" value="${requestScope.data}"/>
+<c:set var="filename" value="${requestScope.filename}"/>
+<!-- jstl 로 lists 받아옴 -->
+<%--  <c:forEach var="noticBoardList" items="${noticeBoardList}"> --%>
+<%--    <c:set var="n_seq" value="${noticBoardList.n_seq}" /> --%>
+<%--    <c:set var="n_subject" value="${noticBoardList.n_subject}" /> --%>
+<%--    <c:set var="n_content" value="${noticBoardList.n_content}" />	    --%>
+<%-- </c:forEach> --%>
+
+
+
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mypage</title>
+  <title>공지사항</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-</head>
 
-<script type="text/javascript">
-function confirmDelete() {
-	  if ( confirm(" 탈퇴 후 복구가 불가능 합니다 정말 삭제하시겠습니까?") ) {
-	    location.href = "mypageDeleteOK.do";
-	  }
-	}
-</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
+</head>
 <body
-  x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
           darkMode = JSON.parse(localStorage.getItem('darkMode'));
           $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -48,37 +58,26 @@ function confirmDelete() {
   x-init="window.addEventListener('DOMContentLoaded', () => {setTimeout(() => loaded = false, 500)})"
   class="fixed left-0 top-0 z-999999 flex h-screen w-screen items-center justify-center bg-white"
 >
-	  <div
-	    class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
-	  >
-	  </div>
+  <div
+    class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
+  ></div>
 </div>
 
   <!-- ===== Preloader End ===== -->
 
   <!-- ===== Page Wrapper Start ===== -->
   <div class="flex h-screen overflow-hidden">
-  
-<!-- ===== Sidebar Start ===== -->
-  <aside
+    <!-- ===== Sidebar Start ===== -->
+    <aside
   :class="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
   class="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-<<<<<<< HEAD
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
 		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
-=======
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-    <a href="/main.do">
-   <!--  사이트 로고  -->
-
-
-     <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
->>>>>>> c7deb6fc10c6334ba12460a7fda82437520168e3
     </a>
 
     <button
@@ -123,7 +122,7 @@ function confirmDelete() {
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="calendar.do"
+              href="notice_board.do"
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
@@ -220,6 +219,7 @@ function confirmDelete() {
       </nav>
   </div>
 </aside>
+
 
     <!-- ===== Sidebar End ===== -->
 
@@ -328,6 +328,14 @@ function confirmDelete() {
           </label>
           <!-- Dark Mode Toggler -->
         </li>
+
+        <!-- Notification Menu Area -->
+        
+        <!-- Notification Menu Area -->
+
+        <!-- Chat Notification Area -->
+        
+        <!-- Chat Notification Area -->
       </ul>
 
       <!-- User Area -->
@@ -338,19 +346,23 @@ function confirmDelete() {
       >
         <a
           class="flex items-center gap-4"
-          href="$"
+          href="#"
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
           <span class="hidden text-right lg:block">
-            <span class="block text-sm font-medium text-black dark:text-white">
-            ${name}
-            </span>
-            <span class="block text-xs font-medium">${role}</span>
-            
+            <span class="block text-sm font-medium text-black dark:text-white"
+
+              >${zzinnickname}</span
+            >
+            <!-- 
+            <span class="block text-xs font-medium"></span>
+			 -->	          
           </span>
 
           <span class="h-12 w-12 rounded-full">
-            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" />
+          <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
+
           </span>
 
           <svg
@@ -383,6 +395,7 @@ function confirmDelete() {
               <a
                 href="profile.do"
                 class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                style="padding-left: 5px;"
               >
                 <svg
                   class="fill-current"
@@ -401,10 +414,14 @@ function confirmDelete() {
                     fill=""
                   />
                 </svg>
-                My Profile
+                프로필
               </a>
             </li>
           </ul>
+          
+          
+          
+          
           <button
             class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
           >
@@ -425,7 +442,7 @@ function confirmDelete() {
                 fill=""
               />
             </svg>
-            <a href="/klogout.do">Log Out</a>
+            <a href="/klogout.do">로그아웃</a>
           </button>
         </div>
         <!-- Dropdown End -->
@@ -438,239 +455,68 @@ function confirmDelete() {
       <!-- ===== Header End ===== -->
 
       <!-- ===== Main Content Start ===== -->
-      <main>
-        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-          <div class="mx-auto max-w-242.5">
-            <!-- Breadcrumb Start -->
-            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <h2 class="text-title-md2 font-bold text-black dark:text-white">
-                Mypage
-              </h2>
+      
+<!-- ============  view 보여지는부분	=================================== -->
+<main>
+<table border="1" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 100%; height: 100%;">
+  <!-- 제목 행 -->
+	 <tr>
+	  <td class="p-3 border-t border-b text-center">
+	    <h class="mb-3 text-xl font-semibold text-black dark:text-white" style="font-weight: bold;">
+	      <a>${n_subject}</a>
+	    </h>
+	  </td>
+	</tr>
+  <!-- 이미지 행 -->
+  
+    <!--===================================== 이미지 보여주는 부분 =======================================  -->
+    <c:forEach items="${atos}" var="ato">
+      <c:if test="${not empty ato.nf_filename}">
+      <tr>
+  		<td class="p-3 border-t border-b">
+	        <a class="block px-4">
+	          <img src="${ato.nf_filename}" alt="Cards" />
+	        </a></td>
+		</tr>
+      </c:if>
+    </c:forEach>
+    <!--===================================== 이미지 보여주는 부분 =======================================  -->
+  
+  <!-- 내용 행 -->
+  <tr>
+    <td class="p-3 border-t border-b">
+      <div class="p-6">
+        <p class="font-medium">
+          <c:out value="${n_content}"/>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
 
-              <nav>
-                <ol class="flex items-center gap-2">
-                  <li><a class="font-medium" href="main.do">main /</a></li>
-                  <li class="text-primary">Profile</li>
-                </ol>
-              </nav>
-            </div>
-            <!-- Breadcrumb End -->
 
-            <!-- ====== Profile Section Start -->
-            <div
-              class="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div class="relative z-20 h-35 md:h-65">
-<!--  배사 파일명 -->
-                <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${backgroundfilename}" alt="profile cover"
-                  class="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center" />
-               
-                </div>
-              </div>
-              <div class="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
-                <div
-                  class="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
-                  <div class="relative drop-shadow-2">
-<!--  프사  -->
-                    <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="profile" />
-                  </div>
-                </div>
-<!--  마이페이지  -->                
-                <div class="mt-4">
-                  <h3 class="mb-1.5 text-2xl font-medium text-black dark:text-white">
-                    ${name}
-                  </h3>
-                  <p class="font-medium">${joinDate} 가입</p>
-                  <div class="mx-auto max-w-180">
-                  
-             <form action="./mypage.do" method="post" name="wfrm" >
-              <div class="p-7">
-                      <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div class="w-full sm:w-1/2">
-                          <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="fullName">
-                            이름</label>
-                          <div class="relative">
-                            <span class="absolute left-4.5 top-4">
-                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g opacity="0.8">
-                                  <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                    fill="" />
-                                  <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                    fill="" />
-                                </g>
-                              </svg>
-                            </span>
-							<input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-							       type="text" name="name" id="name" value="${name}" readonly />
-                          </div>
-                        </div>
-                        
-<!--  전화번호  -->
-						 <div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  전화번호
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="phoneNumber" id="phoneNumber"
-						    value="${tel}" readonly />
-						    <img src="src/images/logo/call.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-						</div>
-                       </div>
-<!--  현재 신장 -->                      
-                         <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  현재 신장 ( cm )
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="takeKcal" id="takeKcal" 
-						   value="${height}" readonly />
-						    <img src="src/images/logo/cm.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-                       </div>
 
-<!--  현재 몸무게 -->
-                       	<div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  현재 몸무게 ( Kg )
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="targetScale" id="targetScale"
-						    value="${weight}" readonly />
-						    <img src="src/images/logo/body.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-						</div>
-                       </div>
+	<div class="align_left">
+    	<a href="user_notice_board.do?cpage=${noticeListTO.cpage}"
+			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+			   style="float: right;">
+			   목록
+			</a>
+    </div>
+	
+	
+	
+</main>
 
-<!--  하루 목표 칼로리  -->
-                      <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  하루 목표 섭취 칼로리 ( Kcal )
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="takeKcal" id="takeKcal" 
-						    value="${targetCalorie}" readonly />
-						    <img src="src/images/logo/mypageFood.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-                       </div>
 
-<!--  목표 몸무게 -->
-                       	<div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  목표 몸무게 ( Kg )
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="targetScale" id="targetScale"
-						    value="${targetWeight}" readonly />
-						    <img src="src/images/logo/work3.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-						</div>
-                       </div>
-                      
-<!--  생년월일  --> 
-                      <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                        <div class="w-full sm:w-1/2">
-						  <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="phoneNumber">
-						  생년월일
-						  </label>
-						  <div class="relative">
-						    <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary" 
-						    type="text" name="birthday" id="birthday" 
-						    value="${birthday}" readonly />
-						    <img src="src/images/logo/birthday.png" alt="이미지" class="absolute left-4.5 top-4 w-5 h-5">
-						  </div>
-                       </div>
-
-<!--  회원 ID -->
-                        <div class="w-full sm:w-1/2">
-                          <label class="mb-3 block text-sm font-medium text-black dark:text-white"
-                            for="phoneNumber">ID</label>
-                            <div class="relative">
-                            <span class="absolute left-4.5 top-4">
-                              <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <g opacity="0.8">
-                                  <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M3.72039 12.887C4.50179 12.1056 5.5616 11.6666 6.66667 11.6666H13.3333C14.4384 11.6666 15.4982 12.1056 16.2796 12.887C17.061 13.6684 17.5 14.7282 17.5 15.8333V17.5C17.5 17.9602 17.1269 18.3333 16.6667 18.3333C16.2064 18.3333 15.8333 17.9602 15.8333 17.5V15.8333C15.8333 15.1703 15.5699 14.5344 15.1011 14.0655C14.6323 13.5967 13.9964 13.3333 13.3333 13.3333H6.66667C6.00363 13.3333 5.36774 13.5967 4.8989 14.0655C4.43006 14.5344 4.16667 15.1703 4.16667 15.8333V17.5C4.16667 17.9602 3.79357 18.3333 3.33333 18.3333C2.8731 18.3333 2.5 17.9602 2.5 17.5V15.8333C2.5 14.7282 2.93899 13.6684 3.72039 12.887Z"
-                                    fill="" />
-                                  <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M9.99967 3.33329C8.61896 3.33329 7.49967 4.45258 7.49967 5.83329C7.49967 7.214 8.61896 8.33329 9.99967 8.33329C11.3804 8.33329 12.4997 7.214 12.4997 5.83329C12.4997 4.45258 11.3804 3.33329 9.99967 3.33329ZM5.83301 5.83329C5.83301 3.53211 7.69849 1.66663 9.99967 1.66663C12.3009 1.66663 14.1663 3.53211 14.1663 5.83329C14.1663 8.13448 12.3009 9.99996 9.99967 9.99996C7.69849 9.99996 5.83301 8.13448 5.83301 5.83329Z"
-                                    fill="" />
-                                </g>
-                              </svg>
-                            </span>
-						<input 
-							class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                             type="text" name="memberid" id="memberid"
-                             value="${id}" readonly/>
-                        </div>
-                      </div>
-                     </div>
-
-<!--  이메일 -->                      
-                       <div class="mb-5.5">
-                        <label class="mb-3 block text-sm font-medium text-black dark:text-white"
-                          for="emailAddress">이메일</label>
-                        <div class="relative">
-                          <span class="absolute left-4.5 top-4">
-                            <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <g opacity="0.8">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M3.33301 4.16667C2.87658 4.16667 2.49967 4.54357 2.49967 5V15C2.49967 15.4564 2.87658 15.8333 3.33301 15.8333H16.6663C17.1228 15.8333 17.4997 15.4564 17.4997 15V5C17.4997 4.54357 17.1228 4.16667 16.6663 4.16667H3.33301ZM0.833008 5C0.833008 3.6231 1.9561 2.5 3.33301 2.5H16.6663C18.0432 2.5 19.1663 3.6231 19.1663 5V15C19.1663 16.3769 18.0432 17.5 16.6663 17.5H3.33301C1.9561 17.5 0.833008 16.3769 0.833008 15V5Z"
-                                  fill="" />
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M0.983719 4.52215C1.24765 4.1451 1.76726 4.05341 2.1443 4.31734L9.99975 9.81615L17.8552 4.31734C18.2322 4.05341 18.7518 4.1451 19.0158 4.52215C19.2797 4.89919 19.188 5.4188 18.811 5.68272L10.4776 11.5161C10.1907 11.7169 9.80879 11.7169 9.52186 11.5161L1.18853 5.68272C0.811486 5.4188 0.719791 4.89919 0.983719 4.52215Z"
-                                  fill="" />
-                              </g>
-                            </svg>
-                          </span>
-                          <input
-                            class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                            type="email" name="email" id="email" 
-                            value="${mail}" readonly/>
-                        </div>
-                      </div>
-
-<!-- 마이페이지 구성 끝 -->
-                  </div>
-                  <div class="mt-6.5">
-                </div>
-                </form>
-                
- <!--  버튼  -->
-		  <!-- 정보 수정 버튼 -->
-		  <button id="editButton"
-		    class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-		    onclick="location.href='mypageModify.do'">
-		    정보 수정
-		  </button>
-		  
-		  <!--  탈퇴 -->
-			<button id="delete"
-			  class="inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
-			  onclick="confirmDelete()">
-			  회원 탈퇴
-			</button>
-            
-            <!-- ====== Profile Section End -->
-          </div>
-        </div>
-      </main>
+<!-- ============  view 보여지는부분	=================================== -->
       <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Content Area End ===== -->
   </div>
   <!-- ===== Page Wrapper End ===== -->
-<script defer src="bundle.js"></script></body>
+
+<script defer src="bundle.js"></script>
+</body>
 
 </html>
