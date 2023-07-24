@@ -15,284 +15,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <title>
-     main RAB
+     Rockat Your Body!
    </title>
    
    <link rel="stylesheet" href="style.css" >
-   
    <link rel="stylesheet" href="/css/main.css" >
    
 <!--  tailwindcss로 그린 아이콘, apexChart -->
   <link rel="icon" href="favicon.ico">
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script> 
-
-<!-- jQuery, jQuery Dialog, jQuery Calendar, fontAwesome --> 
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+   <!-- 구글 사이드 상단 Menu 글씨체-->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+
+   <!-- 구글 사이드 글씨체-->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lugrasimo&display=swap" rel="stylesheet">
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3"></script> 
+   <!-- alert css -->
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  
+  <!-- jQuery, jQuery Dialog, jQuery Calendar, fontAwesome --> 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
   
   <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
-  
-  
+
+   <!-- 이미지 아이콘 cdn -->
+   <script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
+
   <!--  js파일 외부화 -->
   <script src="/js/feedback.js"></script>
+  <script src="/js/window.onload_main.js"></script>
   <script src="/js/default_document.js"></script>
   <script src="/js/functions_for_main.js"></script>
-<script>
-
-//---------------------------- 페이지 요소가 전부 불려오고 난 후 적용될 스크립트----------------------------
-
- window.onload = function() {
-		
-	    document.getElementById('pieChartSelect').addEventListener('change', function(e) {
-	        if (this.value === 'tandanji') {
-	            MacroPieChart();
-	        } else if (this.value === 'colnadang') {
-	            SugarPieChart();
-	        }
-	    });
-		
-//--달력 라벨 밸류 디폴트는 현재로컬타임 기준으로 세팅됨----------------------------------------------
-
-		var currentDate = new Date();
-
-		var day = ("0" + currentDate.getDate()).slice(-2);
-		var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
-		var year = currentDate.getFullYear();
-
-		var formattedDate = year + "-" + month + "-" + day;
-
-		var calendarhtml = '<li> <label for="start"></label> <input type="date" id="calendarCtInput" name="trip-start" value="' + formattedDate + '" min="2023-01-01" max="2050-12-31"></li>';
-    
-		$('#calendarCt').html(calendarhtml);
-	
-		console.log( " formattedDate -> " , formattedDate );
-
-		var selectedDate = formattedDate;
-		/////////////////////////////
-
-//---  몸무게 업데이트 다이얼로그----------------------
-	
-	// 몸무게 다이얼로그 안 달력
-	$(function() {
-  		$("#dateInput").datepicker({
-	    dateFormat: "yy-mm-dd",
-	    minDate: new Date(2023, 0, 1),
-	    maxDate: new Date(2050, 11, 31),
-	    defaultDate: new Date(),
-	    onSelect: function(dateText, inst) {
-	      $(this).val(dateText);
-	    }
-	  });
-	});
-		
-    // 오늘의 몸무게 다이얼로그 팝업
-	$('#weightTodayDropdown').click(function(e) {
-  		e.preventDefault();
-  	$('#weightForToday').dialog('open');
-	});
-
-	// 목표 몸무게 재설정 다이얼로그 팝업
-	$('#targetWeightUpdateDropdown').click(function(e) {
-  		e.preventDefault();
-  	$('#targetWeightUpdate').dialog('open');
-	});
-
-	//  몸무게 다이얼로그 설정
-	$('#weightForToday').dialog({
-	  autoOpen: false,
-	  modal: true,
-	  buttons: {
-	    '계속입력': function() {
-	        var weight = $(this).find('#weightInput').val();
-		      var date = $(this).find('#dateInput').val();
-	    	  var zzinseq = $("#zzinseq").val();
-	    	  
-	    	  //console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
-	    	  //console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
-	    	  //console.log( " 몸무게 업데이트/날짜 -> ", date);
-	    	  
-		      
-		      if(weight === '' || isNaN(weight)) { 
-		        alert('숫자를 입력해주세요');
-		      } else if (!/^(\d*\.?\d{0,2})$/.test(weight)) {
-	              alert('특수문자 대신에 숫자를 입력해주세요 (소수점은 두자리 까지만!)');
-	          } else if ( date === ''){
-	              alert('날짜를 선택해주세요');
-	          }
-		      else {
-		    	  $.ajax({
-		              url: "/weight_update",
-		              method: "POST",
-		              data: {
-	            	  	seq: zzinseq, 
-		                i_weight: weight,
-		                dialogDate : date
-		              },
-		              success: function() {
-		                alert(' ' + weight + ' kg ' + date + ' 에 등록되었습니다.');
-		                loadDataFromDate();
-		              },
-		              error: function(jqXHR, textStatus, errorThrown) {
-	            	    //console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
-	            	    //console.log('Throw Error: ' + errorThrown); // 예외 정보
-	            	    //console.log('jqXHR Object: ' + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
-		                
-	            	    alert('업데이트에 실패했습니다');
-		              }
-		            });
-
-		            //$(this).dialog('close');
-		          }
-	    	
-	     },
-	    '입력': function() {
-	      var weight = $(this).find('#weightInput').val();
-	      var date = $(this).find('#dateInput').val();
-    	  var zzinseq = $("#zzinseq").val();
-    	  
-    	  //console.log( " 몸무게 업데이트/날짜 -> ", zzinseq);
-    	  //console.log( " 몸무게 업데이트/몸무게 -> ", weight); 
-    	  //console.log( " 몸무게 업데이트/날짜 -> ", date);
-    	  
-	      
-	      if(weight === '' || isNaN(weight)) { 
-	        alert('숫자를 입력해주세요');
-	      } else if (!/^(\d*\.?\d{0,2})$/.test(weight)) {
-              alert('특수문자 대신에 숫자를 입력해주세요 (소수점은 두자리 까지만!)');
-          } else if ( date === ''){
-              alert('날짜를 선택해주세요');
-          }
-	      else {
-	    	  $.ajax({
-	              url: "/weight_update",
-	              method: "POST",
-	              data: {
-            	  	seq: zzinseq, 
-	                i_weight: weight,
-	                dialogDate : date
-	              },
-	              success: function() {
-	                alert(' ' + weight + ' kg ' + date + ' 에 등록되었습니다.');
-	                loadDataFromDate();
-	                LineChartForMonth()
-	              },
-	              error: function(jqXHR, textStatus, errorThrown) {
-            	    //console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
-            	    //console.log('Throw Error: ' + errorThrown); // 예외 정보
-            	    //console.log('jqXHR Object: ' + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
-	                
-            	    alert('업데이트에 실패했습니다');
-	              }
-	            });
-
-	            $(this).dialog('close');
-	          }
-	        },
-	    '취소': function() {
-	      $(this).dialog('close');
-	    }
-	  },
-	  close: function() {
-	    $(this).find('#weightInput').val('');
-	  }
-	});
-
-	// 목표 몸무게 다이얼로그 설정
-	$('#targetWeightUpdate').dialog({
-	  autoOpen: false,
-	  modal: true,
-	  buttons: {
-	    '업데이트': function() {
-	      var tweight = $(this).find('#TweightInput').val();
-	      var zzinseq = $("#zzinseq").val();
-
-	 	  //console.log( " 목표 몸무게 업데이트/날짜 -> ", zzinseq);
-    	  //console.log( " 목표 몸무게 업데이트/몸무게 -> ", tweight); 
-	      
-	      if(tweight === '' || isNaN(tweight)) { 
-	          alert('숫자를 입력해주세요');
-	      } else if (!/^(\d*\.?\d{0,2})$/.test(tweight)) {
-              alert('특수문자 대신에 숫자를 입력해주세요 (소수점은 두자리 까지만!)');
-	      } else {
-	    	  $.ajax({
-	              url: "/weight_update",
-	              method: "POST",
-	              data: {
-            	  	seq: zzinseq, 
-            	  	target_weight : tweight
-	              },
-	              success: function() {
-	                alert('목표 몸무게가' + tweight + ' kg로 설정되었습니다!');
-	                loadDataFromDate();
-	              },
-	              error: function(jqXHR, textStatus, errorThrown) {
-            	    console.log('HTTP Status: ' + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
-            	    console.log('Throw Error: ' + errorThrown); // 예외 정보
-            	    console.log('jqXHR Object: ' + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
-	                
-            	    alert('업데이트에 실패했습니다');
-	              }
-	            });
-
-	            $(this).dialog('close');
-	      	 }
-	     },
-	    '취소': function() {
-	      $(this).dialog('close');
-	    }
-	  },
-	  close: function() {
-	    $(this).find('#TweightInput').val('');
-	  }
-	});
-		
-	//---함수등록 칸  ------------------ 바뀌는 날짜에 대해서 모든 데이터가 비동기적으로 처리됨-----------------------------------------
-    $("#calendarCtInput").on("change", function() {
-        	
-        	selectedDate = $(this).val();
-        	
-        	//console.log("달력 value 확인 ->", selectedDate);
-        	
-            loadDataFromDate();
-         
-          	//PieDataForDate();
-          	
-          	MacroPieChart();
-          	
-            AreaChartForWeek();
-
-            	
-        });
-	
-	//년도별로 월평균 보여주기.
-    $("#yearSelectForLineChart").on("change", function() {
-    	
-    	event.preventDefault();
-    	  
-    	console.log(" select 년도 확인 ->",  $(this).val());
-    	
-      	LineChartForMonth();
-        	
-    });
-
-	
-	loadDataFromDate();
-	MacroPieChart();
-	BarChartForDate();
-	AreaChartForWeek();
-	LineChartForMonth();
-
-//////
-  	};//window.onload끝 
-//////
-
-	
-</script>
-
-
-
 </head>
 
   <body
@@ -327,7 +88,7 @@
     <div class="flex h-screen overflow-hidden">
     
  <!-- ===== Sidebar Start ===== -->
-      <aside
+    <aside
   :class="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
   class="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
   @click.outside="sidebarToggle = false"
@@ -335,11 +96,8 @@
   <!-- SIDEBAR HEADER -->
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
-<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> 
-		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+		<i class="fa-solid fa-rocket bounce fa-10x"></i>
     </a>
-    
-    -->
 
     <button
       class="block lg:hidden"
@@ -373,106 +131,142 @@
     >
       <!-- Menu Group -->
       <div>
-        <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
+	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Menu</h3>
+		  <hr class="theme1">
+	
+	      <ul class="mb-6 flex flex-col gap-1.5">
+	        <!-- Menu Item Dashboard -->
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	      <a
+	         href="board.do"
+	         class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	         style="padding-left: 30px;"
+	       >
+	       <i class="fa-solid fa-circle-info"></i>
+	       <path
+	         d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	         fill=""
+	       />
+	       <path
+	         d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	         fill=""
+	       />
+	       </svg>
+	       <h1>공지사항</h1>
+	      </a>
+	     </li>
+	     
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	       <a
+	          href="board.do"
+	          class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	          style="padding-left: 30px;"
+	        >
+	          <i class="fa-solid fa-users"></i>
+	          <path
+	            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	            fill=""
+	          />
+	          <path
+	            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	            fill=""
+	          />
+	          </svg>
+	          <h1>게시판</h1>
+	        </a>
+	      </li>
 
-
-        <ul class="mb-6 flex flex-col gap-1.5">
-          <!-- Menu Item Dashboard -->
-
-          <!-- Menu Item Calendar -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="/user_notice_board.do"
-              @click="selected = (selected === 'Calendar' ? '':'Calendar')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
-            >
-           	공지사항
-            </a>
-          </li>
-          <!-- Menu Item Calendar -->
-
-          <!-- Menu Item Profile -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="board_list1.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-            게시판
-            </a>
-          </li>
-          <!-- Menu Item Profile -->
-
-              <!-- Menu Item Profile2 -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-           	식단
-            </a>
-          </li>
-          <!-- Menu Item Profile2 -->
-       
-
-          <!-- Menu Item Forms -->
-
-          <!-- Menu Item Tables -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="exercise.do"
-
-              @click="selected = (selected === 'Tables' ? '':'Tables')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
-            >
-              운동
-            </a>
-            
-     
-          </li>
-          
-          <!--  마이페이지 li -->
-             
-           <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="profile.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-             마이페이지
-            </a>
-          </li>
-
-          
-          <!--  -->
-          
-          <!-- Menu Item Tables -->
-		  <br/><br/>
-          <!-- Menu Item Settings -->
- 
-           
-        <li>
-			<a
-    			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-    			href="/klogout.do"
-    			@click="selected = (selected === 'Settings' ? '':'Settings')"
-    			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
-    			:class="page === 'settings' && 'bg-graydark'"
- 			>
-    			로그아웃
-  			</a>
-		</li>
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	        <a
+	           href="food.do"
+	           class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	           style="padding-left: 30px;"
+	         >
+	           <i class="fa-solid fa-bowl-food"></i>
+	           <path
+	             d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	             fill=""
+	           />
+	           <path
+	             d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	             fill=""
+	           />
+	           </svg>
+	           <h1>음식</h1>
+	         </a>
+	      </li>
+	      
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	         <a
+	            href="exercise.do"
+	            class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	            style="padding-left: 30px;"
+	          >
+	            <i class="fa-solid fa-dumbbell"></i>
+	            <path
+	              d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	              fill=""
+	            />
+	            <path
+	              d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	              fill=""
+	            />
+	            </svg>
+	            <h1>운동</h1>
+	          </a>
+	       </li>
+			<br/><br/>
+			<h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Others</h3>
+          	<hr class="theme1">
+	          <!-- Menu Item Settings -->
+	        <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	          <a
+	              href="profile.do"
+	              class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	              style="padding-left: 30px;"
+	            >
+	              <svg
+	                class="fill-current"
+	                width="22"
+	                height="22"
+	                viewBox="0 0 22 22"
+	                fill="none"
+	                xmlns="http://www.w3.org/2000/svg"
+	              >
+	                <path
+	                  d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	                  fill=""
+	                />
+	                <path
+	                  d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	                  fill=""
+	                />
+	              </svg>
+	              <h1>프로필</h1>
+	            </a>
+	        </li>
+	        <li>
+				<button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+	            <svg
+	              class="fill-current"
+	              width="22"
+	              height="22"
+	              viewBox="0 0 22 22"
+	              fill="none"
+	              xmlns="http://www.w3.org/2000/svg"
+	            >
+	              <path
+	                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
+	                fill=""
+	              />
+	              <path
+	                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+	                fill=""
+	              />
+	            </svg>
+	            <a href="/klogout.do"><h1>로그아웃</h1></a>
+	          </button>
+			</li>
           
           <!-- Menu Item Settings -->
         </ul>
@@ -480,6 +274,7 @@
       </nav>
   </div>
 </aside>
+
 
       <!-- ===== Sidebar End ===== -->
 
@@ -528,8 +323,9 @@
         </span>
       </button>
         <!-- Hamburger Toggle BTN -->
-      <a class="block flex-shrink-0 lg:hidden" href="/">
-        <img src="src/images/logo/" alt="홈 로고 추가해야되요" />
+      <a class="block flex-shrink-0 lg:hidden" href="/main.do">
+      <i class="fa-solid fa-rocket bounce fa-10x"></i>
+        <!-- <img src="src/images/logo/" alt="홈 로고 추가해야되요" /> -->
       </a>
     </div>
     
@@ -730,7 +526,7 @@
                     fill=""
                   />
                 </svg>
-                프로필
+                내 정보
               </a>
             </li>
             
@@ -1083,6 +879,7 @@
         </div>
     </div>
 </div>
+
 
 </body>
     
