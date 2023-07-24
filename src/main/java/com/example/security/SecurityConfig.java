@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					"/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/img/**","/src/images/**").permitAll()
 			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do","/feedback_view.do").hasRole("ADMIN")
 			.anyRequest().authenticated();
+
 		
 		
 		/*http.authorizeRequests()

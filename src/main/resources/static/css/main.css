@@ -1,0 +1,115 @@
+
+	.chatbot-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ff0000; 
+    position: fixed !important;
+    bottom: 20px !important;
+    
+    right: 33px !important;
+    
+    z-index: 1000;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	}
+	
+	.chatbot-icon .fas {
+	    font-size: 30px; 
+	    color: #ffffff;  
+	}
+	.chatbot-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    width: 400px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    display: none;
+	}
+	
+	.dialog-header {
+	    padding: 10px;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    border-bottom: 1px solid #e0e0e0;
+	}
+	
+	.dialog-title {
+	    font-weight: bold;
+	}
+	
+	.dialog-close {
+	    border: none;
+	    background: transparent;
+	    font-size: 20px;
+	    cursor: pointer;
+	    outline: none;
+	}
+	
+	.dialog-body {
+	    padding: 10px;
+	    max-height: 300px; /* 높이를 제한합니다. 원하는 높이로 설정하세요. */
+    	overflow-y: auto; 
+	}
+	
+	.form-row {
+	    margin-bottom: 10px;
+	}
+	
+	.form-row label {
+	    display: block;
+	    font-weight: bold;
+	}
+	
+	.form-row input,
+	.form-row #f_content {
+	    width: 100%;
+	    padding: 5px;
+	    border-radius: 5px;
+	    border: 1px solid #e0e0e0;
+        
+	}
+	.form-row #f_content {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    height: 135px; 
+	}
+	
+	.dialog-footer {
+	    padding: 10px;
+	    text-align: right;
+	}
+	
+	.dialog-footer button {
+	    padding: 5px 10px;
+	    border-radius: 5px;
+	    background-color: #ff0000;
+	    color: #ffffff;
+	    border: none;
+	    cursor: pointer;
+	}
+	
+
+	 #pieChartSelect {
+        background-color: lightgray;
+        color: black;
+        font-weight: bold;
+    }
+	
+	.ck-content img {
+    max-width: 100%;
+    height: auto;
+	}
+
+	.ck-editor__editable_inline {
+    min-height: 150px; /* 원하는 높이로 조절하세요 */
+	}
+ 
