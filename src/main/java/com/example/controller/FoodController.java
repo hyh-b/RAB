@@ -118,14 +118,14 @@ public class FoodController {
 			response.put("f_cholesterol_mg", f_cholesterol_mg);
 			response.put("f_sodium_mg", f_sodium_mg);
 			
-			System.out.println("음식 이름 \t :" + f_name);
-			System.out.println("탄수화물 \t :" + f_carbohydrate_g);
-			System.out.println("단백지 \t :" + f_protein_g);
-			System.out.println("지방 \t :" + f_fat_g);
-			System.out.println("콜레스토롤 \t :" + f_cholesterol_mg);
-			System.out.println("나트륨 \t :" + f_sodium_mg);
-			System.out.println("당 \t :" + f_sugar_g);
-			System.out.println("칼로리 \t :" + f_kcal);
+//			System.out.println("음식 이름 \t :" + f_name);
+//			System.out.println("탄수화물 \t :" + f_carbohydrate_g);
+//			System.out.println("단백지 \t :" + f_protein_g);
+//			System.out.println("지방 \t :" + f_fat_g);
+//			System.out.println("콜레스토롤 \t :" + f_cholesterol_mg);
+//			System.out.println("나트륨 \t :" + f_sodium_mg);
+//			System.out.println("당 \t :" + f_sugar_g);
+//			System.out.println("칼로리 \t :" + f_kcal);
 			
 			
 			responseList.add(response);
@@ -181,7 +181,7 @@ public class FoodController {
 	                bto.setB_cholesterol_mg(f_cholesterol_mg);
 	                bto.setB_sodium_mg(f_sodium_mg);
 	                bto.setB_day(b_day);  // set the parsed date
-	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
+//	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
 	                
 	                int flag = bdao.insertBreakfast(bto);
 	                response.put("flag", flag);
@@ -200,7 +200,7 @@ public class FoodController {
 	// 점심 ajax 구문
 	@RequestMapping("/lunchFoodData")
 	public Map<String, Object> lunchFoodData(HttpServletRequest request) {
-		System.out.println(request.getParameter("seq"));
+//		System.out.println(request.getParameter("seq"));
 		
 		// 추가 데이터 처리
 		String additionalDataJson = request.getParameter("additionalData");
@@ -261,7 +261,7 @@ public class FoodController {
 	// 저녁 ajax 구문
 	@RequestMapping("/dinnerFoodData")
 	public Map<String, Object> dinnerFoodData(HttpServletRequest request) {
-		System.out.println(request.getParameter("seq"));
+//		System.out.println(request.getParameter("seq"));
 		
 		// 추가 데이터 처리
 		String additionalDataJson = request.getParameter("additionalData");
@@ -365,14 +365,14 @@ public class FoodController {
 	                String sugar = perServingNutrients.getJSONObject("탄수화물").getString("당류(g)");
 	                String kcal = perServingNutrients.getString("열량(kcal)");
 	                
-	                System.out.println("음식 이름:\t" + foodName);
-	                System.out.println("단백질:\t" + protein);
-	                System.out.println("탄수화물:\t" + carbohydrates);
-	                System.out.println("지방:\t" + fat);
-	                System.out.println("콜레스테롤:\t" + cholesterol);
-	                System.out.println("나트륨:\t" + sodium);
-	                System.out.println("당:\t" + sugar);
-	                System.out.println("칼로리:\t"+kcal);
+//	                System.out.println("음식 이름:\t" + foodName);
+//	                System.out.println("단백질:\t" + protein);
+//	                System.out.println("탄수화물:\t" + carbohydrates);
+//	                System.out.println("지방:\t" + fat);
+//	                System.out.println("콜레스테롤:\t" + cholesterol);
+//	                System.out.println("나트륨:\t" + sodium);
+//	                System.out.println("당:\t" + sugar);
+//	                System.out.println("칼로리:\t"+kcal);
 
 	                Map<String, Object> foodInfo = new HashMap<>();
 	                foodInfo.put("foodName", foodName);

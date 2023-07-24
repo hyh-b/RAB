@@ -1,51 +1,53 @@
-<%@page import="com.example.model.NoticeBoardTO"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="m_seq" value="${requestScope.seq}" />
+<c:set var="name" value="${requestScope.name}" />
+<c:set var="profilename" value="${requestScope.profilename}" />
+<%@ page import="com.example.model.BoardTO"%>
+<%@ page import="com.example.model.BoardListTO"%>
+<%@ page import="com.example.model.CommentTO"%>
+<%
+BoardTO to = (BoardTO)request.getAttribute("to");
+BoardListTO listTo = (BoardListTO)request.getAttribute("listTo");
 
-<c:set var="listTO" value="${requestScope.listTO}"/>
-<c:set var="cpage" value="${requestScope.cpage}"/>
-<c:set var="data" value="${requestScope.data}"/>
-<c:set var="filename" value="${requestScope.filename}"/>
+String seq = to.getU_seq();
+System.out.println("Modify seq >>>>> "+seq);
+int cpage = listTo.getCpage();
+System.out.println("Modify cpage >>>>> "+cpage);
 
-<c:set var="groupSize" value="5" />
-<c:set var="groupCounter" value="0" />
-<c:set var="totalRecord" value="${listTO.totalRecord}"/>
-<c:set var="recordPerPage" value="${listTO.recordPerPage }"/>
-<c:set var="totalPage" value="${listTO.totalPage }"/>
-<c:set var="blockPerPage" value="${listTO.blockPerPage }"/>
-<c:set var="endBlock" value="${cpage - ((cpage-1) mod blockPerPage) + blockPerPage -1 }"/>		
+String subject=to.getU_subject();
+String writer=to.getU_writer();
 
+String content=to.getU_content();
+System.out.println("Modify content >>>>> "+content);
+String filename = to.getU_filename();
+System.out.println("Modify filename >>>>> "+filename);
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>공지사항</title>
-<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-<style>
-    /* 추가한 CSS 스타일 */
-    table {
-        border-collapse: collapse;
-    }
-    table, th, td {
-        border: 2px solid black;
-    }
+  <title>BoardModify</title>
+  <style>
 </style>
+<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="./css/board_write.css">
+<script type="text/javascript">
+window.onload = function () {
+	// 필수 입력값 검사
+		document.getElementById('mbtn').onclick = function () {
+			if( document.mfrm.subject.value.trim() == '') {
+				alert('제목을 입력하셔야 합니다'); 
+				return false;
+			}
+			document.mfrm.submit();
+	};
+};
 
-
-
-
-
+</script>
 </head>
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -59,17 +61,19 @@ pageEncoding="UTF-8"%>
   x-init="window.addEventListener('DOMContentLoaded', () => {setTimeout(() => loaded = false, 500)})"
   class="fixed left-0 top-0 z-999999 flex h-screen w-screen items-center justify-center bg-white"
 >
-  <div
-    class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
-  ></div>
+	  <div
+	    class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
+	  >
+	  </div>
 </div>
 
   <!-- ===== Preloader End ===== -->
 
   <!-- ===== Page Wrapper Start ===== -->
   <div class="flex h-screen overflow-hidden">
-    <!-- ===== Sidebar Start ===== -->
-    <aside
+  
+<!-- ===== Sidebar Start ===== -->
+  <aside
   :class="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
   class="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
   @click.outside="sidebarToggle = false"
@@ -123,7 +127,7 @@ pageEncoding="UTF-8"%>
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="user_notice_board.do"
+              href="calendar.do"
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
@@ -220,7 +224,6 @@ pageEncoding="UTF-8"%>
       </nav>
   </div>
 </aside>
-
 
     <!-- ===== Sidebar End ===== -->
 
@@ -329,14 +332,6 @@ pageEncoding="UTF-8"%>
           </label>
           <!-- Dark Mode Toggler -->
         </li>
-
-        <!-- Notification Menu Area -->
-        
-        <!-- Notification Menu Area -->
-
-        <!-- Chat Notification Area -->
-        
-        <!-- Chat Notification Area -->
       </ul>
 
       <!-- User Area -->
@@ -347,23 +342,18 @@ pageEncoding="UTF-8"%>
       >
         <a
           class="flex items-center gap-4"
-          href="#"
+          href="$"
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
           <span class="hidden text-right lg:block">
-            <span class="block text-sm font-medium text-black dark:text-white"
-
-              >${zzinnickname}</span
-            >
-            <!-- 
-            <span class="block text-xs font-medium"></span>
-			 -->	          
+            <span class="block text-sm font-medium text-black dark:text-white">
+            ${name}
+            </span>
+            
           </span>
 
           <span class="h-12 w-12 rounded-full">
-          <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
-            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
-
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" />
           </span>
 
           <svg
@@ -393,10 +383,9 @@ pageEncoding="UTF-8"%>
             class="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark"
           >
             <li>
-              <a
+                <a
                 href="profile.do"
                 class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-                style="padding-left: 5px;"
               >
                 <svg
                   class="fill-current"
@@ -415,14 +404,10 @@ pageEncoding="UTF-8"%>
                     fill=""
                   />
                 </svg>
-                프로필
+                My Profile
               </a>
             </li>
           </ul>
-          
-          
-          
-          
           <button
             class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
           >
@@ -443,7 +428,7 @@ pageEncoding="UTF-8"%>
                 fill=""
               />
             </svg>
-            <a href="/klogout.do">로그아웃</a>
+            <a href="/klogout.do">Log Out</a>
           </button>
         </div>
         <!-- Dropdown End -->
@@ -457,111 +442,79 @@ pageEncoding="UTF-8"%>
 
       <!-- ===== Main Content Start ===== -->
       <main>
-   <!-- ============  게시판 여기부터 시작	=================================== -->
-  <table >
-       <h2 class="mt-10 mb-7.5 text-title-md2 font-bold text-black dark:text-white">
-            공지사항
-          </h2>     
-		<div class="grid grid-cols-1 gap-7.5 sm:grid-cols-1 xl:grid-cols-1">
-		    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-		        <table style="width: 100%;" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-		            <thead>
-		                <tr>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 10%;">번호</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 60%;">제목</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">작성일</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">조회수</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <c:forEach var="noticeBoard" items="${noticeBoardList}">
-		                    <tr>
-		                        <td style="text-align: center;">${noticeBoard.n_seq}</td>
-		                       <td><a href="/user_notice_board_view.do?cpage=${cpage}&n_seq=${noticeBoard.n_seq}">${noticeBoard.n_subject}</a></td>
-		                        <td style="text-align: center;">${noticeBoard.n_wdate}</td>
-		                        <td style="text-align: center;">${noticeBoard.n_hit}</td>
-		                    </tr>
-		                </c:forEach>
-		            </tbody>		            
-  			</table>		
-			
+  <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+    <div class="mx-auto max-w-242.5">
+      <!-- Breadcrumb Start -->
+      <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-title-md2 font-bold text-black dark:text-white">
+        </h2>
+        <nav>
+          <ol class="flex items-center gap-2">
+            <li><a class="font-medium" href="main.do">main /</a></li>
+            <li><a class="font-medium" href="board_list1.do">Board /</a></li>
+            <li class="text-primary">BoardModify</li>
+          </ol>
+        </nav>
+        </div>
+        </div>
+      <!-- Breadcrumb End -->
 
-		
-        <!--=======  페이징 시작 =========================================-->
-		<div style="display: flex; justify-content: center;">
-				<div class="paginate_regular">
-					<div class="board_pagetab">				
-					<c:set var="startBlock" value="${cpage - ((cpage-1) mod blockPerPage)}" />
-					<c:if test="${endBlock >= totalPage}">
-					  <c:set var="endBlock" value="${totalPage}" />
-					</c:if>
-					
-					<c:choose>
-					  <c:when test="${startBlock == 1}">
-					    <span><a>&lt;&lt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/user_notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
-					  </c:otherwise>
-					</c:choose>
-					&nbsp;
-					<c:choose>
-					  <c:when test="${cpage == 1}">
-					    <span><a>&lt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/user_notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
-					  </c:otherwise>
-					</c:choose>
-					&nbsp;
-					<c:forEach begin="${startBlock}" end="${endBlock}" var="i">
-					  <c:choose>
-					    <c:when test="${i eq cpage}">
-					      <span><a>[${i}]</a></span>
-					    </c:when>
-					    <c:otherwise>
-					      <span><a href="/user_notice_board.do?cpage=${i}">${i}</a></span>
-					    </c:otherwise>
-					  </c:choose>
-					</c:forEach>
-					&nbsp;
-					<c:choose>
-					  <c:when test="${cpage == totalPage}">
-					    <span><a>&gt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/user_notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
-					  </c:otherwise>
-					</c:choose>	
-					&nbsp;
-					
-					<c:choose>
-					  <c:when test="${endBlock == totalPage}">
-					    <span><a>&gt;&gt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/user_notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
-					  </c:otherwise>
-					</c:choose>		
-					</div>
-				</div>
-			</div>
-				</div>
-			</div>
-		</table>
-	</main>
+      <!-- ====== Profile Section Start -->
 
-	   <!--=======  페이징 끝 =========================================-->
-	    <!-- ============  게시판 여기서 끝=================================== -->
-		
-				
-      <!-- ===== Main Content End ===== -->
-    </div>
-    <!-- ===== Content Area End ===== -->
+     <!--게시판-->
+     <form action="board_modify_ok1.do" method="post" name="mfrm" enctype="multipart/form-data">
+		<input type="hidden" name = "seq" value="<%=seq%>"  />
+		<input type="hidden" name = "cpage" value="<%=cpage%>" />
+		<div class="contents_sub">
+			<div class="board_write">
+				<table>
+				<tr>
+					<th class="top">글쓴이</th>
+					<td class="top" colspan="3"><input type="text" name="writer" value="<%=writer %>" class="board_view_input_mail" maxlength="5"  readonly /></td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td colspan="3"><input type="text" name="subject" value="<%=subject %>" class="board_view_input" /></td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td colspan="3">
+						<textarea name="content" class="board_editor_area"><%=content %></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>이미지</th>
+					<td colspan="3">
+						기존 이미지 : <%=filename %><br /><br />
+						<input type="file" name="upload" value="" class="board_view_input" /><br /><br />
+					</td>
+				</tr>
+				</table>
+			</div>
+
+			<div class="btn_area">
+				<div class="align_left">			
+					<input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='board_list1.do?seq=<%=seq %>&&cpage=<%=cpage %>'" />
+					<input type="button" value="보기" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='board_view1.do?seq=<%=seq %>&&cpage=<%=cpage %>'" />
+				</div>
+				<div class="align_right">			
+					<input type="button" id="mbtn" value="수정" class="btn_write btn_txt01" style="cursor: pointer;" />
+				</div>	
+			</div>	
+			<!--//게시판-->
+		</div>
+	</form>
+</div>
+
+        
+    <!-- ====== Profile Section End -->
   </div>
-  <!-- ===== Page Wrapper End ===== -->
-
+</main>
+<!-- ===== Main Content End ===== -->
+</div>
+<!-- ===== Content Area End ===== -->
+</div>
+<!-- ===== Page Wrapper End ===== -->
 <script defer src="bundle.js"></script>
 </body>
-
 </html>

@@ -1,52 +1,53 @@
-<%@page import="com.example.model.NoticeBoardTO"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<c:set var="listTO" value="${requestScope.listTO}"/>
-<c:set var="cpage" value="${requestScope.cpage}"/>
-<c:set var="data" value="${requestScope.data}"/>
-<c:set var="filename" value="${requestScope.filename}"/>
-
-<c:set var="groupSize" value="5" />
-<c:set var="groupCounter" value="0" />
-<c:set var="totalRecord" value="${listTO.totalRecord}"/>
-<c:set var="recordPerPage" value="${listTO.recordPerPage }"/>
-<c:set var="totalPage" value="${listTO.totalPage }"/>
-<c:set var="blockPerPage" value="${listTO.blockPerPage }"/>
-<c:set var="endBlock" value="${cpage - ((cpage-1) mod blockPerPage) + blockPerPage -1 }"/>		
-
+<c:set var="name" value="${requestScope.name}" />
+	<%
+	request.setCharacterEncoding("utf-8");
+	String cpage = request.getParameter("cpage");
+	%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>공지사항</title>
-<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-<style>
-    /* 추가한 CSS 스타일 */
-    table {
-        border-collapse: collapse;
-    }
-    table, th, td {
-        border: 2px solid black;
-    }
-</style>
-
-
-
-
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>BoardWrite</title>
+<link rel="stylesheet" type="text/css" href="./css/board_write.css">
 </head>
+<script type="text/javascript">
+window.onload = function () {
+    document.getElementById('wbtn').onclick = function () {
+		// 필수 입력값 검사
+		if( document.wfrm.info.checked == false ) {
+			alert('동의 하셔야 합니다'); 
+		}
+		if(document.wfrm.writer.value.trim() == '' ){
+			alert('글쓴이를 입력 하셔야 합니다');
+			return false;
+		}
+		if(document.wfrm.subject.value.trim() == '' ){
+			alert('제목을 입력 하셔야 합니다');
+			return false;
+		}
+		if(document.wfrm.upload.value.trim() == '' ){
+			alert('파일을 업로드 하셔야 합니다');
+			return false;
+		} else {
+				// 파일명에서 확장자를 분리해서 출력
+				const ext = document.wfrm.upload.value.trim().split('.');
+				// alert( ext[ext.length -1] );
+				if( ext[ext.length -1] != 'jpg' && ext[ext.length -1] != 'png'
+						&& ext[ext.length -1] != 'gif' ) {
+					alert('이미지 파일을 업로드 하셔야 합니다')
+					return false;
+				}
+		}
+		document.wfrm.submit();
+    };
+};
+</script>
+
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
@@ -59,17 +60,19 @@ pageEncoding="UTF-8"%>
   x-init="window.addEventListener('DOMContentLoaded', () => {setTimeout(() => loaded = false, 500)})"
   class="fixed left-0 top-0 z-999999 flex h-screen w-screen items-center justify-center bg-white"
 >
-  <div
-    class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
-  ></div>
+	  <div
+	    class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"
+	  >
+	  </div>
 </div>
 
   <!-- ===== Preloader End ===== -->
 
   <!-- ===== Page Wrapper Start ===== -->
   <div class="flex h-screen overflow-hidden">
-    <!-- ===== Sidebar Start ===== -->
-    <aside
+  
+<!-- ===== Sidebar Start ===== -->
+  <aside
   :class="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
   class="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
   @click.outside="sidebarToggle = false"
@@ -123,7 +126,7 @@ pageEncoding="UTF-8"%>
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="user_notice_board.do"
+              href="calendar.do"
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
@@ -220,7 +223,6 @@ pageEncoding="UTF-8"%>
       </nav>
   </div>
 </aside>
-
 
     <!-- ===== Sidebar End ===== -->
 
@@ -329,239 +331,76 @@ pageEncoding="UTF-8"%>
           </label>
           <!-- Dark Mode Toggler -->
         </li>
-
-        <!-- Notification Menu Area -->
-        
-        <!-- Notification Menu Area -->
-
-        <!-- Chat Notification Area -->
-        
-        <!-- Chat Notification Area -->
       </ul>
+<!-- 상단 디자인 -->
+<div class="contents1"> 
+	<div class="con_title"> 
+		<p style="margin: 0px; text-align: right">
+			<img style="vertical-align: middle" alt="" src="./images/home_icon.gif" /> &gt; 커뮤니티 &gt; <strong>여행지리뷰</strong>
+		</p>
+	</div> 
 
-      <!-- User Area -->
-      <div
-        class="relative"
-        x-data="{ dropdownOpen: false }"
-        @click.outside="dropdownOpen = false"
-      >
-        <a
-          class="flex items-center gap-4"
-          href="#"
-          @click.prevent="dropdownOpen = ! dropdownOpen"
-        >
-          <span class="hidden text-right lg:block">
-            <span class="block text-sm font-medium text-black dark:text-white"
-
-              >${zzinnickname}</span
-            >
-            <!-- 
-            <span class="block text-xs font-medium"></span>
-			 -->	          
-          </span>
-
-          <span class="h-12 w-12 rounded-full">
-          <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
-            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" alt="User" />
-
-          </span>
-
-          <svg
-            :class="dropdownOpen && 'rotate-180'"
-            class="hidden fill-current sm:block"
-            width="12"
-            height="8"
-            viewBox="0 0 12 8"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M0.410765 0.910734C0.736202 0.585297 1.26384 0.585297 1.58928 0.910734L6.00002 5.32148L10.4108 0.910734C10.7362 0.585297 11.2638 0.585297 11.5893 0.910734C11.9147 1.23617 11.9147 1.76381 11.5893 2.08924L6.58928 7.08924C6.26384 7.41468 5.7362 7.41468 5.41077 7.08924L0.410765 2.08924C0.0853277 1.76381 0.0853277 1.23617 0.410765 0.910734Z"
-              fill=""
-            />
-          </svg>
-        </a>
-
-        <!-- Dropdown Start -->
-        <div
-          x-show="dropdownOpen"
-          class="absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
-        >
-          <ul
-            class="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark"
-          >
-            <li>
-              <a
-                href="profile.do"
-                class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-                style="padding-left: 5px;"
-              >
-                <svg
-                  class="fill-current"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 22 22"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
-                    fill=""
-                  />
-                  <path
-                    d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
-                    fill=""
-                  />
-                </svg>
-                프로필
-              </a>
-            </li>
-          </ul>
-          
-          
-          
-          
-          <button
-            class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-          >
-            <svg
-              class="fill-current"
-              width="22"
-              height="22"
-              viewBox="0 0 22 22"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
-                fill=""
-              />
-              <path
-                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
-                fill=""
-              />
-            </svg>
-            <a href="/klogout.do">로그아웃</a>
-          </button>
-        </div>
-        <!-- Dropdown End -->
-      </div>
-      <!-- User Area -->
-    </div>
-  </div>
-</header>
-
-      <!-- ===== Header End ===== -->
-
-      <!-- ===== Main Content Start ===== -->
-      <main>
-   <!-- ============  게시판 여기부터 시작	=================================== -->
-  <table >
-       <h2 class="mt-10 mb-7.5 text-title-md2 font-bold text-black dark:text-white">
-            공지사항
-          </h2>     
-		<div class="grid grid-cols-1 gap-7.5 sm:grid-cols-1 xl:grid-cols-1">
-		    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-		        <table style="width: 100%;" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-		            <thead>
-		                <tr>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 10%;">번호</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 60%;">제목</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">작성일</th>
-		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">조회수</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <c:forEach var="noticeBoard" items="${noticeBoardList}">
-		                    <tr>
-		                        <td style="text-align: center;">${noticeBoard.n_seq}</td>
-		                       <td><a href="/user_notice_board_view.do?cpage=${cpage}&n_seq=${noticeBoard.n_seq}">${noticeBoard.n_subject}</a></td>
-		                        <td style="text-align: center;">${noticeBoard.n_wdate}</td>
-		                        <td style="text-align: center;">${noticeBoard.n_hit}</td>
-		                    </tr>
-		                </c:forEach>
-		            </tbody>		            
-  			</table>		
-			
-
-		
-        <!--=======  페이징 시작 =========================================-->
-		<div style="display: flex; justify-content: center;">
-				<div class="paginate_regular">
-					<div class="board_pagetab">				
-					<c:set var="startBlock" value="${cpage - ((cpage-1) mod blockPerPage)}" />
-					<c:if test="${endBlock >= totalPage}">
-					  <c:set var="endBlock" value="${totalPage}" />
-					</c:if>
-					
-					<c:choose>
-					  <c:when test="${startBlock == 1}">
-					    <span><a>&lt;&lt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/user_notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
-					  </c:otherwise>
-					</c:choose>
-					&nbsp;
-					<c:choose>
-					  <c:when test="${cpage == 1}">
-					    <span><a>&lt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/user_notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
-					  </c:otherwise>
-					</c:choose>
-					&nbsp;
-					<c:forEach begin="${startBlock}" end="${endBlock}" var="i">
-					  <c:choose>
-					    <c:when test="${i eq cpage}">
-					      <span><a>[${i}]</a></span>
-					    </c:when>
-					    <c:otherwise>
-					      <span><a href="/user_notice_board.do?cpage=${i}">${i}</a></span>
-					    </c:otherwise>
-					  </c:choose>
-					</c:forEach>
-					&nbsp;
-					<c:choose>
-					  <c:when test="${cpage == totalPage}">
-					    <span><a>&gt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/user_notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
-					  </c:otherwise>
-					</c:choose>	
-					&nbsp;
-					
-					<c:choose>
-					  <c:when test="${endBlock == totalPage}">
-					    <span><a>&gt;&gt;</a></span>
-					  </c:when>
-					  <c:otherwise>
-					    <span><a href="/user_notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
-					  </c:otherwise>
-					</c:choose>		
-					</div>
-				</div>
-			</div>
-				</div>
-			</div>
-		</table>
-	</main>
-
-	   <!--=======  페이징 끝 =========================================-->
-	    <!-- ============  게시판 여기서 끝=================================== -->
-		
+	<form action="./board_write_ok1.do" method="post" name="wfrm" enctype="multipart/form-data">
+		<div class="contents_sub">
+		<!--게시판-->
+			<div class="board_write">
+				<table>
+				<tr>
+					<th class="top">글쓴이</th>
+					<td class="top" colspan="3"><input type="text" name="writer" value="${name}" class="board_view_input_mail" maxlength="5" readonly="readonly" /></td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td colspan="3"><input type="text" name="subject" value="" class="board_view_input" /></td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td colspan="3">
+						<textarea name="content" class="board_editor_area"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>이미지</th>
+					<td colspan="3">
+						<input type="file" name="upload" value="" class="board_view_input" /><br /><br />
+					</td>
+				</tr>
+				</table>
 				
-      <!-- ===== Main Content End ===== -->
-    </div>
-    <!-- ===== Content Area End ===== -->
-  </div>
-  <!-- ===== Page Wrapper End ===== -->
+				<table>	
+				<tr>
+					<br />
+					<td style="text-align:left;border:1px solid #e0e0e0;background-color:f9f9f9;padding:5px">
+						<div style="padding-top:7px;padding-bottom:5px;font-weight:bold;padding-left:7px;font-family: Gulim,Tahoma,verdana;">※ 개인정보 수집 및 이용에 관한 안내</div>
+						<div style="padding-left:10px;">
+							<div style="width:97%;height:95px;font-size:11px;letter-spacing: -0.1em;border:1px solid #c5c5c5;background-color:#fff;padding-left:14px;padding-top:7px;"> 
+								 1. 수집 개인정보 항목 : 회사명, 담당자명, 메일 주소, 전화번호, 홈페이지 주소, 팩스번호, 주소 <br />
+								 2. 개인정보의 수집 및 이용목적 : 제휴신청에 따른 본인확인 및 원활한 의사소통 경로 확보 <br />
+								 3. 개인정보의 이용기간 : 모든 검토가 완료된 후 3개월간 이용자의 조회를 위하여 보관하며, 이후 해당정보를 지체 없이 파기합니다. <br />
+								 4. 그 밖의 사항은 개인정보취급방침을 준수합니다.
+							</div>
+						</div>
+						<div style="padding-top:7px;padding-left:5px;padding-bottom:7px;font-family: Gulim,Tahoma,verdana;">
+							<input type="checkbox" name="info" value="1" class="input_radio"> 개인정보 수집 및 이용에 대해 동의합니다.
+						</div>
+					</td>
+				</tr>
+				</table>
+			</div>
 
-<script defer src="bundle.js"></script>
+			<div class="btn_area">
+				<div class="align_left">			
+					<input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='board_list1.do?'" />
+				</div>
+				<div class="align_right">			
+					<input type="button" id ="wbtn" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" />					
+				</div>	
+			</div>	
+			<!--//게시판-->
+		</div>
+	</form>
+</div>
+<!-- 하단 디자인 -->
+
 </body>
-
 </html>

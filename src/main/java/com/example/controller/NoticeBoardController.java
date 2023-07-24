@@ -367,6 +367,21 @@ public class NoticeBoardController {
 		modelAndView.addObject("flag", flag);
 		return modelAndView;
 	}
+	
+	@RequestMapping("/notice_board_write.do")
+	public ModelAndView notice_board_write(HttpServletRequest request, NoticeBoardTO noticeBoardTO) throws SQLException {
+	    String cpageParam = request.getParameter("cpage");
+	    int cpage = cpageParam != null ? Integer.parseInt(cpageParam) : 1;
+
+	    NoticeListTO noticeListTO = new NoticeListTO();
+	    noticeListTO.setCpage(cpage);
+
+	    ModelAndView modelAndView = new ModelAndView();
+	    modelAndView.addObject("noticeListTO", noticeListTO);
+	    modelAndView.setViewName("notice_board_write");
+
+	    return modelAndView;
+	}
 }
 	
 	

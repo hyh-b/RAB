@@ -209,30 +209,32 @@ public class MypageController {
 
 	@RequestMapping("/mypageDeleteOK.do")
 	public ModelAndView mypageDelete(HttpServletRequest request, Authentication authentication, MultipartFile upload) {
-		MypageTO myto = new MypageTO();
+	    MypageTO myto = new MypageTO();
 
-		Object principal = authentication.getPrincipal();
-		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		System.out.println("마이페이지 삭제OK seq가져와 " + customUserDetails.getM_seq());
-		String seq = customUserDetails.getM_seq();
+	    Object principal = authentication.getPrincipal();
+	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+	    System.out.println("마이페이지 삭제OK seq 가져와: " + customUserDetails.getM_seq());
+	    String seq = customUserDetails.getM_seq();
+	    myto.setM_seq(seq);
 
-		int flag = mydao.MypageDeleteOk(myto);
+	    int flag = mydao.MypageDeleteOk(myto);
 
-		if (flag == 0) {
-			String profileName = myto.getM_profilename().substring(base.length());
-			String backgroundfileName = myto.getM_backgroundfilename().substring(base.length());
+//	    if (flag == 0) {
+//	        String profileName = myto.getM_profilename();
+//	        String backgroundfileName = myto.getM_backgroundfilename();
+//
+//	        s3FileUploadService.deleteFile(backgroundfileName);
+//	        s3FileUploadService.deleteFile(profileName);
+//
+//	        System.out.println("파일 삭제 완료!");
+//	    }
 
-			s3FileUploadService.deleteFile(backgroundfileName);
-			s3FileUploadService.deleteFile(profileName);
-
-			System.out.println(" 파일 삭제 완료! ");
-		}
-
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("mypageDelete");
-		modelAndView.addObject("flag", flag);
-		modelAndView.addObject("seq", seq);
-		modelAndView.addObject("myto", myto);
-		return modelAndView;
+	    ModelAndView modelAndView = new ModelAndView();
+	    modelAndView.setViewName("mypageDelete");
+	    modelAndView.addObject("flag", flag);
+	    modelAndView.addObject("seq", seq);
+	    modelAndView.addObject("myto", myto);
+	    return modelAndView;
 	}
+
 }
