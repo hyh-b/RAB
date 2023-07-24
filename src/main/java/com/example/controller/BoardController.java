@@ -50,7 +50,13 @@ public class BoardController {
 		
 // 리스트 ===================================================================================================
 		@RequestMapping("/board_list1.do") 
-		public ModelAndView boardList( HttpServletRequest request) {
+		public ModelAndView boardList( HttpServletRequest request, Authentication authentication) {
+			
+			BoardTO to1 = new BoardTO();
+			Object principal = authentication.getPrincipal();
+			CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+			String name = customUserDetails.getM_name();
+			String profilename = customUserDetails.getM_profilename();
 			
 			int cpage = 1;
 			if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
@@ -66,6 +72,7 @@ public class BoardController {
 			int count = 0; 
 			
 			for (BoardTO to : boardLists) {
+				
 				String seq = to.getU_seq();
 				String subject = to.getU_subject();
 				String writer = to.getU_writer();
@@ -132,6 +139,8 @@ public class BoardController {
 			modelAndView.addObject("boardLists" , boardLists );
 			modelAndView.addObject("listTo" , listTo );
 			modelAndView.addObject("sbHTML" , sbHTML );
+			modelAndView.addObject("profilename" , profilename );
+			modelAndView.addObject("name" , name );
 			
 			return modelAndView;
 		}
@@ -151,6 +160,7 @@ public class BoardController {
 			CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 			String seq = customUserDetails.getM_seq();
 			String name = customUserDetails.getM_name();
+			String profilename = customUserDetails.getM_profilename();
 			to.setM_seq(seq);
 			
 			BoardListTO listTo = new BoardListTO();
@@ -173,6 +183,7 @@ public class BoardController {
 			modelAndView.addObject("listTo" , listTo );
 			modelAndView.addObject("comments" , comments );
 			modelAndView.addObject("name" , name );
+			modelAndView.addObject("profilename" , profilename );
 			
 			return modelAndView;
 		}
@@ -224,10 +235,12 @@ public class BoardController {
 			Object principal = authentication.getPrincipal();
 			CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 			String name = customUserDetails.getM_name();
+			String profilename = customUserDetails.getM_profilename();
 			
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("board_write1");
 			modelAndView.addObject( "name" , name );
+			modelAndView.addObject("profilename" , profilename );
 			return modelAndView;
 		}
 
@@ -270,6 +283,7 @@ public class BoardController {
 				// 데이터 넘겨주기
 				modelAndView.addObject( "flag" , flag );
 				
+				
 			return modelAndView;
 		}
 
@@ -285,6 +299,8 @@ public class BoardController {
 			Object principal = authentication.getPrincipal();
 			CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 			String seq = customUserDetails.getM_seq();
+			String name = customUserDetails.getM_name();
+			String profilename = customUserDetails.getM_profilename();
 			to.setM_seq(seq);
 			
 			BoardListTO listTo = new BoardListTO();
@@ -298,6 +314,8 @@ public class BoardController {
 			// 데이터 넘겨주기
 			modelAndView.addObject( "to" , to );
 			modelAndView.addObject( "listTo" , listTo );
+			modelAndView.addObject( "name" , name );
+			modelAndView.addObject("profilename" , profilename );
 			
 			return modelAndView;
 		}
