@@ -167,13 +167,12 @@ pageEncoding="UTF-8"%>
 <!-- 이미지 업로드를 위해 필요한 API -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.14.0/umd/react.development.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.14.0/umd/react-dom.development.js"></script>
-
 <script>
 	$(document).ready(function() {
 		
 		$( function() {
 			$( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
-		} );
+		});
 		
 	//==================================================== 식단 등록 =================================================================
 		// 아침 , 점심 ,저녁 의 div 삭제 이벤트 전역변수
@@ -191,7 +190,7 @@ pageEncoding="UTF-8"%>
 			let selectedMeal = $('#mealSelect').val();
 
 			if (selectedMeal === "") {
-				alert('아침 , 점심 , 저녁 중 선택을 하여 등록해야합니다.');
+				swal("아침 , 점심 , 저녁 중 선택을 하여 등록해야합니다.");
 				return;
 			}
 
@@ -213,12 +212,22 @@ pageEncoding="UTF-8"%>
 		    let formattedDate = $.datepicker.formatDate('yy-mm-dd', selectedDate);
 		    
 		    if (!selectedDate) {
-		        alert('날짜를 선택해주세요!');
+		    	swal({
+		    		  title: "실패!",
+		    		  text: "날짜를 선택해주세요!",
+		    		  icon: "error",
+		    		  button: "확인",
+		    	});
 		        return;
 		    }
 		    
 		    if ($('#' + resultFood).children().length === 0) {
-		        alert('음식을 조회 후 등록 버튼을 눌러주세요!');
+		        swal({
+		    		  title: "실패!",
+		    		  text: "음식을 조회 후 등록 버튼을 눌러주세요!",
+		    		  icon: "error",
+		    		  button: "확인",
+		    	});
 		        return; // 함수 실행 종료
 		    }
 
@@ -256,7 +265,12 @@ pageEncoding="UTF-8"%>
 		        success : function(json){
 		            console.log('아침 클릭 '+json);
 		            if(json.flag == '1'){
-		                alert('등록 성공입니다.');
+		                swal({
+				    		  title: "성공!",
+				    		  text: "등록 성공입니다.",
+				    		  icon: "success",
+				    		  button: "확인",
+				    	});
 		                // 등록 성공 후 div 제거
 		                $('#' + resultFood).empty(); 
 		            } else {
@@ -282,7 +296,12 @@ pageEncoding="UTF-8"%>
 	    console.log(data);
 	
 	    if (data === '') {
-	        alert('검색어를 입력해주세요!');
+	        swal({
+	    		  title: "실패!",
+	    		  text: "검색어를 입력해주세요!",
+	    		  icon: "error",
+	    		  button: "확인",
+	    	});
 	        return;
 	    }
 	    
@@ -340,7 +359,12 @@ pageEncoding="UTF-8"%>
 			"확인": function() {
 				
 				if ($('.select-checkbox:checked').length == 0) {
-	                alert('해당 음식을 체크 누른 후 확인을 눌러주세요!');
+	                swal({
+			    		  title: "실패!",
+			    		  text: "해당 음식을 체크 누른 후 확인을 눌러주세요!",
+			    		  icon: "error",
+			    		  button: "확인",
+			    	});
 	                return false;
 	            }
 				
@@ -409,7 +433,12 @@ pageEncoding="UTF-8"%>
 	        },
 	        "확인": function () {
 	            if ($('.select-checkbox:checked').length === 0) {
-	                alert('해당 음식을 체크한 후 확인을 눌러주세요!');
+	                swal({
+			    		  title: "실패!",
+			    		  text: "해당 음식을 체크한 후 확인을 눌러주세요!",
+			    		  icon: "error",
+			    		  button: "확인",
+			    	});
 	                return false;
 	            }
 
@@ -479,7 +508,12 @@ pageEncoding="UTF-8"%>
 	  _handleSubmit() {
 		  
 	  	if (!this.file) {
-		    alert('사진을 선택 후 업로드 해주세요!');
+		    swal({
+		    	  title: "주의!",
+		    	  text: "사진을 선택 후 업로드 해주세요!",
+		    	  icon: "warning",
+		    	  button: "확인",
+		    	});
 			return;
 		}  
 	  	const formData = new FormData();
@@ -512,7 +546,13 @@ pageEncoding="UTF-8"%>
 	    let file = e.target.files[0];
 	
 	    if (!file.type.startsWith('image/')) {
-	      alert('이미지 파일만 업로드할 수 있습니다.');
+	      swal({
+	    	  title: "실패!",
+	    	  text: "이미지 파일만 업로드할 수 있습니다.",
+	    	  icon: "warning",
+	    	  button: "확인",
+	      });
+
 	      this.file = null;
 	      this.imagePreviewUrl = '';
 	      this.render();
