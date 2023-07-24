@@ -123,7 +123,7 @@ pageEncoding="UTF-8"%>
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="notice_board.do"
+              href="user_notice_board.do"
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
@@ -501,7 +501,7 @@ pageEncoding="UTF-8"%>
 					    <span><a>&lt;&lt;</a></span>
 					  </c:when>
 					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
+					    <span><a href="/user_notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
 					  </c:otherwise>
 					</c:choose>
 					&nbsp;
@@ -510,7 +510,7 @@ pageEncoding="UTF-8"%>
 					    <span><a>&lt;</a></span>
 					  </c:when>
 					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
+					    <span><a href="/user_notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
 					  </c:otherwise>
 					</c:choose>
 					&nbsp;
@@ -520,7 +520,7 @@ pageEncoding="UTF-8"%>
 					      <span><a>[${i}]</a></span>
 					    </c:when>
 					    <c:otherwise>
-					      <span><a href="/notice_board.do?cpage=${i}">${i}</a></span>
+					      <span><a href="/user_notice_board.do?cpage=${i}">${i}</a></span>
 					    </c:otherwise>
 					  </c:choose>
 					</c:forEach>
@@ -530,7 +530,7 @@ pageEncoding="UTF-8"%>
 					    <span><a>&gt;</a></span>
 					  </c:when>
 					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
+					    <span><a href="/user_notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
 					  </c:otherwise>
 					</c:choose>	
 					&nbsp;
@@ -540,7 +540,7 @@ pageEncoding="UTF-8"%>
 					    <span><a>&gt;&gt;</a></span>
 					  </c:when>
 					  <c:otherwise>
-					    <span><a href="/notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
+					    <span><a href="/user_notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
 					  </c:otherwise>
 					</c:choose>		
 					</div>

@@ -27,7 +27,7 @@ public interface NoticeBoardMapperInter {
 	public NoticeAlbumTO noticeFileView(NoticeAlbumTO to);
 	
 	
-	@Select("select * from NoticeBoard")
+	@Select("SELECT * FROM NoticeBoard ORDER BY n_seq DESC")
 	List<NoticeBoardTO> getAllNoticeBoard(); 
 	
 	@Select("SELECT n.n_seq, n.m_seq, n.n_subject, n.n_content, DATE_FORMAT(n.n_wdate, '%Y-%m-%d') AS n_wdate, n.n_hit " +
