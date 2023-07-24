@@ -218,6 +218,12 @@ pageEncoding="UTF-8"%>
 		} 
 		
 	//==================================================== 식단 메모 =================================================================
+	$('#foodName1').on('keypress', function(e) {
+        if (e.which == 13) {
+            e.preventDefault();  
+        	$('#searchButton1').click(); 
+        }
+    });
 	$('#searchButton1').click(function() {
 	    const data = $('#foodName1').val();
 	    console.log(data);

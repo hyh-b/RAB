@@ -34,6 +34,8 @@ import com.example.model.FoodDAO;
 import com.example.model.FoodTO;
 import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
+import com.example.model.MemberDAO;
+import com.example.model.MemberTO;
 import com.example.security.CustomUserDetails;
 
 @RestController
@@ -51,8 +53,11 @@ public class FoodController {
 	@Autowired
 	DinnerDAO ddao;
 	
+	@Autowired
+	private MemberDAO m_dao;
+	
 	@RequestMapping("/food.do")
-	public ModelAndView food(HttpServletRequest request , Authentication authentication) {
+	public ModelAndView food(HttpServletRequest request , Authentication authentication,String mId) {
 //		MemberTO to = new MemberTO();
 //		to.setM_seq((request.getParameter("seq")));
 //		System.out.println(to.getM_seq());
@@ -67,9 +72,19 @@ public class FoodController {
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		String seq = customUserDetails.getM_seq();
 		System.out.println(seq);
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+		
+        String m_profilename =  customUserDetails.getM_profilename();
+        
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("food");
 		modelAndView.addObject("seq", seq);
+		modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("profilename", m_profilename);
+		
 		return modelAndView;
 	}
 	

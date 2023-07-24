@@ -57,6 +57,7 @@
 			      success: function(flag) {
 			          if (flag > 0) {
 			            alert("메일이 전송되었습니다.");
+			            document.querySelector('[x-data]').__x.$data.reset();
 			          }
 			          else {
 			            alert("아이디와 이메일과 일치하는 회원이 존재하지 않습니다");
@@ -373,56 +374,52 @@
                 
           
                 
-				<div x-data="{modalOpen: false, reset() { this.modalOpen = false; document.getElementById('email').value = ''; document.getElementById('findId').innerHTML = ''; } }">
+				<div x-data="{modalOpen: false, reset() { this.modalOpen = false; clearFields(); } }">
 					<button @click="modalOpen = true">
 					    비밀번호 찾기
 					</button>
 				
 					<div x-show="modalOpen" x-transition class="fixed top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5">
-				    <!-- 비밀번호 찾기 모달 내용 -->
-				    	<div @click.outside="reset" class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
+					    <!-- 비밀번호 찾기 모달 내용 -->
+					    <div @click.outside="reset" class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
 							<h3 class="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl ">
 							  비밀번호 찾기
 							</h3>
 							<span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
 					
 							<form id="findPwForm">
-								<div class="mb-3">
+							    <div class="mb-3">
 									<div id="writeIdHelp" class="form-text" style="font-weight: bold; font-size:20px;">
-								    아이디를 입력해주세요
+									    아이디를 입력해주세요
 									</div>
 									<input type="text" class="form-control w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input" id="wId" aria-describedby="emailHelp">
 									<div><br></div>
 									<div id="pwEmailHelp" class="form-text" style="font-weight: bold; font-size:20px;">
-									가입 시 등록했던 이메일 주소를 입력해주세요.
+									    가입 시 등록했던 이메일 주소를 입력해주세요.
 									</div>
 									<input type="email" class="form-control w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input" id="email2" aria-describedby="emailHelp">
 									<div><br></div>
 									<div class="form-text" style="font-weight: bold; font-size:15px;">
-									확인 버튼을 누르시면 잠시 후 메일이 전송됩니다
+									    확인 버튼을 누르시면 잠시 후 메일이 전송됩니다
 									</div>
-								</div>
+							    </div>
 							</form>
 							
 							<div class="-mx-3 flex flex-wrap gap-y-4">
 								<div class="w-full px-3 2xsm:w-1/2">
-									<button id="pwBtn" class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+								    <button id="pwBtn" class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
 										확인
 									</button>
 								</div>
 								<div class="w-full px-3 2xsm:w-1/2">
-								    <button @click="modalOpen = false; reset()" class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90">
+								    <button @click="reset" class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90">
 								    	닫기
 								    </button>
 								</div>
 							</div>
-				    
-				    
-				    </div>
+					    </div>
+					</div>
 				</div>
-                
-                
-              </div>
             </div>
           </div>
           <!-- ====== Forms Section End -->
@@ -435,7 +432,11 @@
   <!-- ===== Page Wrapper End ===== -->
 <script defer src="bundle.js"></script>
 <script type="text/javascript">
-
+function clearFields() {
+    document.getElementById('wId').value = ''; 
+    document.getElementById('email2').value = ''; 
+    document.getElementById('findId').innerHTML = ''; 
+}
 </script>
 </body>
 </html>
