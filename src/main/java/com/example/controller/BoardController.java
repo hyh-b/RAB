@@ -84,7 +84,7 @@ public class BoardController {
 				
 				// 답글 수
 				int cmt = to.getU_commentcount();
-				System.out.println("list.jsp getcommentcount() >>> " + to.getU_commentcount() );
+//				System.out.println("list.jsp getcommentcount() >>> " + to.getU_commentcount() );
 				
 			    if (count % 5 == 0) {
 			        // 5번째 <tr> 요소인 경우 현재 행을 닫고 새로운 행을 시작
@@ -153,7 +153,6 @@ public class BoardController {
 			BoardTO to = new BoardTO();
 			
 			to.setU_seq(request.getParameter("seq") );
-			System.out.println("view to    " + to);
 			
 			// m_seq
 			Object principal = authentication.getPrincipal();
@@ -162,15 +161,12 @@ public class BoardController {
 			String name = customUserDetails.getM_name();
 			String profilename = customUserDetails.getM_profilename();
 			to.setM_seq(seq);
-			
+			System.out.println("view to2    " + to);
 			BoardListTO listTo = new BoardListTO();
-			System.out.println( "listTo.getCpage() " + listTo.getCpage() ); 	// 1
 			
 			listTo.setCpage( Integer.parseInt(request.getParameter("cpage" ) ) );
-			System.out.println("viewController cpage :     " + Integer.parseInt(request.getParameter("cpage" ) ) );
 			
 			to = boardDAO.boardView(to);
-			System.out.println("view hit >>>>>>>>>>>>>>>>>>>>>>>>>>>>>        "+to.getU_hit() );
 			
 			// 답글 리스트
 			ArrayList<CommentTO> comments = commentDAO.commentList(to);
@@ -193,29 +189,28 @@ public class BoardController {
 			ModelAndView modelAndView = new ModelAndView();
 			
 			BoardTO to = new BoardTO();
-			System.out.println("view to    " + to);
-			
 			to.setU_seq(request.getParameter("seq") );
 			
 			//seq
 			Object principal = authentication.getPrincipal();
 			CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-			String seq = customUserDetails.getM_seq();
-			to.setM_seq(seq);
+			String Mseq = customUserDetails.getM_seq();
+			to.setM_seq(Mseq);
 			
 			BoardListTO listTo = new BoardListTO();
 			listTo.setCpage( Integer.parseInt(request.getParameter("cpage" ) ) );
-			System.out.println("답글 cpage :     " + Integer.parseInt(request.getParameter("cpage" ) ) );
+//			System.out.println("답글 cpage :     " + Integer.parseInt(request.getParameter("cpage" ) ) );
 			
 			// 답글 쓰기
 			CommentTO Cto = new CommentTO();
+			Cto.setM_seq(Mseq);
 			Cto.setUc_writer(request.getParameter("cwriter") );
-			System.out.println("답글 쓰기 작성자 : " + request.getParameter("cwriter") );
+//			System.out.println("답글 쓰기 작성자 : " + request.getParameter("cwriter") );
 					
 			Cto.setUc_content( request.getParameter("ccontent") );
 			System.out.println("답글 쓰기 내용 : " + request.getParameter("ccontent") );
 			
-			Cto.setU_seq(seq);
+			Cto.setU_seq(request.getParameter("seq") );
 					
 			int flag = commentDAO.CommentOk(Cto);
 			System.out.println("답글 flag       " + flag );
@@ -374,7 +369,6 @@ public class BoardController {
 		
 			// TO DAO 호출
 			BoardTO to = new BoardTO();
-			System.out.println("게시판 삭제 TO " + to.toString() );
 			
 			Object principal = authentication.getPrincipal();
 			CustomUserDetails customUserDetails = (CustomUserDetails) principal;

@@ -81,9 +81,6 @@ public class MypageController {
 
 		myto = mydao.Mypage(myto);
 
-		// to 객체의 내용 출력
-		System.out.println("myto의 내용:");
-		System.out.println(myto.toString());
 
 		modelAndView.setViewName("profile");
 		modelAndView.addObject("myto", myto);
@@ -126,7 +123,7 @@ public class MypageController {
 
 		Object principal = authentication.getPrincipal();
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		System.out.println("마이페이지 수정OK seq가져와 " + customUserDetails.getM_seq());
+//		System.out.println("마이페이지 수정OK seq가져와 " + customUserDetails.getM_seq());
 		String seq = customUserDetails.getM_seq();
 		myto.setM_seq(seq);
 
@@ -145,7 +142,7 @@ public class MypageController {
 
 		// 글만 수정하는 경우
 		if ((profileUpload == null || profileUpload.isEmpty()) && (coverUpload == null || coverUpload.isEmpty())) {
-			System.out.println("컨트롤러에서 글만 변경합니다");
+//			System.out.println("컨트롤러에서 글만 변경합니다");
 			int flag = mydao.modifyTextOnly(myto);
 
 			// 결과를 담을 ModelAndView 객체 생성 및 설정
@@ -159,14 +156,14 @@ public class MypageController {
 
 		// 프로필 사진 변경
 		if (profileUpload != null && !profileUpload.isEmpty()) {
-			System.out.println("컨트롤러에서 프로필사진만 변경합니다");
+//			System.out.println("컨트롤러에서 프로필사진만 변경합니다");
 			try {
 				// S3에 파일 업로드
 				String fileUrl = s3FileUploadService.upload(profileUpload);
 				String profileName = fileUrl.substring(base.length());
 				// 파일이 성공적으로 업로드 시 db에 데이터 저장
 				if (fileUrl != null) {
-					System.out.println("프사가 성공적으로 업로드");
+//					System.out.println("프사가 성공적으로 업로드");
 					myto.setM_profilename(profileName);
 					myto.setM_profilesize(profileUpload.getSize());
 				}
@@ -176,7 +173,7 @@ public class MypageController {
 
 		// 배경 사진 변경
 		if (coverUpload != null && !coverUpload.isEmpty()) {
-			System.out.println("컨트롤러에서 배경사진만 변경합니다");
+//			System.out.println("컨트롤러에서 배경사진만 변경합니다");
 			try {
 				// S3에 파일 업로드
 				String fileUrl = s3FileUploadService.upload(coverUpload);
@@ -186,7 +183,7 @@ public class MypageController {
 
 				// 파일이 성공적으로 업로드 시 db에 데이터 저장
 				if (fileUrl != null) {
-					System.out.println("배사가 성공적으로 업로드");
+//					System.out.println("배사가 성공적으로 업로드");
 					myto.setM_backgroundfilename(backgroundfileName);
 					myto.setM_backgroundfilesize(coverUpload.getSize());
 				}
@@ -196,7 +193,7 @@ public class MypageController {
 		
 		// DAO 메서드 호출하여 마이페이지 수정 처리
 		int flag = mydao.MypageModifyOk(myto);
-		System.out.println("컨트롤러 수정 flag : " + flag);
+//		System.out.println("컨트롤러 수정 flag : " + flag);
 
 		// 결과를 담을 ModelAndView 객체 생성 및 설정
 		ModelAndView modelAndView = new ModelAndView();
@@ -230,7 +227,7 @@ public class MypageController {
 //	    }
 
 	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("mypageDelete");
+	    modelAndView.setViewName("mypageDeleteOK");
 	    modelAndView.addObject("flag", flag);
 	    modelAndView.addObject("seq", seq);
 	    modelAndView.addObject("myto", myto);
