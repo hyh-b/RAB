@@ -12,17 +12,13 @@ BoardTO to = (BoardTO)request.getAttribute("to");
 BoardListTO listTo = (BoardListTO)request.getAttribute("listTo");
 
 String seq = to.getU_seq();
-System.out.println("Modify seq >>>>> "+seq);
 int cpage = listTo.getCpage();
-System.out.println("Modify cpage >>>>> "+cpage);
 
 String subject=to.getU_subject();
 String writer=to.getU_writer();
 
 String content=to.getU_content();
-System.out.println("Modify content >>>>> "+content);
 String filename = to.getU_filename();
-System.out.println("Modify filename >>>>> "+filename);
 %>
 <!DOCTYPE html>
 <html lang="ko">

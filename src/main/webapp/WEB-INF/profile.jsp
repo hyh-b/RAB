@@ -5,7 +5,6 @@ pageEncoding="UTF-8"%>
 <c:set var="myto" value="${requestScope.myto}" />
 
 <c:set var="name" value="${myto.m_name}" />
-<c:set var="role" value="${myto.m_role}" />
 <c:set var="profilename" value="${myto.m_profilename}" />
 <c:set var="backgroundfilename" value="${myto.m_backgroundfilename}" />
 <c:set var="joinDate" value="${myto.m_join_date}" />
@@ -66,19 +65,10 @@ function confirmDelete() {
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-<<<<<<< HEAD
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
-    <a href="/main.do">
-<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
-=======
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
     <a href="/main.do">
    <!--  사이트 로고  -->
-
-
      <img src="src/images/logo/rocatNOb.png" width="50%" height="50%" />
->>>>>>> c7deb6fc10c6334ba12460a7fda82437520168e3
     </a>
 
     <button
@@ -137,7 +127,7 @@ function confirmDelete() {
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
 
-              href="board.do"
+              href="board_list1.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
@@ -345,7 +335,6 @@ function confirmDelete() {
             <span class="block text-sm font-medium text-black dark:text-white">
             ${name}
             </span>
-            <span class="block text-xs font-medium">${role}</span>
             
           </span>
 

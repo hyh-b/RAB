@@ -16,13 +16,11 @@ BoardListTO listTo = (BoardListTO)request.getAttribute("listTo");
 
 String seq = to.getU_seq();
 int cpage = listTo.getCpage();
-System.out.println("view.jsp cpage >>> " + cpage);
 
 String subject=to.getU_subject();
 String writer=to.getU_writer();
 String wdate=to.getU_wdate();
 
-System.out.println("board_view >>>> "+wdate);
 
 int hit=to.getU_hit();
 String content=to.getU_content();
