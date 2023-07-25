@@ -138,7 +138,7 @@
 	        <!-- Menu Item Dashboard -->
 	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
 	      <a
-	         href="board.do"
+	         href="notice_board.do"
 	         class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
 	         style="padding-left: 30px;"
 	       >
@@ -158,7 +158,7 @@
 	     
 	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
 	       <a
-	          href="board.do"
+	          href="board_list1.do"
 	          class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
 	          style="padding-left: 30px;"
 	        >
@@ -242,7 +242,7 @@
 	                  fill=""
 	                />
 	              </svg>
-	              <h1>프로필</h1>
+	              <h1>내 정보</h1>
 	            </a>
 	        </li>
 	        <li>
