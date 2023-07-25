@@ -1,7 +1,7 @@
 //----------------------함수-----------------------------
 
-		//반복해서 함수들이 그 자리를 대체하게 하는 함수
-		function assignDateChangeListener() {
+	//반복해서 함수들이 그 자리를 대체하게 하는 함수
+	function assignDateChangeListener() {
 	
 		$("#calendarCtInput").off("change"); 
 
@@ -80,7 +80,7 @@
        		} else if(elements.i_weight > elements.m_target_weight) {
        	   		whtml = '<span class="text-sm font-medium">목표까지 - ' + toTarget + ' kg</span>';
       		} else if (elements.i_weight == elements.m_target_weight) {
-       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board.do"><u>당신의 성공을 공유하세요!</u></a></span>';
+       	   		whtml = '<span class="text-sm font-medium">목표달성을 축하드립니다! <a href="board_list1.do"><u>당신의 성공을 공유하세요!</u></a></span>';
        	     //console.log(" undefined ? ->? ", elements.m_weight);
        		}
 			$('#targetWeight').html(whtml);
@@ -398,8 +398,8 @@
 		var selectedDate = $("#calendarCtInput").val();
 	    var zzinseq = $("#zzinseq").val();
 
-		 console.log(" AreaChartForDate 함수에서 zzinseq -> ", zzinseq);
-		 console.log(" AreaChartForDate 함수에서 selectedDate -> ", selectedDate);
+		 //console.log(" AreaChartForDate 함수에서 zzinseq -> ", zzinseq);
+		 //console.log(" AreaChartForDate 함수에서 selectedDate -> ", selectedDate);
 
 	    $.ajax({
 	        url: "/area_chart_data",

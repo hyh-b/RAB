@@ -1,8 +1,5 @@
 package com.example.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -10,27 +7,26 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.mappers.NoticeBoardMapperInter;
+import com.example.model.MemberDAO;
+import com.example.model.MemberTO;
 import com.example.model.NoticeAlbumDAO;
 import com.example.model.NoticeAlbumTO;
 import com.example.model.NoticeBoardDAO;
 import com.example.model.NoticeBoardTO;
 import com.example.model.NoticeListTO;
-
 import com.example.security.CustomUserDetails;
+import com.example.security.CustomUserDetailsService;
 import com.example.upload.S3FileUploadService;
 
 @RestController
@@ -42,6 +38,11 @@ public class NoticeBoardController {
 	private NoticeAlbumDAO abdao;
 	@Autowired
 	private NoticeBoardMapperInter mapper;
+	@Autowired
+	private MemberDAO m_dao;
+	
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
 	
 	// 프로퍼티에서 버킷 이름 할당
 		@Value("${cloud.aws.s3.bucket}")
@@ -61,12 +62,25 @@ public class NoticeBoardController {
 
 
 	@RequestMapping("/notice_board.do")
-	public ModelAndView notice_board(HttpServletRequest request, Authentication authentication) {
+	public ModelAndView notice_board(HttpServletRequest request, Authentication authentication, String mId) {
 	    int cpage = 1;
 	    if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
 	        cpage = Integer.parseInt(request.getParameter("cpage"));
 	    }
-
+	    
+	    authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		String seq = customUserDetails.getM_seq();
+		//System.out.println(seq);
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+		
+        String m_profilename =  customUserDetails.getM_profilename();
+        
 	    NoticeListTO listTO = new NoticeListTO();
 	    listTO.setCpage(cpage);
 
@@ -86,15 +100,30 @@ public class NoticeBoardController {
 	    modelAndView.addObject("cpage", cpage);
 	    modelAndView.addObject("data", data);
 	    modelAndView.setViewName("notice_board");
+	    modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("profilename", m_profilename);
 	    return modelAndView;
 	}
 	@RequestMapping("/user_notice_board.do")
-	public ModelAndView user_notice_board(HttpServletRequest request, Authentication authentication) {
+	public ModelAndView user_notice_board(HttpServletRequest request, Authentication authentication, String mId) {
 		int cpage = 1;
 		if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
 			cpage = Integer.parseInt(request.getParameter("cpage"));
 		}
+		 authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		String seq = customUserDetails.getM_seq();
+		//System.out.println(seq);
 		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+		
+        String m_profilename =  customUserDetails.getM_profilename();
+	        
 		NoticeListTO listTO = new NoticeListTO();
 		listTO.setCpage(cpage);
 		
@@ -114,14 +143,31 @@ public class NoticeBoardController {
 		modelAndView.addObject("cpage", cpage);
 		modelAndView.addObject("data", data);
 		modelAndView.setViewName("user_notice_board");
+		modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("profilename", m_profilename);
 		return modelAndView;
 	}
 
 	
 	@RequestMapping("/notice_board_view.do")
-	public ModelAndView notice_board_view(HttpServletRequest request) {
+	public ModelAndView notice_board_view(HttpServletRequest request, Authentication authentication, String mId) {
 	    NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
-
+	    
+	    authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		String seq = customUserDetails.getM_seq();
+		//System.out.println(seq);
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+		
+        String m_profilename =  customUserDetails.getM_profilename();
+	    
+	    
 	    //cpage
 	    String cpageParam = request.getParameter("cpage");
 	    int cpage = cpageParam != null ? Integer.parseInt(cpageParam) : 1;
@@ -141,33 +187,41 @@ public class NoticeBoardController {
 	    // 조회수 증가 처리
 	    int result = dao.updateHitOK(bto); // Pass the entire NoticeBoardTO object
 
-	    // result 값으로 성공 여부를 확인할 수 있음
-	    if (result == 1) {
-	        System.out.println("조회수 증가 성공");
-	    } else {
-	        System.out.println("조회수 증가 실패");
-	    }
+	  
 
-	    System.out.println("제목 -------" + bto.getN_subject());
-	    System.out.println("내용 -------" + bto.getN_content());
-	    for (NoticeAlbumTO to : atos) {
-	        System.out.println("파일이름 -------" + to.getNf_filename());
-	        System.out.println("파일사이즈 -------" + to.getNf_filesize());
-	    }
 
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.setViewName("notice_board_view");
 	    modelAndView.addObject("bto", bto); // 게시물 정보를 ModelAndView에 추가
 	    modelAndView.addObject("atos", atos);
 	    modelAndView.addObject("noticeListTO", noticeListTO);
+	    modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("profilename", m_profilename);
 	    return modelAndView;
 	}
 
 
 
 	@RequestMapping("/user_notice_board_view.do")
-	public ModelAndView user_notice_board_view(HttpServletRequest request) {
+	public ModelAndView user_notice_board_view(HttpServletRequest request, Authentication authentication, String mId) {
 	    NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
+	    
+	    
+	    authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		String seq = customUserDetails.getM_seq();
+		//System.out.println(seq);
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+		
+        String m_profilename =  customUserDetails.getM_profilename();
+	    
+	    
 
 	    //cpage
 	    String cpageParam = request.getParameter("cpage");
@@ -188,102 +242,93 @@ public class NoticeBoardController {
 	    // 조회수 증가 처리
 	    int result = dao.updateHitOK(bto); // Pass the entire NoticeBoardTO object
 
-	    // result 값으로 성공 여부를 확인할 수 있음
-	    if (result == 1) {
-	        System.out.println("조회수 증가 성공");
-	    } else {
-	        System.out.println("조회수 증가 실패");
-	    }
+	    
 
-	    System.out.println("제목 -------" + bto.getN_subject());
-	    System.out.println("내용 -------" + bto.getN_content());
-	    for (NoticeAlbumTO to : atos) {
-	        System.out.println("파일이름 -------" + to.getNf_filename());
-	        System.out.println("파일사이즈 -------" + to.getNf_filesize());
-	    }
+	   
 
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.setViewName("user_notice_board_view");
 	    modelAndView.addObject("bto", bto); // 게시물 정보를 ModelAndView에 추가
 	    modelAndView.addObject("atos", atos);
 	    modelAndView.addObject("noticeListTO", noticeListTO);
+	    modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("profilename", m_profilename);
 	    return modelAndView;
 	}
 
 	
 
-	@RequestMapping("/notice_board_write_ok.do")
-	public ModelAndView notice_board_write_ok(HttpServletRequest request, Authentication authentication, List<MultipartFile> uploads) {
-	    authentication = SecurityContextHolder.getContext().getAuthentication();
-	    Object principal = authentication.getPrincipal();
-	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-	    
-	    String m_seq = customUserDetails.getM_seq();
-	    int jjinSeq = Integer.parseInt(m_seq);
-	    NoticeBoardTO bto = new NoticeBoardTO();
-	    NoticeAlbumTO ato = new NoticeAlbumTO();
 
+	
+	@RequestMapping("/notice_board_write_ok.do")
+	public Map<String, Object> writeOKAjax(HttpServletRequest request, @RequestParam("uploads") MultipartFile[] uploads) {
+		CustomUserDetails customUserDetails = customUserDetailsService.getCurrentUserDetails();
+		String m_seq=customUserDetails.getM_seq();
+		NoticeBoardTO bto = new NoticeBoardTO();
+	    NoticeAlbumTO ato = new NoticeAlbumTO();
+	    
 	    String subject = request.getParameter("n_subject");
 	    bto.setN_subject(subject);
 	    String content = request.getParameter("n_content");
 	    bto.setN_content(content);
-	    bto.setM_seq(jjinSeq);
+	    bto.setM_seq(Integer.parseInt(m_seq));
 
-	    NoticeBoardTO existingBoard = dao.noticeBoardView(bto);
+	    Map<String, Object> response = new HashMap<>();
+	    int flagAB = dao.writeOK(bto);
 
-	    // If a NoticeBoard with the provided n_seq already exists, use it. Otherwise, create a new one.
-	    int flagAB;
-	    int flag = 0; 
-	    if (existingBoard != null) {
-	        flagAB = 1;  // NoticeBoard already exists
-	    } else {
-	        flagAB = dao.writeOK(bto);  // Create a new NoticeBoard
-	    }
-
-	    System.out.println("flagAB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+flagAB);
-
-	    // If a NoticeBoard exists or has been created, add the files to it
+	    int flag = 0;
 	    if (flagAB == 1) {
-	        System.out.println("flag 넣는중 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-	        try {
-	            for (MultipartFile uploadfile : uploads) {
+	        for (MultipartFile file : uploads) {
+	            try {
 	                // Upload file to S3
-	                String fileUrl = s3FileUploadService.upload(uploadfile);
-	                
+	                String fileUrl = s3FileUploadService.upload(file);
+
 	                // If the file was uploaded successfully, save its data to the database
-	                if (fileUrl != null) {    
+	                if (fileUrl != null) {
 	                    ato.setN_seq(bto.getN_seq());
 	                    ato.setNf_filename(fileUrl);
-	                    ato.setNf_filesize(uploadfile.getSize());            
+	                    ato.setNf_filesize(file.getSize());
 	                    flag = abdao.noticeAlbum_ok(ato);
 	                } else {
-	                    System.out.println("File upload failed for n_seq: " + bto.getN_seq());
+	                    //System.out.println("File upload failed for n_seq: " + bto.getN_seq());
 	                }
+	            } catch (Exception e) {
+	                e.printStackTrace();
 	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
 	        }
 	    }
 
-	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("noticeboardAlbum_ok");
-	    modelAndView.addObject("flagAB",flagAB);
-	    modelAndView.addObject("flag",flag);
-	    return modelAndView; 
+	    response.put("flagAB", flagAB);
+	    response.put("flag", flag);
+	    return response;
+	}
+	@RequestMapping("/notice_board_delete_ok.do")
+	public Map<String, Object> notice_board_delete(HttpServletRequest request, NoticeBoardTO noticeBoardTO)  {
+		Map<String, Object> response = new HashMap<>();
+		NoticeBoardTO bto =new NoticeBoardTO();
+		bto.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
+		//System.out.println("n_seq ------------"+bto.n_seq);
+		int flag = dao.noticeDelete_ok(bto);
+		//System.out.println("flag-----"+flag);
+		
+		response.put("flag", flag);
+		return response;
 	}
 
 
 	
 	
 	@RequestMapping("/notice_board_modify_ok.do")
-	public ModelAndView notice_board_modify_ok(HttpServletRequest request, Authentication authentication, @RequestParam("upload") MultipartFile[] upload) {
-	    authentication = SecurityContextHolder.getContext().getAuthentication();
+	public Map<String, Object> notice_board_modify_ok(HttpServletRequest request, Authentication authentication, @RequestParam("upload") MultipartFile[] upload) {
+		Map<String, Object> response = new HashMap<>();
+		authentication = SecurityContextHolder.getContext().getAuthentication();
 	    NoticeBoardTO bto = new NoticeBoardTO();
 	    NoticeAlbumTO ato = new NoticeAlbumTO();
 
 	    // n_Seq 값으로 지정
 	    bto.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
-	    System.out.println("n_seq---------" + request.getParameter("n_seq"));
+	    //System.out.println("n_seq---------" + request.getParameter("n_seq"));
 	    ato.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
 
 	    int flag = 2;
@@ -296,11 +341,11 @@ public class NoticeBoardController {
 	    int flagAB = dao.updateBoard(bto);
 	    abdao.noticeFileDelete_ok(ato); // pass the ato object
 
-	    System.out.println("flagAB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flagAB);
+	    //System.out.println("flagAB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flagAB);
 
 	    // flagAB가 1일 때만 파일 처리를 진행합니다.
 	    if (flagAB == 1 && upload.length > 0) {
-	        System.out.println("flag 넣는중 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+	        //System.out.println("flag 넣는중 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 	        for (MultipartFile file : upload) {
 	            try {
 	                // Upload new file and insert new entry to NoticeFile
@@ -331,55 +376,79 @@ public class NoticeBoardController {
 	        }
 	    }
 
-	    System.out.println("flag  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flag);
-	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("noticeboardAlbum_ok");
-	    modelAndView.addObject("flagAB", flagAB);     
-	    modelAndView.addObject("flag", flag);     
-	    return modelAndView;
+	   // System.out.println("flag  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flag);
+	  
+	    response.put("flagAB", flagAB);     
+	    response.put("flag", flag);     
+	  
+		return response;
 	}
 
 
 
 
 	@RequestMapping("/notice_board_modify.do")
-	public ModelAndView notice_board_modify(HttpServletRequest request, NoticeBoardTO noticeBoardTO)  {
+	public ModelAndView notice_board_modify(HttpServletRequest request, NoticeBoardTO noticeBoardTO, Authentication authentication, String mId)  {
 		int n_seq = Integer.parseInt(request.getParameter("n_seq"));
+		
+		
+		authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		String seq = customUserDetails.getM_seq();
+		//System.out.println(seq);
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+		
+        String m_profilename =  customUserDetails.getM_profilename();
+		
+		
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
 		modelAndView.setViewName("notice_board_modify");
 		modelAndView.addObject("n_seq", n_seq);
+		modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("profilename", m_profilename);
 		return modelAndView;
 	}
 	
 	
-	@RequestMapping("/notice_board_delete_ok.do")
-	public ModelAndView notice_board_delete(HttpServletRequest request, NoticeBoardTO noticeBoardTO)  {
-		
-		NoticeBoardTO bto =new NoticeBoardTO();
-		bto.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
-		System.out.println("n_seq ------------"+bto.n_seq);
-		int flag = dao.noticeDelete_ok(bto);
-		System.out.println("flag-----"+flag);
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("noticeboarddelete_ok");
-		modelAndView.addObject("flag", flag);
-		return modelAndView;
-	}
+	
 	
 	@RequestMapping("/notice_board_write.do")
-	public ModelAndView notice_board_write(HttpServletRequest request, NoticeBoardTO noticeBoardTO) throws SQLException {
+	public ModelAndView notice_board_write(HttpServletRequest request, NoticeBoardTO noticeBoardTO, Authentication authentication, String mId) throws SQLException {
 	    String cpageParam = request.getParameter("cpage");
 	    int cpage = cpageParam != null ? Integer.parseInt(cpageParam) : 1;
 
+	    
+	    authentication = SecurityContextHolder.getContext().getAuthentication();
+		//authentication에서 사용자 정보를 가져와 오브젝트에 담음
+		Object principal = authentication.getPrincipal();
+		// principal 객체를 CustomUserDetails 타입으로 캐스팅
+		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+		String seq = customUserDetails.getM_seq();
+		//System.out.println(seq);
+		
+		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
+        MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
+		
+        String m_profilename =  customUserDetails.getM_profilename();
+		
+        
 	    NoticeListTO noticeListTO = new NoticeListTO();
 	    noticeListTO.setCpage(cpage);
 
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.addObject("noticeListTO", noticeListTO);
 	    modelAndView.setViewName("notice_board_write");
-
+	    modelAndView.addObject("zzinid", member.getM_id());
+		modelAndView.addObject("zzinnickname", member.getM_name());
+		modelAndView.addObject("profilename", m_profilename);
 	    return modelAndView;
 	}
 }
