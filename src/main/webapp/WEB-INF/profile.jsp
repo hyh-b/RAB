@@ -24,7 +24,7 @@ pageEncoding="UTF-8"%>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mypage</title>
+  <title>내 정보</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 
 <!-- 구글 사이드 상단 Menu 글씨체-->

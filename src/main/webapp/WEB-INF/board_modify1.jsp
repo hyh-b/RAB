@@ -26,7 +26,7 @@ String filename = to.getU_filename();
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BoardModify</title>
+  <title>게시글 수정</title>
   <style>
 </style>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
