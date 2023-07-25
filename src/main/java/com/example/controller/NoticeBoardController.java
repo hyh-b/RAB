@@ -1,11 +1,9 @@
 package com.example.controller;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.mappers.NoticeBoardMapperInter;
@@ -31,14 +28,6 @@ import com.example.model.NoticeListTO;
 import com.example.security.CustomUserDetails;
 import com.example.security.CustomUserDetailsService;
 import com.example.upload.S3FileUploadService;
-
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-
 
 @RestController
 public class NoticeBoardController {
@@ -54,19 +43,7 @@ public class NoticeBoardController {
 	
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
-//	//ckedit-------------------------------------------------------------------------
-//	private final NoticeBoardController imageUploadService;
-//
-//    public NoticeBoardController(ImageUploadService imageUploadService) {
-//        this.imageUploadService = imageUploadService;
-//    }
-//
-//    @PostMapping("/image-upload")
-//    public String uploadImage(@RequestParam("upload") MultipartFile file) {
-//        return imageUploadService.uploadImage(file);
-//    }
-//    
-//    //ckedit--------------------------------------------------------------------
+	
 	// 프로퍼티에서 버킷 이름 할당
 		@Value("${cloud.aws.s3.bucket}")
 		private String bucket;
@@ -282,34 +259,7 @@ public class NoticeBoardController {
 
 	
 
-		@PostMapping(value = "/image/upload")
-		public ModelAndView image(MultipartHttpServletRequest request) throws Exception {
-			
-			ModelAndView mav = new ModelAndView("jsonView");
-	
-			MultipartFile uploadFile = request.getFile("upload");
-	
-			String originalFileName = uploadFile.getOriginalFilename();
-	
-			String ext = originalFileName.substring(originalFileName.indexOf("."));
-	
-			String newFileName = UUID.randomUUID() + ext;
-	
-			String realPath = request.getServletContext().getRealPath("/");
-	
-			String savePath = realPath + "upload/" + newFileName;
-	  
-			String uploadPath = "./upload/" + newFileName; 
-	
-			File file = new File(savePath);
-	
-			uploadFile.transferTo(file);
-	
-			mav.addObject("uploaded", true);
-			mav.addObject("url", uploadPath);
-	
-			return mav;
-		}
+
 	
 	@RequestMapping("/notice_board_write_ok.do")
 	public Map<String, Object> writeOKAjax(HttpServletRequest request, @RequestParam("uploads") MultipartFile[] uploads) {
@@ -504,4 +454,3 @@ public class NoticeBoardController {
 }
 	
 	
-

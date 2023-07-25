@@ -20,13 +20,6 @@ pageEncoding="UTF-8"%>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-<!-- ckedit를 사용하기 위해 사용 -->
-<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
-<meta charset="utf-8">
-    <title>CKEditor 5 – Classic editor</title>
-    <script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
-  <script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/inline/ckeditor.js"></script>
 <script>
 $(document).ready(function() {
 	$('#myForm').submit(function(e) {
@@ -80,12 +73,6 @@ $(document).ready(function() {
 	.bounce:hover {
 	    animation: bounce 1s infinite;
 	}
-	
-	.ck-editor__editable {
-    max-height: 100vh;
-    min-height: 400px; 
-}
-	
 </style>
 
 </head>
@@ -508,7 +495,7 @@ $(document).ready(function() {
       <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div class="board_write">
           <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-            <table style="width: 100%; height: 500px;">
+            <table>
               <tr>				 
 				  <td colspan="3">
 				    <div>
@@ -521,49 +508,27 @@ $(document).ready(function() {
 				  </td>
 				</tr>
 
-<!--               <tr>				  -->
-<!-- 				  <td colspan="3"> -->
-<!-- 				    <div> -->
-<!-- 				      <label class="mb-3 block font-medium text-sm text-black dark:text-white"> -->
-<!-- 				        내용 -->
-<!-- 				      </label> -->
-<!-- 				      <textarea name="n_content" id="n_content" rows="6" placeholder="내용을 입력하세요" -->
-<!-- 				        class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"></textarea> -->
-<!-- 				    </div> -->
-<!-- 				  </td> -->
-<!-- 				</tr> -->
+              <tr>				 
+				  <td colspan="3">
+				    <div>
+				      <label class="mb-3 block font-medium text-sm text-black dark:text-white">
+				        내용
+				      </label>
+				      <textarea name="n_content" id="n_content" rows="6" placeholder="내용을 입력하세요"
+				        class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"></textarea>
+				    </div>
+				  </td>
+				</tr>
 
-<!--               <tr> -->
-<!--                 <th>사진 등록</th> -->
-<!--                 <td colspan="3"> -->
-<!--                   <div class="flex"> -->
-<!-- 					  <input type="file" name="uploads" multiple class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" /> -->
-<!-- 					</div> -->
+              <tr>
+                <th>사진 등록</th>
+                <td colspan="3">
+                  <div class="flex">
+					  <input type="file" name="uploads" multiple class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" />
+					</div>
 
-<!--                 </td> -->
-<!--               </tr> -->
-			<tr>
-				<td >
-					<textarea name="n_content" id="editor" style="width: 100%; height: 100%;" placeholder="내용을 입력하세요"
-						class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"></textarea>
-					<div id="editor"></div>
- 					<script>		
- 					ClassicEditor
- 					.create(document.querySelector('#editor'), {
- 						ckfinder: {
- 							uploadUrl : '/notice_board_write_ok.do'
- 						}
- 					})
- 					.then(editor => {
- 						console.log('Editor was initialized');
- 					})
- 					.catch(error => {
- 						console.error(error);
- 					});
-					 </script>				
-					    
-				</td>
-			</tr>
+                </td>
+              </tr>
             </table>
           </div>
         </div>
