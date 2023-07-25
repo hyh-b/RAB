@@ -1,15 +1,73 @@
+<%@page import="com.example.model.NoticeBoardTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
+pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<c:set var="listTO" value="${requestScope.listTO}"/>
+<c:set var="cpage" value="${requestScope.cpage}"/>
+<c:set var="data" value="${requestScope.data}"/>
+<c:set var="filename" value="${requestScope.filename}"/>
+
+<c:set var="groupSize" value="5" />
+<c:set var="groupCounter" value="0" />
+<c:set var="totalRecord" value="${listTO.totalRecord}"/>
+<c:set var="recordPerPage" value="${listTO.recordPerPage }"/>
+<c:set var="totalPage" value="${listTO.totalPage }"/>
+<c:set var="blockPerPage" value="${listTO.blockPerPage }"/>
+<c:set var="endBlock" value="${cpage - ((cpage-1) mod blockPerPage) + blockPerPage -1 }"/>		
+
+<!DOCTYPE html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>관리자 공지사항</title>
-<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
+  <title>공지사항</title>
+<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+<script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<style>
+    /* 추가한 CSS 스타일 */
+    table {
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border: 2px solid black;
+    }
+    
+    @keyframes bounce {
+	    0%, 20%, 50%, 80%, 100% {
+	        transform: translateY(0);
+	    }
+	    40% {
+	        transform: translateY(-20px);
+	    }
+	    60% {
+	        transform: translateY(-10px);
+	    }
+	}
+	
+	.bounce:hover {
+	    animation: bounce 1s infinite;
+	}
+	 main {
+	    width: 100%;
+	    height: 100vh;
+	    overflow: auto;
+	}
+</style>
+
+
+
+
+
+</head>
 <body
   x-data="{ page: 'buttons', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
@@ -160,7 +218,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="adminAnnouncement.do"
+              href="admin_notice_board.do"
 
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
@@ -173,7 +231,7 @@
       			height="24"
    			/>
 
-              공지사함
+              공지사항
             </a>
      
           </li>
@@ -215,14 +273,119 @@
   </div>
 </aside>
 
-    <!-- ===== Sidebar End ===== -->
+      <!-- ===== Header End ===== -->
 
-    
+      <!-- ===== Main Content Start ===== -->
+      <main>
+   <!-- ============  게시판 여기부터 시작	=================================== -->
+  <table>
+       <h2 class="mt-10 mb-7.5 text-title-md2 font-bold text-black dark:text-white">
+            공지사항
+          </h2>     
+		<div class="grid grid-cols-1 gap-7.5 sm:grid-cols-1 xl:grid-cols-1">
+		    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+		        <table style="width: 100%;" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+		            <thead>
+		                <tr>
+		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 10%;">번호</th>
+		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 60%;">제목</th>
+		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">작성일</th>
+		                    <th class="text-xl font-semibold text-black dark:text-white" style="width: 15%;">조회수</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <c:forEach var="noticeBoard" items="${noticeBoardList}">
+		                    <tr>
+		                        <td style="text-align: center;">${noticeBoard.n_seq}</td>
+		                       <td><a href="/admin_notice_board_view.do?cpage=${cpage}&n_seq=${noticeBoard.n_seq}">${noticeBoard.n_subject}</a></td>
+		                        <td style="text-align: center;">${noticeBoard.n_wdate}</td>
+		                        <td style="text-align: center;">${noticeBoard.n_hit}</td>
+		                    </tr>
+		                </c:forEach>
+		            </tbody>		            
+  			</table>		
+			<a href="notice_board_write.do?cpage=${cpage}"
+			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+			   style="float: right;">
+			   쓰기
+			</a>
+
+		
+        <!--=======  페이징 시작 =========================================-->
+		<div style="display: flex; justify-content: center;">
+				<div class="paginate_regular">
+					<div class="board_pagetab">				
+					<c:set var="startBlock" value="${cpage - ((cpage-1) mod blockPerPage)}" />
+					<c:if test="${endBlock >= totalPage}">
+					  <c:set var="endBlock" value="${totalPage}" />
+					</c:if>
+					
+					<c:choose>
+					  <c:when test="${startBlock == 1}">
+					    <span><a>&lt;&lt;</a></span>
+					  </c:when>
+					  <c:otherwise>
+					    <span><a href="/admin_notice_board.do?cpage=${startBlock - blockPerPage}">&lt;&lt;</a></span>
+					  </c:otherwise>
+					</c:choose>
+					&nbsp;
+					<c:choose>
+					  <c:when test="${cpage == 1}">
+					    <span><a>&lt;</a></span>
+					  </c:when>
+					  <c:otherwise>
+					    <span><a href="/admin_notice_board.do?cpage=${cpage - 1}">&lt;</a></span>
+					  </c:otherwise>
+					</c:choose>
+					&nbsp;
+					<c:forEach begin="${startBlock}" end="${endBlock}" var="i">
+					  <c:choose>
+					    <c:when test="${i eq cpage}">
+					      <span><a>[${i}]</a></span>
+					    </c:when>
+					    <c:otherwise>
+					      <span><a href="/admin_notice_board.do?cpage=${i}">${i}</a></span>
+					    </c:otherwise>
+					  </c:choose>
+					</c:forEach>
+					&nbsp;
+					<c:choose>
+					  <c:when test="${cpage == totalPage}">
+					    <span><a>&gt;</a></span>
+					  </c:when>
+					  <c:otherwise>
+					    <span><a href="/admin_notice_board.do?cpage=${cpage + 1}">&gt;</a></span>
+					  </c:otherwise>
+					</c:choose>	
+					&nbsp;
+					
+					<c:choose>
+					  <c:when test="${endBlock == totalPage}">
+					    <span><a>&gt;&gt;</a></span>
+					  </c:when>
+					  <c:otherwise>
+					    <span><a href="/admin_notice_board.do?cpage=${startBlock + blockPerPage}">&gt;&gt;</a></span>
+					  </c:otherwise>
+					</c:choose>		
+					</div>
+				</div>
+			</div>
+				</div>
+			</div>
+		</table>
+	</main>
+
+	   <!--=======  페이징 끝 =========================================-->
+	    <!-- ============  게시판 여기서 끝=================================== -->
+		
+				
       <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Content Area End ===== -->
   </div>
   <!-- ===== Page Wrapper End ===== -->
-<script defer src="bundle.js"></script></body>
+
+<script defer src="bundle.js"></script>
+</body>
 
 </html>
