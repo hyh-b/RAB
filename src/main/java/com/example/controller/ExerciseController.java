@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,6 +57,8 @@ public class ExerciseController {
 	@Autowired
 	private ExerciseDAO eDao;
 	
+	private HttpSession httpSession;
+	
 	// S3에서 이미지 불러오는 url = https://rabfile.s3.ap-northeast-2.amazonaws.com/파일명
 	
 	private final S3FileUploadService s3FileUploadService;
@@ -71,24 +74,25 @@ public class ExerciseController {
 	private CustomUserDetailsService customUserDetailsService;
 	
 	@RequestMapping("/exercise.do")
-	public ModelAndView tables() {
-		//customUserDetailsService.updateUserDetails();
+	public ModelAndView exercise() {
+		//String accessToken = (String) httpSession.getAttribute("access_token");
+        //System.out.println("Access Token: " + accessToken);
+		customUserDetailsService.updateUserDetails();
 		CustomUserDetails customUserDetails = customUserDetailsService.getCurrentUserDetails();
 		
 		String m_seq =  customUserDetails.getM_seq();
 		String m_name = customUserDetails.getM_name();
-		String m_gender = customUserDetails.getM_gender();
+		String m_profile = customUserDetails.getM_profilename();
 		
-		System.out.println("닉네임"+m_name);
+		/*System.out.println("닉네임"+m_name);
 		System.out.println("성별"+m_gender);
 		System.out.println("애스이큐"+m_seq);
-		// 업로드 파일 삭제
-		/*s3FileUploadService.deleteFile("634fbbb7e5324555acaad4c8debd28c7.png"); */
+		*/
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("exercise");
 		modelAndView.addObject("m_name",m_name);
-		modelAndView.addObject("m_gender",m_gender);
+		modelAndView.addObject("m_profile",m_profile);
 		return modelAndView; 
 	}
 	
@@ -108,12 +112,12 @@ public class ExerciseController {
 		try {
             // S3에 파일 업로드 
             String fileUrl = s3FileUploadService.upload(upload);
-            System.out.println("수정전"+fileUrl);
+            //System.out.println("수정전"+fileUrl);
             // 파일이 성공적으로 업로드 시 db에 데이터 저장
             if (fileUrl != null) {
             	// S3에 업로드 성공시 생성되는 URL에서 파일명만 잘라냄
             	String fileName = fileUrl.substring(base.length());
-            	System.out.println("수정"+fileName);
+            	//System.out.println("수정"+fileName);
                 to.setM_seq(m_seq);
                 to.setAlbum_name(fileName);
                 to.setAlbum_size(upload.getSize());
@@ -216,7 +220,6 @@ public class ExerciseController {
 	        to.setEx_used_kcal(new BigDecimal(payload.get("ex_used_kcal")));
 	        to.setEx_day(payload.get("selectedDate"));
 	    } catch (NumberFormatException e) {
-	        System.out.println("Invalid number format");
 	        return new ResponseEntity<>(Map.of("result", "Error"), HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	    
@@ -314,9 +317,7 @@ public class ExerciseController {
 	        exercise.setEx_used_kcal(ex_used_kcal);
 	        exercise.setM_seq(m_seq);
 
-
 	        exercise.setEx_day(selectedDate);
-
 
 	        // 소모 칼로리 계산 후 db에 업데이트
 	        eDao.updateExercise(exercise);

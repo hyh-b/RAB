@@ -13,6 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>정보 입력</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 <style>
    body, html {
@@ -127,7 +128,13 @@
 			var allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
 	        // 모든 정보를 입력해야 제출가능
 			if (!allFilled) {
-                alert("모든 정보를 입력하셔야 합니다.");
+                //alert("모든 정보를 입력하셔야 합니다.");
+               swal({
+                  title: "주의!",
+                  text: "모든 정보를 입력하셔야 합니다",
+                  icon: "warning",
+                  button: "확인",
+               });
                 return false;
             }
 	        
@@ -135,7 +142,13 @@
             if (window.getComputedStyle(nameNo).display == 'none'){
             	document.sfrm.submit();
             }else{
-	        	alert("닉네임이 중복됩니다")
+	        	//alert("닉네임이 중복됩니다")
+	        	swal({
+                  title: "주의!",
+                  text: "닉네임이 중복됩니다",
+                  icon: "warning",
+                  button: "확인",
+               });
 	        	return false;
 	        }
           

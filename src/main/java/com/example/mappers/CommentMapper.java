@@ -19,8 +19,7 @@ public interface CommentMapper {
 	public abstract ArrayList<CommentTO> listComment(BoardTO bto);
     
 	// 답글 쓰기
-	@Insert(" INSERT INTO UserCMT (u_seq, uc_wdate, uc_content, uc_writer) "
-			+ "VALUES (#{u_seq}, now(), #{uc_content}, #{uc_writer} )")
+	@Insert(" INSERT INTO UserCMT (u_seq, m_seq, uc_wdate, uc_content, uc_writer) values (#{u_seq}, #{m_seq}, now(), #{uc_content} , #{uc_writer})")
 	public abstract int CommentOK (CommentTO to);
 	
 	// 답글쓰기 후 업데이트
