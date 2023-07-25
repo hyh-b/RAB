@@ -140,7 +140,11 @@
 		    <artifactId>jjwt</artifactId>
 		    <version>0.9.1</version>
 		</dependency>
-	
+		<dependency>
+		    <groupId>org.jsoup</groupId>
+		    <artifactId>jsoup</artifactId>
+		    <version>1.13.1</version> <!-- 이 버전은 변경될 수 있으므로 최신 버전을 확인해주세요 -->
+		</dependency>
 	</dependencies>
 
 	<build>
