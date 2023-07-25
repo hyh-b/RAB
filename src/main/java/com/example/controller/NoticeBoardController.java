@@ -74,7 +74,7 @@ public class NoticeBoardController {
 		// principal 객체를 CustomUserDetails 타입으로 캐스팅
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		String seq = customUserDetails.getM_seq();
-		System.out.println(seq);
+		//System.out.println(seq);
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
@@ -187,19 +187,8 @@ public class NoticeBoardController {
 	    // 조회수 증가 처리
 	    int result = dao.updateHitOK(bto); // Pass the entire NoticeBoardTO object
 
-	    // result 값으로 성공 여부를 확인할 수 있음
-	    if (result == 1) {
-	        System.out.println("조회수 증가 성공");
-	    } else {
-	        System.out.println("조회수 증가 실패");
-	    }
+	  
 
-	    System.out.println("제목 -------" + bto.getN_subject());
-	    System.out.println("내용 -------" + bto.getN_content());
-	    for (NoticeAlbumTO to : atos) {
-	        System.out.println("파일이름 -------" + to.getNf_filename());
-	        System.out.println("파일사이즈 -------" + to.getNf_filesize());
-	    }
 
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.setViewName("notice_board_view");
@@ -253,19 +242,9 @@ public class NoticeBoardController {
 	    // 조회수 증가 처리
 	    int result = dao.updateHitOK(bto); // Pass the entire NoticeBoardTO object
 
-	    // result 값으로 성공 여부를 확인할 수 있음
-	    if (result == 1) {
-	        System.out.println("조회수 증가 성공");
-	    } else {
-	        System.out.println("조회수 증가 실패");
-	    }
+	    
 
-	    System.out.println("제목 -------" + bto.getN_subject());
-	    System.out.println("내용 -------" + bto.getN_content());
-	    for (NoticeAlbumTO to : atos) {
-	        System.out.println("파일이름 -------" + to.getNf_filename());
-	        System.out.println("파일사이즈 -------" + to.getNf_filesize());
-	    }
+	   
 
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.setViewName("user_notice_board_view");
@@ -288,7 +267,7 @@ public class NoticeBoardController {
 		String m_seq=customUserDetails.getM_seq();
 		NoticeBoardTO bto = new NoticeBoardTO();
 	    NoticeAlbumTO ato = new NoticeAlbumTO();
-	    System.out.println("오긴하니?");
+	    
 	    String subject = request.getParameter("n_subject");
 	    bto.setN_subject(subject);
 	    String content = request.getParameter("n_content");
@@ -312,7 +291,7 @@ public class NoticeBoardController {
 	                    ato.setNf_filesize(file.getSize());
 	                    flag = abdao.noticeAlbum_ok(ato);
 	                } else {
-	                    System.out.println("File upload failed for n_seq: " + bto.getN_seq());
+	                    //System.out.println("File upload failed for n_seq: " + bto.getN_seq());
 	                }
 	            } catch (Exception e) {
 	                e.printStackTrace();
@@ -324,20 +303,32 @@ public class NoticeBoardController {
 	    response.put("flag", flag);
 	    return response;
 	}
-
+	@RequestMapping("/notice_board_delete_ok.do")
+	public Map<String, Object> notice_board_delete(HttpServletRequest request, NoticeBoardTO noticeBoardTO)  {
+		Map<String, Object> response = new HashMap<>();
+		NoticeBoardTO bto =new NoticeBoardTO();
+		bto.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
+		//System.out.println("n_seq ------------"+bto.n_seq);
+		int flag = dao.noticeDelete_ok(bto);
+		//System.out.println("flag-----"+flag);
+		
+		response.put("flag", flag);
+		return response;
+	}
 
 
 	
 	
 	@RequestMapping("/notice_board_modify_ok.do")
-	public ModelAndView notice_board_modify_ok(HttpServletRequest request, Authentication authentication, @RequestParam("upload") MultipartFile[] upload) {
-	    authentication = SecurityContextHolder.getContext().getAuthentication();
+	public Map<String, Object> notice_board_modify_ok(HttpServletRequest request, Authentication authentication, @RequestParam("upload") MultipartFile[] upload) {
+		Map<String, Object> response = new HashMap<>();
+		authentication = SecurityContextHolder.getContext().getAuthentication();
 	    NoticeBoardTO bto = new NoticeBoardTO();
 	    NoticeAlbumTO ato = new NoticeAlbumTO();
 
 	    // n_Seq 값으로 지정
 	    bto.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
-	    System.out.println("n_seq---------" + request.getParameter("n_seq"));
+	    //System.out.println("n_seq---------" + request.getParameter("n_seq"));
 	    ato.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
 
 	    int flag = 2;
@@ -350,11 +341,11 @@ public class NoticeBoardController {
 	    int flagAB = dao.updateBoard(bto);
 	    abdao.noticeFileDelete_ok(ato); // pass the ato object
 
-	    System.out.println("flagAB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flagAB);
+	    //System.out.println("flagAB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flagAB);
 
 	    // flagAB가 1일 때만 파일 처리를 진행합니다.
 	    if (flagAB == 1 && upload.length > 0) {
-	        System.out.println("flag 넣는중 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+	        //System.out.println("flag 넣는중 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 	        for (MultipartFile file : upload) {
 	            try {
 	                // Upload new file and insert new entry to NoticeFile
@@ -385,12 +376,12 @@ public class NoticeBoardController {
 	        }
 	    }
 
-	    System.out.println("flag  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flag);
-	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("noticeboardAlbum_ok");
-	    modelAndView.addObject("flagAB", flagAB);     
-	    modelAndView.addObject("flag", flag);     
-	    return modelAndView;
+	   // System.out.println("flag  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + flag);
+	  
+	    response.put("flagAB", flagAB);     
+	    response.put("flag", flag);     
+	  
+		return response;
 	}
 
 
@@ -427,19 +418,7 @@ public class NoticeBoardController {
 	}
 	
 	
-	@RequestMapping("/notice_board_delete_ok.do")
-	public ModelAndView notice_board_delete(HttpServletRequest request, NoticeBoardTO noticeBoardTO)  {
-		
-		NoticeBoardTO bto =new NoticeBoardTO();
-		bto.setN_seq(Integer.parseInt(request.getParameter("n_seq")));
-		System.out.println("n_seq ------------"+bto.n_seq);
-		int flag = dao.noticeDelete_ok(bto);
-		System.out.println("flag-----"+flag);
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("noticeboarddelete_ok");
-		modelAndView.addObject("flag", flag);
-		return modelAndView;
-	}
+	
 	
 	@RequestMapping("/notice_board_write.do")
 	public ModelAndView notice_board_write(HttpServletRequest request, NoticeBoardTO noticeBoardTO, Authentication authentication, String mId) throws SQLException {

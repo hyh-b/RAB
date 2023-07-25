@@ -19,11 +19,42 @@ pageEncoding="UTF-8"%>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<!-- 구글 사이드 상단 Menu 글씨체-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+
+<!-- 구글 사이드 글씨체-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lugrasimo&display=swap" rel="stylesheet">
+
+<!-- 이미지 아이콘 cdn -->
+<script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <style type="text/css">
+
+	.theme1 {margin-bottom:30px; border:0px; height:5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.5), transparent);}
+   
+	/*============ 사이드 로고 메뉴 폰트 ==========*/
+	h3.mb-4.ml-4.text-sm.font-medium.text-bodydark2 {
+	     font-size: 30px;
+	   font-family: 'Cuprum', sans-serif;
+	    }
+	/*=====================================*/
+	 
+	/*============ 사이드 (공지사항 , 게시판 , 식단 , 운동 , 내정보 , 로그아웃) ==========*/
+	    h1 {
+	       font-size: 25px;
+	        font-family: 'Josefin Sans', sans-serif;
+	}
+	
+
 	.radio-buttons {
     	display: flex; /* 가로 배치를 위해 flexbox 사용 */
   	}
@@ -328,12 +359,10 @@ pageEncoding="UTF-8"%>
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
-    
-   <!--  사이트 로고  -->
-
-     <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
+<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
+		<i class="fa-solid fa-rocket bounce fa-10x"></i>
     </a>
 
     <button
@@ -357,9 +386,7 @@ pageEncoding="UTF-8"%>
   </div>
   <!-- SIDEBAR HEADER -->
 
-  <div
-    class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear"
-  >
+  <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
     <!-- Sidebar Menu -->
     <nav
       class="mt-5 py-4 px-4 lg:mt-9 lg:px-6"
@@ -368,158 +395,149 @@ pageEncoding="UTF-8"%>
         selected = JSON.parse(localStorage.getItem('selected'));
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
-    </nav>
       <!-- Menu Group -->
       <div>
-        <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
-        
+	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Menu</h3>
+		  <hr class="theme1">
+	
+	      <ul class="mb-6 flex flex-col gap-1.5">
+	        <!-- Menu Item Dashboard -->
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	      <a
+	         href="board.do"
+	         class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	         style="padding-left: 30px;"
+	       >
+	       <i class="fa-solid fa-circle-info"></i>
+	       <path
+	         d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	         fill=""
+	       />
+	       <path
+	         d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	         fill=""
+	       />
+	       </svg>
+	       <h1>공지사항</h1>
+	      </a>
+	     </li>
+	     
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	       <a
+	          href="board.do"
+	          class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	          style="padding-left: 30px;"
+	        >
+	          <i class="fa-solid fa-users"></i>
+	          <path
+	            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	            fill=""
+	          />
+	          <path
+	            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	            fill=""
+	          />
+	          </svg>
+	          <h1>게시판</h1>
+	        </a>
+	      </li>
 
-        <ul class="mb-6 flex flex-col gap-1.5">
-          <!-- Menu Item Dashboard -->
-
-          <!-- Menu Item Calendar -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="calendar.do"
-              @click="selected = (selected === 'Calendar' ? '':'Calendar')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
-            >
-
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-
-              공지사항
-            </a>
-          </li>
-          <!-- Menu Item Calendar -->
-
-          <!-- Menu Item Profile -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="board_list.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-             <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="게시판.png"
-      			width="24"
-      			height="24"
-   			/>
-             	게시판
-            </a>
-          </li>
-          <!-- Menu Item Profile -->
-
-              <!-- Menu Item Profile2 -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="식단.png"
-      			width="24"
-      			height="24"
-   			/>
-             	식단
-            </a>
-          </li>
-          <!-- Menu Item Profile2 -->
-
-          <!-- Menu Item Forms -->
-
-          <!-- Menu Item Tables -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="exercise.do"
-
-              @click="selected = (selected === 'Tables' ? '':'Tables')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
-            >
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="운동.png"
-      			width="24"
-      			height="24"
-   			/>
-
-              운동
-            </a>
-            
-     
-          </li>
-          
-          <!-- Menu Item Tables -->
-		  <br/><br/>
-          <!-- Menu Item Settings -->
- 
-           
-        <li>
-			<a
-    			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-    			href="/klogout.do"
-    			@click="selected = (selected === 'Settings' ? '':'Settings')"
-    			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
-    			:class="page === 'settings' && 'bg-graydark'"
- 			>
-   			<img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="로그아웃"
-      			width="24"
-      			height="24"
-   			/>
-    			로그아웃
-  			</a>
-		</li>
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	        <a
+	           href="food.do"
+	           class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	           style="padding-left: 30px;"
+	         >
+	           <i class="fa-solid fa-bowl-food"></i>
+	           <path
+	             d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	             fill=""
+	           />
+	           <path
+	             d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	             fill=""
+	           />
+	           </svg>
+	           <h1>음식</h1>
+	         </a>
+	      </li>
+	      
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	         <a
+	            href="exercise.do"
+	            class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	            style="padding-left: 30px;"
+	          >
+	            <i class="fa-solid fa-dumbbell"></i>
+	            <path
+	              d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	              fill=""
+	            />
+	            <path
+	              d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	              fill=""
+	            />
+	            </svg>
+	            <h1>운동</h1>
+	          </a>
+	       </li>
+			<br/><br/>
+			<h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Others</h3>
+          	<hr class="theme1">
+	          <!-- Menu Item Settings -->
+	        <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	          <a
+	              href="profile.do"
+	              class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	              style="padding-left: 30px;"
+	            >
+	              <svg
+	                class="fill-current"
+	                width="22"
+	                height="22"
+	                viewBox="0 0 22 22"
+	                fill="none"
+	                xmlns="http://www.w3.org/2000/svg"
+	              >
+	                <path
+	                  d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	                  fill=""
+	                />
+	                <path
+	                  d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	                  fill=""
+	                />
+	              </svg>
+	              <h1>프로필</h1>
+	            </a>
+	        </li>
+	        <li>
+				<button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+	            <svg
+	              class="fill-current"
+	              width="22"
+	              height="22"
+	              viewBox="0 0 22 22"
+	              fill="none"
+	              xmlns="http://www.w3.org/2000/svg"
+	            >
+	              <path
+	                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
+	                fill=""
+	              />
+	              <path
+	                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+	                fill=""
+	              />
+	            </svg>
+	            <a href="/klogout.do"><h1>로그아웃</h1></a>
+	          </button>
+			</li>
           
           <!-- Menu Item Settings -->
         </ul>
       </div>
-
-      <!-- Support Group -->
- 
-          <!-- Menu Item Messages -->
-        
-          <!-- Menu Item Chart -->
-         
-      
-          <!-- Menu Item Chart -->
-
-          <!-- Menu Item Ui Elements -->
-        
-          <!-- Menu Item Ui Elements -->
-
-          <!-- Menu Item Auth Pages -->
-          
-            <!-- Dropdown Menu End -->
-   
-          <!-- Menu Item Auth Pages -->
-       
-    <!-- Sidebar Menu -->
-
-    <!-- Promo Box -->
-
-    <!-- Promo Box -->
+      </nav>
   </div>
 </aside>
 
@@ -570,7 +588,7 @@ pageEncoding="UTF-8"%>
       </button>
         <!-- Hamburger Toggle BTN -->
       <a class="block flex-shrink-0 lg:hidden" href="/">
-        <img src="src/images/logo/" alt="홈 로고 추가해야되요" />
+        <img src="src/images/logo/" alt="" />
       </a>
     </div>
     
@@ -650,14 +668,16 @@ pageEncoding="UTF-8"%>
           <span class="hidden text-right lg:block">
             <span class="block text-sm font-medium text-black dark:text-white"
 
-              ><%= m_name %></span
+              >${m_name}</span
             >
-            <span class="block text-xs font-medium"><%= m_gender %></span>
+            <!-- 
+            <span class="block text-xs font-medium"></span>
+			 -->	          
           </span>
 
           <span class="h-12 w-12 rounded-full">
           <!--  프로필 사진 업로드 파일 경로 설정 => C:/java/RAB-workspace/RABver/RABver/src/main/webapp/src/images/user -->
-            <img src="src/images/user/gh.png" alt="User" />
+            <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${m_profile}" alt="User" />
 
           </span>
 
@@ -691,22 +711,34 @@ pageEncoding="UTF-8"%>
               <a
                 href="profile.do"
                 class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                style="padding-left: 5px;"
               >
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-                내 정보
+                <svg
+                  class="fill-current"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+                    fill=""
+                  />
+                  <path
+                    d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+                    fill=""
+                  />
+                </svg>
+                프로필
               </a>
             </li>
           </ul>
           
-          <button
-            class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-          >
+          
+          
+          
+          <button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
             <svg
               class="fill-current"
               width="22"
@@ -1061,8 +1093,13 @@ pageEncoding="UTF-8"%>
 	// 이미지 삭제
     function deleteImage() {
         if (!selectedImageValue) {
-            alert('삭제할 이미지를 선택해 주세요');
-            
+            //alert('삭제할 이미지를 선택해 주세요');
+            swal({
+                title: "주의!",
+                text: "삭제할 이미지를 선택해 주세요",
+                icon: "warning",
+                button: "확인",
+           });
 	        return;
 	    }
 	        console.log(selectedImageValue)
@@ -1075,13 +1112,27 @@ pageEncoding="UTF-8"%>
 		    success: function(response) {
 		    	
 		    	if(response == "삭제 성공"){
-		            alert('이미지가 삭제되었습니다');
+		            //alert('이미지가 삭제되었습니다');
+		            swal({
+		                  title: "성공!",
+		                  text: "이미지가 삭제되었습니다",
+		                  icon: "success",
+		                  button: "확인",
+		             });
+
 		            imgSlide();
 		            displayImages();
 		    	}
 	        },
 	        error: function(xhr, status, error) {
-	            alert('삭제에 실패했습니다');
+	            //alert('삭제에 실패했습니다');
+	        	swal({
+	                  title: "실패!",
+	                  text: "삭제에 실패했습니다",
+	                  icon: "error",
+	                  button: "확인",
+	             });
+
 	        },
 	        complete: function() {
 	            // 실행 후 이미지 선택 해제
@@ -1186,7 +1237,14 @@ pageEncoding="UTF-8"%>
 			buttons: {
 				"추가": function() {
 					if ($('.select-checkbox:checked').length == 0) {
-		                alert('추가할 운동을 선택해주세요');
+		                //alert('추가할 운동을 선택해주세요');
+		                 swal({
+			                  title: "주의!",
+			                  text: "추가할 운동을 선택해주세요",
+			                  icon: "warning",
+			                  button: "확인",
+			             });
+
 		                return false;
 		            }
 					let exercises = [];
@@ -1203,14 +1261,28 @@ pageEncoding="UTF-8"%>
 						data: JSON.stringify({ exercise: exercises, date: selectedDate }),
 						contentType: "application/json",
 						success: function(data) {
-							alert("운동등록에 성공했습니다. 운동 시간을 입력 한 뒤 칼로리 계산버튼을 눌러주세요.")
+							//alert("운동등록에 성공했습니다. 운동 시간을 입력 한 뒤 칼로리 계산버튼을 눌러주세요.")
+							swal({
+				                  title: "성공!",
+				                  text: "운동등록에 성공했습니다. 운동 시간을 입력 한 뒤 칼로리 계산버튼을 눌러주세요.",
+				                  icon: "success",
+				                  button: "확인",
+				             });
+
 							// db의 당일 운동 데이터 출력
 							fetchExercises(selectedDate);
 							
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
 							// 오류 처리
-							alert('운동등록에 실패했습니다'+ jqXHR.responseText)
+							//alert('운동등록에 실패했습니다'+ jqXHR.responseText)
+							swal({
+				                  title: "실패!",
+				                  text: "운동등록에 실패했습니다",
+				                  icon: "error",
+				                  button: "확인",
+				             });
+
 							console.error('Server response:', jqXHR.responseText);
 						}
         			});
@@ -1247,7 +1319,13 @@ pageEncoding="UTF-8"%>
 	                var time = $('#time').val();
 	                var calorie = $('#calorie').val();
 	                if (name === '' ||time === '' ||calorie === '') {
-	    		        alert('추가할 운동 정보를 모두 입력해주세요');
+	    		        //alert('추가할 운동 정보를 모두 입력해주세요');
+	    		        swal({
+	    	                  title: "주의!",
+	    	                  text: "추가할 운동 정보를 모두 입력해주세요",
+	    	                  icon: "warning",
+	    	                  button: "확인",
+	    	             });
 	    		        return;
 	    		    }
 	                let selectedDate = $('#datepicker').val();
@@ -1263,11 +1341,25 @@ pageEncoding="UTF-8"%>
 	                    contentType: "application/json; charset=utf-8", 
 	                    dataType: "json", 
 	                    success: function(response) {
-	                    	alert('운동등록에 성공했습니다');
+	                    	//alert('운동등록에 성공했습니다');
+	                    	 swal({
+	                             title: "성공!",
+	                             text: "운동등록에 성공했습니다",
+	                             icon: "success",
+	                             button: "확인",
+	                        });
+
 		                	fetchExercises(selectedDate)
 	                    },
 	                    error: function(jqXHR, textStatus, errorThrown) {
-	                        alert('운동 추가 실패: ' + errorThrown);
+	                        //alert('운동 추가 실패: ' + errorThrown);
+	                        swal({
+	                            title: "실패!",
+	                            text: "운동 추가 실패",
+	                            icon: "error",
+	                            button: "확인",
+	                       });
+
 	                        console.error('Server response:', jqXHR.responseText);
 	                    }
 	                });
@@ -1348,7 +1440,13 @@ pageEncoding="UTF-8"%>
    			const formData = new FormData(form[0]);
    			console.log("제출시작")
    			if (!fileInput.val()) {
-		        alert("파일을 선택해주세요");
+		        //alert("파일을 선택해주세요");
+		        swal({
+	                  title: "주의!",
+	                  text: "파일을 선택해주세요",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 		        return;
 		    }
 			$.ajax({
@@ -1359,10 +1457,24 @@ pageEncoding="UTF-8"%>
 			    contentType: false,
 			    success: function(flag) {
 			    	if(flag == 1 ){
-			    		alert("이미지 업로드에 성공했습니다")
+			    		//alert("이미지 업로드에 성공했습니다")
+			    		swal({
+			                  title: "성공!",
+			                  text: "이미지 업로드에 성공했습니다",
+			                  icon: "success",
+			                  button: "확인",
+			             });
+
 			    		form[0].reset();
 			    	}else{
-			    		alert("이미지 업로드에 실패했습니다")
+			    		//alert("이미지 업로드에 실패했습니다")
+			    		swal({
+			                  title: "실패!",
+			                  text: "이미지 업로드에 실패했습니다",
+			                  icon: "error",
+			                  button: "확인",
+			             });
+
 			    	}
 			    	imgSlide();
 			    	displayImages();
@@ -1444,7 +1556,13 @@ pageEncoding="UTF-8"%>
 		$('#searchButton1').click(function() {
 			let searchEx = $("#exerciseName1").val();
 			if (searchEx === '') {
-		        alert('운동종목을 입력해주세요');
+		        //alert('운동종목을 입력해주세요');
+		        swal({
+	                  title: "주의!",
+	                  text: "운동종목을 입력해주세요",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 		        return;
 		    }
 			// 검색한 단어 서버로 보내고 검색결과 데이터 받아옴
@@ -1498,7 +1616,14 @@ pageEncoding="UTF-8"%>
 		            });
 		            // 계산된 소모 칼로리 적용 후 총 운동시간, 소모 칼로리 업데이트
 		            calculateTotalTimeAndCalories();
-		            alert("운동 시간 대비 소모 칼로리가 계산되었습니다")
+		            //alert("운동 시간 대비 소모 칼로리가 계산되었습니다")
+		            swal({
+		                  title: "성공!",
+		                  text: "운동 시간 대비 소모 칼로리가 계산되었습니다",
+		                  icon: "success",
+		                  button: "확인",
+		             });
+
 		        },
 		        error: function(jqXHR, textStatus, errorThrown) {
 		            console.error('Calculation failed:', errorThrown);

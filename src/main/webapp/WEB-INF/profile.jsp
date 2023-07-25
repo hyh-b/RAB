@@ -67,10 +67,12 @@ function confirmDelete() {
 >
   <!-- SIDEBAR HEADER -->
 
+
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
 		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+
 
     </a>
 

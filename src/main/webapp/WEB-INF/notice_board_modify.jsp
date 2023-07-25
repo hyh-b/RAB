@@ -15,7 +15,7 @@ pageEncoding="UTF-8"%>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 <script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
@@ -39,28 +39,45 @@ pageEncoding="UTF-8"%>
 </style>
 <script>
 $(document).ready(function() {
-	  $('#wbtn').click(function() {
-	    if ($('#u_subject').val().trim() == '') {
-	      alert('제목을 입력하시오.');
+	  $('#ubtn').click(function(e) {
+	    e.preventDefault(); // 폼의 기본 제출 동작을 방지합니다.
+	    
+	    if ($('#n_subject').val().trim() == '') {
+	    	swal({
+	    		  title: "제목을 입력하세요",
+	    		  text: "제목을 입력하세요!",
+	    		  icon: "error",
+	    		  button: "확인",
+	    		});
 	      return false;
 	    }
 	    
-	    let formData = new FormData($('form')[0]);	   
+	    let formData = new FormData($('form[name="ufrm"]')[0]);	   
 
 	    $.ajax({
-	      url: 'notice_board_write_ok.do',
+	      url: 'notice_board_modify_ok.do?n_seq=${n_seq}',
 	      data: formData,
 	      dataType: 'json',
 	      type: 'post',
 	      contentType: false,
 	      processData: false,
 	      success: function(json) {
-// 	        if (json.flagAB == '0' && json.flagCF == '0') {
-// 	          alert('쓰기 성공');
-// 	          location.href = '/';
-// 	        } else {
-// 	          alert('쓰기 실패');
-// 	        }
+	        if (json.flagAB == '1' && json.flag == '1') {
+	        	swal({
+	                title: "성공!",
+	                text: "수정에 성공했습니다.",
+	                icon: "success",
+	                button: "확인",
+	              }).then(function() { window.location.href='notice_board.do'; });
+	   
+	        } else {
+	        	 swal({
+	                 title: "실패",
+	                 text: "수정에 실패했습니다.",
+	                 icon: "error",
+	                 button: "확인",
+	               }).then(function() { history.back(); });
+	        }
 			console.log(json);
 	      },
 	      error: function(e) {

@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>회원가입</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
 
 <body
@@ -368,44 +369,98 @@
             var idPattern = /^(?=.*[a-zA-Z])[^\.\n]{6,20}$/;
             
 			if( document.sfrm.id.value.trim() == '' ) {
-				alert( '아이디를 입력하셔야 합니다' );
+				//alert( '아이디를 입력하셔야 합니다' );
+				 swal({
+	                  title: "주의!",
+	                  text: "아이디를 입력하셔야 합니다",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 				return false;
 			}
 			if (window.getComputedStyle(idOk).display !== 'inline-block') {
-	            alert('사용할 수 없는 아이디입니다');
+	            //alert('사용할 수 없는 아이디입니다');
+	            swal({
+	                  title: "주의!",
+	                  text: "사용할 수 없는 아이디입니다",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 	            event.preventDefault(); 
 	            return false;
 	        }
 			
 			if (!idPattern.test(document.sfrm.id.value.trim())) { 
-	            alert("아이디는 최소 6자 이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다. ('.'는 사용불가)");
+	            //alert("아이디는 최소 6자 이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다. ('.'는 사용불가)");
+	            swal({
+	                  title: "주의!",
+	                  text: "아이디는 최소 6자 이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다. ('.'는 사용불가)",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 	            event.preventDefault();
 	            return false;
 	        }
 			if( document.sfrm.mail.value.trim() == '' ) {
-				alert( '메일을 입력하셔야 합니다' );
+				//alert( '메일을 입력하셔야 합니다' );
+				swal({
+	                  title: "주의!",
+	                  text: "메일을 입력하셔야 합니다",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 				return false;
 			}
 			if( document.sfrm.password.value.trim() == '' ) {
-				alert( '비밀번호를 입력하셔야 합니다' );
+				//alert( '비밀번호를 입력하셔야 합니다' );
+				swal({
+	                  title: "주의!",
+	                  text: "비밀번호를 입력하셔야 합니다",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 				return false;
 			}
 			if( document.sfrm.r_password.value.trim() == '' ) {
-				alert( '비밀번호 확인을 입력하셔야 합니다' );
+				//alert( '비밀번호 확인을 입력하셔야 합니다' );
+				swal({
+	                  title: "주의!",
+	                  text: "비밀번호 확인을 입력하셔야 합니다",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 				return false;
 			}
 			if( document.sfrm.r_password.value.trim() !== document.sfrm.password.value.trim() ) {
-				alert( '비밀번호 확인이 일치하지 않습니다' );
+				//alert( '비밀번호 확인이 일치하지 않습니다' );
+				swal({
+	                  title: "주의!",
+	                  text: "비밀번호 확인이 일치하지 않습니다",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
 				return false;
 			}
 			if (!emailPattern.test(document.sfrm.mail.value.trim())) {
-                alert("유효한 이메일 주소를 입력해주세요.");
+               // alert("유효한 이메일 주소를 입력해주세요.");
+                swal({
+	                  title: "주의!",
+	                  text: "유효한 이메일 주소를 입력해주세요.",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
                 event.preventDefault();
                 return false;
             }
 
             if (!passwordPattern.test(document.sfrm.password.value.trim())) {
-                alert("비밀번호는 최소 6자이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \" 는 사용불가)");
+                //alert("비밀번호는 최소 6자이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \" 는 사용불가)");
+                swal({
+	                  title: "주의!",
+	                  text: "비밀번호는 최소 6자이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \" 는 사용불가)",
+	                  icon: "warning",
+	                  button: "확인",
+	             });
                 event.preventDefault();
                 return false;
             }
