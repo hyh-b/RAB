@@ -293,7 +293,7 @@
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="adminAnnouncement.do"
+              href="admin_notice_board.do"
 
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
@@ -306,7 +306,7 @@
       			height="24"
    			/>
 
-              공지사함
+              공지사항
             </a>
      
           </li>
