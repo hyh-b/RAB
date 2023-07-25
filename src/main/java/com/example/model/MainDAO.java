@@ -1,33 +1,23 @@
 package com.example.model;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.mappers.MainMapperInter;
-import com.example.mappers.MemberMapperInter;
+
 
 @Repository
 @MapperScan("com.example.mappers")
 public class MainDAO {
-		
 	@Autowired
 	private MainMapperInter mapper;
-	
-	
 //-------------------------------------------------------------------------
-	
 	public ArrayList<MainTO> DateData(int seq, String day ) {
 
 		List<MainTO> datas = (List<MainTO>)mapper.DataFromDateForMain(seq, day);
@@ -40,8 +30,6 @@ public class MainDAO {
 	    
 	    return ddatas;
 	}
-		
-	
 //----------------------Charts below------------------------------------------------------
 		
 		
@@ -131,7 +119,7 @@ public class MainDAO {
 			
 			int result = mapper.UnionBLDperDay(seq, day);
 			
-			System.out.println("  union dao 에서 seq -> " + seq );
+			//System.out.println("  union dao 에서 seq -> " + seq );
 			
 			if(result == 1 ) {
 				
@@ -142,7 +130,7 @@ public class MainDAO {
 				flag_upd = 1;
 			}
 		
-			System.out.println( " flag_upd ->" + flag_upd);
+			//System.out.println( " flag_upd ->" + flag_upd);
 			
 			return flag_upd;
 					
@@ -156,7 +144,7 @@ public class MainDAO {
 			
 			int result = mapper.UnionAllCalories(seq, day);
 			
-			System.out.println("  union dao2 에서 seq -> " + seq );
+			//System.out.println("  union dao2 에서 seq -> " + seq );
 			
 			if(result == 1 ) {
 				flag_uac = 0;
@@ -164,7 +152,7 @@ public class MainDAO {
 				flag_uac = 1;
 			}
 			
-			System.out.println( " flag_uac ->" + flag_uac);
+			//System.out.println( " flag_uac ->" + flag_uac);
 		
 			return flag_uac;
 					
@@ -184,7 +172,7 @@ public class MainDAO {
 				flag_uan= 1;
 			}
 			
-			System.out.println( " 탄단지 콜나당 flag isZero = " + flag_uan);
+			//System.out.println( " 탄단지 콜나당 flag isZero = " + flag_uan);
 		
 			return flag_uan;
 					
@@ -200,10 +188,10 @@ public class MainDAO {
 			
 			if(result == 1 ) {
 				WeightUpdateFlag = 0;
-				System.out.println( " 그 날짜의 몸무게 업데이트 완료 , " + WeightUpdateFlag);
+				//System.out.println( " 그 날짜의 몸무게 업데이트 완료 , " + WeightUpdateFlag);
 			}else if(result == 0) {
 				WeightUpdateFlag = 1;
-				System.out.println( " 몸무게 날짜 업데이트 실패 , " + WeightUpdateFlag);
+				//System.out.println( " 몸무게 날짜 업데이트 실패 , " + WeightUpdateFlag);
 			}
 
 			return WeightUpdateFlag;
@@ -218,23 +206,24 @@ public class MainDAO {
 			
 			if(result == 1 ) {
 				TargetWeightUpdateFlag = 0;
-				System.out.println( " 목표 몸무게 업데이트 완료 , " + TargetWeightUpdateFlag);
+				//System.out.println( " 목표 몸무게 업데이트 완료 , " + TargetWeightUpdateFlag);
 			}else if(result == 0) {
 				TargetWeightUpdateFlag = 1;
-				System.out.println( " 목표 몸무게 날짜 업데이트 실패 , " + TargetWeightUpdateFlag);
+				//System.out.println( " 목표 몸무게 날짜 업데이트 실패 , " + TargetWeightUpdateFlag);
 			}
 
 			return TargetWeightUpdateFlag;
 		}
-	//---main에서 합연산 쿼리들 실행 테스트--------------------
+		
+	//---main으로 다시 넘어올때 합연산 쿼리들 실행 테스트--------------------
 
-				public int MainUnionPerDay(String seq) {
+		public int MainUnionPerDay(String seq) {
 					
 					int mainflag_a = 1;
 					
 					int result = mapper.MainUnionBLDperDay(seq);
 					
-					System.out.println(" \n mainflag_a  에서 seq -> " + seq );
+					//System.out.println(" \n mainflag_a  에서 seq -> " + seq );
 					
 					if(result == 1 ) {
 						
@@ -245,21 +234,21 @@ public class MainDAO {
 						mainflag_a = 1;
 					}
 				
-					System.out.println( " MainUnionPerDay ->" + mainflag_a );
+					//System.out.println( " MainUnionPerDay ->" + mainflag_a );
 					
 					return mainflag_a ;
 							
 				}
 				
-				//---아 점 저 합연산 3개를 1개의 i_kcal로 총합연산--------------------------
+		//---아 점 저 합연산 3개를 1개의 i_kcal로 총합연산--------------------------
 				
-				public int MainUnionAllCalories(String seq) {
+		public int MainUnionAllCalories(String seq) {
 					
 					int mainflag_c = 1;
 					
 					int result = mapper.MainUnionAllCalories(seq);
 					
-					System.out.println("  String화 된 seq ->  " + seq );
+					//System.out.println("  String화 된 seq ->  " + seq );
 					
 					if(result == 1 ) {
 						mainflag_c = 0;
@@ -267,15 +256,15 @@ public class MainDAO {
 						mainflag_c = 1;
 					}
 					
-					System.out.println( " MainUnionAllCalories ->" + mainflag_c);
+					//System.out.println( " MainUnionAllCalories ->" + mainflag_c);
 				
 					return mainflag_c;
 							
 				}
 				
-				//---탄단지 콜나당 하루치 총합--------------------------
+		//---탄단지 콜나당 하루치 총합--------------------------
 				
-				public int 	MainUnionAllNutritions(String seq) {
+		public int 	MainUnionAllNutritions(String seq) {
 					
 					int mainflag_c= 1;
 					
@@ -287,20 +276,15 @@ public class MainDAO {
 						mainflag_c = 1;
 					}
 					
-					System.out.println( " MainUnionAllNutritions = " + mainflag_c + "\n");
+					//System.out.println( " MainUnionAllNutritions = " + mainflag_c + "\n");
 				
 					return mainflag_c;
 							
 				}
-
-				
-	//---main에서 합연산 쿼리들 실행 테스트 끝 --------------------
-				
-				
-				
 	
-		//---피드백---------------------
-		
+	//---main에서 합연산 쿼리들 실행 테스트 끝 --------------------
+
+	 //---피드백---------------------
 		//피드백 입력
 		public int FeedbackReceived(int seq, String f_id, String f_name, String f_mail, String f_subject, String f_content) {
 			int feedbackFlag = 1;
@@ -309,10 +293,10 @@ public class MainDAO {
 			
 			if(result == 1 ) {
 				feedbackFlag = 0;
-				System.out.println( " feedbackFlag 완료 , " + feedbackFlag);
+				//System.out.println( " feedbackFlag 완료 , " + feedbackFlag);
 			}else if(result == 0) {
 				feedbackFlag = 1;
-				System.out.println( " feedbackFlag 실패 , " + feedbackFlag);
+				//System.out.println( " feedbackFlag 실패 , " + feedbackFlag);
 			}
 			
 			return feedbackFlag;
@@ -326,7 +310,7 @@ public class MainDAO {
 			
 			ArrayList<MainTO> feedback_lists  = new ArrayList<>(feedback_list);
 			
-			System.out.println(" feedback_lists dao 에서 -> " + feedback_lists);
+			//System.out.println(" feedback_lists dao 에서 -> " + feedback_lists);
 	    
 	    	return feedback_lists;
 		}
@@ -338,7 +322,7 @@ public class MainDAO {
 			
 			ArrayList<MainTO> feedback_views  = new ArrayList<>(feedback_view);
 			
-			System.out.println(" views 피드백 dao 에서 -> " + feedback_views );
+			//System.out.println(" views 피드백 dao 에서 -> " + feedback_views );
 	    
 	    	return feedback_views ;
 		}
@@ -351,8 +335,8 @@ public class MainDAO {
 			
 			searchWord = "%" + searchWord + "%";
 			
-			System.out.println( "dao 에서 키-> " + searchKey);
-			System.out.println( "dao 에서 word-> " + searchWord);
+			//System.out.println( "dao 에서 키-> " + searchKey);
+			//System.out.println( "dao 에서 word-> " + searchWord);
 			
 			
 			
@@ -372,14 +356,12 @@ public class MainDAO {
 		            return new ArrayList<>();
 		    }
 		}
-		
 		//----피드백 이미지.
-		
 		public int ImageForFeedback(String nameFile, int sizeFile) {
 			
 			int img_feedback = mapper.ImageFeedbackInserted(nameFile, sizeFile);
 					
-			System.out.println(" dao에서 이미지 처리 결과? -> "+ img_feedback);
+			//System.out.println(" dao에서 이미지 처리 결과? -> "+ img_feedback);
 			
 			return img_feedback;
 		}

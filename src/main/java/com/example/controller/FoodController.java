@@ -71,7 +71,7 @@ public class FoodController {
 		// principal 객체를 CustomUserDetails 타입으로 캐스팅
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
 		String seq = customUserDetails.getM_seq();
-		System.out.println(seq);
+//		System.out.println(seq);
 		
 		mId = authentication.getName(); // Retrieve the m_id of the authenticated user
         MemberTO member = m_dao.findByMId(mId); // Retrieve the user details based on the m_id
@@ -92,7 +92,7 @@ public class FoodController {
 	@RequestMapping("/foodData")
 	public List<Map<String, Object>> foodData1(HttpServletRequest request) {
 		String foodName = request.getParameter("data");
-		System.out.println("foodName" + foodName);
+//		System.out.println("foodName" + foodName);
 		
 		List<Map<String, Object>> responseList = new ArrayList<>();
 		List<FoodTO> foodList = fdao.selectFood(foodName);
@@ -156,12 +156,12 @@ public class FoodController {
 	                    e.printStackTrace();
 	                }
 	            }
-	            System.out.println("시작 디버깅");
+//	            System.out.println("시작 디버깅");
 	            for (int i = 0; i < additionalDataArray.length(); i++) {
 	                JSONObject additionalData = additionalDataArray.getJSONObject(i);
 	                String f_name = additionalData.getString("f_name");
 	                BigDecimal f_kcal = new BigDecimal(additionalData.getString("f_kcal"));
-	                System.out.println("칼로리\t"+f_kcal);
+//	                System.out.println("칼로리\t"+f_kcal);
 	                BigDecimal f_carbohydrate_g = new BigDecimal(additionalData.getString("f_carbohydrate_g"));
 	                BigDecimal f_protein_g = new BigDecimal(additionalData.getString("f_protein_g"));
 	                BigDecimal f_fat_g = new BigDecimal(additionalData.getString("f_fat_g"));
@@ -335,7 +335,7 @@ public class FoodController {
 	        // 임시 디렉토리에 저장
 	        Path tempFile = Files.createTempFile(null, originalFileName);
 	        Files.write(tempFile, file.getBytes());
-	        System.out.println("파일 이름 : \t"+tempFile);
+//	        System.out.println("파일 이름 : \t"+tempFile);
 	        // kakao API 콜!
 	        String result = kakaoApiService.callKakaoVisionApi(tempFile.toString());
 
