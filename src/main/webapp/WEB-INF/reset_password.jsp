@@ -60,20 +60,44 @@
 		var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?![^]*[\\'\\\"\\=]).{6,20}$/;
 
 		if (document.pwfrm.password.value.trim() == '') {
-			alert('비밀번호를 입력하셔야 합니다');
+			//alert('비밀번호를 입력하셔야 합니다');
+			swal({
+                title: "주의!",
+                text: "비밀번호를 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인",
+           });
 			return false;
 		}
 		if (document.pwfrm.r_password.value.trim() == '') {
-			alert('비밀번호 확인을 입력하셔야 합니다');
+			//alert('비밀번호 확인을 입력하셔야 합니다');
+			swal({
+                title: "주의!",
+                text: "비밀번호 확인을 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인",
+           });
 			return false;
 		}
 		if (document.pwfrm.r_password.value.trim() !== document.pwfrm.password.value.trim()) {
-			alert('비밀번호 확인이 일치하지 않습니다');
+			//alert('비밀번호 확인이 일치하지 않습니다');
+			swal({
+                title: "주의!",
+                text: "비밀번호 확인이 일치하지 않습니다",
+                icon: "warning",
+                button: "확인",
+           });
 			return false;
 		}
 
 		if (!passwordPattern.test(document.pwfrm.password.value.trim())) {
-			alert("비밀번호는 최소 6자 이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \"는 사용불가)");
+			//alert("비밀번호는 최소 6자 이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \"는 사용불가)");
+			swal({
+                title: "주의!",
+                text: "비밀번호는 최소 6자이상 20자 이하로, 문자와 숫자가 필수로 포함되어야 합니다.(=, ' , \" 는 사용불가)",
+                icon: "warning",
+                button: "확인",
+           });
 			return false;
 		}
 

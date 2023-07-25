@@ -11,15 +11,26 @@
     }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
-	/* 카카오 로그인을 눌렀을 때 로그인이 되어 있다면 alreadyLogin.do로 보냄 */
     $(document).ready(function () {
         var isLogin = '${login}'; 
-        if (isLogin === 'login') {
-            $('#loginLink').attr('href', 'alreadyLogin.do');
-        } else {
-            $('#loginLink').attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do');
-        }
+        $('#loginLink').click(function(e) {
+            if (isLogin === 'login') {
+                e.preventDefault(); // 기본 클릭 동작을 막습니다
+                swal({
+                    title: "정보",
+                    text: "이미 로그인 되어있습니다",
+                    icon: "info",
+                    button: "확인",
+                }).then((value) => {
+                    window.location.href = "main.do";
+                });
+            } else {
+                // 로그인이 되어있지 않다면, 카카오 로그인 URL로 이동합니다
+                $(this).attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do');
+            }
+        });
     });
 </script>
 <!DOCTYPE HTML>
