@@ -31,6 +31,130 @@ pageEncoding="UTF-8"%>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Board</title>
+<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
+
+<!-- 구글 사이드 상단 Menu 글씨체-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+
+<!-- 구글 사이드 글씨체-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lugrasimo&display=swap" rel="stylesheet">
+
+<!-- 이미지 아이콘 cdn -->
+<script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
+
+<!-- alert css -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<style type="text/css">
+	
+	.theme1 {margin-bottom:30px; border:0px; height:5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.5), transparent);}
+	
+	/*============ 사이드 로고 메뉴 폰트 ==========*/
+	h3.mb-4.ml-4.text-sm.font-medium.text-bodydark2 {
+        font-size: 30px;
+		font-family: 'Cuprum', sans-serif;
+    }
+	/*=====================================*/
+    
+	/*============ 사이드 (공지사항 , 게시판 , 식단 , 운동 , 내정보 , 로그아웃) ==========*/
+    h1 {
+	    font-size: 25px;
+     	font-family: 'Josefin Sans', sans-serif;
+	}
+	/*===================================================================*/
+	
+	/*========================================================== 로켓 이미지 바운스 조절====================================================*/	
+	@keyframes bounce {
+	    0%, 20%, 50%, 80%, 100% {
+	        transform: translateY(0);
+	    }
+	    40% {
+	        transform: translateY(-20px);
+	    }
+	    60% {
+	        transform: translateY(-10px);
+	    }
+	}
+	
+	.bounce:hover {
+	    animation: bounce 1s infinite;
+	}
+	/*================================================================================================================================*/	
+	
+	/*=========================================================== 다이어로그 크기 조절 css ==================================================*/
+ 	.ui-dialog {
+	    max-width: 90%; 
+	    min-width: 300px; 
+	    width: auto !important; 
+	}
+	
+	.ui-dialog-content {
+	    overflow-y: auto;
+	    max-height: 70vh; 
+	}
+		
+	/*================================================================================================================================*/
+	
+	/*========================================================= 사진 이미지 크기 , 버튼 css =================================================*/
+	.fileInput {
+	  border-bottom: 4px solid lightgray;
+	  border-right: 4px solid lightgray;
+	  border-top: 1px solid black;
+	  border-left: 1px solid black;
+	  padding: 10px;
+	  margin: 15px;
+	  cursor: pointer;
+	}
+	
+	.imgPreview {
+	  text-align: center;
+	  margin: 5px 15px;
+	  height: 200px;
+	  width: 500px;
+	  border-left: 1px solid gray;
+	  border-right: 1px solid gray;
+	  border-top: 5px solid gray;
+	  border-bottom: 5px solid gray;
+	}
+	
+	.imgPreview img {
+	  width: 100%;
+	  height: 100%;
+	}
+	
+	.previewText {
+	  width: 100%;
+	  margin-top: 20px;
+	}
+	
+	.submitButton {
+	  padding: 12px;
+	  margin-left: 10px;
+	  background: white;
+	  border: 4px solid lightgray;
+	  border-radius: 15px;
+	  font-weight: 700;
+	  font-size: 10pt;
+	  cursor: pointer;
+	}
+	
+	.submitButton:hover {
+	  background: #efefef;
+	}
+	
+	.centerText {
+	  text-align: center;
+	  width: 500px;
+	}
+	/*================================================================================================================================*/
+
+</style>
+
+  
   <style>
   /* 페이지 처리 위치 스타일 */
   .board_pagetab {
@@ -61,7 +185,6 @@ pageEncoding="UTF-8"%>
 }
   
 </style>
-<link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 
 </head>
 <body
@@ -86,9 +209,8 @@ pageEncoding="UTF-8"%>
 
   <!-- ===== Page Wrapper Start ===== -->
   <div class="flex h-screen overflow-hidden">
-  
-<!-- ===== Sidebar Start ===== -->
-  <aside
+    <!-- ===== Sidebar Start ===== -->
+    <aside
   :class="sidebarToggle ? 'translate-x-0' : '-translate-x-full'"
   class="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
   @click.outside="sidebarToggle = false"
@@ -97,7 +219,7 @@ pageEncoding="UTF-8"%>
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket fa-bounce fa-10x"></i>
+		<i class="fa-solid fa-rocket bounce fa-10x"></i>
     </a>
 
     <button
@@ -132,106 +254,142 @@ pageEncoding="UTF-8"%>
     >
       <!-- Menu Group -->
       <div>
-        <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
+	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Menu</h3>
+		  <hr class="theme1">
+	
+	      <ul class="mb-6 flex flex-col gap-1.5">
+	        <!-- Menu Item Dashboard -->
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	      <a
+	         href="notice_board.do"
+	         class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	         style="padding-left: 30px;"
+	       >
+	       <i class="fa-solid fa-circle-info"></i>
+	       <path
+	         d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	         fill=""
+	       />
+	       <path
+	         d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	         fill=""
+	       />
+	       </svg>
+	       <h1>공지사항</h1>
+	      </a>
+	     </li>
+	     
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	       <a
+	          href="board_list1.do"
+	          class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	          style="padding-left: 30px;"
+	        >
+	          <i class="fa-solid fa-users"></i>
+	          <path
+	            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	            fill=""
+	          />
+	          <path
+	            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	            fill=""
+	          />
+	          </svg>
+	          <h1>게시판</h1>
+	        </a>
+	      </li>
 
-
-        <ul class="mb-6 flex flex-col gap-1.5">
-          <!-- Menu Item Dashboard -->
-
-          <!-- Menu Item Calendar -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="calendar.do"
-              @click="selected = (selected === 'Calendar' ? '':'Calendar')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
-            >
-           	공지사항
-            </a>
-          </li>
-          <!-- Menu Item Calendar -->
-
-          <!-- Menu Item Profile -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="board.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-            게시판
-            </a>
-          </li>
-          <!-- Menu Item Profile -->
-
-              <!-- Menu Item Profile2 -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-           	식단
-            </a>
-          </li>
-          <!-- Menu Item Profile2 -->
-       
-
-          <!-- Menu Item Forms -->
-
-          <!-- Menu Item Tables -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="exercise.do"
-
-              @click="selected = (selected === 'Tables' ? '':'Tables')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
-            >
-              운동
-            </a>
-            
-     
-          </li>
-          
-          <!--  마이페이지 li -->
-             
-           <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="profile.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-             마이페이지
-            </a>
-          </li>
-
-          
-          <!--  -->
-          
-          <!-- Menu Item Tables -->
-		  <br/><br/>
-          <!-- Menu Item Settings -->
- 
-           
-        <li>
-			<a
-    			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-    			href="/klogout.do"
-    			@click="selected = (selected === 'Settings' ? '':'Settings')"
-    			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
-    			:class="page === 'settings' && 'bg-graydark'"
- 			>
-    			로그아웃
-  			</a>
-		</li>
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	        <a
+	           href="food.do"
+	           class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	           style="padding-left: 30px;"
+	         >
+	           <i class="fa-solid fa-bowl-food"></i>
+	           <path
+	             d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	             fill=""
+	           />
+	           <path
+	             d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	             fill=""
+	           />
+	           </svg>
+	           <h1>음식</h1>
+	         </a>
+	      </li>
+	      
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	         <a
+	            href="exercise.do"
+	            class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	            style="padding-left: 30px;"
+	          >
+	            <i class="fa-solid fa-dumbbell"></i>
+	            <path
+	              d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	              fill=""
+	            />
+	            <path
+	              d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	              fill=""
+	            />
+	            </svg>
+	            <h1>운동</h1>
+	          </a>
+	       </li>
+			<br/><br/>
+			<h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Others</h3>
+          	<hr class="theme1">
+	          <!-- Menu Item Settings -->
+	        <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	          <a
+	              href="profile.do"
+	              class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	              style="padding-left: 30px;"
+	            >
+	              <svg
+	                class="fill-current"
+	                width="22"
+	                height="22"
+	                viewBox="0 0 22 22"
+	                fill="none"
+	                xmlns="http://www.w3.org/2000/svg"
+	              >
+	                <path
+	                  d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	                  fill=""
+	                />
+	                <path
+	                  d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	                  fill=""
+	                />
+	              </svg>
+	              <h1>프로필</h1>
+	            </a>
+	        </li>
+	        <li>
+				<button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+	            <svg
+	              class="fill-current"
+	              width="22"
+	              height="22"
+	              viewBox="0 0 22 22"
+	              fill="none"
+	              xmlns="http://www.w3.org/2000/svg"
+	            >
+	              <path
+	                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
+	                fill=""
+	              />
+	              <path
+	                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+	                fill=""
+	              />
+	            </svg>
+	            <a href="/klogout.do"><h1>로그아웃</h1></a>
+	          </button>
+			</li>
           
           <!-- Menu Item Settings -->
         </ul>
@@ -239,6 +397,7 @@ pageEncoding="UTF-8"%>
       </nav>
   </div>
 </aside>
+
 
     <!-- ===== Sidebar End ===== -->
 
@@ -371,7 +530,8 @@ pageEncoding="UTF-8"%>
             <img src="https://rabfile.s3.ap-northeast-2.amazonaws.com/${profilename}" />
           </span>
 
-          <svg
+        
+           <svg
             :class="dropdownOpen && 'rotate-180'"
             class="hidden fill-current sm:block"
             width="12"
@@ -398,9 +558,10 @@ pageEncoding="UTF-8"%>
             class="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark"
           >
             <li>
-                 <a
+              <a
                 href="profile.do"
                 class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                style="padding-left: 5px;"
               >
                 <svg
                   class="fill-current"
@@ -419,13 +580,12 @@ pageEncoding="UTF-8"%>
                     fill=""
                   />
                 </svg>
-                My Profile
+                프로필
               </a>
             </li>
           </ul>
-          <button
-            class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-          >
+          
+          <button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
             <svg
               class="fill-current"
               width="22"
@@ -443,7 +603,7 @@ pageEncoding="UTF-8"%>
                 fill=""
               />
             </svg>
-            <a href="/klogout.do">Log Out</a>
+            <a href="/klogout.do">로그아웃</a>
           </button>
         </div>
         <!-- Dropdown End -->
@@ -452,7 +612,6 @@ pageEncoding="UTF-8"%>
     </div>
   </div>
 </header>
-
       <!-- ===== Header End ===== -->
 
       <!-- ===== Main Content Start ===== -->
