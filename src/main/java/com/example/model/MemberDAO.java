@@ -133,14 +133,14 @@ public class MemberDAO {
         int syncFlag = 1;
         
         int result = mapper.MandIweightsynced(m_seq);
-        System.out.println("result:"+result);
-        System.out.println("다오에스이큐: "+m_seq);
+        //System.out.println("result:"+result);
+        //System.out.println("다오에스이큐: "+m_seq);
         if(result == 1 ) {
            syncFlag = 0;
-           System.out.println( " synced 정상-> , " + syncFlag);
+           //System.out.println( " synced 정상-> , " + syncFlag);
         }else if(result == 0) {
            syncFlag = 1;
-           System.out.println( " synced 비정상-> , " + syncFlag);
+           //System.out.println( " synced 비정상-> , " + syncFlag);
         }
         return syncFlag;
 

@@ -14,6 +14,7 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.SimpleMailMessage;
@@ -32,6 +33,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import com.example.jwt.JwtTokenUtil;
 import com.example.kakao.OAuthService;
@@ -64,6 +69,9 @@ public class MemberController {
 	@Autowired
 	private MainDAO mainDao;
 	
+	//@Autowired
+	//private OAuth2AuthorizedClientService authorizedClientService;
+	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 	
@@ -71,17 +79,7 @@ public class MemberController {
 	
 	@RequestMapping("/signin.do")
 	public ModelAndView signin(Principal principal, HttpServletRequest request) {
-		String error = (String) request.getSession().getAttribute("error");
-		String error2 = (String)request.getAttribute("error");
-		System.out.println("djxm어트리부트에러"+error2);
-	    if (error != null) {
-	        System.out.println("Received error parameter: " + error);
-	        request.getSession().removeAttribute("error");
-	        //...
-	    } else {
-	        System.out.println("Did not receive error parameter");
-	        //...
-	    }
+		
 		ModelAndView modelAndView = new ModelAndView();
 		// 로그인 되어있는 사용자가 로그인페이지에 접근하면  main페이지로 돌려보냄
 		if (principal != null && principal.getName() != null) {
@@ -150,6 +148,7 @@ public class MemberController {
 		String email = String.valueOf(emailObject);
 		session.setAttribute("userInfo", email);
 		session.setAttribute("access_token", access_token);
+		System.out.println("세션값:"+(String)session.getAttribute("access_token"));
 		
 		//가입한 회원이면 바로 로그인시키기 위해 login오브젝트 전달
 		if(mDao.confirmKakao(email) != null) { 
@@ -194,19 +193,25 @@ public class MemberController {
 	
 	//카카오 로그아웃
 	@RequestMapping("/klogout.do")
-	public ModelAndView klogout(HttpSession session) {
+	public ModelAndView klogout(HttpServletRequest request, HttpServletResponse response,Authentication authentication) {
 			
-		//String access_Token = (String)session.getAttribute("access_Token");
-		//String access_Token = "tP6eyK52OtuC5YY0Zwd5fYV8dLTBeW7PrqQEHq7aCiolDQAAAYlhTn3C";
-		OAuthService oau = new OAuthService();
+		// 로그아웃 처리
+	   /* new SecurityContextLogoutHandler().logout(request, response, authentication);
+
+	    // OAuth2AuthenticationToken을 통해 OAuth2AuthorizedClient 얻기
+	    OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken)authentication;
+	    OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
+	        oauthToken.getAuthorizedClientRegistrationId(), 
+	        oauthToken.getName());
+
+	    // access token 가져오기
+	    String accessToken = client.getAccessToken().getTokenValue();
+	    System.out.println("토큰호출"+accessToken);
+	    OAuthService oAuthService = new OAuthService();
+	    // 카카오 로그아웃 API 호출
+	    oAuthService.kakaoLogout(accessToken);*/
 		
 		ModelAndView modelAndView = new ModelAndView();
-		/*oau.kakaoLogout(access_Token);
-		if(access_Token != null) {
-			oau.kakaoLogout((String)session.getAttribute("access_token"));
-			session.removeAttribute("acces_token"); session.removeAttribute("userInfo");
-		}*/
-			 
 		modelAndView.setViewName("kLogout");
 		
 		return modelAndView; 
@@ -222,7 +227,7 @@ public class MemberController {
 		String mId= customUserDetails.getM_id();
 
 		int flag = mainDao.InsertDataForMain(mId);
-		System.out.println("플래그:"+flag);
+		//System.out.println("플래그:"+flag);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("signup2");
 		return modelAndView; 
@@ -298,8 +303,8 @@ public class MemberController {
 	@PostMapping("/findId")
     public List<String> findId(@RequestBody Map<String, String> request) {
 		String m_mail = request.get("email");
-		System.out.println("시작");
-		System.out.println("메일"+m_mail);
+		//System.out.println("시작");
+		//System.out.println("메일"+m_mail);
 		List<MemberTO> members = mDao.findId(m_mail);
 	    List<String> id = new ArrayList<>();
 	    for(MemberTO member : members) {
@@ -311,8 +316,8 @@ public class MemberController {
 	// 비밀번호 찾기 - 메일 전송
 	@PostMapping("/findPw")
 	public int findPw(@RequestBody MemberTO to) {
-		System.out.println(to.getM_id());
-		System.out.println(to.getM_mail());
+		//System.out.println(to.getM_id());
+		//System.out.println(to.getM_mail());
 		
 		int flag = mDao.findPw(to);
 				
@@ -327,7 +332,7 @@ public class MemberController {
 	        String m_id = to.getM_id();
 	        
 	        String secretKey = jwtSecretKey; 
-	        System.out.println("컨트롤러 키:"+secretKey);
+	        //System.out.println("컨트롤러 키:"+secretKey);
 	        // 페이지에서 받은 아이디값을 넣은 jwt토큰 생성
 	        String token = Jwts.builder()
 	                .setSubject(m_id)
@@ -335,7 +340,7 @@ public class MemberController {
 	                .setExpiration(new Date(tokenTO.getExpiration()))
 	                .signWith(SignatureAlgorithm.HS512, secretKey.getBytes(StandardCharsets.UTF_8))
 	                .compact();
-	        System.out.println("토큰: "+token);
+	       // System.out.println("토큰: "+token);
 			String toEmail = to.getM_mail();
 			String toName = "RockAtYourBody";
 			String subject = "RAB 비밀번호 재설정";
@@ -360,7 +365,7 @@ public class MemberController {
 
 	        javaMailSender.send(mimeMessage);
 
-	        System.out.println("전송 완료");
+	        //System.out.println("전송 완료");
 	    } catch (MessagingException e) {
 	        e.printStackTrace();
 	    }
@@ -379,7 +384,7 @@ public class MemberController {
 	public ModelAndView handlePasswordReset(@RequestParam("token") String token,@RequestParam("password") String password) {
 	    ModelAndView modelAndView = new ModelAndView();
 	    modelAndView.setViewName("reset_password_ok");
-		System.out.println("받은 토큰"+token);
+		//System.out.println("받은 토큰"+token);
 		try {
 	        // 토큰에서 사용자 ID 추출
 	        String userId = jwtTokenUtil.getUserIdFromToken(token);
@@ -393,7 +398,7 @@ public class MemberController {
             }
             
 	    } catch (Exception e) {
-	    	System.out.println("에러: "+e.getMessage());
+	    	//System.out.println("에러: "+e.getMessage());
 	    }
 	    return modelAndView;
 	}
@@ -430,15 +435,8 @@ public class MemberController {
 		BigDecimal m_weight = customUserDetails.getM_weight();
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("signup3");
-		System.out.println("적용몸무게2:"+m_weight);
+		//System.out.println("적용몸무게2:"+m_weight);
 		mDao.MandIweightsynced(m_seq);
-		return modelAndView; 
-	}
-	
-	@RequestMapping("/overlappingLogin.do")
-	public ModelAndView overlappingLogin() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("overlappingLogin");
 		return modelAndView; 
 	}
 	

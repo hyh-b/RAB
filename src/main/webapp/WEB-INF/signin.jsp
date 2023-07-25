@@ -12,6 +12,7 @@
   <title>로그인</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
 	
 	$(document).ready(function() {
@@ -56,11 +57,27 @@
 			      dataType: "json",
 			      success: function(flag) {
 			          if (flag > 0) {
-			            alert("메일이 전송되었습니다.");
+			            //alert("메일이 전송되었습니다.");
+			            swal({
+			                  title: "성공!",
+			                  text: "메일이 전송되었습니다",
+			                  icon: "success",
+			                  button: "확인",
+			             });
+
+			            
 			            document.querySelector('[x-data]').__x.$data.reset();
 			          }
 			          else {
-			            alert("아이디와 이메일과 일치하는 회원이 존재하지 않습니다");
+			            //alert("아이디와 이메일과 일치하는 회원이 존재하지 않습니다");
+			            swal({
+				    		  title: "실패!",
+				    		  text: "아이디와 이메일과 일치하는 회원이 존재하지 않습니다",
+				    		  icon: "error",
+				    		  button: "확인",
+				    		  zIndex: 9999999999999
+				    	});
+			            
 			          }
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -71,6 +88,11 @@
 		
 	});
 </script>
+<style>
+    .fixed {
+        z-index: 9999;
+    }
+</style>
 </head>
 <body
   x-data="{ page: 'signin', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -89,7 +111,12 @@
 <% if (request.getParameter("error") != null) { %>
     <script>
     	
-         alert("아이디 혹은 비밀번호가 맞지 않습니다");
+    	swal({
+		  title: "실패!",
+		  text: "아이디 혹은 비밀번호가 일치하지 않습니다",
+		  icon: "error",
+		  button: "확인",
+		});
     </script>
 <% }
 	String kId = request.getParameter("kId");
