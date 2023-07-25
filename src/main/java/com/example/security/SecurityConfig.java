@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers("/","signin.do","/signup.do","/signup_ok.do","/klogout.do","/kSignup_ok.do","/kakao.do","/idCheck.do",
 					"/reset_password","/reset_password_ok","/findId","/findPw","/overlappingLogin.do",
 					"/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/img/**","/src/images/**").permitAll()
-			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do","/feedback_view.do","/notice_board.do").hasRole("ADMIN")
+			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do","/feedback_view.do","/admin_notice_board.do").hasRole("ADMIN")
 			.anyRequest().authenticated();
 
 		
