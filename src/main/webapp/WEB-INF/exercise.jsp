@@ -988,12 +988,12 @@ pageEncoding="UTF-8"%>
 	
 	// 이미지 슬라이드 출력
 	function imgSlide(){
-		console.log("이미지시작")
+		
 		$.ajax({
 			url: '/imgSlide', 
 			type: 'GET',
 			success: function(response) {
-				console.log("이미지시작22")
+				
 				let slideHtml = "";
 				let bucketUrl = "https://rabfile.s3.ap-northeast-2.amazonaws.com/";
 				for (var i = 0; i < response.length; i++) {
@@ -1102,7 +1102,7 @@ pageEncoding="UTF-8"%>
            });
 	        return;
 	    }
-	        console.log(selectedImageValue)
+	        
 	    $.ajax({
 	    	url: '/exDelete',
 	        method: 'POST',
@@ -1409,9 +1409,6 @@ pageEncoding="UTF-8"%>
 	            '</div>';
         $('#total1').html(totalHtml);
 		
-	    // 여기서 totalExTime과 totalExUsedKcal을 원하는 곳에 표시하면 됩니다.
-	    console.log("총 운동시간: " + totalExTime + " 분");
-	    console.log("총 소모 칼로리: " + totalExUsedKcal + " Kcal");
 	}
 	
 	// 다크모드 시 칼로리계산 이미지 밝기 낮추기 
@@ -1438,7 +1435,7 @@ pageEncoding="UTF-8"%>
    			const form = $(this);
    			const fileInput = form.find('input[type="file"]');
    			const formData = new FormData(form[0]);
-   			console.log("제출시작")
+   			
    			if (!fileInput.val()) {
 		        //alert("파일을 선택해주세요");
 		        swal({
