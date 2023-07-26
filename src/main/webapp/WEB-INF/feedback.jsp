@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,26 +18,25 @@
 <!-- 구글 사이드 글씨체-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lugrasimo&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100&display=swap" rel="stylesheet">
 
 <!-- 이미지 아이콘 cdn -->
 <script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 
 <style type="text/css">
-	theme1 {margin-bottom:30px; border:0px; height:5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.5), transparent);}
+	.theme1 {margin-bottom:30px; border:0px; height:5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.5), transparent);}
 	
 	/*============ 사이드 로고 메뉴 폰트 ==========*/
 	h3.mb-4.ml-4.text-sm.font-medium.text-bodydark2 {
         font-size: 30px;
-		font-family: 'Cuprum', sans-serif;
+		cfont-family: 'Cuprum', sans-serif;
     }
 	/*=====================================*/
     
 	/*============ 사이드 (공지사항 , 게시판 , 식단 , 운동 , 내정보 , 로그아웃) ==========*/
-    h1 {
+    h1.side {
 	    font-size: 25px;
-     	font-family: 'Josefin Sans', sans-serif;
+	    font-family: 'Josefin Sans', sans-serif;
 	}
 	/*===================================================================*/
 	
@@ -58,24 +56,25 @@
 	.bounce:hover {
 	    animation: bounce 1s infinite;
 	}
-	/*================================================================================================================================*/	
-	
 </style>
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-  
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-   <style>
-        .feedback-table {
-            color: grey;
-        }
-      .container {
-		    max-width: 1400px;
-		    overflow-y: scroll;
-		    height: 90vh; /* 페이지가 브라우저 창에 꽉 차도록 설정 */
-		  }
 
-    </style>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+  
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+
+<style>
+ .feedback-table {
+   color: grey;
+ }
+ .container {
+   max-width: 1400px;
+   overflow-y: scroll;
+   height: 90vh; /* 페이지가 브라우저 창에 꽉 차도록 설정 */
+ }
+ </style>
 
 <!--           
 
@@ -349,10 +348,10 @@
 >
   <!-- SIDEBAR HEADER -->
   <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px; padding-bottom: 0px;padding-top: 40px;">
-    <a href="/main.do">
-<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket bounce fa-10x" style="padding-top: 20px;"></i>
-    </a>
+	<div onclick="location.href='/admin.do';">
+	    <!-- <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
+	    <i class="fa-solid fa-rocket bounce fa-10x" style="padding-top: 20px;"></i>
+	</div>
 
     <button
       class="block lg:hidden"
@@ -395,63 +394,57 @@
 	      <ul class="mb-6 flex flex-col gap-1.5">
 	        <!-- Menu Item Dashboard -->
 	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
-	      <a
-	         href="feedback.do"
-	         class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-	         style="padding-left: 30px;"
-	       >
-	       <i class="fa-solid fa-circle-info"></i>
-	       <path
-	         d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
-	         fill=""
-	       />
-	       <path
-	         d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
-	         fill=""
-	       />
-	       </svg>
-	       <h1>피드백</h1>
-	      </a>
+	      <div 
+		    onclick="location.href='feedback.do';" 
+		    class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base" 
+		    style="padding-left: 30px;">
+			<i class="fa-solid fa-circle-info"></i>
+	        <path
+	            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	            fill=""
+	        />
+	        <path
+	            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	            fill=""
+	        />
+		    <h1 class="side">피드백</h1>
+		 </div>
 	     </li>
 	     
 	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
-	       <a
-	          href="admin.do"
-	          class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-	          style="padding-left: 30px;"
-	        >
-	          <i class="fa-solid fa-users"></i>
-	          <path
-	            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
-	            fill=""
-	          />
-	          <path
-	            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
-	            fill=""
-	          />
-	          </svg>
-	          <h1>회원관리</h1>
-	        </a>
+	      	<div 
+			    onclick="location.href='admin.do';" 
+			    class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base" 
+			    style="padding-left: 30px;">
+			    <i class="fa-solid fa-users"></i>
+		        <path
+		            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+		            fill=""
+		        />
+		        <path
+		            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+		            fill=""
+		        />
+			    <h1 class="side">회원관리</h1>
+			 </div>
 	      </li>
 
 	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
-	        <a
-	           href="admin_notice_board.do"
-	           class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-	           style="padding-left: 30px;"
-	         >
-	           <i class="fa-solid fa-bowl-food"></i>
-	           <path
-	             d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
-	             fill=""
-	           />
-	           <path
-	             d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
-	             fill=""
-	           />
-	           </svg>
-	           <h1>공지사항</h1>
-	         </a>
+	         <div 
+			    onclick="location.href='admin_notice_board.do';" 
+			    class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base" 
+			    style="padding-left: 30px;">
+			    <i class="fa-solid fa-circle-info"></i>
+		        <path
+		            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+		            fill=""
+		        />
+		        <path
+		            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+		            fill=""
+		        />
+			    <h1 class="side">공지사항</h1>
+			 </div>
 	      </li>
 			<br/><br/>
 			<h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Others</h3>
@@ -476,7 +469,10 @@
 	                fill=""
 	              />
 	            </svg>
-	            <a href="/klogout.do"><h1>로그아웃</h1></a>
+<!-- 	            <a href="/klogout.do"><h1>로그아웃</h1></a> -->
+	            <div 
+			    onclick="location.href='admin_notice_board.do';" 
+			    ><h1 class="side">로그아웃</h1></div>
 	          </button>
 			</li>
           
@@ -527,6 +523,7 @@
     </div>
 
 
-<script defer src="bundle.js"></script></body>
+<script defer src="bundle.js"></script>
 
+</body>
 </html>

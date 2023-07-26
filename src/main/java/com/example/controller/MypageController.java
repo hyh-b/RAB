@@ -74,7 +74,6 @@ public class MypageController {
 		Object principal = authentication.getPrincipal();
 		// principal 객체를 CustomUserDetails 타입으로 캐스팅
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		System.out.println("마이페이지 seq가져와 " + customUserDetails.getM_seq());
 		String seq = customUserDetails.getM_seq();
 
 		myto.setM_seq(seq);
@@ -99,7 +98,6 @@ public class MypageController {
 		Object principal = authentication.getPrincipal();
 		// principal 객체를 CustomUserDetails 타입으로 캐스팅
 		CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-		System.out.println("마이페이지 수정 seq가져와 " + customUserDetails.getM_seq());
 		String seq = customUserDetails.getM_seq();
 		myto.setM_seq(seq);
 

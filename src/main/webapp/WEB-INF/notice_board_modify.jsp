@@ -83,7 +83,7 @@ $(document).ready(function() {
 	                 button: "확인",
 	               }).then(function() { history.back(); });
 	        }
-			console.log(json);
+
 	      },
 	      error: function(e) {
 	        alert('[에러]' + e.status);
