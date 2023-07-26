@@ -33,7 +33,7 @@ import com.example.security.CustomUserDetails;
 import com.example.security.CustomUserDetailsService;
 import com.example.upload.S3FileUploadService;
 
-@Controller
+@RestController
 public class MypageController {
 	// @Autowired
 	// CustomUserDetailsService customUserDetailsService = new

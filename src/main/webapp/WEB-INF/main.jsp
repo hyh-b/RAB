@@ -94,9 +94,10 @@
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px; padding-bottom: 0px;padding-top: 40px;">
     <a href="/main.do">
-		<i class="fa-solid fa-rocket bounce fa-10x"></i>
+<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
+		<i class="fa-solid fa-rocket bounce fa-10x" style="padding-top: 20px;"></i>
     </a>
 
     <button
@@ -131,7 +132,7 @@
     >
       <!-- Menu Group -->
       <div>
-	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Menu</h3>
+	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 0px;">Menu</h3>
 		  <hr class="theme1">
 	
 	      <ul class="mb-6 flex flex-col gap-1.5">
@@ -242,7 +243,7 @@
 	                  fill=""
 	                />
 	              </svg>
-	              <h1>내 정보</h1>
+	              <h1>프로필</h1>
 	            </a>
 	        </li>
 	        <li>
@@ -275,57 +276,25 @@
   </div>
 </aside>
 
-
       <!-- ===== Sidebar End ===== -->
 
       <!-- ===== Content Area Start ===== -->
-      <div
-        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
-      >
-        <!-- ===== Header Start ===== -->
-    <header
-  class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
->
-  <div
-    class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11"
-  >
+      <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      <!-- ===== Header Start ===== -->
+      <header class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
+  		<div class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
     <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
-      <!-- Hamburger Toggle BTN -->
+      <!-- Hamburger Toggle BTN 로고메뉴-->
       <button
         class="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
         @click.stop="sidebarToggle = !sidebarToggle"
       >
-        <span class="relative block h-5.5 w-5.5 cursor-pointer">
-          <span class="du-block absolute right-0 h-full w-full">
-            <span
-              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white"
-              :class="{ '!w-full delay-300': !sidebarToggle }"
-            ></span>
-            <span
-              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white"
-              :class="{ '!w-full delay-400': !sidebarToggle }"
-            ></span>
-            <span
-              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white"
-              :class="{ '!w-full delay-500': !sidebarToggle }"
-            ></span>
-          </span>
-          <span class="du-block absolute right-0 h-full w-full rotate-45">
-            <span
-              class="absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white"
-              :class="{ 'h-0 delay-[0]': !sidebarToggle }"
-            ></span>
-            <span
-              class="delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white"
-              :class="{ 'h-0 dealy-200': !sidebarToggle }"
-            ></span>
-          </span>
-        </span>
+      	<!-- 아이콘을 여기에 추가 -->
+    	<i class="fa-solid fa-rocket bounce fa-xl"></i>
       </button>
         <!-- Hamburger Toggle BTN -->
       <a class="block flex-shrink-0 lg:hidden" href="/main.do">
-      <i class="fa-solid fa-rocket bounce fa-10x"></i>
-        <!-- <img src="src/images/logo/" alt="홈 로고 추가해야되요" /> -->
+     
       </a>
     </div>
     

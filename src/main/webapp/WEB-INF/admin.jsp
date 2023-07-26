@@ -119,8 +119,8 @@
 	        type: 'POST',
 	        data: { date: date },
 	        success: function(response) {
-	            console.log('신규 가입자 수: ' + response.newMember);
-	            console.log('탈퇴한 회원 수: ' + response.deletedMember);
+	            /* console.log('신규 가입자 수: ' + response.newMember);
+	            console.log('탈퇴한 회원 수: ' + response.deletedMember); */
 	            let nMember = response.newMember;
 	            let dMember = response.deletedMember;
 	            let mHtml = "";
@@ -313,7 +313,7 @@
 	           class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
 	           style="padding-left: 30px;"
 	         >
-	           <i class="fa-solid fa-bowl-food"></i>
+	           <i class="fa-solid fa-circle-info"></i>
 	           <path
 	             d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
 	             fill=""
