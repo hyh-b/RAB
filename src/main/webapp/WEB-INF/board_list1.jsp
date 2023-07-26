@@ -13,7 +13,6 @@ pageEncoding="UTF-8"%>
 	BoardListTO listTo = (BoardListTO)request.getAttribute("listTo");
 
 	int cpage = listTo.getCpage();
-	System.out.println("list.jsp cpage >>> " + cpage);
 	
 	//페이지에 보일량
 	int recordPerPage = listTo.getRecordPerPage();
@@ -621,7 +620,7 @@ pageEncoding="UTF-8"%>
       <!-- Breadcrumb Start -->
       <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-title-md2 font-bold text-black dark:text-white">
-          Board
+          게시판
         </h2>
         <nav>
           <ol class="flex items-center gap-2">

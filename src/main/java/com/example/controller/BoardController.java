@@ -100,7 +100,7 @@ public class BoardController {
 			    sbHTML.append("<tr>");
 			    sbHTML.append("<td class='boardThumbWrap'>");
 			    sbHTML.append("<div class='boardThumb'>");
-			    sbHTML.append("<a href='board_view1.do?seq=" + seq + "&&cpage="+cpage+"'><img src='https://rabfile.s3.ap-northeast-2.amazonaws.com/"+filename+"' border='0' width='100%' /></a>");
+			    sbHTML.append("<a href='board_view1.do?seq=" + seq + "&&cpage="+cpage+"'><img src='https://rabfile.s3.ap-northeast-2.amazonaws.com/"+filename+"' border='0' width='100%' height='100%' /></a>");
 			    sbHTML.append("</div>");
 			    sbHTML.append("</td>");
 			    sbHTML.append("</tr>");
@@ -157,11 +157,10 @@ public class BoardController {
 			// m_seq
 			Object principal = authentication.getPrincipal();
 			CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-			String seq = customUserDetails.getM_seq();
+			String m_seq = customUserDetails.getM_seq();
 			String name = customUserDetails.getM_name();
 			String profilename = customUserDetails.getM_profilename();
-			to.setM_seq(seq);
-			System.out.println("view to2    " + to);
+			to.setM_seq(m_seq);
 			BoardListTO listTo = new BoardListTO();
 			
 			listTo.setCpage( Integer.parseInt(request.getParameter("cpage" ) ) );
@@ -180,6 +179,7 @@ public class BoardController {
 			modelAndView.addObject("comments" , comments );
 			modelAndView.addObject("name" , name );
 			modelAndView.addObject("profilename" , profilename );
+			modelAndView.addObject("m_seq" , m_seq );
 			
 			return modelAndView;
 		}
@@ -208,12 +208,10 @@ public class BoardController {
 //			System.out.println("답글 쓰기 작성자 : " + request.getParameter("cwriter") );
 					
 			Cto.setUc_content( request.getParameter("ccontent") );
-			System.out.println("답글 쓰기 내용 : " + request.getParameter("ccontent") );
 			
 			Cto.setU_seq(request.getParameter("seq") );
 					
 			int flag = commentDAO.CommentOk(Cto);
-			System.out.println("답글 flag       " + flag );
 				
 			modelAndView.setViewName("board_comment_ok1");
 				
@@ -263,7 +261,6 @@ public class BoardController {
 					String fileName = fileUrl.substring(base.length());
 					// 파일이 성공적으로 업로드 시 db에 데이터 저장
 					if (fileUrl != null) {
-						System.out.println("사진이 게시판에 성공적으로 업로드");
 						to.setU_filename(fileName);
 						to.setU_filesize(upload.getSize());
 					}
@@ -377,6 +374,9 @@ public class BoardController {
 			
 			BoardListTO listTo = new BoardListTO();
 			listTo.setCpage(Integer.parseInt( request.getParameter( "cpage" ) ) );
+			
+			to.setU_seq(request.getParameter("seq") );
+//			System.out.println(to.getU_seq());
 			
 			int flag = boardDAO.boardDeleteOk(to);
 			

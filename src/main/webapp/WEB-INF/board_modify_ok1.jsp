@@ -15,11 +15,8 @@
 	
 	out.println( "<script type='text/javascript'>" );
 	if( flag == 0 ) {
-		out.println( "alert('글수정에 성공');" );
+// 		out.println( "alert('글수정에 성공');" );
 		out.println( "location.href='board_view1.do?seq=" + seq +"&&cpage="+ cpage +"'" );
-	} else if( flag == 1 ) {
-		out.println( "alert('비밀번호 오류');" );
-		out.println( "history.back();" );
 	} else {
 		out.println( "alert('글수정에 실패');" );
 		out.println( "history.back();" );

@@ -53,19 +53,6 @@ public class BoardDAO {
 	public BoardTO boardView(BoardTO to) {
 		mapper.viewHit(to);
 		to = mapper.view(to);
-		
-		BoardTO prevData = mapper.view_prev(to);
-		 if (prevData != null) {
-			to.setPrevSeq(prevData.getU_seq());
-		    to.setPrevSubject(prevData.getU_subject());
-		}
-		
-		BoardTO nextData = mapper.view_next(to);
-		 if (nextData != null) {
-		    to.setNextSeq(nextData.getU_seq());
-			to.setNextSubject(nextData.getU_subject());
-		 }
-		 
 		return to;
 	}
 	
@@ -100,11 +87,11 @@ public class BoardDAO {
 			int result = mapper.modify_ok_withFile(to);
 			if( result == 1 ) {
 				flag = 0;
-				 if (to.getU_filename() != null && to.getOldFilename() != null) {
-				     // 이전 파일 삭제
-				     File file = new File(to.getUploadPath(), to.getOldFilename());
-				     file.delete();
-				 }
+//				 if (to.getU_filename() != null && to.getOldFilename() != null) {
+//				     // 이전 파일 삭제
+//				     File file = new File(to.getUploadPath(), to.getOldFilename());
+//				     file.delete();
+//				 }
 				 
 			} 
 			
