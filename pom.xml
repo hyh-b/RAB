@@ -169,6 +169,10 @@
 	    <artifactId>jstl</artifactId>
 	</dependency>
 	<!-- 배포를 위해 만듦-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
