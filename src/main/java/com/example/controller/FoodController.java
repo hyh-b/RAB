@@ -35,8 +35,10 @@ import com.example.model.FoodDAO;
 import com.example.model.FoodTO;
 import com.example.model.LunchDAO;
 import com.example.model.LunchTO;
+import com.example.model.MainDAO;
 import com.example.model.MemberDAO;
 import com.example.model.MemberTO;
+import com.example.model.TotalFoodDAO;
 import com.example.security.CustomUserDetails;
 
 @RestController
@@ -56,6 +58,9 @@ public class FoodController {
 	
 	@Autowired
 	private MemberDAO m_dao;
+	
+	@Autowired
+	private TotalFoodDAO dao;
 	
 	@RequestMapping("/food.do")
 	public ModelAndView food(HttpServletRequest request , Authentication authentication,String mId) {
@@ -136,7 +141,7 @@ public class FoodController {
 	
 	// 아침 ajax 데이터 구문.
 	@RequestMapping("/breakfastFoodData")
-	public Map<String, Object> breakfastFoodData(HttpServletRequest request) {
+	public Map<String, Object> breakfastFoodData(HttpServletRequest request ) {
 	    System.out.println(request.getParameter("seq"));
 
 	    // 추가 데이터 처리
@@ -182,12 +187,17 @@ public class FoodController {
 	                bto.setB_cholesterol_mg(f_cholesterol_mg);
 	                bto.setB_sodium_mg(f_sodium_mg);
 	                bto.setB_day(b_day);  // set the parsed date
-//	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
+	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
 	                
+	                System.out.println("날짜>>>>>>>>>>>>>"+b_day);
+	        		
+	                
+	                dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), b_day);
+	                dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), b_day);
+	                dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), b_day);
 	                int flag = bdao.insertBreakfast(bto);
 	                response.put("flag", flag);
 	            }
-	            
 	            return response;
 	            
 	        } catch (JSONException e) {
@@ -247,6 +257,11 @@ public class FoodController {
 					lto.setL_sodium_mg(l_sodium_mg);
 					lto.setL_day(l_day);
 					int flag = ldao.insertLunchData(lto);
+					
+					
+					dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), l_day);
+	                dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), l_day);
+	                dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), l_day);	
 					response.put("flag", flag);
 				}
 				
@@ -308,6 +323,11 @@ public class FoodController {
 					dto.setD_day(d_day);
 					
 					int flag = ddao.insertDinnerData(dto);
+					
+					dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), d_day);
+	                dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), d_day);
+	                dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), d_day);	
+	                
 					response.put("flag", flag);
 				}
 				

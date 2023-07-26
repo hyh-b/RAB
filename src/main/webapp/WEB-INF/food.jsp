@@ -268,7 +268,9 @@ pageEncoding="UTF-8"%>
 		        contentType: false,
 		        dataType : 'json',
 		        success : function(json){
-		            console.log('아침 클릭 '+json);
+// 		            console.log('아침 클릭 '+json);
+// 		            console.log('아침 클릭 '+json.flag);
+// 		            console.log('아침 클릭 '+json.main_flag_b);
 		            if(json.flag == '1'){
 		                swal({
 				    		  title: "성공!",
@@ -279,11 +281,21 @@ pageEncoding="UTF-8"%>
 		                // 등록 성공 후 div 제거
 		                $('#' + resultFood).empty(); 
 		            } else {
-		                alert('음식을 조회 후 등록 버튼을 눌러주세요!');
+		                swal({
+				    		  title: "실패!",
+				    		  text: "음식을 조회 후 등록 버튼을 눌러주세요!",
+				    		  icon: "error",
+				    		  button: "확인",
+				    	});
 		            }
 		        },
 		        error : function(e){
-		            alert('[에러]'+e.status);
+		            swal({
+			    		  title: "에러",
+			    		  text: '[에러]'+e.status,
+			    		  icon: "error",
+			    		  button: "확인",
+			    	});
 		        }
 		    });
 		} 
@@ -342,11 +354,21 @@ pageEncoding="UTF-8"%>
 		                    $(this).toggleClass('selected');
 		                });
 		            } else {
-		                alert("데이터가 없습니다. 다시 입력해주세요!");
+		                swal({
+				    		  title: "실패!",
+				    		  text: "데이터가 없습니다. 다시 입력해주세요!",
+				    		  icon: "error",
+				    		  button: "확인",
+				    	});
 		            }
 		        },
 		        error: function(e) {
-		            alert("에러 발생: " + e.status);
+		        	swal({
+			    		  title: "에러",
+			    		  text: '[에러]'+e.status,
+			    		  icon: "error",
+			    		  button: "확인",
+			    	});
 		        }
 		    });
 		});
@@ -538,7 +560,12 @@ pageEncoding="UTF-8"%>
 	   	            this.render();
 	   	        },
 	   	        error: function(e) {
-	   	            alert('[에러]]'+e.status)
+	   	        	swal({
+			    		  title: "에러",
+			    		  text: '[에러]'+e.status,
+			    		  icon: "error",
+			    		  button: "확인",
+			    	});
 	   	        }
 	   	    });
 		  }
