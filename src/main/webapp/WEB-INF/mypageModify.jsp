@@ -882,62 +882,112 @@ $.ajax({
 
 // 이메일 형식 검사==============================================================================================================
 function validateEmail() {
-	  const emailInput = document.getElementById('email');
-	  const email = emailInput.value.trim();
-	  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	  
-	  if (email === '') {
-	    alert('이메일을 입력하셔야 합니다.');
-	    return false;
-	  }
-	  
-	  if (!emailRegex.test(email)) {
-	    alert('올바른 이메일 형식이 아닙니다. 다시 입력해주세요.');
-	    return false;
-	  }
-	  
-	  return true;
-	}
+    const emailInput = document.getElementById('email');
+    const email = emailInput.value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email === '') {
+        swal({
+            title: "경고!",
+            text: "이메일을 입력하셔야 합니다.",
+            icon: "warning",
+            button: "확인"
+        });
+        return false;
+    }
+
+    if (!emailRegex.test(email)) {
+        swal({
+            title: "경고!",
+            text: "올바른 이메일 형식이 아닙니다. 다시 입력해주세요.",
+            icon: "warning",
+            button: "확인"
+        });
+        return false;
+    }
+
+    return true;
+}
 
 // 필수 입력값 =====================================================================================================================
 window.onload = function () {
-	document.getElementById('editButton').onclick = function () {
-		if( document.mfrm.name.value.trim() == '') {
-			alert('닉네임을 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.phoneNumber.value.trim() == '') {
-			alert('휴대폰 번호를 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.cm.value.trim() == '') {
-			alert('현재신장을 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.kg.value.trim() == '') {
-			alert('현재 몸무게를 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.takeKcal.value.trim() == '') {
-			alert('하루 목표 섭취 칼로리를 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.targetScale.value.trim() == '') {
-			alert('목표 체중을 입력하셔야 합니다'); 
-			return false;
-		}
-		if( document.mfrm.birthday.value.trim() == '') {
-			alert('생년월일을 입력하셔야 합니다'); 
-			return false;
-		}
-		
-		// 닉네임을 입력하지 않거나 중복인 경우에 알림창 표시
-		if (document.getElementById("nameNo").style.display == 'inline-block') {
-			alert('중복되는 닉네임은 사용할 수 없습니다'); 
-			return false;
-		}
-		document.mfrm.submit();
-	};
+    document.getElementById('editButton').onclick = function () {
+        if (document.mfrm.name.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "닉네임을 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        if (document.mfrm.phoneNumber.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "휴대폰 번호를 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        if (document.mfrm.cm.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "현재신장을 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        if (document.mfrm.kg.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "현재 몸무게를 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        if (document.mfrm.takeKcal.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "하루 목표 섭취 칼로리를 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        if (document.mfrm.targetScale.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "목표 체중을 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        if (document.mfrm.birthday.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "생년월일을 입력하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+
+        // 닉네임을 입력하지 않거나 중복인 경우에 알림창 표시
+        if (document.getElementById("nameNo").style.display == 'inline-block') {
+            swal({
+                title: "경고!",
+                text: "중복되는 닉네임은 사용할 수 없습니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        document.mfrm.submit();
+    };
 };
 
 // 배경 사진 사진 변경================================================================================================================
