@@ -902,7 +902,7 @@ function validateEmail() {
 // 필수 입력값 =====================================================================================================================
 window.onload = function () {
 	document.getElementById('editButton').onclick = function () {
-		if( document.mfrm.name.value.trim()editButton == '') {
+		if( document.mfrm.name.value.trim() == '') {
 			alert('닉네임을 입력하셔야 합니다'); 
 			return false;
 		}

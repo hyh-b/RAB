@@ -208,11 +208,15 @@ public class MypageController {
 
 	    Object principal = authentication.getPrincipal();
 	    CustomUserDetails customUserDetails = (CustomUserDetails) principal;
-	    System.out.println("마이페이지 삭제OK seq 가져와: " + customUserDetails.getM_seq());
 	    String seq = customUserDetails.getM_seq();
+	    String m_id = customUserDetails.getM_id();
 	    myto.setM_seq(seq);
 
 	    int flag = mydao.MypageDeleteOk(myto);
+	    // 탈퇴 회원 정보
+	    if ( flag == 0 ) {
+	    	mydao.MemberDeleteInfo(m_id);
+	    }
 
 //	    if (flag == 0) {
 //	        String profileName = myto.getM_profilename();

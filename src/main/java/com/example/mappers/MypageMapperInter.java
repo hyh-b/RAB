@@ -80,6 +80,11 @@ public interface MypageMapperInter {
 	@Delete("delete from Member where m_seq = #{m_seq}")
 	public abstract int mypageDelete_ok(MypageTO to);
 	
+	// 탈퇴 회원
+	@Insert("insert into deletedMember(m_id,deletedDate) values(#{m_id},now())")
+	public abstract int memberDeleteInfo(String m_id);
+	
+	
 //	@Delete("delete from Member where m_id='jihyeon'")
 //	public abstract int mypageDelete_ok(MypageTO to);
 }
