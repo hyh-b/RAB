@@ -119,8 +119,8 @@
 	        type: 'POST',
 	        data: { date: date },
 	        success: function(response) {
-	            console.log('신규 가입자 수: ' + response.newMember);
-	            console.log('탈퇴한 회원 수: ' + response.deletedMember);
+	            /* console.log('신규 가입자 수: ' + response.newMember);
+	            console.log('탈퇴한 회원 수: ' + response.deletedMember); */
 	            let nMember = response.newMember;
 	            let dMember = response.deletedMember;
 	            let mHtml = "";
