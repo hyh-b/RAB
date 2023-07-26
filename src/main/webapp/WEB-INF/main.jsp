@@ -441,14 +441,9 @@
               <a
                 href=""
                 class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              	style="padding-left: 10px;"
               >
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
+               <i class="fa-solid fa-plus" style="color: #fa1900;"></i>
                 몸무게 입력
               </a>
               </div>
@@ -459,14 +454,9 @@
               <a
                 href=""
                 class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+                style="padding-left: 10px;"
               >
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
+               <i class="fa-solid fa-plus" style="color: #2afa00;"></i>
                 목표 몸무게 재설정
               </a>
               </div>
