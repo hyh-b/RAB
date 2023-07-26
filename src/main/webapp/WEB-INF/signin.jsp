@@ -42,7 +42,7 @@
 			});
 		});
 		
-		
+		// 비밀번호 찾기
 		$('#pwBtn').click(function(event) {
 			event.preventDefault();
 			
@@ -92,6 +92,9 @@
     .fixed {
         z-index: 9999;
     }
+    
+    [x-cloak] { display: none; }
+    
 </style>
 </head>
 <body
@@ -278,8 +281,8 @@
 				        <img src="src/images/logo/rocatNOb.png" />
 				    </a>
 				    <div style="flex: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; color: black;">
-				        <p style="font-size: 45px; margin-bottom: 0;">WELCOME!</p><br><br><br>
-				        <p style="font-size: 25px; margin-top: 0;">로그인하여 더욱 많은<br><br>컨텐츠를 즐겨보세요</p>
+				        <p class="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">WELCOME!</p><br>
+				        <p class="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">로그인하여 더욱 많은<br>컨텐츠를 즐겨보세요</p>
 				    </div>
 				</div>
               </div>
@@ -368,7 +371,7 @@
 						<button @click="modalOpen = true" >
 							아이디 찾기
 						</button>
-						<div x-show="modalOpen" x-transition class="fixed top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5">
+						<div x-show.transition="modalOpen" x-cloak class="fixed top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5">
 							<div @click.outside="reset" class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
 							<h3 class="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl ">
 							  아이디 찾기
@@ -409,7 +412,7 @@
 					    비밀번호 찾기
 					</button>
 				
-					<div x-show="modalOpen" x-transition class="fixed top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5">
+					<div x-show.transition="modalOpen" x-cloak class="fixed top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5">
 					    <!-- 비밀번호 찾기 모달 내용 -->
 					    <div @click.outside="reset" class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
 							<h3 class="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl ">
