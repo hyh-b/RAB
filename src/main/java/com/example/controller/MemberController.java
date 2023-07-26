@@ -146,9 +146,9 @@ public class MemberController {
 		Object emailObject = userInfo.get("email");
 		String id = String.valueOf(idObject);
 		String email = String.valueOf(emailObject);
+		
 		session.setAttribute("userInfo", email);
 		session.setAttribute("access_token", access_token);
-		System.out.println("세션값:"+(String)session.getAttribute("access_token"));
 		
 		//가입한 회원이면 바로 로그인시키기 위해 login오브젝트 전달
 		if(mDao.confirmKakao(email) != null) { 
@@ -193,23 +193,17 @@ public class MemberController {
 	
 	//카카오 로그아웃
 	@RequestMapping("/klogout.do")
-	public ModelAndView klogout(HttpServletRequest request, HttpServletResponse response,Authentication authentication) {
-			
-		// 로그아웃 처리
-	   /* new SecurityContextLogoutHandler().logout(request, response, authentication);
-
-	    // OAuth2AuthenticationToken을 통해 OAuth2AuthorizedClient 얻기
-	    OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken)authentication;
-	    OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
-	        oauthToken.getAuthorizedClientRegistrationId(), 
-	        oauthToken.getName());
-
-	    // access token 가져오기
-	    String accessToken = client.getAccessToken().getTokenValue();
-	    System.out.println("토큰호출"+accessToken);
-	    OAuthService oAuthService = new OAuthService();
-	    // 카카오 로그아웃 API 호출
-	    oAuthService.kakaoLogout(accessToken);*/
+	public ModelAndView klogout(HttpSession session) {
+		
+		String access_Token = (String)session.getAttribute("access_token");
+		
+		OAuthService oau = new OAuthService();
+		
+		if(access_Token != null) {
+			oau.kakaoLogout(access_Token);
+			session.removeAttribute("access_token"); 
+			session.removeAttribute("userInfo");
+		}
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("kLogout");

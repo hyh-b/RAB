@@ -24,18 +24,24 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         Authentication authentication) throws IOException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         
+        HttpSession session = request.getSession();
+        //카카오 로그인 유저 엑세스토큰 저장
+        String tempUserInfo = (String) session.getAttribute("userInfo");
+        String tempAccessToken = (String) session.getAttribute("access_token");
+        
+        if(tempUserInfo != null) {
+        	
+        session = request.getSession(true);
+        session.setAttribute("userInfo", tempUserInfo);
+        session.setAttribute("access_token", tempAccessToken);
+        }
+        
         // 로그인시 ADMIN 권한이 있는 유저는 admin.do로 보내고 그렇지 않다면 main.do로
         if (roles.contains("ROLE_ADMIN")) {
             response.sendRedirect("/admin.do");
         } else {
             response.sendRedirect("/main.do");
         }
-        
-        
-          /* 로그인시 세션 추가하는 법
-            String username = authentication.getName();
-            HttpSession session = request.getSession();
-            session.setAttribute("username", username);*/
         
     }
     
