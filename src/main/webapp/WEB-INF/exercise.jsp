@@ -404,7 +404,7 @@ pageEncoding="UTF-8"%>
 	        <!-- Menu Item Dashboard -->
 	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
 	      <a
-	         href="board.do"
+	         href="notice_board.do"
 	         class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
 	         style="padding-left: 30px;"
 	       >
@@ -424,7 +424,7 @@ pageEncoding="UTF-8"%>
 	     
 	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
 	       <a
-	          href="board.do"
+	          href="board_list1.do"
 	          class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
 	          style="padding-left: 30px;"
 	        >
