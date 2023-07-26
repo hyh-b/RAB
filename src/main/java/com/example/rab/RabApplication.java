@@ -15,5 +15,5 @@ public class RabApplication extends  SpringBootServletInitializer {
 		SpringApplication.run(RabApplication.class, args);
 		
 	}	
-
+	
 }
