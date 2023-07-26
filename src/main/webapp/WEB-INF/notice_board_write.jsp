@@ -24,7 +24,7 @@ pageEncoding="UTF-8"%>
 $(document).ready(function() {
 	$('#myForm').submit(function(e) {
 	    if ($('#n_subject').val().trim() == '') {
-	      alert('제목을 입력하시오.');
+	    	 swal('제목을 입력하세요!', '제목을 입력하세요!', 'warning');
 	      e.preventDefault();  // 폼 제출을 방지합니다.    
 	    } else {
 	      let formData = new FormData(this);   
@@ -36,9 +36,7 @@ $(document).ready(function() {
 	        type: 'post',
 	        contentType: false,
 	        processData: false,
-	        success: function(response) {
-	        	console.log("콘솔플래그"+response.flag)
-	        	console.log("콘솔플래그ab"+response.flagAB)
+	        success: function(response) {	        	
         if (response.flag == 1 && response.flagAB == 1) {
           swal('이미지 업로드 성공!', '이미지가 업로드되었습니다.', 'success').then(function() { window.location.href='admin_notice_board.do'; });
         } else if(response.flag == 0 && response.flagAB == 1) {
@@ -557,23 +555,14 @@ $(document).ready(function() {
     </button>
   </div>
 </div>
-
-
-
-
   </div>
 </form>
-
-
-	    <!-- ============  Write 여기서 끝=================================== -->
-		
-				
+	    <!-- ============  Write 여기서 끝=================================== -->						
       <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Content Area End ===== -->
   </div>
   <!-- ===== Page Wrapper End ===== -->
-
 <script defer src="bundle.js"></script>
 </body>
 
