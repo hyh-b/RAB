@@ -25,7 +25,12 @@ $(document).ready(function() {
         
         // feedback ajax요청
         if (f_subject.trim() === "" || f_content.trim() === "") {
-            alert("제목과 내용을 입력해주세요.");
+             swal({
+                  title: "제목과 내용은 필수입니다!",
+                  text: "제목과 내용을 입력해주세요!",
+                  icon: "warning",
+                  button: "확인",            
+              });
         } else {
             $.ajax({
                 url: "/feedback_ok",
@@ -39,7 +44,13 @@ $(document).ready(function() {
                     f_content : f_content
                 },
                 success: function () {
-                    alert("소중한 피드백 감사합니다!");
+
+                    swal({
+	                  title: "소중한 피드백 감사합니다!",
+	                  text: "여러분의 피드백을 바탕으로 사이트 개선에 힘쓰겠습니다.",
+	                  icon: "success",
+	                  button: "확인",            
+             		 });
                     document.querySelector(".chatbot-dialog").style.display = "none";
                     resetForm();
                 },
@@ -47,7 +58,12 @@ $(document).ready(function() {
                     console.log("HTTP Status: " + jqXHR.status); // 서버로부터 반환된 HTTP 상태 코드
                     console.log("Throw Error: " + errorThrown); // 예외 정보
                     console.log("jqXHR Object: " + jqXHR.responseText); // 서버로부터 반환된 HTTP 응답 본문
-                    alert("업데이트에 실패했습니다");
+                     swal({
+	                  title: "X",
+	                  text: "업데이트에 실패했습니다!",
+	                  icon: "error",
+	                  button: "확인",            
+             		 });
                 },
             });
         }

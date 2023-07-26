@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -405,7 +406,7 @@ public class MainController {
 		    JsonArray feedback_datas = new JsonArray(); 
 		    
 		    
-		    System.out.println( " page 수 -> " + page);
+		    //System.out.println( " page 수 -> " + page);
 		    int pageSize = 10;  // 한 페이지에 보여줄 데이터의 개수
 	        int offset = page * pageSize;  // 가져올 데이터의 시작 위치
 		    
@@ -445,7 +446,7 @@ public class MainController {
 	    	 feedback_datas.add(feedback_data); 
 		    }	   	
 		    
-		    System.out.println( "\n 피드백 ajax 시작-> " + feedback_datas + "\n");
+		    //System.out.println( "\n 피드백 ajax 시작-> " + feedback_datas + "\n");
 
 		    return new ResponseEntity<String>( feedback_datas.toString(), HttpStatus.OK);
 		}
