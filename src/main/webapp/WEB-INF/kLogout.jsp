@@ -6,6 +6,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body>
 <script type="text/javascript">
 	//alert('로그아웃 되었습니다.')
 	swal({
@@ -13,12 +15,11 @@
            text: "로그아웃 되었습니다",
            icon: "success",
            button: "확인",
-      });
+      })
+      .then((value) => {location.href="/logout";});
 
-	location.href="/logout";
+	//location.href="/logout";
 </script>
-</head>
-<body>
 
 </body>
 </html>

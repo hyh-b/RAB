@@ -307,132 +307,13 @@
 	        </a>
 	      </li>
 
-<<<<<<< HEAD
-        <ul class="mb-6 flex flex-col gap-1.5">
-          <!-- Menu Item Dashboard -->
-
-          <!-- Menu Item Calendar -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="boardManagement.do"
-              @click="selected = (selected === 'Calendar' ? '':'Calendar')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
-            >
-
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="비고.png"
-      			width="24"
-      			height="24"
-   			/>
-
-              게시물관리
-            </a>
-          </li>
-          <!-- Menu Item Calendar -->
-
-          <!-- Menu Item Profile -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="feedback.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-             <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="게시판.png"
-      			width="24"
-      			height="24"
-   			/>
-             	피드백
-            </a>
-          </li>
-          <!-- Menu Item Profile -->
-
-              <!-- Menu Item Profile2 -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="admin.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-
-               <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="식단.png"
-      			width="24"
-      			height="24"
-   			/>
-             	회원관리
-            </a>
-          </li>
-          <!-- Menu Item Profile2 -->
-       
-
-          <!-- Menu Item Forms -->
-
-          <!-- Menu Item Tables -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="admin_notice_board.do"
-
-              @click="selected = (selected === 'Tables' ? '':'Tables')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
-            >
-            <img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="운동.png"
-      			width="24"
-      			height="24"
-   			/>
-
-              공지사항
-            </a>
-     
-          </li>
-          
-          <!-- Menu Item Tables -->
-		  <br/><br/>
-          <!-- Menu Item Settings -->
- 
-           
-        <li>
-			<a
-    			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-    			href="/klogout.do"
-    			@click="selected = (selected === 'Settings' ? '':'Settings')"
-    			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
-    			:class="page === 'settings' && 'bg-graydark'"
- 			>
-   			<img
-      			class="fill-current"
-      			src="/src/images/user/rocatNOb.png"
-      			alt="로그아웃"
-      			width="24"
-      			height="24"
-   			/>
-    			로그아웃
-  			</a>
-		</li>
-=======
 	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
 	        <a
 	           href="admin_notice_board.do"
 	           class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
 	           style="padding-left: 30px;"
 	         >
-	           <i class="fa-solid fa-bowl-food"></i>
+	           <i class="fa-solid fa-circle-info"></i>
 	           <path
 	             d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
 	             fill=""
@@ -471,8 +352,6 @@
 	            <a href="/klogout.do"><h1>로그아웃</h1></a>
 	          </button>
 			</li>
->>>>>>> 12755490bae35f1189188d2c536a16fe06af3916
-          
           <!-- Menu Item Settings -->
         </ul>
       </div>

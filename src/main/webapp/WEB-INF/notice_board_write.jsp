@@ -44,7 +44,6 @@ $(document).ready(function() {
         } else {
           swal('업로드 실패!', '아이디와 비밀번호를 확인해 주세요', 'warning');
         }
-        console.log('글쓰기 시도함');
 	        },
 	        error: function(e) {
 	          alert('[에러]' + e.status);

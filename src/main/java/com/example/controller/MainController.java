@@ -481,7 +481,7 @@ public class MainController {
 	    	 feedback_datas.add(feedback_data); 
 		    }	   	
 		    
-		    System.out.println( "\n 피드백 view 시작-> " + feedback_datas + "\n");
+		    //System.out.println( "\n 피드백 view 시작-> " + feedback_datas + "\n");
 
 		    return new ResponseEntity<String>( feedback_datas.toString(), HttpStatus.OK);
 		}
