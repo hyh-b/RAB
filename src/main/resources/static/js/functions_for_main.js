@@ -104,9 +104,9 @@
 			
       	},
      	  error: function (error) {
-         	console.log('에러는 -> ', error);
-         	console.log('\n 응답 JSON -> ', error.responseJSON);
-         	console.log('\n 응답 본문 -> ', error.responseText);
+         	//console.log('에러는 -> ', error);
+         	//console.log('\n 응답 JSON -> ', error.responseJSON);
+         	//console.log('\n 응답 본문 -> ', error.responseText);
 
       	 }
     	
@@ -177,7 +177,7 @@
 		            pieChart.render();
 		        },
 		        error: function(e) {
-		            console.log("pie에서 에러 ->", e);
+		            //console.log("pie에서 에러 ->", e);
 		        },
 		    });
 		}
@@ -240,7 +240,7 @@
 		            pieChart.render();
 		        },
 		        error: function(e) {
-		            console.log("pie에서 에러 ->", e);
+		            //console.log("pie에서 에러 ->", e);
 		        },
 		    });
 		}
@@ -383,7 +383,7 @@
 	      }
 	    },
 	    error: function(e) {
-	      console.log("BarChartForDate에서 에러 ->", e);
+	      //console.log("BarChartForDate에서 에러 ->", e);
 	    },
 	  });
 	}
@@ -461,9 +461,9 @@
 	            }
 	        },
 	        error: function (error) {
-	            console.log('에러는 -> ', error);
-	            console.log('\n 응답 JSON -> ', error.responseJSON);
-	            console.log('\n 응답 본문 -> ', error.responseText);
+	            //console.log('에러는 -> ', error);
+	            //console.log('\n 응답 JSON -> ', error.responseJSON);
+	            //console.log('\n 응답 본문 -> ', error.responseText);
 	        }
 	    });
 	}

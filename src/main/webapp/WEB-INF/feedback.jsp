@@ -18,7 +18,11 @@
 <!-- 구글 사이드 글씨체-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lugrasimo&display=swap" rel="stylesheet">
+
+ <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
 <!-- 이미지 아이콘 cdn -->
 <script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
@@ -191,7 +195,7 @@
 		        dataType: 'json',
 		        success: function(data) {
 		            if (data.length == 0) {  // 받아온 데이터가 없으면 더 이상 데이터가 없다는 것을 의미
-		                console.log("더 이상 데이터가 없습니다.");
+		                //console.log("더 이상 데이터가 없습니다.");
 		                isLoadingData = false;
 		                return;
 		            }
@@ -247,7 +251,7 @@
 		    }, { threshold: [0.2] });
 		
 		    function loadMoreData() {
-		        console.log("데이터 불러오는중..");
+		        //console.log("데이터 불러오는중..");
 		        feedbackList();
 		
 		        // 데이터 로드 후 마지막 행을 관찰 대상으로 설정
@@ -282,11 +286,16 @@
 				        var searchKey = $('#searchKey').val();
 				        var searchWord = $('#searchWord').val().trim();
 				        
-				        console.log(' searchKey ', searchKey);
-				        console.log(' searchWord ', searchWord);
+				        //console.log(' searchKey ', searchKey);
+				        //console.log(' searchWord ', searchWord);
 				
 				        if (!searchWord) {
-				            alert('검색어를 입력하세요!');
+				            swal({
+				                  title: "검색어를 입력하세요!",
+				                  text: "검색어를 입력하세요!",
+				                  icon: "warning",
+				                  button: "확인",            
+				              });
 				            return;
 				        }
 				
@@ -301,7 +310,7 @@
 				            	var searching = JSON.parse(response);
 				            	$('#feedbackTableBody').empty();
 				            	
-				            	console.log(' searching -> ', searching );
+				            	//console.log(' searching -> ', searching );
 				                displayFeedbackData(searching);
 				                isSearchResult = true;
 				            },

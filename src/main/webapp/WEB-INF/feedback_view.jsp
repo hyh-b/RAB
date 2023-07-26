@@ -13,6 +13,7 @@
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
    <style>
@@ -37,8 +38,8 @@ window.onload = function() {
     var f_seq = urlParams.get('f_seq');
     var m_seq = urlParams.get('m_seq');
     
-    console.log( ' f_seq -> ', f_seq );
-    console.log( ' m_seq -> ', m_seq );
+    //console.log( ' f_seq -> ', f_seq );
+    //console.log( ' m_seq -> ', m_seq );
     
     $.ajax({
         url: '/feedback_view',
@@ -50,7 +51,12 @@ window.onload = function() {
         dataType: 'json',
         success: function(data) {
             if (data.length == 0) {  // 받아온 데이터가 없으면 더 이상 데이터가 없다는 것을 의미
-                alert("더 이상 데이터가 없습니다.");
+            	swal({
+	                  title: "페이지 끝",
+	                  text: "더 이상 데이터가 없습니다.",
+	                  icon: "warning",
+	                  button: "확인",            
+           		 });
                 return;
             }
 

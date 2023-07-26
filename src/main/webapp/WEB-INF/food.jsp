@@ -910,8 +910,7 @@ pageEncoding="UTF-8"%>
       </button>
       <!-- Hamburger Toggle BTN 히든-->
       <a class="block flex-shrink-0 lg:hidden" href="index.html">
-<!--         <img src="src/images/logo/logo-icon.svg" alt="Logo" /> -->
-<!-- 		<i class="fa-solid fa-rocket bounce fa-xl"></i> -->
+
       </a>
     </div>
     
