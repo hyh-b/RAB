@@ -126,5 +126,11 @@ public class MypageDAO {
 		System.out.println("delete dao flag :  " + flag);
 		return flag;
 	}
+	
+	// 탈퇴 회원
+	public int MemberDeleteInfo ( String m_id ) {
+		int flag = mapper.memberDeleteInfo(m_id);
+		return flag;
+	}
 
 }
