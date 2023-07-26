@@ -62,7 +62,7 @@ public class NoticeBoardController {
 	    }
 
 
-	@RequestMapping("/notice_board.do")
+	@RequestMapping("/admin_notice_board.do")
 	public ModelAndView notice_board(HttpServletRequest request, Authentication authentication, String mId) {
 	    int cpage = 1;
 	    if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
@@ -100,13 +100,13 @@ public class NoticeBoardController {
 	    modelAndView.addObject("listTO", listTO);
 	    modelAndView.addObject("cpage", cpage);
 	    modelAndView.addObject("data", data);
-	    modelAndView.setViewName("notice_board");
+	    modelAndView.setViewName("admin_notice_board");
 	    modelAndView.addObject("zzinid", member.getM_id());
 		modelAndView.addObject("zzinnickname", member.getM_name());
 		modelAndView.addObject("profilename", m_profilename);
 	    return modelAndView;
 	}
-	@RequestMapping("/user_notice_board.do")
+	@RequestMapping("/notice_board.do")
 	public ModelAndView user_notice_board(HttpServletRequest request, Authentication authentication, String mId) {
 		int cpage = 1;
 		if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
@@ -143,7 +143,7 @@ public class NoticeBoardController {
 		modelAndView.addObject("listTO", listTO);
 		modelAndView.addObject("cpage", cpage);
 		modelAndView.addObject("data", data);
-		modelAndView.setViewName("user_notice_board");
+		modelAndView.setViewName("notice_board");
 		modelAndView.addObject("zzinid", member.getM_id());
 		modelAndView.addObject("zzinnickname", member.getM_name());
 		modelAndView.addObject("profilename", m_profilename);
@@ -151,7 +151,7 @@ public class NoticeBoardController {
 	}
 
 	
-	@RequestMapping("/notice_board_view.do")
+	@RequestMapping("/admin_notice_board_view.do")
 	public ModelAndView notice_board_view(HttpServletRequest request, Authentication authentication, String mId) {
 	    NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
 	    
@@ -192,7 +192,7 @@ public class NoticeBoardController {
 
 
 	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("notice_board_view");
+	    modelAndView.setViewName("admin_notice_board_view");
 	    modelAndView.addObject("bto", bto); // 게시물 정보를 ModelAndView에 추가
 	    modelAndView.addObject("atos", atos);
 	    modelAndView.addObject("noticeListTO", noticeListTO);
@@ -204,7 +204,7 @@ public class NoticeBoardController {
 
 
 
-	@RequestMapping("/user_notice_board_view.do")
+	@RequestMapping("/notice_board_view.do")
 	public ModelAndView user_notice_board_view(HttpServletRequest request, Authentication authentication, String mId) {
 	    NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
 	    
@@ -248,7 +248,7 @@ public class NoticeBoardController {
 	   
 
 	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("user_notice_board_view");
+	    modelAndView.setViewName("notice_board_view");
 	    modelAndView.addObject("bto", bto); // 게시물 정보를 ModelAndView에 추가
 	    modelAndView.addObject("atos", atos);
 	    modelAndView.addObject("noticeListTO", noticeListTO);
@@ -262,48 +262,48 @@ public class NoticeBoardController {
 
 
 	
-	@RequestMapping("/notice_board_write_ok.do")
-	public Map<String, Object> writeOKAjax(HttpServletRequest request, @RequestParam("uploads") MultipartFile[] uploads) {
-		CustomUserDetails customUserDetails = customUserDetailsService.getCurrentUserDetails();
-		String m_seq=customUserDetails.getM_seq();
-		NoticeBoardTO bto = new NoticeBoardTO();
-	    NoticeAlbumTO ato = new NoticeAlbumTO();
-	    
-	    String subject = request.getParameter("n_subject");
-	    bto.setN_subject(subject);
-	    String content = request.getParameter("n_content");
-	    bto.setN_content(content);
-	    bto.setM_seq(Integer.parseInt(m_seq));
-
-	    Map<String, Object> response = new HashMap<>();
-	    int flagAB = dao.writeOK(bto);
-
-	    int flag = 0;
-	    if (flagAB == 1) {
-	        for (MultipartFile file : uploads) {
-	            try {
-	                // Upload file to S3
-	                String fileUrl = s3FileUploadService.upload(file);
-
-	                // If the file was uploaded successfully, save its data to the database
-	                if (fileUrl != null) {
-	                    ato.setN_seq(bto.getN_seq());
-	                    ato.setNf_filename(fileUrl);
-	                    ato.setNf_filesize(file.getSize());
-	                    flag = abdao.noticeAlbum_ok(ato);
-	                } else {
-	                    //System.out.println("File upload failed for n_seq: " + bto.getN_seq());
-	                }
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    }
-
-	    response.put("flagAB", flagAB);
-	    response.put("flag", flag);
-	    return response;
-	}
+//	@RequestMapping("/notice_board_write_ok.do")
+//	public Map<String, Object> writeOKAjax(HttpServletRequest request, @RequestParam("uploads") MultipartFile[] uploads) {
+//		CustomUserDetails customUserDetails = customUserDetailsService.getCurrentUserDetails();
+//		String m_seq=customUserDetails.getM_seq();
+//		NoticeBoardTO bto = new NoticeBoardTO();
+//	    NoticeAlbumTO ato = new NoticeAlbumTO();
+//	    
+//	    String subject = request.getParameter("n_subject");
+//	    bto.setN_subject(subject);
+//	    String content = request.getParameter("n_content");
+//	    bto.setN_content(content);
+//	    bto.setM_seq(Integer.parseInt(m_seq));
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    int flagAB = dao.writeOK(bto);
+//
+//	    int flag = 0;
+//	    if (flagAB == 1) {
+//	        for (MultipartFile file : uploads) {
+//	            try {
+//	                // Upload file to S3
+//	                String fileUrl = s3FileUploadService.upload(file);
+//
+//	                // If the file was uploaded successfully, save its data to the database
+//	                if (fileUrl != null) {
+//	                    ato.setN_seq(bto.getN_seq());
+//	                    ato.setNf_filename(fileUrl);
+//	                    ato.setNf_filesize(file.getSize());
+//	                    flag = abdao.noticeAlbum_ok(ato);
+//	                } else {
+//	                    //System.out.println("File upload failed for n_seq: " + bto.getN_seq());
+//	                }
+//	            } catch (Exception e) {
+//	                e.printStackTrace();
+//	            }
+//	        }
+//	    }
+//
+//	    response.put("flagAB", flagAB);
+//	    response.put("flag", flag);
+//	    return response;
+//	}
 	@RequestMapping("/notice_board_delete_ok.do")
 	public Map<String, Object> notice_board_delete(HttpServletRequest request, NoticeBoardTO noticeBoardTO)  {
 		Map<String, Object> response = new HashMap<>();
@@ -451,84 +451,6 @@ public class NoticeBoardController {
 		modelAndView.addObject("profilename", m_profilename);
 	    return modelAndView;
 	}
-	
-	
-	//================================================ 내만의 작업공간 ===========================================================
-	
-//	@RequestMapping("/image/upload")
-//	public Map<String, Object> uploadImages(@RequestParam("upload") MultipartFile[] files , @RequestParam("uploadedImageUrl") String uploadedImageUrl) {
-//	    Map<String, Object> response = new HashMap<>();
-//
-//	    List<String> uploadedUrls = new ArrayList<>();
-//	    
-//	    for (MultipartFile file : files) {
-//	        try {
-//	        	System.out.println("이미지 업로드 시도: " + file.getOriginalFilename());
-//	            
-//	        	// Upload file to S3
-//	            String fileUrl = s3FileUploadService.upload(file);
-//	            
-//	            if (fileUrl != null) {
-//	                uploadedUrls.add(fileUrl);
-//	            }
-//	        } catch (Exception e) {
-//	            e.printStackTrace();
-//	            response.put("uploaded", 0);
-//	            response.put("error", e.getMessage());
-//	            return response;  // 실패한 경우 여기서 응답을 반환
-//	        }
-//	    }
-//
-//	    response.put("uploaded", 1);
-//	    response.put("urls", uploadedUrls);
-//
-//	    return response;
-//	}
-//	
-//	
-//	@RequestMapping("/notice_board_write_ok.do")
-//	public Map<String, Object> writeOKAjax(HttpServletRequest request, @RequestParam("uploads") MultipartFile[] uploads) {
-//	    CustomUserDetails customUserDetails = customUserDetailsService.getCurrentUserDetails();
-//	    String m_seq = customUserDetails.getM_seq();
-//	    NoticeBoardTO bto = new NoticeBoardTO();
-//	    NoticeAlbumTO ato = new NoticeAlbumTO();
-//
-//	    String subject = request.getParameter("n_subject");
-//	    bto.setN_subject(subject);
-//	    String content = request.getParameter("n_content");
-//	    bto.setN_content(content);
-//	    bto.setM_seq(Integer.parseInt(m_seq));
-//
-//	    Map<String, Object> response = new HashMap<>();
-//	    int flagAB = dao.writeOK(bto);
-//
-//	    int flag = 0;
-//	    if (flagAB == 1) {
-//	        for (MultipartFile file : uploads) {
-//	            try {
-//	                // Upload file to S3
-//	                String fileUrl = s3FileUploadService.upload(file);
-//
-//	                // If the file was uploaded successfully, save its data to the database
-//	                if (fileUrl != null) {
-//	                    ato.setN_seq(bto.getN_seq());
-//	                    ato.setNf_filename(fileUrl);
-//	                    ato.setNf_filesize(file.getSize());
-//	                    flag = abdao.noticeAlbum_ok(ato);
-//	                } else {
-//	                    //System.out.println("File upload failed for n_seq: " + bto.getN_seq());
-//	                }
-//	            } catch (Exception e) {
-//	                e.printStackTrace();
-//	            }
-//	        }
-//	    }
-//
-//	    response.put("flagAB", flagAB);
-//	    response.put("flag", flag);
-//	    return response;
-//	}
 }
 	
 	
-

@@ -3,7 +3,30 @@
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="n_seq" value="${requestScope.n_seq}" />
+
+<c:set var="noticeListTO" value="${requestScope.noticeListTO}"/>
+<c:set var="bto" value="${requestScope.bto}"/>
+<c:set var="n_seq" value="${bto.n_seq}" />
+<c:set var="n_subject" value="${bto.n_subject}" />
+<c:set var="n_content" value="${bto.n_content}" />
+<c:set var="ato" value="${requestScope.ato}"/>
+<c:set var="nf_filename" value="${ato.nf_filename}" />
+<c:set var="nf_filesize" value="${ato.nf_filesize}" />
+
+
+
+
+<c:set var="data" value="${requestScope.data}"/>
+<c:set var="filename" value="${requestScope.filename}"/>
+<!-- jstl 로 lists 받아옴 -->
+<%--  <c:forEach var="noticBoardList" items="${noticeBoardList}"> --%>
+<%--    <c:set var="n_seq" value="${noticBoardList.n_seq}" /> --%>
+<%--    <c:set var="n_subject" value="${noticBoardList.n_subject}" /> --%>
+<%--    <c:set var="n_content" value="${noticBoardList.n_content}" />	    --%>
+<%-- </c:forEach> --%>
+
+
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -13,8 +36,8 @@ pageEncoding="UTF-8"%>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>공지사항</title>
 <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet">
-<script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 
+<script src="https://kit.fontawesome.com/efe58e199b.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
@@ -36,67 +59,55 @@ pageEncoding="UTF-8"%>
 	.bounce:hover {
 	    animation: bounce 1s infinite;
 	}
+	
 	main {
 	    width: 100%;
 	    height: 100vh;
 	    overflow: auto;
 	}
-</style>
-<script>
-$(document).ready(function() {
-	  $('#ubtn').click(function(e) {
-	    e.preventDefault(); // 폼의 기본 제출 동작을 방지합니다.
-	    
-	    if ($('#n_subject').val().trim() == '') {
-	    	swal({
-	    		  title: "제목을 입력하세요",
-	    		  text: "제목을 입력하세요!",
-	    		  icon: "error",
-	    		  button: "확인",
-	    		});
-	      return false;
-	    }
-	    
-	    let formData = new FormData($('form[name="ufrm"]')[0]);	   
 
-	    $.ajax({
-	      url: 'notice_board_modify_ok.do?n_seq=${n_seq}',
-	      data: formData,
-	      dataType: 'json',
-	      type: 'post',
-	      contentType: false,
-	      processData: false,
-	      success: function(json) {
-	        if (json.flagAB == '1' && json.flag == '1') {
-	        	swal({
-	                title: "성공!",
-	                text: "수정에 성공했습니다.",
-	                icon: "success",
-	                button: "확인",
-	              }).then(function() { window.location.href='admin_notice_board.do'; });
-	   
-	        } else {
-	        	 swal({
-	                 title: "실패",
-	                 text: "수정에 실패했습니다.",
-	                 icon: "error",
-	                 button: "확인",
-	               }).then(function() { history.back(); });
-	        }
-			console.log(json);
-	      },
-	      error: function(e) {
-	        alert('[에러]' + e.status);
-	      }
-	    });
-	  });
-	});
+
+</style>
+
+<script type='text/javascript'>
+$(document).ready(function() {
+  $('#deleteLink').click(function(e) {  // 'deleteLink' ID를 가진 요소에 클릭 이벤트를 연결합니다.
+    e.preventDefault();  // 기본 클릭 동작(여기서는 페이지 이동)을 방지합니다.
+    
+    $.ajax({
+      url:'notice_board_delete_ok.do?n_seq=${n_seq}',  // 'deleteLink'의 'href' 속성 값을 사용하여 요청을 보냅니다.
+      type: 'GET',  // 요청 유형을 'GET'으로 설정합니다.
+      success: function(response) {
+        var flag = response.flag;  // 응답에서 플래그 값을 가져옵니다.
+        if (flag == 0) {
+          swal({
+            title: "성공!",
+            text: "삭제에 성공했습니다.",
+            icon: "success",
+            button: "확인",
+          }).then(function() { window.location.href='admin_notice_board.do'; });
+        } else {
+          swal({
+            title: "실패",
+            text: "삭제에 실패했습니다.",
+            icon: "error",
+            button: "확인",
+          }).then(function() { history.back(); });
+        }
+      },
+      error: function(error) {
+        console.log('에러 발생: ', error);
+      }
+    });
+  });
+});
 </script>
+
 
 
 </head>
 <body
-   x-data="{ page: 'buttons', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'buttons', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
           darkMode = JSON.parse(localStorage.getItem('darkMode'));
           $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -300,58 +311,77 @@ $(document).ready(function() {
   </div>
 </aside>
 
-
       <!-- ===== Header End ===== -->
 
       <!-- ===== Main Content Start ===== -->
-      <main>
-  			<!-- ============  write 여기부터 시작	=================================== -->
-
-	<form action="notice_board_modify_ok.do?n_seq=${n_seq}" method="post" name="ufrm" enctype="multipart/form-data">
-  <div class="button-container">
-    <div class="upload-container">
-      <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div class="board_write">
-          <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-            <table>
-              <tr>
-                <th>제목</th>
-                <td colspan="3"><input type="text" name="n_subject" value="" id="n_subject" class="board_view_input" /></td>
-              </tr>
-              <tr>
-                <th>내용</th>
-                <td colspan="3">
-                  <textarea name="n_content" id="n_content" class="board_editor_area"></textarea>
-                </td>
-              </tr>
-             <tr>
-				    <th>사진 등록</th>
-					    <td colspan="3">
-					        <div class="flex">
-					            <input type="file" name="upload" multiple class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" />
-					        </div>
-					   </td>
-				</tr>
-            </table>
-          </div>
-        </div>
+      
+<!-- ============  view 보여지는부분	=================================== -->
+<main>
+<table border="1" class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" style="width: 100%; height: 100%;">
+  <!-- 제목 행 -->
+	 <tr>
+	  <td class="p-3 border-t border-b text-center">
+	    <h class="mb-3 text-xl font-semibold text-black dark:text-white" style="font-weight: bold;">
+	      <a>${n_subject}</a>
+	    </h>
+	  </td>
+	</tr>
+  <!-- 이미지 행 -->
+  
+    <!--===================================== 이미지 보여주는 부분 =======================================  -->
+    <c:forEach items="${atos}" var="ato">
+      <c:if test="${not empty ato.nf_filename}">
+      <tr>
+  		<td class="p-3 border-t border-b">
+	        <a class="block px-4">
+	          <img src="${ato.nf_filename}" alt="Cards" />
+	        </a></td>
+		</tr>
+      </c:if>
+    </c:forEach>
+    <!--===================================== 이미지 보여주는 부분 =======================================  -->
+  
+  <!-- 내용 행 -->
+  <tr>
+    <td class="p-3 border-t border-b">
+      <div class="p-6">
+        <p class="font-medium">
+          <c:out value="${n_content}"/>
+        </p>
       </div>
+    </td>
+  </tr>
+</table>
+
+
+
+	<div class="align_left">
+    	<a href="admin_notice_board.do?cpage=${noticeListTO.cpage}"
+			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+			   style="float: right;">
+			   목록
+			</a>
     </div>
-  </div>
-  <div class="btn_area">
-    <div class="align_left">
-	    <input type="button" value="목록" class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer; float: right;" onclick="location.href='admin_notice_board.do?cpage=${noticeListTO.cpage}'" />
-	</div>
-    <div class="align_right">
-	    <input type="submit" id="ubtn" value="등록" class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" style="cursor: pointer; float: right;" />
-	</div>
-  </div>
-</form>
+	<div class="align_left">
+          <a href="notice_board_modify.do?n_seq=${n_seq}"
+			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+			   style="float: right;">
+			   수정
+			</a>
+    </div>
+   <a href="notice_board_delete_ok.do?n_seq=${n_seq}"
+	   id="deleteLink"  
+	   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
+	   style="float: right;">
+	   삭제
+	</a>
+
+	
+	
+</main>
 
 
-	    <!-- ============  Write 여기서 끝=================================== -->
-		
-				
+<!-- ============  view 보여지는부분	=================================== -->
       <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Content Area End ===== -->
