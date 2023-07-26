@@ -38,13 +38,12 @@ $(document).ready(function() {
 	        processData: false,
 	        success: function(response) {
         if (response.flag == 1 && response.flagAB == 1) {
-          swal('이미지 업로드 성공!', '이미지가 업로드되었습니다.', 'success').then(function() { window.location.href='notice_board.do'; });
+          swal('이미지 업로드 성공!', '이미지가 업로드되었습니다.', 'success').then(function() { window.location.href='admin_notice_board.do'; });
         } else if(response.flag == 0 && response.flagAB == 1) {
-          swal('텍스트 업로드 성공!', '텍스트가 업로드되었습니다.', 'success').then(function() { window.location.href='notice_board.do'; });
+          swal('텍스트 업로드 성공!', '텍스트가 업로드되었습니다.', 'success').then(function() { window.location.href='admin_notice_board.do'; });
         } else {
           swal('업로드 실패!', '아이디와 비밀번호를 확인해 주세요', 'warning');
         }
-        console.log('글쓰기 시도함');
 	        },
 	        error: function(e) {
 	          alert('[에러]' + e.status);
@@ -73,11 +72,16 @@ $(document).ready(function() {
 	.bounce:hover {
 	    animation: bounce 1s infinite;
 	}
+	main {
+	    width: 100%;
+	    height: 100vh;
+	    overflow: auto;
+	}
 </style>
 
 </head>
 <body
-  x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+   x-data="{ page: 'buttons', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
           darkMode = JSON.parse(localStorage.getItem('darkMode'));
           $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -104,10 +108,12 @@ $(document).ready(function() {
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
-    <a href="/main.do">
-<!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket bounce fa-10x"></i>
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+    <a href="/admin.do">
+    
+   <!--  사이트 로고  -->
+
+     <img src="src/images/logo/logo2.jpg" width="100%" height="100%" />
     </a>
 
     <button
@@ -131,7 +137,9 @@ $(document).ready(function() {
   </div>
   <!-- SIDEBAR HEADER -->
 
-  <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+  <div
+    class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear"
+  >
     <!-- Sidebar Menu -->
     <nav
       class="mt-5 py-4 px-4 lg:mt-9 lg:px-6"
@@ -140,10 +148,11 @@ $(document).ready(function() {
         selected = JSON.parse(localStorage.getItem('selected'));
         $watch('selected', value => localStorage.setItem('selected', JSON.stringify(value)))"
     >
+    </nav>
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
-
+        
 
         <ul class="mb-6 flex flex-col gap-1.5">
           <!-- Menu Item Dashboard -->
@@ -152,11 +161,20 @@ $(document).ready(function() {
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="notice_board.do"
+              href="boardManagement.do"
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
             >
-           	공지사항
+
+            <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="비고.png"
+      			width="24"
+      			height="24"
+   			/>
+
+              게시물관리
             </a>
           </li>
           <!-- Menu Item Calendar -->
@@ -166,12 +184,19 @@ $(document).ready(function() {
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
 
-              href="board.do"
+              href="feedback.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-            게시판
+             <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="게시판.png"
+      			width="24"
+      			height="24"
+   			/>
+             	피드백
             </a>
           </li>
           <!-- Menu Item Profile -->
@@ -180,12 +205,20 @@ $(document).ready(function() {
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
+              href="admin.do"
               @click="selected = (selected === 'Profile' ? '':'Profile')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
               :class="page === 'profile' && 'bg-graydark'"
             >
-           	식단
+
+               <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="식단.png"
+      			width="24"
+      			height="24"
+   			/>
+             	회원관리
             </a>
           </li>
           <!-- Menu Item Profile2 -->
@@ -197,34 +230,23 @@ $(document).ready(function() {
           <li>
             <a
               class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="exercise.do"
+              href="adminAnnouncement.do"
 
               @click="selected = (selected === 'Tables' ? '':'Tables')"
               :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
             >
-              운동
+            <img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="운동.png"
+      			width="24"
+      			height="24"
+   			/>
+
+              공지사함
             </a>
-            
      
           </li>
-          
-          <!--  마이페이지 li -->
-             
-           <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="profile.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-             마이페이지
-            </a>
-          </li>
-
-          
-          <!--  -->
           
           <!-- Menu Item Tables -->
 		  <br/><br/>
@@ -239,6 +261,13 @@ $(document).ready(function() {
     			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
     			:class="page === 'settings' && 'bg-graydark'"
  			>
+   			<img
+      			class="fill-current"
+      			src="/src/images/user/rocatNOb.png"
+      			alt="로그아웃"
+      			width="24"
+      			height="24"
+   			/>
     			로그아웃
   			</a>
 		</li>
@@ -246,7 +275,13 @@ $(document).ready(function() {
           <!-- Menu Item Settings -->
         </ul>
       </div>
-      </nav>
+
+       
+    <!-- Sidebar Menu -->
+
+    <!-- Promo Box -->
+
+    <!-- Promo Box -->
   </div>
 </aside>
 
@@ -537,7 +572,7 @@ $(document).ready(function() {
   </div>
   <div class="btn_area">
     <div class="align_left">
-     	<a href="notice_board.do?cpage=${noticeListTO.cpage}"
+     	<a href="admin_notice_board.do?cpage=${noticeListTO.cpage}"
 			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
 			   style="float: right;">
 			   목록
