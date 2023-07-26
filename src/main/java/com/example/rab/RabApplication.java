@@ -10,6 +10,10 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = {"com.example.jwt","com.example.kakaoicloud","com.example.upload","com.example.rab","com.example.kakao","com.example.security","com.example.controller","com.example.model", "com.example.boardmodel", "com.example.mappers"})
+<<<<<<< HEAD
+=======
+
+>>>>>>> 38f5ce4d9fc5a75a63a6ffd042f530f545b1ce9f
 public class RabApplication extends SpringBootServletInitializer {
 	
 	@Override
