@@ -360,6 +360,7 @@ pageEncoding="UTF-8"%>
 				    		  icon: "error",
 				    		  button: "확인",
 				    	});
+		                $('#foodName1').val('');
 		            }
 		        },
 		        error: function(e) {
@@ -381,6 +382,7 @@ pageEncoding="UTF-8"%>
 		    buttons: {
 		        '취소': function() {
 		        	$('#foodComent1').empty();
+		        	$('#foodName1').val('');
 		            $(this).dialog('close');
 		        },
 				"확인": function() {
