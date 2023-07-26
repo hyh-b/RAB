@@ -64,7 +64,7 @@ pageEncoding="UTF-8"%>
 
 </head>
 <body
-  x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+ x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
   x-init="
           darkMode = JSON.parse(localStorage.getItem('darkMode'));
           $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -91,10 +91,10 @@ pageEncoding="UTF-8"%>
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px; padding-bottom: 0px;padding-top: 40px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket bounce fa-10x"></i>
+		<i class="fa-solid fa-rocket bounce fa-10x" style="padding-top: 20px;"></i>
     </a>
 
     <button
@@ -129,106 +129,142 @@ pageEncoding="UTF-8"%>
     >
       <!-- Menu Group -->
       <div>
-        <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">메뉴</h3>
+	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 0px;">Menu</h3>
+		  <hr class="theme1">
+	
+	      <ul class="mb-6 flex flex-col gap-1.5">
+	        <!-- Menu Item Dashboard -->
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	      <a
+	         href="notice_board.do"
+	         class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	         style="padding-left: 30px;"
+	       >
+	       <i class="fa-solid fa-circle-info"></i>
+	       <path
+	         d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	         fill=""
+	       />
+	       <path
+	         d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	         fill=""
+	       />
+	       </svg>
+	       <h1>공지사항</h1>
+	      </a>
+	     </li>
+	     
+	     <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	       <a
+	          href="board_list1.do"
+	          class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	          style="padding-left: 30px;"
+	        >
+	          <i class="fa-solid fa-users"></i>
+	          <path
+	            d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	            fill=""
+	          />
+	          <path
+	            d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	            fill=""
+	          />
+	          </svg>
+	          <h1>게시판</h1>
+	        </a>
+	      </li>
 
-
-        <ul class="mb-6 flex flex-col gap-1.5">
-          <!-- Menu Item Dashboard -->
-
-          <!-- Menu Item Calendar -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="notice_board.do"
-              @click="selected = (selected === 'Calendar' ? '':'Calendar')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Calendar') && (page === 'calendar') }"
-            >
-           	공지사항
-            </a>
-          </li>
-          <!-- Menu Item Calendar -->
-
-          <!-- Menu Item Profile -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="board.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-            게시판
-            </a>
-          </li>
-          <!-- Menu Item Profile -->
-
-              <!-- Menu Item Profile2 -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="food.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-           	식단
-            </a>
-          </li>
-          <!-- Menu Item Profile2 -->
-       
-
-          <!-- Menu Item Forms -->
-
-          <!-- Menu Item Tables -->
-          <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-              href="exercise.do"
-
-              @click="selected = (selected === 'Tables' ? '':'Tables')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Tables') && (page === 'Tables') }"
-            >
-              운동
-            </a>
-            
-     
-          </li>
-          
-          <!--  마이페이지 li -->
-             
-           <li>
-            <a
-              class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-
-              href="profile.do"
-              @click="selected = (selected === 'Profile' ? '':'Profile')"
-              :class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Profile') && (page === 'profile') }"
-              :class="page === 'profile' && 'bg-graydark'"
-            >
-             마이페이지
-            </a>
-          </li>
-
-          
-          <!--  -->
-          
-          <!-- Menu Item Tables -->
-		  <br/><br/>
-          <!-- Menu Item Settings -->
- 
-           
-        <li>
-			<a
-    			class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
-    			href="/klogout.do"
-    			@click="selected = (selected === 'Settings' ? '':'Settings')"
-    			:class="{ 'bg-graydark dark:bg-meta-4': (selected === 'Settings') && (page === 'settings') }"
-    			:class="page === 'settings' && 'bg-graydark'"
- 			>
-    			로그아웃
-  			</a>
-		</li>
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	        <a
+	           href="food.do"
+	           class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	           style="padding-left: 30px;"
+	         >
+	           <i class="fa-solid fa-bowl-food"></i>
+	           <path
+	             d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	             fill=""
+	           />
+	           <path
+	             d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	             fill=""
+	           />
+	           </svg>
+	           <h1>음식</h1>
+	         </a>
+	      </li>
+	      
+	      <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	         <a
+	            href="exercise.do"
+	            class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	            style="padding-left: 30px;"
+	          >
+	            <i class="fa-solid fa-dumbbell"></i>
+	            <path
+	              d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	              fill=""
+	            />
+	            <path
+	              d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	              fill=""
+	            />
+	            </svg>
+	            <h1>운동</h1>
+	          </a>
+	       </li>
+			<br/><br/>
+			<h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Others</h3>
+          	<hr class="theme1">
+	          <!-- Menu Item Settings -->
+	        <li class="sideMenu" style="height: 50px; padding-top: 20px;">
+	          <a
+	              href="profile.do"
+	              class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+	              style="padding-left: 30px;"
+	            >
+	              <svg
+	                class="fill-current"
+	                width="22"
+	                height="22"
+	                viewBox="0 0 22 22"
+	                fill="none"
+	                xmlns="http://www.w3.org/2000/svg"
+	              >
+	                <path
+	                  d="M11 9.62499C8.42188 9.62499 6.35938 7.59687 6.35938 5.12187C6.35938 2.64687 8.42188 0.618744 11 0.618744C13.5781 0.618744 15.6406 2.64687 15.6406 5.12187C15.6406 7.59687 13.5781 9.62499 11 9.62499ZM11 2.16562C9.28125 2.16562 7.90625 3.50624 7.90625 5.12187C7.90625 6.73749 9.28125 8.07812 11 8.07812C12.7188 8.07812 14.0938 6.73749 14.0938 5.12187C14.0938 3.50624 12.7188 2.16562 11 2.16562Z"
+	                  fill=""
+	                />
+	                <path
+	                  d="M17.7719 21.4156H4.2281C3.5406 21.4156 2.9906 20.8656 2.9906 20.1781V17.0844C2.9906 13.7156 5.7406 10.9656 9.10935 10.9656H12.925C16.2937 10.9656 19.0437 13.7156 19.0437 17.0844V20.1781C19.0094 20.8312 18.4594 21.4156 17.7719 21.4156ZM4.53748 19.8687H17.4969V17.0844C17.4969 14.575 15.4344 12.5125 12.925 12.5125H9.07498C6.5656 12.5125 4.5031 14.575 4.5031 17.0844V19.8687H4.53748Z"
+	                  fill=""
+	                />
+	              </svg>
+	              <h1>프로필</h1>
+	            </a>
+	        </li>
+	        <li>
+				<button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+	            <svg
+	              class="fill-current"
+	              width="22"
+	              height="22"
+	              viewBox="0 0 22 22"
+	              fill="none"
+	              xmlns="http://www.w3.org/2000/svg"
+	            >
+	              <path
+	                d="M15.5375 0.618744H11.6531C10.7594 0.618744 10.0031 1.37499 10.0031 2.26874V4.64062C10.0031 5.05312 10.3469 5.39687 10.7594 5.39687C11.1719 5.39687 11.55 5.05312 11.55 4.64062V2.23437C11.55 2.16562 11.5844 2.13124 11.6531 2.13124H15.5375C16.3625 2.13124 17.0156 2.78437 17.0156 3.60937V18.3562C17.0156 19.1812 16.3625 19.8344 15.5375 19.8344H11.6531C11.5844 19.8344 11.55 19.8 11.55 19.7312V17.3594C11.55 16.9469 11.2062 16.6031 10.7594 16.6031C10.3125 16.6031 10.0031 16.9469 10.0031 17.3594V19.7312C10.0031 20.625 10.7594 21.3812 11.6531 21.3812H15.5375C17.2219 21.3812 18.5625 20.0062 18.5625 18.3562V3.64374C18.5625 1.95937 17.1875 0.618744 15.5375 0.618744Z"
+	                fill=""
+	              />
+	              <path
+	                d="M6.05001 11.7563H12.2031C12.6156 11.7563 12.9594 11.4125 12.9594 11C12.9594 10.5875 12.6156 10.2438 12.2031 10.2438H6.08439L8.21564 8.07813C8.52501 7.76875 8.52501 7.2875 8.21564 6.97812C7.90626 6.66875 7.42501 6.66875 7.11564 6.97812L3.67814 10.4844C3.36876 10.7938 3.36876 11.275 3.67814 11.5844L7.11564 15.0906C7.25314 15.2281 7.45939 15.3312 7.66564 15.3312C7.87189 15.3312 8.04376 15.2625 8.21564 15.125C8.52501 14.8156 8.52501 14.3344 8.21564 14.025L6.05001 11.7563Z"
+	                fill=""
+	              />
+	            </svg>
+	            <a href="/klogout.do"><h1>로그아웃</h1></a>
+	          </button>
+			</li>
           
           <!-- Menu Item Settings -->
         </ul>
@@ -237,54 +273,26 @@ pageEncoding="UTF-8"%>
   </div>
 </aside>
 
-
     <!-- ===== Sidebar End ===== -->
 
     <!-- ===== Content Area Start ===== -->
     <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
       <!-- ===== Header Start ===== -->
-      <header
-  class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
->
-  <div
-    class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11"
-  >
+      <header class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
+  		<div class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
     <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
-      <!-- Hamburger Toggle BTN -->
+      <!-- Hamburger Toggle BTN 로고메뉴-->
       <button
         class="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
         @click.stop="sidebarToggle = !sidebarToggle"
       >
-        <span class="relative block h-5.5 w-5.5 cursor-pointer">
-          <span class="du-block absolute right-0 h-full w-full">
-            <span
-              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white"
-              :class="{ '!w-full delay-300': !sidebarToggle }"
-            ></span>
-            <span
-              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white"
-              :class="{ '!w-full delay-400': !sidebarToggle }"
-            ></span>
-            <span
-              class="relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white"
-              :class="{ '!w-full delay-500': !sidebarToggle }"
-            ></span>
-          </span>
-          <span class="du-block absolute right-0 h-full w-full rotate-45">
-            <span
-              class="absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white"
-              :class="{ 'h-0 delay-[0]': !sidebarToggle }"
-            ></span>
-            <span
-              class="delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white"
-              :class="{ 'h-0 dealy-200': !sidebarToggle }"
-            ></span>
-          </span>
-        </span>
+      	<!-- 아이콘을 여기에 추가 -->
+    	<i class="fa-solid fa-rocket bounce fa-xl"></i>
       </button>
-      <!-- Hamburger Toggle BTN -->
+      <!-- Hamburger Toggle BTN 히든-->
       <a class="block flex-shrink-0 lg:hidden" href="index.html">
-        <img src="src/images/logo/logo-icon.svg" alt="Logo" />
+<!--         <img src="src/images/logo/logo-icon.svg" alt="Logo" /> -->
+<!-- 		<i class="fa-solid fa-rocket bounce fa-xl"></i> -->
       </a>
     </div>
     
@@ -439,9 +447,7 @@ pageEncoding="UTF-8"%>
           
           
           
-          <button
-            class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-          >
+          <button class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
             <svg
               class="fill-current"
               width="22"
@@ -500,12 +506,7 @@ pageEncoding="UTF-8"%>
 		                </c:forEach>
 		            </tbody>		            
   			</table>		
-			<a href="notice_board_write.do?cpage=${cpage}"
-			   class="inline-flex items-center justify-center rounded-full bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" 
-			   style="float: right;">
-			   쓰기
-			</a>
-
+			
 		
         <!--=======  페이징 시작 =========================================-->
 		<div style="display: flex; justify-content: center;">

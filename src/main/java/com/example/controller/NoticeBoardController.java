@@ -62,7 +62,7 @@ public class NoticeBoardController {
 	    }
 
 
-	@RequestMapping("/notice_board.do")
+	@RequestMapping("/admin_notice_board.do")
 	public ModelAndView notice_board(HttpServletRequest request, Authentication authentication, String mId) {
 	    int cpage = 1;
 	    if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
@@ -100,13 +100,13 @@ public class NoticeBoardController {
 	    modelAndView.addObject("listTO", listTO);
 	    modelAndView.addObject("cpage", cpage);
 	    modelAndView.addObject("data", data);
-	    modelAndView.setViewName("notice_board");
+	    modelAndView.setViewName("admin_notice_board");
 	    modelAndView.addObject("zzinid", member.getM_id());
 		modelAndView.addObject("zzinnickname", member.getM_name());
 		modelAndView.addObject("profilename", m_profilename);
 	    return modelAndView;
 	}
-	@RequestMapping("/user_notice_board.do")
+	@RequestMapping("/notice_board.do")
 	public ModelAndView user_notice_board(HttpServletRequest request, Authentication authentication, String mId) {
 		int cpage = 1;
 		if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
@@ -143,7 +143,7 @@ public class NoticeBoardController {
 		modelAndView.addObject("listTO", listTO);
 		modelAndView.addObject("cpage", cpage);
 		modelAndView.addObject("data", data);
-		modelAndView.setViewName("user_notice_board");
+		modelAndView.setViewName("notice_board");
 		modelAndView.addObject("zzinid", member.getM_id());
 		modelAndView.addObject("zzinnickname", member.getM_name());
 		modelAndView.addObject("profilename", m_profilename);
@@ -151,7 +151,7 @@ public class NoticeBoardController {
 	}
 
 	
-	@RequestMapping("/notice_board_view.do")
+	@RequestMapping("/admin_notice_board_view.do")
 	public ModelAndView notice_board_view(HttpServletRequest request, Authentication authentication, String mId) {
 	    NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
 	    
@@ -192,7 +192,7 @@ public class NoticeBoardController {
 
 
 	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("notice_board_view");
+	    modelAndView.setViewName("admin_notice_board_view");
 	    modelAndView.addObject("bto", bto); // 게시물 정보를 ModelAndView에 추가
 	    modelAndView.addObject("atos", atos);
 	    modelAndView.addObject("noticeListTO", noticeListTO);
@@ -204,7 +204,7 @@ public class NoticeBoardController {
 
 
 
-	@RequestMapping("/user_notice_board_view.do")
+	@RequestMapping("/notice_board_view.do")
 	public ModelAndView user_notice_board_view(HttpServletRequest request, Authentication authentication, String mId) {
 	    NoticeBoardTO bto = new NoticeBoardTO(); // 게시물 정보 가져오기
 	    
@@ -248,7 +248,7 @@ public class NoticeBoardController {
 	   
 
 	    ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.setViewName("user_notice_board_view");
+	    modelAndView.setViewName("notice_board_view");
 	    modelAndView.addObject("bto", bto); // 게시물 정보를 ModelAndView에 추가
 	    modelAndView.addObject("atos", atos);
 	    modelAndView.addObject("noticeListTO", noticeListTO);
@@ -454,4 +454,3 @@ public class NoticeBoardController {
 }
 	
 	
-
