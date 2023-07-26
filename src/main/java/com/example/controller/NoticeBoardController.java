@@ -269,7 +269,7 @@ public class NoticeBoardController {
 		String m_seq=customUserDetails.getM_seq();
 		NoticeBoardTO bto = new NoticeBoardTO();
 	    NoticeAlbumTO ato = new NoticeAlbumTO();
-	    
+	    System.out.println("보드시작");
 	    String subject = request.getParameter("n_subject");
 	    bto.setN_subject(subject);
 	    String content = request.getParameter("n_content");
@@ -280,18 +280,23 @@ public class NoticeBoardController {
 	    int flagAB = dao.writeOK(bto);
 
 	    int flag = 0;
+	    System.out.println("flagab값"+flagAB);
 	    if (flagAB == 1) {
 	        for (MultipartFile file : uploads) {
 	            try {
 	                // Upload file to S3
 	                String fileUrl = s3FileUploadService.upload(file);
-
+	                System.out.println("파일유알엘"+fileUrl);
 	                // If the file was uploaded successfully, save its data to the database
 	                if (fileUrl != null) {
 	                    ato.setN_seq(bto.getN_seq());
+	                    System.out.println("n_seq"+bto.getN_seq());
 	                    ato.setNf_filename(fileUrl);
+	                    System.out.println("파일유알엘 세부:"+fileUrl);
 	                    ato.setNf_filesize(file.getSize());
+	                    System.out.println("파일사이즈 세부:"+file.getSize());
 	                    flag = abdao.noticeAlbum_ok(ato);
+	                    System.out.println("flag :"+flag);
 	                } else {
 	                    //System.out.println("File upload failed for n_seq: " + bto.getN_seq());
 	                }
@@ -299,6 +304,7 @@ public class NoticeBoardController {
 	                e.printStackTrace();
 	            }
 	        }
+	        System.out.println("끝");
 	    }
 
 	    response.put("flagAB", flagAB);
