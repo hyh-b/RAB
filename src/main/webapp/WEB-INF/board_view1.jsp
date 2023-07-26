@@ -193,31 +193,48 @@ for (CommentTO Cto : comments ) {
 <script type="text/javascript">
 window.onload = function () {
     document.getElementById('cbtn').onclick = function () {
-		// 필수 입력값 검사
-		if(document.cfrm.cwriter.value.trim() == '' ){
-			alert('글쓴이를 입력 하셔야 합니다');
-			return false;
-		}
-		if(document.cfrm.ccontent.value.trim() == '' ){
-			alert('내용을 입력 하셔야 합니다');
-			return false;
-		}
+        // 필수 입력값 검사
+        if (document.cfrm.cwriter.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "글쓴이를 입력 하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        if (document.cfrm.ccontent.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "내용을 입력 하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
 
-		document.cfrm.submit();
+        document.cfrm.submit();
     };
 };
 
 function confirmDelete() {
-	var shouldDelete = confirm('삭제 이후에는 복구할 수 없습니다 정말로 이 글을 삭제하시겠습니까?');
-	if (shouldDelete) {
-		// "예"를 선택한 경우 글 삭제 URL로 리디렉션
-		location.href = 'board_delete_ok1.do?seq=<%=seq %>&cpage=<%=cpage%>';
-	} else {
-		return;
-	};
-};
-
+    swal({
+        title: "주의!",
+        text: "삭제 이후에는 복구할 수 없습니다. 정말로 이 글을 삭제하시겠습니까?",
+        icon: "warning",
+        buttons: ["아니오", "예"],
+        dangerMode: true,
+    }).then((shouldDelete) => {
+        if (shouldDelete) {
+            // "예"를 선택한 경우 글 삭제 URL로 리디렉션
+        	location.href = 'board_delete_ok1.do?seq=<%=seq %>&cpage=<%=cpage%>';
+        } else {
+            return;
+        }
+    });
+}
 </script>
+
 </head>
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
