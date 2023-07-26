@@ -57,6 +57,20 @@ $(document).ready(function() {
 
 </script>
 <style>
+.theme1 {margin-bottom:30px; border:0px; height:5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.5), transparent);}
+	
+	/*============ 사이드 로고 메뉴 폰트 ==========*/
+	h3.mb-4.ml-4.text-sm.font-medium.text-bodydark2 {
+        font-size: 30px;
+		font-family: 'Cuprum', sans-serif;
+    }
+	/*=====================================*/
+    
+	/*============ 사이드 (공지사항 , 게시판 , 식단 , 운동 , 내정보 , 로그아웃) ==========*/
+    h1 {
+	    font-size: 25px;
+     	font-family: 'Josefin Sans', sans-serif;
+	}
     @keyframes bounce {
 	    0%, 20%, 50%, 80%, 100% {
 	        transform: translateY(0);
