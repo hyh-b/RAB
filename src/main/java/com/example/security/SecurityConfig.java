@@ -1,6 +1,7 @@
 package com.example.security;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.sql.DataSource;
 
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -18,6 +21,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import com.example.model.MemberDAO;
@@ -49,13 +53,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+			.accessDecisionManager(new AffirmativeBased(Arrays.asList(
+	                new WebExpressionVoter(),
+	                new RoleVoter(),
+	                new RestrictAdminAccessVoter())))
 			.antMatchers("/signup2.do").hasRole("SIGNUP")
 			.antMatchers("/","signin.do","/signup.do","/signup_ok.do","/klogout.do","/kSignup_ok.do","/kakao.do","/idCheck.do",
 					"/reset_password","/reset_password_ok","/findId","/findPw","/overlappingLogin.do",
 					"/css/**","/fonts/**","/js/**","/sass/**","/style.css","/bundle.js","/img/**","/src/images/**").permitAll()
 			.antMatchers("/admin.do","/adminAnnouncement.do","/boardManagement.do","/feedback.do","/feedback_view.do","/admin_notice_board.do").hasRole("ADMIN")
 			.anyRequest().authenticated();
-
 		
 		
 		/*http.authorizeRequests()
