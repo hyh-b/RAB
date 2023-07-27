@@ -11,7 +11,6 @@
 		
 		out.println("<script type='text/javascript'>");
 		if (flag == 0) {
-		    out.println("alert('글삭제 성공');");
 		    out.println("location.href='board_list1.do?cpage="+ cpage +"';");
 		} else {
 		    out.println("alert('글삭제 실패');");

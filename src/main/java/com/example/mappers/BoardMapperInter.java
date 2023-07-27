@@ -32,7 +32,7 @@ public interface BoardMapperInter {
 		public abstract int viewHit(BoardTO to);
 		
 		// view : seq 넣어야한다
-		@Select("select u_seq, u_subject , u_writer ,u_wdate , u_hit, u_content, u_filename, u_filesize from UserBoard where u_seq=#{u_seq}")
+		@Select("SELECT u_seq, m_seq, u_subject , u_writer ,u_wdate , u_hit, u_content, u_filename, u_filesize from UserBoard where u_seq=#{u_seq}")
 		public abstract BoardTO view(BoardTO to);
 		
 		// 이전글

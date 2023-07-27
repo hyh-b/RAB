@@ -280,25 +280,26 @@ public class NoticeBoardController {
 	    int flagAB = dao.writeOK(bto);
 
 	    int flag = 0;
+	   
 	    if (flagAB == 1) {
 	        for (MultipartFile file : uploads) {
 	            try {
 	                // Upload file to S3
 	                String fileUrl = s3FileUploadService.upload(file);
-
+	              
 	                // If the file was uploaded successfully, save its data to the database
 	                if (fileUrl != null) {
-	                    ato.setN_seq(bto.getN_seq());
-	                    ato.setNf_filename(fileUrl);
-	                    ato.setNf_filesize(file.getSize());
-	                    flag = abdao.noticeAlbum_ok(ato);
+	                    ato.setN_seq(bto.getN_seq());	                   
+	                    ato.setNf_filename(fileUrl);	                   
+	                    ato.setNf_filesize(file.getSize());	                   
+	                    flag = abdao.noticeAlbum_ok(ato);	                   
 	                } else {
 	                    //System.out.println("File upload failed for n_seq: " + bto.getN_seq());
 	                }
 	            } catch (Exception e) {
 	                e.printStackTrace();
 	            }
-	        }
+	        }	      
 	    }
 
 	    response.put("flagAB", flagAB);
