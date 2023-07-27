@@ -37,8 +37,6 @@ $(document).ready(function() {
 	        contentType: false,
 	        processData: false,
 	        success: function(response) {
-	        	console.log("콘솔플래그"+response.flag)
-	        	console.log("콘솔플래그ab"+response.flagAB)
         if (response.flag == 1 && response.flagAB == 1) {
           swal('이미지 업로드 성공!', '이미지가 업로드되었습니다.', 'success').then(function() { window.location.href='admin_notice_board.do'; });
         } else if(response.flag == 0 && response.flagAB == 1) {
