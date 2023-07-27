@@ -144,7 +144,7 @@ public class FoodController {
 	@Transactional
 	@RequestMapping("/breakfastFoodData")
 	public Map<String, Object> breakfastFoodData(HttpServletRequest request ) {
-	    System.out.println(request.getParameter("seq"));
+//	    System.out.println(request.getParameter("seq"));
 
 	    // 추가 데이터 처리
 	    String additionalDataJson = request.getParameter("additionalData");
@@ -189,9 +189,9 @@ public class FoodController {
 	                bto.setB_cholesterol_mg(f_cholesterol_mg);
 	                bto.setB_sodium_mg(f_sodium_mg);
 	                bto.setB_day(b_day);  // set the parsed date
-	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
+//	                System.out.println("내가 선택한 날짜 : "+ bto.getB_day());
 	                
-	                System.out.println("날짜>>>>>>>>>>>>>"+b_day);
+//	                System.out.println("날짜>>>>>>>>>>>>>"+b_day);
 	        		
 	                int flag = bdao.insertBreakfast(bto);
 	                response.put("flag", flag);
