@@ -24,7 +24,7 @@ pageEncoding="UTF-8"%>
 $(document).ready(function() {
 	$('#myForm').submit(function(e) {
 	    if ($('#n_subject').val().trim() == '') {
-	      alert('제목을 입력하시오.');
+	    	 swal('제목을 입력하세요!', '제목을 입력하세요!', 'warning');
 	      e.preventDefault();  // 폼 제출을 방지합니다.    
 	    } else {
 	      let formData = new FormData(this);   
@@ -36,7 +36,7 @@ $(document).ready(function() {
 	        type: 'post',
 	        contentType: false,
 	        processData: false,
-	        success: function(response) {
+	        success: function(response) {	        	
         if (response.flag == 1 && response.flagAB == 1) {
           swal('이미지 업로드 성공!', '이미지가 업로드되었습니다.', 'success').then(function() { window.location.href='admin_notice_board.do'; });
         } else if(response.flag == 0 && response.flagAB == 1) {
@@ -57,6 +57,20 @@ $(document).ready(function() {
 
 </script>
 <style>
+.theme1 {margin-bottom:30px; border:0px; height:5px; background: linear-gradient(to left, transparent, rgba(255,255,255,.5), transparent);}
+	
+	/*============ 사이드 로고 메뉴 폰트 ==========*/
+	h3.mb-4.ml-4.text-sm.font-medium.text-bodydark2 {
+        font-size: 30px;
+		font-family: 'Cuprum', sans-serif;
+    }
+	/*=====================================*/
+    
+	/*============ 사이드 (공지사항 , 게시판 , 식단 , 운동 , 내정보 , 로그아웃) ==========*/
+    h1 {
+	    font-size: 25px;
+     	font-family: 'Josefin Sans', sans-serif;
+	}
     @keyframes bounce {
 	    0%, 20%, 50%, 80%, 100% {
 	        transform: translateY(0);
@@ -555,23 +569,14 @@ $(document).ready(function() {
     </button>
   </div>
 </div>
-
-
-
-
   </div>
 </form>
-
-
-	    <!-- ============  Write 여기서 끝=================================== -->
-		
-				
+	    <!-- ============  Write 여기서 끝=================================== -->						
       <!-- ===== Main Content End ===== -->
     </div>
     <!-- ===== Content Area End ===== -->
   </div>
   <!-- ===== Page Wrapper End ===== -->
-
 <script defer src="bundle.js"></script>
 </body>
 

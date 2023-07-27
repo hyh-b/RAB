@@ -1,10 +1,12 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="m_seq" value="${requestScope.seq}" />
+<c:set var="m_seq" value="${requestScope.m_seq}" />
 <c:set var="sbHTML" value="${requestScope.sbHTML}" />
 <c:set var="name" value="${requestScope.name}" />
 <c:set var="profilename" value="${requestScope.profilename}" />
+<%-- <c:set var="to" value="${requestScope.to}" /> --%>
+<%-- <c:set var="writerseq" value="${to.m_seq}" /> --%>
 <%@page import="java.util.ArrayList"%>
 <%@ page import="com.example.model.BoardTO"%>
 <%@ page import="com.example.model.BoardListTO"%>
@@ -13,6 +15,7 @@ pageEncoding="UTF-8"%>
 <%
 BoardTO to = (BoardTO)request.getAttribute("to");
 BoardListTO listTo = (BoardListTO)request.getAttribute("listTo");
+String m_seq = (String)request.getAttribute("m_seq");
 
 String seq = to.getU_seq();
 int cpage = listTo.getCpage();
@@ -20,6 +23,10 @@ int cpage = listTo.getCpage();
 String subject=to.getU_subject();
 String writer=to.getU_writer();
 String wdate=to.getU_wdate();
+String writerseq = to.getM_seq();
+
+// System.out.println(m_seq);
+// System.out.println(writerseq);
 
 
 int hit=to.getU_hit();
@@ -186,31 +193,48 @@ for (CommentTO Cto : comments ) {
 <script type="text/javascript">
 window.onload = function () {
     document.getElementById('cbtn').onclick = function () {
-		// 필수 입력값 검사
-		if(document.cfrm.cwriter.value.trim() == '' ){
-			alert('글쓴이를 입력 하셔야 합니다');
-			return false;
-		}
-		if(document.cfrm.ccontent.value.trim() == '' ){
-			alert('내용을 입력 하셔야 합니다');
-			return false;
-		}
+        // 필수 입력값 검사
+        if (document.cfrm.cwriter.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "글쓴이를 입력 하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
+        if (document.cfrm.ccontent.value.trim() == '') {
+            swal({
+                title: "경고!",
+                text: "내용을 입력 하셔야 합니다",
+                icon: "warning",
+                button: "확인"
+            });
+            return false;
+        }
 
-		document.cfrm.submit();
+        document.cfrm.submit();
     };
 };
 
 function confirmDelete() {
-	var shouldDelete = confirm('삭제 이후에는 복구할 수 없습니다 정말로 이 글을 삭제하시겠습니까?');
-	if (shouldDelete) {
-		// "예"를 선택한 경우 글 삭제 URL로 리디렉션
-		location.href = 'board_delete_ok1.do?seq=<%=seq %>&cpage=<%=cpage%>';
-	} else {
-		return;
-	};
-};
-
+    swal({
+        title: "주의!",
+        text: "삭제 이후에는 복구할 수 없습니다. 정말로 이 글을 삭제하시겠습니까?",
+        icon: "warning",
+        buttons: ["아니오", "예"],
+        dangerMode: true,
+    }).then((shouldDelete) => {
+        if (shouldDelete) {
+            // "예"를 선택한 경우 글 삭제 URL로 리디렉션
+        	location.href = 'board_delete_ok1.do?seq=<%=seq %>&cpage=<%=cpage%>';
+        } else {
+            return;
+        }
+    });
+}
 </script>
+
 </head>
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -724,15 +748,20 @@ function confirmDelete() {
 		</div>
 		<div class="btn_area">
 			<div class="align_left">			
-							<input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='board_list1.do?cpage=<%=cpage %>'" />
+			<input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='board_list1.do?cpage=<%=cpage %>'" />
 
 			</div>
-			<div class="align_right">
-				<input type="button" value="수정" id="modifyButton" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='board_modify1.do?seq=<%=seq %>&&cpage=<%=cpage%>'" />
-				<input type="button" value="삭제" id="deleteButton" class="btn_list btn_txt02" style="cursor: pointer;" onclick="confirmDelete()"  />
-				<input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="location.href='board_write1.do'" />
-			</div>
-		</div>
+			
+<div class="align_right">
+    <%-- m_seq와 writerseq가 같을 때 버튼을 표시합니다. --%>
+    <% if (m_seq.equals(writerseq)) { %>
+        <input type="button" value="수정" id="modifyButton" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='board_modify1.do?seq=<%=seq %>&cpage=<%=cpage%>'" />
+        <input type="button" value="삭제" id="deleteButton" class="btn_list btn_txt02" style="cursor: pointer;" onclick="confirmDelete()" />
+    <% } %>
+    <%-- 여기서는 다른 내용을 표시하지 않으므로, 생략합니다. --%>
+
+    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="location.href='board_write1.do'" />
+</div>
 
     <!-- ====== Profile Section End -->
   </div>
