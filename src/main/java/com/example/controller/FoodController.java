@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -140,6 +141,7 @@ public class FoodController {
 	}
 	
 	// 아침 ajax 데이터 구문.
+	@Transactional
 	@RequestMapping("/breakfastFoodData")
 	public Map<String, Object> breakfastFoodData(HttpServletRequest request ) {
 	    System.out.println(request.getParameter("seq"));
@@ -191,13 +193,12 @@ public class FoodController {
 	                
 	                System.out.println("날짜>>>>>>>>>>>>>"+b_day);
 	        		
-	                
-	                dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), b_day);
-	                dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), b_day);
-	                dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), b_day);
 	                int flag = bdao.insertBreakfast(bto);
 	                response.put("flag", flag);
 	            }
+	            dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), b_day);
+                dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), b_day);
+                dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), b_day);
 	            return response;
 	            
 	        } catch (JSONException e) {
@@ -209,6 +210,7 @@ public class FoodController {
 
 	
 	// 점심 ajax 구문
+	@Transactional
 	@RequestMapping("/lunchFoodData")
 	public Map<String, Object> lunchFoodData(HttpServletRequest request) {
 //		System.out.println(request.getParameter("seq"));
@@ -259,11 +261,11 @@ public class FoodController {
 					int flag = ldao.insertLunchData(lto);
 					
 					
-					dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), l_day);
-	                dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), l_day);
-	                dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), l_day);	
 					response.put("flag", flag);
 				}
+				dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), l_day);
+				dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), l_day);
+				dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), l_day);	
 				
 				return response;
 				
@@ -275,6 +277,7 @@ public class FoodController {
 	}
 
 	// 저녁 ajax 구문
+	@Transactional
 	@RequestMapping("/dinnerFoodData")
 	public Map<String, Object> dinnerFoodData(HttpServletRequest request) {
 //		System.out.println(request.getParameter("seq"));
@@ -324,12 +327,12 @@ public class FoodController {
 					
 					int flag = ddao.insertDinnerData(dto);
 					
-					dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), d_day);
-	                dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), d_day);
-	                dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), d_day);	
 	                
 					response.put("flag", flag);
 				}
+				dao.UnionPerDay(Integer.parseInt(request.getParameter("seq")), d_day);
+				dao.UnionAllCalories(Integer.parseInt(request.getParameter("seq")), d_day);
+				dao.UnionAllNutritions(Integer.parseInt(request.getParameter("seq")), d_day);	
 				
 				return response;
 				
