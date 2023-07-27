@@ -28,7 +28,8 @@
                 });
             } else {
                 // 로그인이 되어있지 않다면, 카카오 로그인 URL로 이동합니다
-                $(this).attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do');
+                //$(this).attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do');
+                $(this).attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://43.201.35.6:8080/kakao.do');
             }
         });
     });

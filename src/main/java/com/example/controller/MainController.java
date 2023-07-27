@@ -84,14 +84,14 @@ public class MainController {
         // 날짜는 무조건 오늘치만 비동기로 들어가고, 날짜를 선택후 다시 메인으로 가서 그 날로 가면 안되고 새로고침을 하고 그날로 가야 그 날의 데이터가 보임
         // food.do에서 메인페이지 로고를 누르거나 뒤로가기를 누르면 reload가 되게 하면 쿼리도 필요없이 해결되겠지만 모든함수들이 전부 실행되는건 너무 손해
         // 최선책은 food.do에 있는 달력을 따로 파라미터로 받아서 그걸 받는 end point에 아래쿼리를 실행 시키면 될듯 (중간에 거치는 가상 경로가 필요).)
-//        int main_flag_a = dao.MainUnionPerDay(seq);
-//		int main_flag_b = dao.MainUnionAllCalories(seq);
-//		int main_flag_c = dao.MainUnionAllNutritions(seq);
+        int main_flag_a = dao.MainUnionPerDay(seq);
+		int main_flag_b = dao.MainUnionAllCalories(seq);
+		int main_flag_c = dao.MainUnionAllNutritions(seq);
         //-테스트 끝-
         
-        //System.out.println("     m_id: " + member.getM_id());
-        //System.out.println("     m_mail: " + member.getM_mail());
-        //System.out.println("     m_seq: " + member.getM_seq());
+//        System.out.println("     m_id: " + member.getM_id());
+//        System.out.println("     m_mail: " + member.getM_mail());
+//        System.out.println("     m_seq: " + member.getM_seq());
   
         map.addAttribute("user", member);
         
