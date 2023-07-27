@@ -452,10 +452,12 @@ pageEncoding="UTF-8"%>
 		    height: 874,
 		    buttons: {
 		        '취소': function () {
-		        	imageUpload.file = null;
-	                imageUpload.imagePreviewUrl = '';
-	                imageUpload.render();
-	                $('#foodTable').empty();
+		        	// 이미지 및 데이터 초기화
+		            imageUpload.file = null;
+		            imageUpload.imagePreviewUrl = '';
+		            imageUpload.responseData = null;
+		            imageUpload.render();
+		            $('#foodTable').empty();
 		            $(this).dialog('close');
 		        },
 		        "확인": function () {
@@ -511,8 +513,11 @@ pageEncoding="UTF-8"%>
 		                    $('#resultFood1').append(result);
 		                    divId++;
 		                });
+		                
+		                // 이미지 및 데이터 초기화
 		                imageUpload.file = null;
 		                imageUpload.imagePreviewUrl = '';
+		                imageUpload.responseData = null;
 		                imageUpload.render();
 		                $('#foodTable').empty();
 		                $('.select-checkbox').prop('checked', false);
@@ -560,45 +565,72 @@ pageEncoding="UTF-8"%>
 	   	            this.render();
 	   	        },
 	   	        error: function(e) {
-	   	        	swal({
-			    		  title: "에러",
-			    		  text: '[에러]'+e.status,
-			    		  icon: "error",
-			    		  button: "확인",
-			    	});
+	   	        	if (e.status == 500) {
+		   	             swal({
+		   	                 title: "불러오기 실패",
+		   	                 text: "데이터가 없습니다. 사진을 다시 찍어 업로드 눌러주세요!",
+		   	                 icon: "warning",
+		   	                 button: "확인",
+		   	             });
+	   	         	} else {
+		   	             swal({
+		   	                 title: "에러",
+		   	                 text: '[에러]' + e.status,
+		   	                 icon: "error",
+		   	                 button: "확인",
+		   	             });
+		   	         }
 	   	        }
 	   	    });
 		  }
 		
-		  
 		  _handleImageChange(e) {
-		    e.preventDefault();
-		
-		    let reader = new FileReader();
-		    let file = e.target.files[0];
-		
-		    if (!file.type.startsWith('image/')) {
-		      swal({
-		    	  title: "실패!",
-		    	  text: "이미지 파일만 업로드할 수 있습니다.",
-		    	  icon: "warning",
-		    	  button: "확인",
-		      });
-	
-		      this.file = null;
-		      this.imagePreviewUrl = '';
-		      this.render();
-		      return;
-		    }
-		
-		    reader.onloadend = () => {
-		      this.file = file;
-		      this.imagePreviewUrl = reader.result;
-		      this.render();
-		    }
-		
-		    reader.readAsDataURL(file);
-		  }
+			    e.preventDefault();
+
+			    let reader = new FileReader();
+			    let file = e.target.files[0];
+
+			    if (!file.type.startsWith('image/')) {
+			        swal({
+			            title: "실패!",
+			            text: "이미지 파일만 업로드할 수 있습니다.",
+			            icon: "warning",
+			            button: "확인",
+			        });
+
+			        this.file = null;
+			        this.imagePreviewUrl = '';
+			        this.render();
+			        return;
+			    }
+
+			    reader.onload = (event) => {
+			        const img = new Image();
+			        img.src = event.target.result;
+
+			        img.onload = () => {
+			            if (img.width < 300 || img.height < 300) {
+			                swal({
+			                    title: "주의!",
+			                    text: "이미지의 해상도가 너무 낮습니다. 너비와 높이가 각각 300 픽셀 이상인 이미지를 선택해 주세요.",
+			                    icon: "warning",
+			                    button: "확인",
+			                });
+
+			                this.file = null;
+			                this.imagePreviewUrl = '';
+			                this.render();
+			                return;
+			            } else {
+			                this.file = file;
+			                this.imagePreviewUrl = reader.result;
+			                this.render();
+			            }
+			        };
+			    };
+
+			    reader.readAsDataURL(file);
+			}
 		
 	     	  //========================================= UI 에서 이미지 미리보기 기능 시작 ====================================================
 		  render() {

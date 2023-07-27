@@ -417,6 +417,7 @@ public class FoodController {
 
 	        return response;
 	    } catch (Exception e) {
+	    	 e.printStackTrace();  // 에러 로깅
 	        throw new RuntimeException("[에러]\t: " + e.getMessage());
 	    }
 	}
