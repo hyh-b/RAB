@@ -269,7 +269,6 @@ public class NoticeBoardController {
 		String m_seq=customUserDetails.getM_seq();
 		NoticeBoardTO bto = new NoticeBoardTO();
 	    NoticeAlbumTO ato = new NoticeAlbumTO();
-	    
 	    String subject = request.getParameter("n_subject");
 	    bto.setN_subject(subject);
 	    String content = request.getParameter("n_content");
@@ -280,7 +279,6 @@ public class NoticeBoardController {
 	    int flagAB = dao.writeOK(bto);
 
 	    int flag = 0;
-	   
 	    if (flagAB == 1) {
 	        for (MultipartFile file : uploads) {
 	            try {
@@ -299,7 +297,8 @@ public class NoticeBoardController {
 	            } catch (Exception e) {
 	                e.printStackTrace();
 	            }
-	        }	      
+	        }
+
 	    }
 
 	    response.put("flagAB", flagAB);
