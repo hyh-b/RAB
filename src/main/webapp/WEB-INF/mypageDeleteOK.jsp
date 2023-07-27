@@ -8,8 +8,8 @@
 	
 	out.println( "<script type='text/javascript'>" );
 	if( flag == 0 ) {
-		out.println( "alert('탈퇴가 완료되었습니다 BYE');" );
-		out.println( "location.href='/';" );
+		out.println( "location.href='/klogout.do';" );
+// 		out.println( "location.href='/';" );
 	} /* else {
 		out.println( "alert('탈퇴에 실패했습니다 관리자에게 문의 주세요');" );
 		out.println("history.back();");

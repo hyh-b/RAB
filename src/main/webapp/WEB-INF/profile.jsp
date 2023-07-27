@@ -152,10 +152,21 @@ pageEncoding="UTF-8"%>
 
 <script type="text/javascript">
 function confirmDelete() {
-	  if ( confirm(" 탈퇴 후 복구가 불가능 합니다 정말 삭제하시겠습니까?") ) {
-	    location.href = "mypageDeleteOK.do";
-	  }
-	}
+  swal({
+    title: "탈퇴 확인",
+    text: "탈퇴 후 복구가 불가능합니다. 정말 삭제하시겠습니까?",
+    icon: "warning",
+    buttons: ["취소", "삭제"], // '취소' 및 '삭제' 버튼 표시
+    dangerMode: true,
+  }).then((willDelete) => {
+    if (willDelete) {
+      // 사용자가 '삭제' 버튼을 클릭했을 경우
+      location.href = "mypageDeleteOK.do";
+    } else {
+      // 사용자가 '취소' 버튼을 클릭했을 경우
+    }
+  });
+}
 </script>
 <body
   x-data="{ page: 'profile', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
