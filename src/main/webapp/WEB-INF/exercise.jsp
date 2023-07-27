@@ -53,7 +53,25 @@ pageEncoding="UTF-8"%>
 	       font-size: 25px;
 	        font-family: 'Josefin Sans', sans-serif;
 	}
+	/*===================================================================*/
 	
+	/*========================================================== 로켓 이미지 바운스 조절====================================================*/	
+	@keyframes bounce {
+	    0%, 20%, 50%, 80%, 100% {
+	        transform: translateY(0);
+	    }
+	    40% {
+	        transform: translateY(-20px);
+	    }
+	    60% {
+	        transform: translateY(-10px);
+	    }
+	}
+	
+	.bounce:hover {
+	    animation: bounce 1s infinite;
+	}
+	/*================================================================================================================================*/	
 
 	.radio-buttons {
     	display: flex; /* 가로 배치를 위해 flexbox 사용 */
@@ -359,10 +377,10 @@ pageEncoding="UTF-8"%>
   @click.outside="sidebarToggle = false"
 >
   <!-- SIDEBAR HEADER -->
-  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px;">
+  <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5" style="padding-left: 59px; padding-bottom: 0px;padding-top: 40px;">
     <a href="/main.do">
 <!--       <img src="src/images/logo/배경로고2.png" width="100%" height="100%" /> -->
-		<i class="fa-solid fa-rocket bounce fa-10x"></i>
+		<i class="fa-solid fa-rocket bounce fa-10x" style="padding-top: 20px;"></i>
     </a>
 
     <button
@@ -397,7 +415,7 @@ pageEncoding="UTF-8"%>
     >
       <!-- Menu Group -->
       <div>
-	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 20px;">Menu</h3>
+	      <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2" style="padding-left: 45px; padding-top: 0px;">Menu</h3>
 		  <hr class="theme1">
 	
 	      <ul class="mb-6 flex flex-col gap-1.5">
