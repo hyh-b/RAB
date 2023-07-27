@@ -452,10 +452,12 @@ pageEncoding="UTF-8"%>
 		    height: 874,
 		    buttons: {
 		        '취소': function () {
-		        	imageUpload.file = null;
-	                imageUpload.imagePreviewUrl = '';
-	                imageUpload.render();
-	                $('#foodTable').empty();
+		        	// 이미지 및 데이터 초기화
+		            imageUpload.file = null;
+		            imageUpload.imagePreviewUrl = '';
+		            imageUpload.responseData = null;
+		            imageUpload.render();
+		            $('#foodTable').empty();
 		            $(this).dialog('close');
 		        },
 		        "확인": function () {
@@ -511,8 +513,11 @@ pageEncoding="UTF-8"%>
 		                    $('#resultFood1').append(result);
 		                    divId++;
 		                });
+		                
+		                // 이미지 및 데이터 초기화
 		                imageUpload.file = null;
 		                imageUpload.imagePreviewUrl = '';
+		                imageUpload.responseData = null;
 		                imageUpload.render();
 		                $('#foodTable').empty();
 		                $('.select-checkbox').prop('checked', false);
