@@ -32,6 +32,7 @@ public class CustomUserDetails implements UserDetails {
     private String m_profilename;
     private BigDecimal m_weight;
     private String m_id;
+    
     public CustomUserDetails(MemberTO to) {
         this.username = to.getM_id();
         this.password = to.getM_pw();

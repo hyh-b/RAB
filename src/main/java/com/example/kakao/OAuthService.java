@@ -43,8 +43,8 @@ public class OAuthService {
 	            StringBuilder sb = new StringBuilder();
 	            sb.append("grant_type=authorization_code");
 	            sb.append("&client_id=7b7314f847f2460b0290bb8096940714"); // TODO REST_API_KEY 입력
-	            //sb.append("&redirect_uri=http://localhost:8080/kakao.do"); // TODO 인가코드 받은 redirect_uri 입력
-	            sb.append("&redirect_uri=http://43.201.35.6:8080/kakao.do"); // TODO 인가코드 받은 redirect_uri 입력
+	            sb.append("&redirect_uri=http://localhost:8080/kakao.do"); // TODO 인가코드 받은 redirect_uri 입력
+	            //sb.append("&redirect_uri=http://43.201.35.6:8080/kakao.do"); // TODO 인가코드 받은 redirect_uri 입력
 	            sb.append("&code=" + code);
 	            bw.write(sb.toString());
 	            bw.flush();

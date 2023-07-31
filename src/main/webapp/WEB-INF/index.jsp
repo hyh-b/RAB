@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
     <%
     	request.setCharacterEncoding("utf-8");
     %>
@@ -28,8 +28,8 @@
                 });
             } else {
                 // 로그인이 되어있지 않다면, 카카오 로그인 URL로 이동합니다
-                //$(this).attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do');
-                $(this).attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://43.201.35.6:8080/kakao.do');
+                $(this).attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://localhost:8080/kakao.do');
+                //$(this).attr('href', 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7b7314f847f2460b0290bb8096940714&redirect_uri=http://43.201.35.6:8080/kakao.do');
             }
         });
     });
@@ -73,6 +73,9 @@
 			<header id="header">
 				<h1>RockAt yourBody</h1>
 				<p>당신의 몸을 &nbsp;&bull;&nbsp;상승시키세요&nbsp;&bull;&nbsp; With RAB</p>
+				<sec:authorize access="isAuthenticated()">
+  <p>Welcome, <sec:authentication property="name" />!</p>
+</sec:authorize>
 				<nav>
 					<ul>
 						<li class="login" >

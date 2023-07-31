@@ -90,6 +90,8 @@
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 		
+		
+		
 		<dependency> 
 			<groupId>com.google.code.gson</groupId> 
 		    <artifactId>gson</artifactId> 
@@ -167,6 +169,7 @@
 		    <artifactId>spring-security-oauth2-client</artifactId>
 		    <version>5.5.0</version>
 		</dependency>
+		
 	
 	</dependencies>
 
