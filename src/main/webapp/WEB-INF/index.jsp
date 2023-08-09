@@ -74,8 +74,8 @@
 				<h1>RockAt yourBody</h1>
 				<p>당신의 몸을 &nbsp;&bull;&nbsp;상승시키세요&nbsp;&bull;&nbsp; With RAB</p>
 				<sec:authorize access="isAuthenticated()">
-  <p>Welcome, <sec:authentication property="name" />!</p>
-</sec:authorize>
+					<p>Welcome, <sec:authentication property="name" />!</p>
+				</sec:authorize>
 				<nav>
 					<ul>
 						<li class="login" >
