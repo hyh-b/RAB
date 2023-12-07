@@ -339,8 +339,8 @@ public class MemberController {
 			String toEmail = to.getM_mail();
 			String toName = "RockAtYourBody";
 			String subject = "RAB 비밀번호 재설정";
-			//String content = "비밀번호를 재설정하려면 다음 링크를 클릭하세요(유효시간-60분): <a href='http://localhost:8080/reset_password?token=" + token + "'>클릭하세요</a>)";
-			String content = "비밀번호를 재설정하려면 다음 링크를 클릭하세요(유효시간-60분): <a href='http://43.201.35.6:8080/reset_password?token=" + token + "'>클릭하세요</a>)";
+			String content = "비밀번호를 재설정하려면 다음 링크를 클릭하세요(유효시간-60분): <a href='http://localhost:8080/reset_password?token=" + token + "'>클릭하세요</a>)";
+			//String content = "비밀번호를 재설정하려면 다음 링크를 클릭하세요(유효시간-60분): <a href='http://43.201.35.6:8080/reset_password?token=" + token + "'>클릭하세요</a>)";
 			
 			this.mailSender1(toEmail, toName, subject, content);
 		}

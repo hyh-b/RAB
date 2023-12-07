@@ -1211,7 +1211,7 @@ pageEncoding="UTF-8"%>
 			</div>
 			<div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
 				<div class="flex items-center">
-			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-left: 50px; width: 650px;">
+			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-left: 50px; width: 520px;">
 			    		음식명
 			    	</label>
 			    	<label class="font-medium text-black dark:text-white mr-4" style="padding-right: 40px;">

@@ -49,6 +49,15 @@
 			var email = $('#email2').val();
 			var id = $("#wId").val();
 			
+			swal({
+		        title: "처리 중...",
+		        text: "잠시만 기다려주세요",
+		        icon: "info",
+		        button: false,
+		        closeOnClickOutside: false,
+		        closeOnEsc: false
+		    });
+			
 			$.ajax({
 				url: '/findPw',  
 			      type: 'post',
